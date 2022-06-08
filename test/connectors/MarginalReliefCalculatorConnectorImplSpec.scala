@@ -1,0 +1,100 @@
+package connectors
+
+import akka.actor.ActorSystem
+import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.client.WireMock.{ verify => _, _ }
+import com.typesafe.config.ConfigFactory
+import config.FrontendAppConfig
+import connectors.sharedmodel.{ MarginalReliefResult, SingleResult }
+import org.mockito.MockitoSugar
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.Configuration
+import play.api.libs.ws.ahc.{ AhcWSClient, AhcWSClientConfigFactory }
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.{ HttpClientV2, HttpClientV2Impl }
+import uk.gov.hmrc.http.hooks.HttpHook
+import uk.gov.hmrc.http.test.WireMockSupport
+
+import java.time.LocalDate
+import scala.concurrent.ExecutionContext.Implicits.global
+
+class MarginalReliefCalculatorConnectorImplSpec
+    extends AnyFreeSpec with Matchers with WireMockSupport with MockitoSugar with ScalaFutures
+    with IntegrationPatience {
+
+  implicit val as: ActorSystem = ActorSystem("MarginalReliefCalculatorConnectorImplSpec-as")
+
+  trait Fixture {
+    val accountingPeriodStart: LocalDate = LocalDate.ofEpochDay(0)
+    val accountingPeriodEnd: LocalDate = LocalDate.ofEpochDay(0)
+    val profit: Double = 1
+    val exemptionDistribution: Option[Double] = Some(1)
+    val associatedCompanies: Option[Double] = Some(1)
+    val mockHttpHook: HttpHook = mock[HttpHook](withSettings.lenient)
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+
+    val config: Configuration = Configuration(
+      ConfigFactory
+        .parseString(s"""
+                        |microservice {
+                        | services {
+                        |   marginal-relief-calculator-backend {
+                        |     host = $wireMockHost
+                        |     port = $wireMockPort
+                        |     path = ""
+                        |   }
+                        | }
+                        |}
+                        |""".stripMargin)
+        .withFallback(ConfigFactory.load())
+    )
+    val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
+    val httpClient: HttpClientV2 = new HttpClientV2Impl(
+      wsClient = AhcWSClient(AhcWSClientConfigFactory.forConfig(config.underlying)),
+      actorSystem = as,
+      config = config,
+      hooks = Seq(mockHttpHook)
+    )
+  }
+
+  "MarginalReliefCalculator" - {
+    "calculate" - {
+      "should return successful response" in new Fixture {
+        val marginalReliefCalculatorConnector = new MarginalReliefCalculatorConnectorImpl(httpClient, frontendAppConfig)
+
+        wireMockServer.stubFor(
+          WireMock
+            .get(
+              s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptionDistribution
+                  .map("exemptionDistribution=" + _)
+                  .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
+            )
+            .willReturn(aResponse().withBody(s"""
+                                                |{
+                                                |   "type": "SingleResult",
+                                                |   "corporationTaxBeforeMR": 1,
+                                                |   "effectiveTaxRateBeforeMR": 1,
+                                                |   "corporationTax": 1,
+                                                |   "effectiveTaxRate": 1,
+                                                |   "marginalRelief": 1
+                                                |}
+                                                |""".stripMargin))
+        )
+
+        val result: MarginalReliefResult = marginalReliefCalculatorConnector
+          .calculate(
+            accountingPeriodStart,
+            accountingPeriodEnd,
+            profit,
+            exemptionDistribution,
+            associatedCompanies
+          )
+          .futureValue
+
+          result shouldEqual SingleResult(1, 1, 1, 1, 1)
+      }
+    }
+  }
+}
