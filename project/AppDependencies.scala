@@ -10,7 +10,6 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "5.18.0",
     "uk.gov.hmrc"       %% "play-language"                 % "5.1.0-play-28",
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % "0.59.0",
-    "uk.gov.hmrc"       %% "http-verbs-play-28"            % "14.2.0",
     "org.julienrf"      %% "play-json-derived-codecs"      % "10.0.2"
   )
 
@@ -25,7 +24,7 @@ object AppDependencies {
     "org.mockito"            %% "mockito-scala"           % "1.16.42",
     "org.scalacheck"         %% "scalacheck"              % "1.15.4",
     "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-27" % "0.59.0",
-    "uk.gov.hmrc"            %% "http-verbs-test-play-28" % "14.2.0",
+    "uk.gov.hmrc"            %% "http-verbs-test-play-28" % "13.10.0",
     "com.vladsch.flexmark"    % "flexmark-all"            % "0.62.2"
   ).map(_ % "test, it")
 

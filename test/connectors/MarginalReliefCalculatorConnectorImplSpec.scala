@@ -11,18 +11,16 @@ import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.Configuration
-import play.api.libs.ws.ahc.{ AhcWSClient, AhcWSClientConfigFactory }
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.client.{ HttpClientV2, HttpClientV2Impl }
 import uk.gov.hmrc.http.hooks.HttpHook
-import uk.gov.hmrc.http.test.WireMockSupport
+import uk.gov.hmrc.http.test.{ HttpClientSupport, WireMockSupport }
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class MarginalReliefCalculatorConnectorImplSpec
-    extends AnyFreeSpec with Matchers with WireMockSupport with MockitoSugar with ScalaFutures
-    with IntegrationPatience {
+private class MarginalReliefCalculatorConnectorImplSpec
+    extends AnyFreeSpec with Matchers with WireMockSupport with MockitoSugar with ScalaFutures with IntegrationPatience
+    with HttpClientSupport {
 
   implicit val as: ActorSystem = ActorSystem("MarginalReliefCalculatorConnectorImplSpec-as")
 
@@ -51,12 +49,6 @@ class MarginalReliefCalculatorConnectorImplSpec
         .withFallback(ConfigFactory.load())
     )
     val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
-    val httpClient: HttpClientV2 = new HttpClientV2Impl(
-      wsClient = AhcWSClient(AhcWSClientConfigFactory.forConfig(config.underlying)),
-      actorSystem = as,
-      config = config,
-      hooks = Seq(mockHttpHook)
-    )
   }
 
   "MarginalReliefCalculator" - {
@@ -93,7 +85,7 @@ class MarginalReliefCalculatorConnectorImplSpec
           )
           .futureValue
 
-          result shouldEqual SingleResult(1, 1, 1, 1, 1)
+        result shouldEqual SingleResult(1, 1, 1, 1, 1)
       }
     }
   }

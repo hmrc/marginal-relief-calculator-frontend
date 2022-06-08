@@ -16,7 +16,7 @@
 
 package config
 
-import com.google.inject.{Inject, Singleton}
+import com.google.inject.{ Inject, Singleton }
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
@@ -25,7 +25,7 @@ import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
-  val host: String    = configuration.get[String]("host")
+  val host: String = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
@@ -35,9 +35,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
 
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
-  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/marginal-relief-calculator-frontend"
+  val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/marginal-relief-calculator-frontend"
 
-  val marginalReliefCalculatorUrl: String = configuration.get[Service]("microservice.services.marginal-relief-calculator-backend").baseUrl
+  val marginalReliefCalculatorUrl: String =
+    configuration.get[Service]("microservice.services.marginal-relief-calculator-backend").baseUrl
 
   val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("features.welsh-translation")
@@ -47,7 +48,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     "cy" -> Lang("cy")
   )
 
-  val timeout: Int   = configuration.get[Int]("timeout-dialog.timeout")
+  val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
 
   val cacheTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")

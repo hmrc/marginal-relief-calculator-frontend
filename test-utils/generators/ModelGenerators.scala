@@ -18,7 +18,6 @@ package generators
 
 import models._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.{ Arbitrary, Gen }
 
-trait ModelGenerators {
-}
+trait ModelGenerators {}
