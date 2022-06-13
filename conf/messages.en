@@ -55,3 +55,60 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+inputScreen.title = inputScreen
+inputScreen.heading = inputScreen
+inputScreen.checkYourAnswersLabel = inputScreen
+inputScreen.error.required = Enter inputScreen
+inputScreen.error.length = InputScreen must be 100 characters or less
+inputScreen.change.hidden = InputScreen
+
+accountingPeriodStartDate.title = Accounting Period Start
+accountingPeriodStartDate.heading = Accounting Period Start
+accountingPeriodStartDate.hint = For example, 12 11 2007
+accountingPeriodStartDate.checkYourAnswersLabel = Accounting Period Start
+accountingPeriodStartDate.error.required.all = Enter the Accounting Period Start date
+accountingPeriodStartDate.error.required.two = The Accounting Period Start date must include {0} and {1}
+accountingPeriodStartDate.error.required = The Accounting Period Start date must include {0}
+accountingPeriodStartDate.error.invalid = Enter a real Accounting Period Start date
+accountingPeriodStartDate.change.hidden = Accounting Period Start date
+
+accountingPeriodEndDate.title = Accounting Period End
+accountingPeriodEndDate.heading = Accounting Period End
+accountingPeriodEndDate.hint = For example, 12 11 2007
+accountingPeriodEndDate.checkYourAnswersLabel = Accounting Period End
+accountingPeriodEndDate.error.required.all = Enter the Accounting Period End date
+accountingPeriodEndDate.error.required.two = The Accounting Period End date must include {0} and {1}
+accountingPeriodEndDate.error.required = The Accounting Period End date must include {0}
+accountingPeriodEndDate.error.invalid = Enter a real Accounting Period End date
+accountingPeriodEndDate.change.hidden = Accounting Period End date
+
+resultsPage.title = resultsPage
+resultsPage.heading = resultsPage
+
+profit.title = Taxable profit
+profit.heading = Taxable profit
+profit.checkYourAnswersLabel = Taxable profit
+profit.error.nonNumeric = Enter your Taxable profit using numbers
+profit.error.required = Enter your Taxable profit
+profit.error.wholeNumber = Enter your Taxable profit using whole numbers
+profit.error.outOfRange = Taxable profit must be between {0} and {1}
+profit.change.hidden = Taxable profit
+
+distribution.title = Distributions
+distribution.heading = Distributions
+distribution.checkYourAnswersLabel = Distributions
+distribution.error.nonNumeric = Enter your Distributions using numbers
+distribution.error.required = Enter your Distributions
+distribution.error.wholeNumber = Enter your Distributions using whole numbers
+distribution.error.outOfRange = Distributions must be between {0} and {1}
+distribution.change.hidden = Distributions
+
+associatedCompanies.title = Number of associated companies
+associatedCompanies.heading = Number of associated companies
+associatedCompanies.checkYourAnswersLabel = Number of associated companies
+associatedCompanies.error.nonNumeric = Enter your Number of associated companies using numbers
+associatedCompanies.error.required = Enter your Number of associated companies
+associatedCompanies.error.wholeNumber = Enter your Number of associated companies using whole numbers
+associatedCompanies.error.outOfRange = Number of associated companies must be between {0} and {1}
+associatedCompanies.change.hidden = Number of associated companies
