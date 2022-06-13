@@ -7,6 +7,8 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 lazy val appName: String = "marginal-relief-calculator-frontend"
 val silencerVersion = "1.6.0"
 
+addCommandAlias("fmt", "scalafmt;test:scalafmt;it:scalafmt")
+
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
