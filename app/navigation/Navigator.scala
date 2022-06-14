@@ -26,11 +26,12 @@ import models._
 @Singleton
 class Navigator @Inject() () {
 
-  private val normalRoutes: Page => UserAnswers => Call = { case InputScreenPage =>
-    _ => routes.ResultsPageController.onPageLoad
+  private val normalRoutes: Page => UserAnswers => Call = {
+    case InputScreenPage =>
+      _ => routes.ResultsPageController.onPageLoad
 
-  case _ =>
-    _ => routes.IndexController.onPageLoad
+    case _ =>
+      _ => routes.IndexController.onPageLoad
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = { case _ =>

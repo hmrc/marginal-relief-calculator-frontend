@@ -28,31 +28,30 @@ class InputScreenFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "accountingPeriodStartDate" -> localDate(
-            invalidKey     = "accountingPeriodStartDate.error.invalid",
-            allRequiredKey = "accountingPeriodStartDate.error.required.all",
-            twoRequiredKey = "accountingPeriodStartDate.error.required.two",
-            requiredKey    = "accountingPeriodStartDate.error.required"
-          ),
-          "accountingPeriodEndDate" -> localDate(
-            invalidKey     = "accountingPeriodEndDate.error.invalid",
-            allRequiredKey = "accountingPeriodEndDate.error.required.all",
-            twoRequiredKey = "accountingPeriodEndDate.error.required.two",
-            requiredKey    = "accountingPeriodEndDate.error.required"
-          ),
-          "profit" -> int(
-          "profit.error.required",
-          "profit.error.wholeNumber",
-          "profit.error.nonNumeric")
+          invalidKey = "accountingPeriodStartDate.error.invalid",
+          allRequiredKey = "accountingPeriodStartDate.error.required.all",
+          twoRequiredKey = "accountingPeriodStartDate.error.required.two",
+          requiredKey = "accountingPeriodStartDate.error.required"
+        ),
+        "accountingPeriodEndDate" -> localDate(
+          invalidKey = "accountingPeriodEndDate.error.invalid",
+          allRequiredKey = "accountingPeriodEndDate.error.required.all",
+          twoRequiredKey = "accountingPeriodEndDate.error.required.two",
+          requiredKey = "accountingPeriodEndDate.error.required"
+        ),
+        "profit" -> int("profit.error.required", "profit.error.wholeNumber", "profit.error.nonNumeric")
           .verifying(inRange(0, Int.MaxValue, "profit.error.outOfRange")),
-          "distribution" -> int(
+        "distribution" -> int(
           "distribution.error.required",
           "distribution.error.wholeNumber",
-          "distribution.error.nonNumeric")
+          "distribution.error.nonNumeric"
+        )
           .verifying(inRange(0, Int.MaxValue, "distribution.error.outOfRange")),
-           "associatedCompanies" -> int(
+        "associatedCompanies" -> int(
           "associatedCompanies.error.required",
           "associatedCompanies.error.wholeNumber",
-          "associatedCompanies.error.nonNumeric")
+          "associatedCompanies.error.nonNumeric"
+        )
           .verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange"))
       )(InputScreenForm.apply)(InputScreenForm.unapply)
     )

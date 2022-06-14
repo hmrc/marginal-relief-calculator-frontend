@@ -49,4 +49,8 @@ case class DualResult(
   year2: MarginalReliefByYear,
   effectiveTaxRateBeforeMR: Double,
   effectiveTaxRate: Double
-) extends MarginalReliefResult
+) extends MarginalReliefResult {
+  def totalCorporationTaxBeforeMR = year1.corporationTaxBeforeMR + year2.corporationTaxBeforeMR
+  def totalCorporationTax = year1.corporationTax + year2.corporationTax
+  def totalMarginalRelief = year1.marginalRelief + year2.marginalRelief
+}

@@ -16,7 +16,7 @@
 
 package connectors
 
-import com.google.inject.{ Inject, Singleton }
+import com.google.inject.{ ImplementedBy, Inject }
 import config.FrontendAppConfig
 import connectors.sharedmodel.MarginalReliefResult
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
@@ -25,18 +25,17 @@ import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, StringContextOps }
 import java.time.LocalDate
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.higherKinds
-
+@ImplementedBy(classOf[MarginalReliefCalculatorConnectorImpl])
 trait MarginalReliefCalculatorConnector[F[_]] {
   def calculate(
     accountingPeriodStart: LocalDate,
     accountingPeriodEnd: LocalDate,
     profit: Double,
     exemptionDistribution: Option[Double],
-    associatedCompanies: Option[Double]
+    associatedCompanies: Option[Int]
   )(implicit hc: HeaderCarrier): F[MarginalReliefResult]
 }
 
-@Singleton
 class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, frontendAppConfig: FrontendAppConfig)(
   implicit ec: ExecutionContext
 ) extends MarginalReliefCalculatorConnector[Future] {
@@ -45,7 +44,7 @@ class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, f
     accountingPeriodEnd: LocalDate,
     profit: Double,
     exemptionDistribution: Option[Double],
-    associatedCompanies: Option[Double]
+    associatedCompanies: Option[Int]
   )(implicit hc: HeaderCarrier): Future[MarginalReliefResult] =
     httpClient
       .GET[MarginalReliefResult](

@@ -22,27 +22,28 @@ import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.InputScreenPage
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.InputScreenView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 import models.UserAnswers
 
-class InputScreenController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        sessionRepository: SessionRepository,
-                                        navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: InputScreenFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: InputScreenView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class InputScreenController @Inject() (
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: InputScreenFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: InputScreenView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   val form = formProvider()
 
@@ -55,26 +56,25 @@ class InputScreenController @Inject()(
 
     Ok(view(preparedForm, mode))
   }
-  
+
   def onSubmit(mode: Mode): Action[AnyContent] =
     (identify andThen getData).async { implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
-                case Some(answers) =>
-                  answers.set(InputScreenPage, value)
-                case None =>
-                  UserAnswers(request.userId).set(InputScreenPage, value)
-              })
+                                  case Some(answers) =>
+                                    answers.set(InputScreenPage, value)
+                                  case None =>
+                                    UserAnswers(request.userId).set(InputScreenPage, value)
+                                })
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(InputScreenPage, mode, updatedAnswers)
             )
         )
     }
-  }
+}

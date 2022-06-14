@@ -17,8 +17,14 @@
 package forms
 
 import java.time.LocalDate
-import play.api.libs.json.{Format, _}
-final case class InputScreenForm(accountingPeriodStartDate:LocalDate, accountingPeriodEndDate:LocalDate, profit:Int, distribution:Int, associatedCompanies:Int)
+import play.api.libs.json.{ Format, _ }
+final case class InputScreenForm(
+  accountingPeriodStartDate: LocalDate,
+  accountingPeriodEndDate: LocalDate,
+  profit: Int,
+  distribution: Int,
+  associatedCompanies: Int
+)
 
 object InputScreenForm {
   implicit val format: Format[InputScreenForm] =

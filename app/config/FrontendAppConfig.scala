@@ -43,10 +43,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("features.welsh-translation")
 
+  // $COVERAGE-OFF$
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")
   )
+  // $COVERAGE-ON$
 
   val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
