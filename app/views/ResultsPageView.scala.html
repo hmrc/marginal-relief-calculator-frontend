@@ -14,14 +14,44 @@
  * limitations under the License.
  *@
 
+@import connectors.sharedmodel._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        govukButton: GovukButton,
+        govukPanel : GovukPanel
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(marginalReliefResult: MarginalReliefResult)(implicit request: Request[_], messages: Messages)
+
+@displayResults(corporationTaxBeforeMR: Double, effectiveTaxRateBeforeMR: Double, corporationTax: Double, effectiveTaxRate: Double, marginalRelief: Double) = {
+    <span>
+        @govukPanel(Panel(
+            title = Text("Marginal Relief for your accounting period is"),
+            content = HtmlContent(s"£$marginalRelief")
+        ))
+        <h2 class="govuk-heading-m">Your Corporation Tax after Marginal Relief:</h2>
+        <h2 class="govuk-heading-m">£@corporationTax</h2>
+        <p class="govuk-body">Corporation Tax liability<br>
+            Reduced from £@corporationTaxBeforeMR after £@marginalRelief Marginal Relief
+        </p>
+        <h2 class="govuk-heading-m">@effectiveTaxRate%</h2>
+        <p class="govuk-body">Effective tax rate after Marginal Relief<br>
+            Reduced from @effectiveTaxRateBeforeMR%
+        </p>
+    </span>
+}
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
-    <h1 class="govuk-heading-xl">@messages("resultsPage.heading")</h1>
+        @marginalReliefResult match {
+            case SingleResult(corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief) => {
+                @displayResults(corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief)
+            }
+            case r: DualResult => {
+                @displayResults(r.totalCorporationTaxBeforeMR, r.effectiveTaxRateBeforeMR, r.totalCorporationTax, r.effectiveTaxRate, r.totalMarginalRelief)
+            }
+        }
+
 }

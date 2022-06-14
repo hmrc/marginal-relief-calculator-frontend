@@ -16,24 +16,50 @@
 
 package controllers
 
+import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
+import forms.InputScreenForm
+import pages.InputScreenPage
+import play.api.Logging
+
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
-class ResultsPageController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       identify: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: ResultsPageView
-                                     ) extends FrontendBaseController with I18nSupport {
+import scala.concurrent.{ ExecutionContext, Future }
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    implicit request =>
-      Ok(view())
+class ResultsPageController @Inject() (
+  override val messagesApi: MessagesApi,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: ResultsPageView,
+  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector[Future]
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with Logging {
+
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val maybeInputScreenParameters: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
+    maybeInputScreenParameters match {
+      case Some(inputScreenParameters) =>
+        marginalReliefCalculatorConnector
+          .calculate(
+            inputScreenParameters.accountingPeriodStartDate,
+            inputScreenParameters.accountingPeriodEndDate,
+            inputScreenParameters.profit,
+            Some(inputScreenParameters.distribution),
+            Some(inputScreenParameters.associatedCompanies)
+          )
+          .map { marginalReliefResult =>
+            logger.info(s"received results: $marginalReliefResult")
+            Ok(view(marginalReliefResult))
+          }
+      case None => throw new BadRequestException("input screen parameters not provided")
+
+    }
   }
 }
