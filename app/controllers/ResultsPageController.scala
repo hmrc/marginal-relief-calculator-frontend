@@ -46,6 +46,7 @@ class ResultsPageController @Inject() (
     val maybeInputScreenParameters: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
     maybeInputScreenParameters match {
       case Some(inputScreenParameters) =>
+        logger.info("Calling marginal relief calculator backend for computing marginal relief")
         marginalReliefCalculatorConnector
           .calculate(
             inputScreenParameters.accountingPeriodStartDate,
@@ -55,11 +56,12 @@ class ResultsPageController @Inject() (
             Some(inputScreenParameters.associatedCompanies)
           )
           .map { marginalReliefResult =>
-            logger.info(s"received results: $marginalReliefResult")
+            logger.info(s"Received results from marginal relief calculator backend: $marginalReliefResult")
             Ok(view(marginalReliefResult))
           }
-      case None => throw new BadRequestException("input screen parameters not provided")
-
+      case None =>
+        logger.info("Input parameters are missing")
+        throw new BadRequestException("input screen parameters not provided")
     }
   }
 }
