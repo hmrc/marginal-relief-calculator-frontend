@@ -16,15 +16,15 @@
 
 package connectors
 
-import com.google.inject.{ImplementedBy, Inject}
+import com.google.inject.{ ImplementedBy, Inject }
 import config.FrontendAppConfig
 import connectors.sharedmodel.MarginalReliefResult
 import org.slf4j.LoggerFactory
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, StringContextOps}
+import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, StringContextOps }
 
 import java.time.LocalDate
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.language.higherKinds
 @ImplementedBy(classOf[MarginalReliefCalculatorConnectorImpl])
 trait MarginalReliefCalculatorConnector[F[_]] {
