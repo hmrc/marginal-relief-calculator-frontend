@@ -19,17 +19,17 @@ package controllers
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
 import forms.InputScreenForm
+import org.slf4j.LoggerFactory
 import pages.InputScreenPage
-import play.api.Logging
 
 import javax.inject.Inject
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
@@ -40,7 +40,9 @@ class ResultsPageController @Inject() (
   view: ResultsPageView,
   marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector[Future]
 )(implicit val ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport with Logging {
+    extends FrontendBaseController with I18nSupport {
+
+  private val logger = LoggerFactory.getLogger(getClass)
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val maybeInputScreenParameters: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)

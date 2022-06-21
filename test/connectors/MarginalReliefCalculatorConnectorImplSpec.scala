@@ -44,7 +44,7 @@ private class MarginalReliefCalculatorConnectorImplSpec
     val accountingPeriodStart: LocalDate = LocalDate.ofEpochDay(0)
     val accountingPeriodEnd: LocalDate = LocalDate.ofEpochDay(0)
     val profit: Double = 1
-    val exemptionDistributions: Option[Double] = Some(1)
+    val exemptDistributions: Option[Double] = Some(1)
     val associatedCompanies: Option[Int] = Some(1)
     val mockHttpHook: HttpHook = mock[HttpHook](withSettings.lenient)
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -75,9 +75,9 @@ private class MarginalReliefCalculatorConnectorImplSpec
         wireMockServer.stubFor(
           WireMock
             .get(
-              s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptionDistributions
+              s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
                   .map(
-                    "exemptionDistributions" +
+                    "exemptDistributions" +
                       "=" + _
                   )
                   .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
@@ -99,7 +99,7 @@ private class MarginalReliefCalculatorConnectorImplSpec
             accountingPeriodStart,
             accountingPeriodEnd,
             profit,
-            exemptionDistributions,
+            exemptDistributions,
             associatedCompanies
           )
           .futureValue
