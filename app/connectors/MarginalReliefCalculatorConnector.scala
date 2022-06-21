@@ -16,14 +16,15 @@
 
 package connectors
 
-import com.google.inject.{ ImplementedBy, Inject }
+import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import connectors.sharedmodel.MarginalReliefResult
+import org.slf4j.LoggerFactory
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
-import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, StringContextOps }
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, StringContextOps}
 
 import java.time.LocalDate
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.higherKinds
 @ImplementedBy(classOf[MarginalReliefCalculatorConnectorImpl])
 trait MarginalReliefCalculatorConnector[F[_]] {
@@ -39,15 +40,20 @@ trait MarginalReliefCalculatorConnector[F[_]] {
 class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, frontendAppConfig: FrontendAppConfig)(
   implicit ec: ExecutionContext
 ) extends MarginalReliefCalculatorConnector[Future] {
+
+  private val logger = LoggerFactory.getLogger(getClass)
+
   override def calculate(
     accountingPeriodStart: LocalDate,
     accountingPeriodEnd: LocalDate,
     profit: Double,
     exemptDistributions: Option[Double],
     associatedCompanies: Option[Int]
-  )(implicit hc: HeaderCarrier): Future[MarginalReliefResult] =
+  )(implicit hc: HeaderCarrier): Future[MarginalReliefResult] = {
+    logger.info("Calling marginal relief backend - calculate")
     httpClient
       .GET[MarginalReliefResult](
         url"${frontendAppConfig.marginalReliefCalculatorUrl}/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptDistributions=$exemptDistributions&associatedCompanies=$associatedCompanies"
       )
+  }
 }

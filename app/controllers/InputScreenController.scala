@@ -18,19 +18,18 @@ package controllers
 
 import controllers.actions._
 import forms.InputScreenFormProvider
-import javax.inject.Inject
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
+import org.slf4j.LoggerFactory
 import pages.InputScreenPage
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.InputScreenView
 
-import scala.concurrent.{ ExecutionContext, Future }
-
-import models.UserAnswers
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class InputScreenController @Inject() (
   override val messagesApi: MessagesApi,
@@ -44,6 +43,8 @@ class InputScreenController @Inject() (
   view: InputScreenView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
+
+  private val logger = LoggerFactory.getLogger(getClass)
 
   val form = formProvider()
 
@@ -62,8 +63,16 @@ class InputScreenController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-          value =>
+          formWithErrors => {
+            logger.error(
+              s"Failed to bind request for marginal relief calculation [errors=${formWithErrors.errors.map(_.message)}]"
+            )
+            Future.successful(BadRequest(view(formWithErrors, mode)))
+          },
+          value => {
+            logger.info(
+              s"Received request for marginal relief calculation [data=${request.userAnswers.map(_.data.toString()).getOrElse("")}]"
+            )
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
                                   case Some(answers) =>
@@ -75,6 +84,7 @@ class InputScreenController @Inject() (
             } yield Redirect(
               navigator.nextPage(InputScreenPage, mode, updatedAnswers)
             )
+          }
         )
     }
 }
