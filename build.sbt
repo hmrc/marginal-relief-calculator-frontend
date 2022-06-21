@@ -22,6 +22,7 @@ lazy val root = (project in file("."))
   .settings(useSuperShell in ThisBuild := false)
   .settings(
     scalaVersion := "2.12.10",
+    PlayKeys.playDefaultPort := 7101,
     name := appName,
     RoutesKeys.routesImport ++= Seq(
       "models._",
@@ -38,7 +39,6 @@ lazy val root = (project in file("."))
       "controllers.routes._",
       "viewmodels.govuk.all._"
     ),
-    PlayKeys.playDefaultPort := 9000,
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;" +
       ".*Routes.*;.*viewmodels.govuk.*;",
     ScoverageKeys.coverageMinimumStmtTotal := 50,
