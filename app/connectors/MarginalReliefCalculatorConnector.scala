@@ -31,7 +31,7 @@ trait MarginalReliefCalculatorConnector[F[_]] {
     accountingPeriodStart: LocalDate,
     accountingPeriodEnd: LocalDate,
     profit: Double,
-    exemptionDistribution: Option[Double],
+    exemptionDistributions: Option[Double],
     associatedCompanies: Option[Int]
   )(implicit hc: HeaderCarrier): F[MarginalReliefResult]
 }
@@ -43,11 +43,11 @@ class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, f
     accountingPeriodStart: LocalDate,
     accountingPeriodEnd: LocalDate,
     profit: Double,
-    exemptionDistribution: Option[Double],
+    exemptionDistributions: Option[Double],
     associatedCompanies: Option[Int]
   )(implicit hc: HeaderCarrier): Future[MarginalReliefResult] =
     httpClient
       .GET[MarginalReliefResult](
-        url"${frontendAppConfig.marginalReliefCalculatorUrl}/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptionDistribution=$exemptionDistribution&associatedCompanies=$associatedCompanies"
+        url"${frontendAppConfig.marginalReliefCalculatorUrl}/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptionDistributions=$exemptionDistributions&associatedCompanies=$associatedCompanies"
       )
 }
