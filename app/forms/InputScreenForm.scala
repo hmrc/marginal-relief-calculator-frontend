@@ -20,7 +20,7 @@ import java.time.LocalDate
 import play.api.libs.json.{ Format, _ }
 final case class InputScreenForm(
   accountingPeriodStartDate: LocalDate,
-  accountingPeriodEndDate: LocalDate,
+  accountingPeriodEndDate: Option[LocalDate],
   profit: Int,
   distribution: Int,
   associatedCompanies: Int

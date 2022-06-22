@@ -37,7 +37,6 @@ class InputScreenController @Inject() (
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
   formProvider: InputScreenFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: InputScreenView
@@ -69,17 +68,24 @@ class InputScreenController @Inject() (
             )
             Future.successful(BadRequest(view(formWithErrors, mode)))
           },
-          value => {
+          form => {
             logger.info(
               s"Received request for marginal relief calculation [data=${request.userAnswers.map(_.data.toString()).getOrElse("")}]"
             )
+
+            // setting defaults for missing fields
+            val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate =
+              form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
+            )
+
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
                                   case Some(answers) =>
-                                    answers.set(InputScreenPage, value)
+                                    answers.set(InputScreenPage, formWithAccountingPeriodEnd)
                                   case None =>
-                                    UserAnswers(request.userId).set(InputScreenPage, value)
+                                    UserAnswers(request.userId).set(InputScreenPage, formWithAccountingPeriodEnd)
                                 })
+              // validate updated user answers
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(InputScreenPage, mode, updatedAnswers)

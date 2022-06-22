@@ -43,7 +43,7 @@ object InputScreenSummary {
           ),
           SummaryListRowViewModel(
             key = "accountingPeriodEndDate.checkYourAnswersLabel",
-            value = ValueViewModel(answer.accountingPeriodEndDate.format(dateFormatter)),
+            value = ValueViewModel(answer.accountingPeriodEndDate.map(_.format(dateFormatter)).getOrElse[String]("")),
             actions = Seq(
               ActionItemViewModel("site.change", routes.InputScreenController.onPageLoad(CheckMode).url)
                 .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))

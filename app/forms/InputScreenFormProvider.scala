@@ -18,7 +18,7 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{ mapping, optional }
 
 import javax.inject.Inject
 
@@ -33,11 +33,13 @@ class InputScreenFormProvider @Inject() extends Mappings {
           twoRequiredKey = "accountingPeriodStartDate.error.required.two",
           requiredKey = "accountingPeriodStartDate.error.required"
         ),
-        "accountingPeriodEndDate" -> localDate(
-          invalidKey = "accountingPeriodEndDate.error.invalid",
-          allRequiredKey = "accountingPeriodEndDate.error.required.all",
-          twoRequiredKey = "accountingPeriodEndDate.error.required.two",
-          requiredKey = "accountingPeriodEndDate.error.required"
+        "accountingPeriodEndDate" -> optional(
+          localDate(
+            invalidKey = "accountingPeriodEndDate.error.invalid",
+            allRequiredKey = "accountingPeriodEndDate.error.required.all",
+            twoRequiredKey = "accountingPeriodEndDate.error.required.two",
+            requiredKey = "accountingPeriodEndDate.error.required"
+          )
         ),
         "profit" -> int("profit.error.required", "profit.error.wholeNumber", "profit.error.nonNumeric")
           .verifying(inRange(0, Int.MaxValue, "profit.error.outOfRange")),
