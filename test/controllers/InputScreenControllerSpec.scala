@@ -112,7 +112,7 @@ class InputScreenControllerSpec extends SpecBase with MockitoSugar {
             .as[InputScreenForm] must be(
             InputScreenForm(
               accountingPeriodStartDate = LocalDate.parse("2020-02-01"),
-              accountingPeriodEndDate = Some(LocalDate.parse("2020-02-01").plusYears(1).plusDays(1)),
+              accountingPeriodEndDate = Some(LocalDate.parse("2020-02-01").plusYears(1).minusDays(1)),
               profit = 11,
               distribution = 22,
               associatedCompanies = 33
