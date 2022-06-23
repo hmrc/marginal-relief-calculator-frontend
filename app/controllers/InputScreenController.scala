@@ -74,8 +74,14 @@ class InputScreenController @Inject() (
             )
 
             // setting defaults for missing fields
+            val isLeapYear = form.accountingPeriodStartDate.getYear % 4 == 0
+
             val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate =
-              form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
+              if (isLeapYear) {
+                form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).plusDays(1)))
+              } else {
+                form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
+              }
             )
 
             for {

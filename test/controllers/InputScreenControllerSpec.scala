@@ -78,6 +78,48 @@ class InputScreenControllerSpec extends SpecBase with MockitoSugar {
           )
         }
       }
+      "when accountingPeriodStartDate year is leap year than accountingPeriodEndDate should be + 366 days" in {
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(
+            method = POST,
+            uri = routes.InputScreenController.onSubmit(NormalMode).url,
+            headers = FakeHeaders(Seq.empty),
+            body = AnyContentAsFormUrlEncoded(
+              Map(
+                "accountingPeriodStartDate.day"   -> Seq("01"),
+                "accountingPeriodStartDate.month" -> Seq("02"),
+                "accountingPeriodStartDate.year"  -> Seq("2020"),
+                "profit"                          -> Seq("11"),
+                "distribution"                    -> Seq("22"),
+                "associatedCompanies"             -> Seq("33")
+              )
+            )
+          ).withSession(SessionKeys.sessionId -> "test-session-id")
+
+          val sessionRepository = application.injector.instanceOf[SessionRepository]
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result) must be(Some("/marginal-relief-calculator-frontend/results-page"))
+          sessionRepository
+            .get("test-session-id")
+            .futureValue
+            .get
+            .data
+            .value(InputScreenPage.toString)
+            .as[InputScreenForm] must be(
+            InputScreenForm(
+              accountingPeriodStartDate = LocalDate.parse("2020-02-01"),
+              accountingPeriodEndDate = Some(LocalDate.parse("2020-02-01").plusYears(1).plusDays(1)),
+              profit = 11,
+              distribution = 22,
+              associatedCompanies = 33
+            )
+          )
+        }
+      }
     }
   }
 }
