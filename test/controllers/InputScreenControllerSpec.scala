@@ -33,6 +33,7 @@ class InputScreenControllerSpec extends SpecBase with MockitoSugar {
 
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
 
+
   "InputScreenController" - {
     "onSubmit" - {
       "when accountingPeriodEndDate is missing, should default to (accountingPeriodStartDate + 1yr - 1d)" in {
@@ -118,6 +119,31 @@ class InputScreenControllerSpec extends SpecBase with MockitoSugar {
               associatedCompanies = 33
             )
           )
+        }
+      }
+      "When form is sent with invalid data should be 404" in {
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(
+            method = POST,
+            uri = routes.InputScreenController.onSubmit(NormalMode).url,
+            headers = FakeHeaders(Seq.empty),
+            body = AnyContentAsFormUrlEncoded(
+              Map(
+                "accountingPeriodStartDate.day"   -> Seq("a"),
+                "accountingPeriodStartDate.month" -> Seq("b"),
+                "accountingPeriodStartDate.year"  -> Seq("c"),
+                "profit"                          -> Seq("a"),
+                "distribution"                    -> Seq("b"),
+                "associatedCompanies"             -> Seq("c")
+              )
+            )
+          )
+
+          val result = route(application, request).value
+
+          status(result) mustEqual 400
         }
       }
     }
