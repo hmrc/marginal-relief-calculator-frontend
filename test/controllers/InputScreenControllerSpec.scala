@@ -18,12 +18,12 @@ package controllers
 
 import base.SpecBase
 import forms.InputScreenForm
-import models.{NormalMode, UserAnswers}
+import models.{ NormalMode, UserAnswers }
 import org.mockito.MockitoSugar
 import pages.InputScreenPage
 import play.api.mvc.AnyContentAsFormUrlEncoded
-import play.api.test.Helpers.{POST, status, _}
-import play.api.test.{FakeHeaders, FakeRequest}
+import play.api.test.Helpers.{ POST, status, _ }
+import play.api.test.{ FakeHeaders, FakeRequest }
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 
@@ -32,7 +32,6 @@ import java.time.LocalDate
 class InputScreenControllerSpec extends SpecBase with MockitoSugar {
 
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
-
 
   "InputScreenController" - {
     "onSubmit" - {
