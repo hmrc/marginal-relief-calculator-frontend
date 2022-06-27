@@ -45,16 +45,16 @@ class ResultsPageController @Inject() (
   private val logger = LoggerFactory.getLogger(getClass)
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val maybeInputScreenParameters: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
-    maybeInputScreenParameters match {
-      case Some(inputScreenParameters) =>
+    val maybeInputScreenForm: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
+    maybeInputScreenForm match {
+      case Some(inputScreenForm) =>
         marginalReliefCalculatorConnector
           .calculate(
-            inputScreenParameters.accountingPeriodStartDate,
-            inputScreenParameters.accountingPeriodEndDate,
-            inputScreenParameters.profit,
-            Some(inputScreenParameters.distribution),
-            Some(inputScreenParameters.associatedCompanies)
+            inputScreenForm.accountingPeriodStartDate,
+            inputScreenForm.accountingPeriodEndDate.get,
+            inputScreenForm.profit,
+            Some(inputScreenForm.distribution),
+            Some(inputScreenForm.associatedCompanies)
           )
           .map { marginalReliefResult =>
             logger.info(s"received results: $marginalReliefResult")
