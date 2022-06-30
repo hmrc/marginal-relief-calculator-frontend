@@ -19,7 +19,9 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukDateInput: GovukDateInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukFieldset : GovukFieldset,
+    govukDetails : GovukDetails
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
@@ -32,12 +34,23 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
         }
 
+        <h1 class="govuk-fieldset__legend--l">What are your accounting period dates?</h1>
+        <p class="govuk-body govuk-!-margin-bottom-4"></p>
+        <p>Your accounting period cannot be longer than 12 months and is normally the same as the financial year covered by your company's annual accounts.</p>
+        <div id="passport-issued-hint" class="govuk-hint">
+        For example, 27 3 2021
+        </div>
+
+        @govukDetails(Details(
+            summary = Text("Where can I find my accounting period dates?"),
+            content = Text("Your accounting period dates are found on the Notice to deliver a return form (CT603) sent to your company.")
+        ))
+
         @govukDateInput(
             DateViewModel(
             field  = form("accountingPeriodStartDate"),
             legend = LegendViewModel(messages("accountingPeriodStartDate.heading"))
             )
-            .withHint(HintViewModel(messages("accountingPeriodStartDate.hint")))
         )
 
         @govukDateInput(
