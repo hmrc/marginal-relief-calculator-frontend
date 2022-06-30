@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {}
+import forms.AccountingPeriodForm
 
-  implicit lazy val arbitraryAccountingPeriodUserAnswersEntry: Arbitrary[(AccountingPeriodPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[AccountingPeriodPage.type]
-        value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (page, value)
-    }
+import play.api.libs.json.JsPath
+
+case object AccountingPeriodPage extends QuestionPage[AccountingPeriodForm] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "accountingPeriod"
+}
