@@ -17,3 +17,6 @@
 package generators
 
 trait PageGenerators {}
+
+  implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =
+    Arbitrary(AccountingPeriodPage)
