@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {}
+import play.api.libs.json.{Format, Json}
 
-  implicit lazy val arbitraryAccountingPeriodUserAnswersEntry: Arbitrary[(AccountingPeriodPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[AccountingPeriodPage.type]
-        value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (page, value)
-    }
+import java.time.LocalDate
+
+final case class AccountingPeriodForm(
+  accountingPeriodStartDate: LocalDate,
+  accountingPeriodEndDate: Option[LocalDate]
+)
+
+object AccountingPeriodForm {
+  implicit val format: Format[AccountingPeriodForm] = Json.format[AccountingPeriodForm]
+}
+
