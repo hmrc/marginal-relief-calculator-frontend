@@ -16,7 +16,7 @@
 
 package forms
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{ Format, Json }
 
 import java.time.LocalDate
 
@@ -28,4 +28,3 @@ final case class AccountingPeriodForm(
 object AccountingPeriodForm {
   implicit val format: Format[AccountingPeriodForm] = Json.format[AccountingPeriodForm]
 }
-

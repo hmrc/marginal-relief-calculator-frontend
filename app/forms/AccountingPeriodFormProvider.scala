@@ -16,13 +16,34 @@
 
 package forms
 
+import forms.DateUtils.DateOps
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms.{mapping, optional}
+import play.api.data.Forms.{ mapping, optional }
+import play.api.data.validation.{ Constraint, Invalid, Valid }
 
 import javax.inject.Inject
 
 class AccountingPeriodFormProvider @Inject() extends Mappings {
+
+  private val startShouldBeBeforeEnd: Constraint[AccountingPeriodForm] =
+    Constraint { accountingPeriodForm =>
+      accountingPeriodForm.accountingPeriodEndDate match {
+        case Some(accountingPeriodEndDate)
+            if accountingPeriodEndDate.isEqualOrBefore(accountingPeriodForm.accountingPeriodStartDate) =>
+          Invalid("accountingPeriod.error.startShouldBeBeforeEnd")
+        case _ => Valid
+      }
+    }
+
+  val accountingPeriodShouldBeLessThanOneYear: Constraint[AccountingPeriodForm] = Constraint { accountingPeriodForm =>
+    accountingPeriodForm.accountingPeriodEndDate match {
+      case Some(accountingPeriodEndDate)
+          if accountingPeriodEndDate.isAfter(accountingPeriodForm.accountingPeriodStartDate.plusYears(1)) =>
+        Invalid("accountingPeriod.error.periodIsMoreThanAYear")
+      case _ => Valid
+    }
+  }
 
   def apply(): Form[AccountingPeriodForm] =
     Form(
@@ -40,7 +61,9 @@ class AccountingPeriodFormProvider @Inject() extends Mappings {
             twoRequiredKey = "accountingPeriodEndDate.error.required.two",
             requiredKey = "accountingPeriodEndDate.error.required"
           )
-        ),
+        )
       )(AccountingPeriodForm.apply)(AccountingPeriodForm.unapply)
+        .verifying(startShouldBeBeforeEnd)
+        .verifying(accountingPeriodShouldBeLessThanOneYear)
     )
 }

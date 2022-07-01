@@ -27,36 +27,36 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("accountingPeriod.title"))) {
-
     @formHelper(action = routes.AccountingPeriodController.onSubmit(mode)) {
-
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
         }
-
-        <h1 class="govuk-fieldset__legend--l">What are your accounting period dates?</h1>
-        <p class="govuk-body govuk-!-margin-bottom-4"></p>
-        <p>Your accounting period cannot be longer than 12 months and is normally the same as the financial year covered by your company's annual accounts.</p>
+        <h1 class="govuk-fieldset__legend--xl">
+            @messages("accountingPeriod.heading")
+        </h1>
+        <p class="govuk-hint">
+            @messages("accountingPeriod.accountingPeriodCannotBeLongerThan12M")
+        </p>
         <div id="passport-issued-hint" class="govuk-hint">
-        For example, 27 3 2021
+            @messages("accountingPeriod.forExample")
         </div>
 
         @govukDetails(Details(
-            summary = Text("Where can I find my accounting period dates?"),
-            content = Text("Your accounting period dates are found on the Notice to deliver a return form (CT603) sent to your company.")
+            summary = Text(messages("accountingPeriod.whereCanIFindMyAccPeriodDates")),
+            content = Text(messages("accountingPeriod.yourAccPeriodDatesFoundOnForm"))
         ))
 
         @govukDateInput(
             DateViewModel(
-            field  = form("accountingPeriodStartDate"),
-            legend = LegendViewModel(messages("accountingPeriodStartDate.heading"))
+                field  = form("accountingPeriodStartDate"),
+                legend = LegendViewModel(messages("accountingPeriodStartDate.heading")).withCssClass("govuk-fieldset__legend--s")
             )
         )
 
         @govukDateInput(
             DateViewModel(
-            field  = form("accountingPeriodEndDate"),
-            legend = LegendViewModel(messages("accountingPeriodEndDate.heading"))
+                field  = form("accountingPeriodEndDate"),
+                legend = LegendViewModel(messages("accountingPeriodEndDate.heading")).withCssClass("govuk-fieldset__legend--s")
             )
             .withHint(HintViewModel(messages("accountingPeriodEndDate.hint")))
         )

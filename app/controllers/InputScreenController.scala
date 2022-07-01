@@ -73,17 +73,12 @@ class InputScreenController @Inject() (
               s"Received request for marginal relief calculation [data=${request.userAnswers.map(_.data.toString()).getOrElse("")}]"
             )
 
-            // setting defaults for missing fields
-            val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate =
-              form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
-            )
-
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
                                   case Some(answers) =>
-                                    answers.set(InputScreenPage, formWithAccountingPeriodEnd)
+                                    answers.set(InputScreenPage, form)
                                   case None =>
-                                    UserAnswers(request.userId).set(InputScreenPage, formWithAccountingPeriodEnd)
+                                    UserAnswers(request.userId).set(InputScreenPage, form)
                                 })
               // validate updated user answers
               _ <- sessionRepository.set(updatedAnswers)

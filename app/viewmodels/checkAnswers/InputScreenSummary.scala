@@ -16,40 +16,18 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
-import models.{ CheckMode, UserAnswers }
+import models.UserAnswers
 import pages.InputScreenPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
-import java.time.format.DateTimeFormatter
 
 object InputScreenSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] =
     answers
       .get(InputScreenPage)
-      .map { answer =>
-        val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-        List(
-          SummaryListRowViewModel(
-            key = "accountingPeriodStartDate.checkYourAnswersLabel",
-            value = ValueViewModel(answer.accountingPeriodStartDate.format(dateFormatter)),
-            actions = Seq(
-              ActionItemViewModel("site.change", routes.InputScreenController.onPageLoad(CheckMode).url)
-                .withVisuallyHiddenText(messages("accountingPeriodStartDate.change.hidden"))
-            )
-          ),
-          SummaryListRowViewModel(
-            key = "accountingPeriodEndDate.checkYourAnswersLabel",
-            value = ValueViewModel(answer.accountingPeriodEndDate.map(_.format(dateFormatter)).getOrElse[String]("")),
-            actions = Seq(
-              ActionItemViewModel("site.change", routes.InputScreenController.onPageLoad(CheckMode).url)
-                .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))
-            )
-          )
-        )
+      .map { _ =>
+        List.empty
       }
       .getOrElse(List.empty)
 }

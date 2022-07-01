@@ -18,14 +18,14 @@ package viewmodels.checkAnswers
 
 import java.time.format.DateTimeFormatter
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{ CheckMode, UserAnswers }
 import pages.AccountingPeriodPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object AccountingPeriodSummary  {
+object AccountingPeriodSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] =
     answers
       .get(AccountingPeriodPage)

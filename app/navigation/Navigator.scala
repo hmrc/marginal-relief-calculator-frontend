@@ -16,13 +16,12 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
-import models.{Mode, UserAnswers}
+import javax.inject.{ Inject, Singleton }
+import models.{ Mode, UserAnswers }
 import play.api.mvc.Call
 import controllers.routes
 import pages._
 import models._
-import org.apache.commons.lang3.ObjectUtils.mode
 
 @Singleton
 class Navigator @Inject() () {

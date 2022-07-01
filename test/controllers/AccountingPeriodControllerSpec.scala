@@ -1,32 +1,50 @@
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
-import forms.AccountingPeriodFormProvider
-import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
+import models.{ NormalMode, UserAnswers }
+import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AccountingPeriodPage
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.http.SessionKeys
 import views.html.AccountingPeriodView
 
+import java.time.{ LocalDate, ZoneOffset }
 import scala.concurrent.Future
 
 class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
+
+  private val epoch: LocalDate = LocalDate.ofEpochDay(0)
 
   val formProvider = new AccountingPeriodFormProvider()
   private def form = formProvider()
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
+  val validAnswer = AccountingPeriodForm(LocalDate.now(ZoneOffset.UTC), Some(LocalDate.now(ZoneOffset.UTC).plusDays(1)))
 
   lazy val accountingPeriodRoute = routes.AccountingPeriodController.onPageLoad(NormalMode).url
 
@@ -38,9 +56,12 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, accountingPeriodRoute)
       .withFormUrlEncodedBody(
-        "value.day"   -> validAnswer.getDayOfMonth.toString,
-        "value.month" -> validAnswer.getMonthValue.toString,
-        "value.year"  -> validAnswer.getYear.toString
+        "accountingPeriodStartDate.day"   -> validAnswer.accountingPeriodStartDate.getDayOfMonth.toString,
+        "accountingPeriodStartDate.month" -> validAnswer.accountingPeriodStartDate.getMonthValue.toString,
+        "accountingPeriodStartDate.year"  -> validAnswer.accountingPeriodStartDate.getYear.toString,
+        "accountingPeriodEndDate.day"     -> validAnswer.accountingPeriodEndDate.get.getDayOfMonth.toString,
+        "accountingPeriodEndDate.month"   -> validAnswer.accountingPeriodEndDate.get.getMonthValue.toString,
+        "accountingPeriodEndDate.year"    -> validAnswer.accountingPeriodEndDate.get.getYear.toString
       )
 
   "AccountingPeriod Controller" - {
@@ -55,7 +76,10 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AccountingPeriodView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(getRequest, messages(application)).toString
+        contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
+          getRequest,
+          messages(application)
+        ).toString.filterAndTrim
       }
     }
 
@@ -71,7 +95,10 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(getRequest, messages(application)).toString
+        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode)(
+          getRequest,
+          messages(application)
+        ).toString.filterAndTrim
       }
     }
 
@@ -97,47 +124,88 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      val request =
-        FakeRequest(POST, accountingPeriodRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+    "must populate accountingPeriodEndDate when not provided i.e accountingPeriodEndDate = accountingPeriodStartDate + 1y -1d" in {
+      val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val request = FakeRequest(POST, accountingPeriodRoute)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> validAnswer.accountingPeriodStartDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> validAnswer.accountingPeriodStartDate.getMonthValue.toString,
+            "accountingPeriodStartDate.year"  -> validAnswer.accountingPeriodStartDate.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
 
-        val view = application.injector.instanceOf[AccountingPeriodView]
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.InputScreenController.onPageLoad(NormalMode).url))
+        sessionRepository
+          .get("test-session-id")
+          .futureValue
+          .get
+          .data
+          .value(AccountingPeriodPage.toString)
+          .as[AccountingPeriodForm] must be(
+          AccountingPeriodForm(
+            accountingPeriodStartDate = validAnswer.accountingPeriodStartDate,
+            accountingPeriodEndDate = Some(validAnswer.accountingPeriodStartDate.plusYears(1).minusDays(1))
+          )
+        )
+      }
+    }
+    "must return BadRequest 400 when form has invalid data" in {
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+
+        val request = FakeRequest(POST, accountingPeriodRoute)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> "a",
+            "accountingPeriodStartDate.month" -> "b",
+            "accountingPeriodStartDate.year"  -> "c"
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
 
         val result = route(application, request).value
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        status(result) mustEqual 400
+        contentAsString(result) must include("Enter a real Start date");
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+    "must redirect to the next page when valid data is submitted, when user answers already exists" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val result = route(application, getRequest).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
-      }
-    }
-
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = Some(UserAnswers("test-session-id"))).build()
 
       running(application) {
-        val result = route(application, postRequest).value
+
+        val request = FakeRequest(POST, accountingPeriodRoute)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> epoch.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> epoch.getMonth.getValue.toString,
+            "accountingPeriodStartDate.year"  -> epoch.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+        val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result) must be(Some(routes.InputScreenController.onPageLoad(NormalMode).url))
+        sessionRepository
+          .get("test-session-id")
+          .futureValue
+          .get
+          .data
+          .value(AccountingPeriodPage.toString)
+          .as[AccountingPeriodForm] must be(
+          AccountingPeriodForm(
+            accountingPeriodStartDate = epoch,
+            accountingPeriodEndDate = Some(epoch.plusYears(1).minusDays(1))
+          )
+        )
       }
     }
   }

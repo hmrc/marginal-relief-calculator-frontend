@@ -35,22 +35,6 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-         @govukDateInput(
-            DateViewModel(
-                field  = form("accountingPeriodStartDate"),
-                legend = LegendViewModel(messages("accountingPeriodStartDate.heading")).asPageHeading()
-            )
-            .withHint(HintViewModel(messages("accountingPeriodStartDate.hint")))
-        )
-
-         @govukDateInput(
-            DateViewModel(
-                field  = form("accountingPeriodEndDate"),
-                legend = LegendViewModel(messages("accountingPeriodEndDate.heading")).asPageHeading()
-            )
-            .withHint(HintViewModel(messages("accountingPeriodEndDate.hint")))
-        )
-
         @govukInput(
             InputViewModel(
                 field = form("profit"),
