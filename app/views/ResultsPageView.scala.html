@@ -46,7 +46,7 @@
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
         @marginalReliefResult match {
-            case SingleResult(corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief) => {
+            case SingleResult(year, corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief) => {
                 @displayResults(corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief)
             }
             case r: DualResult => {

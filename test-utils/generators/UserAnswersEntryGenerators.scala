@@ -16,4 +16,17 @@
 
 package generators
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Arbitrary.arbitrary
+import pages.AccountingPeriodPage
+import play.api.libs.json.{ JsValue, Json }
+
+trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+  implicit lazy val arbitraryAccountingPeriodUserAnswersEntry: Arbitrary[(AccountingPeriodPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AccountingPeriodPage.type]
+        value <- arbitrary[Int].map(Json.toJson(_))
+      } yield (page, value)
+    }
+}

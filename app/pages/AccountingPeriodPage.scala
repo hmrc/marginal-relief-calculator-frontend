@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages.AccountingPeriodPage
+import forms.AccountingPeriodForm
 
-trait PageGenerators {
-  implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =
-    Arbitrary(AccountingPeriodPage)
+import play.api.libs.json.JsPath
+
+case object AccountingPeriodPage extends QuestionPage[AccountingPeriodForm] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "accountingPeriod"
 }

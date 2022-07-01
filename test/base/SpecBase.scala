@@ -44,4 +44,13 @@ trait SpecBase
         bind[IdentifierAction].to[SessionIdentifierAction],
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
+
+  implicit class StringOps(value: String) {
+    def filterAndTrim =
+      value
+        .split("\n")
+        .filterNot(_.contains("csrfToken"))
+        .map(_.trim)
+        .mkString
+  }
 }

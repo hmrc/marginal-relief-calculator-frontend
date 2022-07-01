@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages.AccountingPeriodPage
+import java.time.LocalDate
 
-trait PageGenerators {
-  implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =
-    Arbitrary(AccountingPeriodPage)
+object DateUtils {
+  implicit class DateOps(date: LocalDate) {
+    def isEqualOrBefore(another: LocalDate): Boolean =
+      date.equals(another) || date.isBefore(another)
+  }
 }

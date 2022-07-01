@@ -17,7 +17,7 @@
 package navigation
 
 import javax.inject.{ Inject, Singleton }
-
+import models.{ Mode, UserAnswers }
 import play.api.mvc.Call
 import controllers.routes
 import pages._
@@ -27,6 +27,9 @@ import models._
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
+    case AccountingPeriodPage =>
+      _ => routes.InputScreenController.onPageLoad(NormalMode)
+
     case InputScreenPage =>
       _ => routes.ResultsPageController.onPageLoad
 

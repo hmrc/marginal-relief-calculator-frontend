@@ -17,39 +17,38 @@
 package controllers
 
 import controllers.actions._
-import forms.InputScreenFormProvider
+import forms.AccountingPeriodFormProvider
 import models.{ Mode, UserAnswers }
+
+import javax.inject.Inject
 import navigation.Navigator
-import org.slf4j.LoggerFactory
-import pages.InputScreenPage
+import pages.AccountingPeriodPage
+import play.api.i18n.Lang.logger
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.InputScreenView
+import views.html.AccountingPeriodView
 
-import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
-class InputScreenController @Inject() (
+class AccountingPeriodController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  formProvider: InputScreenFormProvider,
+  formProvider: AccountingPeriodFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: InputScreenView
+  view: AccountingPeriodView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  private val logger = LoggerFactory.getLogger(getClass)
-
-  val form = formProvider()
+  def form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm =
-      request.userAnswers.flatMap(_.get(InputScreenPage)) match {
+      request.userAnswers.flatMap(_.get(AccountingPeriodPage)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -73,17 +72,21 @@ class InputScreenController @Inject() (
               s"Received request for marginal relief calculation [data=${request.userAnswers.map(_.data.toString()).getOrElse("")}]"
             )
 
+            // setting defaults for missing fields
+            val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate =
+              form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
+            )
+
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
                                   case Some(answers) =>
-                                    answers.set(InputScreenPage, form)
+                                    answers.set(AccountingPeriodPage, formWithAccountingPeriodEnd)
                                   case None =>
-                                    UserAnswers(request.userId).set(InputScreenPage, form)
+                                    UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd)
                                 })
-              // validate updated user answers
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
-              navigator.nextPage(InputScreenPage, mode, updatedAnswers)
+              navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
             )
           }
         )

@@ -85,6 +85,7 @@ private class MarginalReliefCalculatorConnectorImplSpec
             .willReturn(aResponse().withBody(s"""
                                                 |{
                                                 |   "type": "SingleResult",
+                                                |   "year": 1,
                                                 |   "corporationTaxBeforeMR": 1,
                                                 |   "effectiveTaxRateBeforeMR": 1,
                                                 |   "corporationTax": 1,
@@ -104,7 +105,7 @@ private class MarginalReliefCalculatorConnectorImplSpec
           )
           .futureValue
 
-        result shouldEqual SingleResult(1, 1, 1, 1, 1)
+        result shouldEqual SingleResult(1, 1, 1, 1, 1, 1)
       }
     }
   }

@@ -1,0 +1,68 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukDateInput: GovukDateInput,
+    govukButton: GovukButton,
+    govukFieldset : GovukFieldset,
+    govukDetails : GovukDetails
+)
+
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("accountingPeriod.title"))) {
+    @formHelper(action = routes.AccountingPeriodController.onSubmit(mode)) {
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
+        }
+        <h1 class="govuk-fieldset__legend--xl">
+            @messages("accountingPeriod.heading")
+        </h1>
+        <p class="govuk-hint">
+            @messages("accountingPeriod.accountingPeriodCannotBeLongerThan12M")
+        </p>
+        <div id="passport-issued-hint" class="govuk-hint">
+            @messages("accountingPeriod.forExample")
+        </div>
+
+        @govukDetails(Details(
+            summary = Text(messages("accountingPeriod.whereCanIFindMyAccPeriodDates")),
+            content = Text(messages("accountingPeriod.yourAccPeriodDatesFoundOnForm"))
+        ))
+
+        @govukDateInput(
+            DateViewModel(
+                field  = form("accountingPeriodStartDate"),
+                legend = LegendViewModel(messages("accountingPeriodStartDate.heading")).withCssClass("govuk-fieldset__legend--s")
+            )
+        )
+
+        @govukDateInput(
+            DateViewModel(
+                field  = form("accountingPeriodEndDate"),
+                legend = LegendViewModel(messages("accountingPeriodEndDate.heading")).withCssClass("govuk-fieldset__legend--s")
+            )
+            .withHint(HintViewModel(messages("accountingPeriodEndDate.hint")))
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

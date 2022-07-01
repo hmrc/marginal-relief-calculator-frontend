@@ -18,9 +18,9 @@ package controllers
 
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
-import forms.InputScreenForm
+import forms.{ AccountingPeriodForm, InputScreenForm }
 import org.slf4j.LoggerFactory
-import pages.InputScreenPage
+import pages.{ AccountingPeriodPage, InputScreenPage }
 
 import javax.inject.Inject
 import play.api.i18n.{ I18nSupport, MessagesApi }
@@ -45,13 +45,14 @@ class ResultsPageController @Inject() (
   private val logger = LoggerFactory.getLogger(getClass)
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val maybeAccountingPeriodForm: Option[AccountingPeriodForm] = request.userAnswers.get(AccountingPeriodPage)
     val maybeInputScreenForm: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
-    maybeInputScreenForm match {
-      case Some(inputScreenForm) =>
+    (maybeAccountingPeriodForm, maybeInputScreenForm) match {
+      case (Some(accountingPeriodForm), Some(inputScreenForm)) =>
         marginalReliefCalculatorConnector
           .calculate(
-            inputScreenForm.accountingPeriodStartDate,
-            inputScreenForm.accountingPeriodEndDate.get,
+            accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodForm.accountingPeriodEndDate.get,
             inputScreenForm.profit,
             Some(inputScreenForm.distribution),
             Some(inputScreenForm.associatedCompanies)
@@ -60,8 +61,9 @@ class ResultsPageController @Inject() (
             logger.info(s"received results: $marginalReliefResult")
             Ok(view(marginalReliefResult))
           }
-      case None => throw new BadRequestException("input screen parameters not provided")
-
+      case (Some(_), None) => throw new BadRequestException("input screen parameters not provided")
+      case (None, Some(_)) => throw new BadRequestException("accounting period not provided")
+      case (None, None)    => throw new BadRequestException("Calculation parameters not provided")
     }
   }
 }

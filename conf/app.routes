@@ -20,3 +20,8 @@ GET        /change-input-screen                  controllers.InputScreenControll
 POST       /change-input-screen                  controllers.InputScreenController.onSubmit(mode: Mode = CheckMode)
 
 GET        /results-page                       controllers.ResultsPageController.onPageLoad()
+
+GET        /accounting-period                  controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
+POST       /accounting-period                  controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
+GET        /change-accounting-period                        controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-accounting-period                        controllers.AccountingPeriodController.onSubmit(mode: Mode = CheckMode)

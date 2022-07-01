@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages.AccountingPeriodPage
+import play.api.libs.json.{ Format, Json }
 
-trait PageGenerators {
-  implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =
-    Arbitrary(AccountingPeriodPage)
+import java.time.LocalDate
+
+final case class AccountingPeriodForm(
+  accountingPeriodStartDate: LocalDate,
+  accountingPeriodEndDate: Option[LocalDate]
+)
+
+object AccountingPeriodForm {
+  implicit val format: Format[AccountingPeriodForm] = Json.format[AccountingPeriodForm]
 }
