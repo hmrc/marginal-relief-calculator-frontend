@@ -30,8 +30,6 @@ class EndLocalDateFormatter(
   args: Seq[String] = Seq.empty
 ) extends LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args) {
 
-  private val fieldKeys: List[String] = List("day", "month", "year")
-
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
     val fields = fieldKeys.map { field =>

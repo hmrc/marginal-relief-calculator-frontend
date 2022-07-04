@@ -31,7 +31,7 @@ private[mappings] class LocalDateFormatter(
   args: Seq[String] = Seq.empty
 ) extends Formatter[LocalDate] with Formatters {
 
-  private val fieldKeys: List[String] = List("day", "month", "year")
+  protected val fieldKeys: List[String] = List("day", "month", "year")
 
   private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
     Try(LocalDate.of(year, month, day)) match {
