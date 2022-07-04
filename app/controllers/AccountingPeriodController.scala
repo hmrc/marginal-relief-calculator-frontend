@@ -17,12 +17,12 @@
 package controllers
 
 import controllers.actions._
-import forms.DateUtils.DateOps
-import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
+import forms.AccountingPeriodFormProvider
 import models.{ Mode, UserAnswers }
+
+import javax.inject.Inject
 import navigation.Navigator
 import pages.AccountingPeriodPage
-import play.api.data.Form
 import play.api.i18n.Lang.logger
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
@@ -30,20 +30,19 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AccountingPeriodView
 
-import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
 class AccountingPeriodController @Inject() (
-  override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  navigator: Navigator,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  formProvider: AccountingPeriodFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: AccountingPeriodView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController with I18nSupport {
+                                             override val messagesApi: MessagesApi,
+                                             sessionRepository: SessionRepository,
+                                             navigator: Navigator,
+                                             identify: IdentifierAction,
+                                             getData: DataRetrievalAction,
+                                             formProvider: AccountingPeriodFormProvider,
+                                             val controllerComponents: MessagesControllerComponents,
+                                             view: AccountingPeriodView
+                                           )(implicit ec: ExecutionContext)
+  extends FrontendBaseController with I18nSupport {
 
   def form = formProvider()
 
@@ -57,28 +56,16 @@ class AccountingPeriodController @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  private def validateForm(form: Form[AccountingPeriodForm]) =
-    form.value match {
-      case Some(accountingPeriodForm)
-          if accountingPeriodForm.accountingPeriodEndDate.isDefined && accountingPeriodForm.accountingPeriodEndDate.get
-            .isEqualOrBefore(
-              accountingPeriodForm.accountingPeriodStartDate
-            ) =>
-        form.withError("accountingPeriodEndDate.day", "accountingPeriod.error.startShouldBeBeforeEnd")
-      case _ => form
-    }
-
   def onSubmit(mode: Mode): Action[AnyContent] =
     (identify andThen getData).async { implicit request =>
       form
         .bindFromRequest()
         .fold(
-          form => {
-            val formWithErrors = validateForm(form)
+          formWithErrors => {
             logger.error(
               s"Failed to bind request for marginal relief calculation [errors=${formWithErrors.errors.map(_.message)}]"
             )
-            Future.successful(BadRequest(view(validateForm(formWithErrors), mode)))
+            Future.successful(BadRequest(view(formWithErrors, mode)))
           },
           form => {
             logger.info(
@@ -92,11 +79,11 @@ class AccountingPeriodController @Inject() (
 
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
-                                  case Some(answers) =>
-                                    answers.set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-                                  case None =>
-                                    UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-                                })
+                case Some(answers) =>
+                  answers.set(AccountingPeriodPage, formWithAccountingPeriodEnd)
+                case None =>
+                  UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd)
+              })
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
