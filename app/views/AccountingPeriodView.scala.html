@@ -29,7 +29,12 @@
 @layout(pageTitle = title(form, messages("accountingPeriod.title"))) {
     @formHelper(action = routes.AccountingPeriodController.onSubmit(mode)) {
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value.day")))
+            @govukErrorSummary(
+                ErrorSummaryViewModel(
+                    form,
+                    errorLinkOverrides = Map(form.errors.head.key -> s"${form.errors.head.key}.day")
+                )
+            )
         }
         <h1 class="govuk-fieldset__legend--xl">
             @messages("accountingPeriod.heading")

@@ -50,22 +50,6 @@ class AccountingPeriodFormProviderSpec extends DateBehaviours {
       }
     }
 
-    "return error when endDate is same as startDate" in {
-
-      val dates = datesBetween(
-        min = LocalDate.of(2020, 7, 1),
-        max = LocalDate.of(2020, 12, 31)
-      )
-
-      forAll(dates) { date =>
-        val data = buildDataMap(date, date)
-
-        val result = form.bind(data)
-        result.hasErrors mustBe true
-        result.errors mustBe Seq(FormError("", List("accountingPeriod.error.startShouldBeBeforeEnd")))
-      }
-    }
-
     "return error when endDate is before startDate" in {
 
       val startDates = datesBetween(
@@ -83,7 +67,9 @@ class AccountingPeriodFormProviderSpec extends DateBehaviours {
 
         val result = form.bind(data)
         result.hasErrors mustBe true
-        result.errors mustBe Seq(FormError("", List("accountingPeriod.error.startShouldBeBeforeEnd")))
+        result.errors mustBe Seq(
+          FormError("accountingPeriodEndDate", List("accountingPeriod.error.startShouldBeBeforeEnd"))
+        )
       }
     }
 
@@ -101,7 +87,9 @@ class AccountingPeriodFormProviderSpec extends DateBehaviours {
 
         val result = form.bind(data)
         result.hasErrors mustBe true
-        result.errors mustBe Seq(FormError("", List("accountingPeriod.error.periodIsMoreThanAYear")))
+        result.errors mustBe Seq(
+          FormError("accountingPeriodEndDate", List("accountingPeriod.error.periodIsMoreThanAYear"))
+        )
       }
     }
   }

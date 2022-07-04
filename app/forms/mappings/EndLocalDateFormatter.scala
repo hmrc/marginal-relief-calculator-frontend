@@ -16,47 +16,21 @@
 
 package forms.mappings
 
+import forms.DateUtils.DateOps
+import play.api.data.FormError
+
 import java.time.LocalDate
 
-import play.api.data.FormError
-import play.api.data.format.Formatter
-
-import scala.util.{ Failure, Success, Try }
-
-private[mappings] class LocalDateFormatter(
+class EndLocalDateFormatter(
   invalidKey: String,
   allRequiredKey: String,
   twoRequiredKey: String,
   requiredKey: String,
+  startDateId: String,
   args: Seq[String] = Seq.empty
-) extends Formatter[LocalDate] with Formatters {
+) extends LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args) {
 
   private val fieldKeys: List[String] = List("day", "month", "year")
-
-  private def toDate(key: String, day: Int, month: Int, year: Int): Either[Seq[FormError], LocalDate] =
-    Try(LocalDate.of(year, month, day)) match {
-      case Success(date) =>
-        Right(date)
-      case Failure(_) =>
-        Left(Seq(FormError(key, invalidKey, args)))
-    }
-
-  protected def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
-
-    val int = intFormatter(
-      requiredKey = invalidKey,
-      wholeNumberKey = invalidKey,
-      nonNumericKey = invalidKey,
-      args
-    )
-
-    for {
-      day   <- int.bind(s"$key.day", data)
-      month <- int.bind(s"$key.month", data)
-      year  <- int.bind(s"$key.year", data)
-      date  <- toDate(key, day, month, year)
-    } yield date
-  }
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
@@ -71,8 +45,17 @@ private[mappings] class LocalDateFormatter(
 
     fields.count(_._2.isDefined) match {
       case 3 =>
-        formatDate(key, data).left.map {
-          _.map(_.copy(key = key, args = args))
+        formatDate(key, data) match {
+          case Left(errors) =>
+            Left(errors.map(_.copy(key = key, args = args)))
+          case Right(endDate) =>
+            formatDate(startDateId, data).toOption match {
+              case Some(startDate) if endDate.isEqualOrBefore(startDate) =>
+                Left(List(FormError(key, "accountingPeriod.error.startShouldBeBeforeEnd")))
+              case Some(startDate) if endDate.isAfter(startDate.plusYears(1).minusDays(1)) =>
+                Left(List(FormError(key, "accountingPeriod.error.periodIsMoreThanAYear")))
+              case _ => Right(endDate)
+            }
         }
       case 2 =>
         Left(List(FormError(key, requiredKey, missingFields ++ args)))
