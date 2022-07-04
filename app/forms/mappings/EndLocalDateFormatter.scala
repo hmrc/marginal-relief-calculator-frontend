@@ -65,11 +65,4 @@ class EndLocalDateFormatter(
         Left(List(FormError(key, allRequiredKey, args)))
     }
   }
-
-  override def unbind(key: String, value: LocalDate): Map[String, String] =
-    Map(
-      s"$key.day"   -> value.getDayOfMonth.toString,
-      s"$key.month" -> value.getMonthValue.toString,
-      s"$key.year"  -> value.getYear.toString
-    )
 }
