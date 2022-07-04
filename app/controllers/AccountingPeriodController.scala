@@ -33,16 +33,16 @@ import views.html.AccountingPeriodView
 import scala.concurrent.{ ExecutionContext, Future }
 
 class AccountingPeriodController @Inject() (
-                                             override val messagesApi: MessagesApi,
-                                             sessionRepository: SessionRepository,
-                                             navigator: Navigator,
-                                             identify: IdentifierAction,
-                                             getData: DataRetrievalAction,
-                                             formProvider: AccountingPeriodFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: AccountingPeriodView
-                                           )(implicit ec: ExecutionContext)
-  extends FrontendBaseController with I18nSupport {
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  formProvider: AccountingPeriodFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: AccountingPeriodView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   def form = formProvider()
 
@@ -79,11 +79,11 @@ class AccountingPeriodController @Inject() (
 
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers match {
-                case Some(answers) =>
-                  answers.set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-                case None =>
-                  UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-              })
+                                  case Some(answers) =>
+                                    answers.set(AccountingPeriodPage, formWithAccountingPeriodEnd)
+                                  case None =>
+                                    UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd)
+                                })
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
               navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
