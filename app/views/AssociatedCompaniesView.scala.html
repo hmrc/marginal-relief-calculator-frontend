@@ -31,15 +31,14 @@
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
 @yesHtml = {
-    @govukInput(Input(
-        id = "additional-associated-companies",
-        name = "additional-associated-companies",
-        label = Label(content = Text("Enter only additional associated companies")
-    ),
-        classes = "govuk-!-width-one-third",
-        autocomplete = Some("email"),
-        spellcheck = Some(false)
-    ))
+    @govukInput(
+        InputViewModel(
+            field = form("associatedCompaniesAmount"),
+            label = Label(content = Text(messages("associatedCompanies.amountLabel")))
+        )
+        .asNumeric()
+        .withCssClass("govuk-!-width-one-third")
+    )
 }
 
 @layout(pageTitle = title(form, messages("associatedCompanies.title"))) {
@@ -56,27 +55,27 @@
 
         @govukWarningText(WarningText(
             iconFallbackText = "Warning",
-            content = Text("Do not include the company you're currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect calculation.")
+            content = Text(messages("associatedCompanies.warning"))
         ))
 
         @govukDetails(Details(
-            summary = Text(messages("What are associated companies?")),
-            content = HtmlContent("A company is considered associated to another if:<br/><ul><li>one of the companies has control of the other</li><li>both companies are controlled by the same companies or people</li>")
+            summary = Text(messages("associatedCompanies.detailsTitle")),
+            content = HtmlContent(messages("associatedCompanies.detailsHtml"))
         ))
 
         @govukRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel("").asPageHeading(),
+                legend = LegendViewModel(""),
                 items = Seq(
                     RadioItem(
-                        content = Text("Yes"),
-                        value = Some("yes"),
+                        content = Text(messages("associatedCompanies.option1Label")),
+                        value = Some(messages("associatedCompanies.option1Value")),
                         conditionalHtml = Some(yesHtml)
                     ),
                     RadioItem(
-                        content = Text("No"),
-                        value = Some("no")
+                        content = Text(messages("associatedCompanies.option2Label")),
+                        value = Some(messages("associatedCompanies.option2Value"))
                     )
                 )
             )

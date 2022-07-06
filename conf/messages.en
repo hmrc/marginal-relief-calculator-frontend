@@ -118,20 +118,18 @@ distribution.error.wholeNumber = Enter your Distributions using whole numbers
 distribution.error.outOfRange = Distributions must be between {0} and {1}
 distribution.change.hidden = Distributions
 
-associatedCompanies.title = Number of associated companies
-associatedCompanies.heading = Number of associated companies
-associatedCompanies.checkYourAnswersLabel = Number of associated companies
-associatedCompanies.error.nonNumeric = Enter your Number of associated companies using numbers
-associatedCompanies.error.required = Enter your Number of associated companies
-associatedCompanies.error.wholeNumber = Enter your Number of associated companies using whole numbers
-associatedCompanies.error.outOfRange = Number of associated companies must be between {0} and {1}
-associatedCompanies.change.hidden = Number of associated companies
-
-
-associatedCompanies.title = Did your company have any active associated companies between 1 April 2023 to 31 December 2023?
 associatedCompanies.heading = Did your company have any active associated companies between 1 April 2023 to 31 December 2023?
-associatedCompanies.warningyes = yes
-associatedCompanies.no = no
+associatedCompanies.warning = Do not include the company you're currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect calculation.
+associatedCompanies.detailsTitle = What are associated companies?
+associatedCompanies.detailsHtml = A company is considered associated to another if:<br/><ul><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link">control</a> of the other</li><li>both companies are controlled by the same companies or people</li>
+associatedCompanies.option1Value = yes
+associatedCompanies.option1Label = Yes
+associatedCompanies.option2Value = no
+associatedCompanies.option2Label = No
+associatedCompanies.amountLabel = Enter only additional associated companies
 associatedCompanies.checkYourAnswersLabel = Did your company have any active associated companies between 1 April 2023 to 31 December 2023?
-associatedCompanies.error.required = Select associatedCompanies
+associatedCompanies.error.required = Select whether you have associated companies or not
+associatedCompanies.error.decimal = Do not use decimal points. Enter a whole number. For example, 1
+associatedCompanies.error.max = Enter an amount that is less than 99
+associatedCompanies.error.blank = Enter the number of associated companies you have. For example, 1
 associatedCompanies.change.hidden = AssociatedCompanies
