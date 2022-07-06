@@ -1,0 +1,89 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukRadios: GovukRadios,
+    govukInput : GovukInput,
+    govukButton: GovukButton,
+    govukWarningText : GovukWarningText,
+    govukDetails : GovukDetails
+)
+
+
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@yesHtml = {
+    @govukInput(Input(
+        id = "additional-associated-companies",
+        name = "additional-associated-companies",
+        label = Label(content = Text("Enter only additional associated companies")
+    ),
+        classes = "govuk-!-width-one-third",
+        autocomplete = Some("email"),
+        spellcheck = Some(false)
+    ))
+}
+
+@layout(pageTitle = title(form, messages("associatedCompanies.title"))) {
+
+    @formHelper(action = routes.AssociatedCompaniesController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
+        }
+
+        <h1 class="govuk-fieldset__legend--xl">
+            @messages("associatedCompanies.heading")
+        </h1>
+
+        @govukWarningText(WarningText(
+            iconFallbackText = "Warning",
+            content = Text("Do not include the company you're currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect calculation.")
+        ))
+
+        @govukDetails(Details(
+            summary = Text(messages("What are associated companies?")),
+            content = HtmlContent("A company is considered associated to another if:<br/><ul><li>one of the companies has control of the other</li><li>both companies are controlled by the same companies or people</li>")
+        ))
+
+        @govukRadios(
+            RadiosViewModel(
+                field  = form("value"),
+                legend = LegendViewModel("").asPageHeading(),
+                items = Seq(
+                    RadioItem(
+                        content = Text("Yes"),
+                        value = Some("yes"),
+                        conditionalHtml = Some(yesHtml)
+                    ),
+                    RadioItem(
+                        content = Text("No"),
+                        value = Some("no")
+                    )
+                )
+            )
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

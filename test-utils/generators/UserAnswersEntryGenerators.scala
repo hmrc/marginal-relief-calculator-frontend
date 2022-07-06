@@ -22,6 +22,14 @@ import pages.AccountingPeriodPage
 import play.api.libs.json.{ JsValue, Json }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryAssociatedCompaniesUserAnswersEntry: Arbitrary[(AssociatedCompaniesPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AssociatedCompaniesPage.type]
+        value <- arbitrary[AssociatedCompanies].map(Json.toJson(_))
+      } yield (page, value)
+    }
   implicit lazy val arbitraryAccountingPeriodUserAnswersEntry: Arbitrary[(AccountingPeriodPage.type, JsValue)] =
     Arbitrary {
       for {

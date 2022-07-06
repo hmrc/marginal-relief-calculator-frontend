@@ -127,3 +127,11 @@ associatedCompanies.error.wholeNumber = Enter your Number of associated companie
 associatedCompanies.error.outOfRange = Number of associated companies must be between {0} and {1}
 associatedCompanies.change.hidden = Number of associated companies
 
+
+associatedCompanies.title = Did your company have any active associated companies between 1 April 2023 to 31 December 2023?
+associatedCompanies.heading = Did your company have any active associated companies between 1 April 2023 to 31 December 2023?
+associatedCompanies.warningyes = yes
+associatedCompanies.no = no
+associatedCompanies.checkYourAnswersLabel = Did your company have any active associated companies between 1 April 2023 to 31 December 2023?
+associatedCompanies.error.required = Select associatedCompanies
+associatedCompanies.change.hidden = AssociatedCompanies

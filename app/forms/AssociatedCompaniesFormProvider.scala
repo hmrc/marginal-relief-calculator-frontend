@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages.AccountingPeriodPage
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.AssociatedCompanies
 
-  implicit lazy val arbitraryAssociatedCompaniesPage: Arbitrary[AssociatedCompaniesPage.type] =
-    Arbitrary(AssociatedCompaniesPage)
-  implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =
-    Arbitrary(AccountingPeriodPage)
+class AssociatedCompaniesFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[AssociatedCompanies] =
+    Form(
+      "value" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required")
+    )
 }

@@ -17,3 +17,8 @@
 package generators
 
 trait ModelGenerators {}
+
+  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
+    Arbitrary {
+      Gen.oneOf(AssociatedCompanies.values.toSeq)
+    }

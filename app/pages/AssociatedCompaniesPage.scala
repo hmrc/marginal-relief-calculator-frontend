@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import org.scalacheck.Arbitrary
-import pages.AccountingPeriodPage
+import models.AssociatedCompanies
+import play.api.libs.json.JsPath
 
-trait PageGenerators {
+case object AssociatedCompaniesPage extends QuestionPage[AssociatedCompanies] {
 
-  implicit lazy val arbitraryAssociatedCompaniesPage: Arbitrary[AssociatedCompaniesPage.type] =
-    Arbitrary(AssociatedCompaniesPage)
-  implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =
-    Arbitrary(AccountingPeriodPage)
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "associatedCompanies"
 }
