@@ -25,7 +25,7 @@ import javax.inject.Inject
 class InputScreenFormProvider @Inject() extends Mappings {
 
   def apply(): Form[InputScreenForm] =
-    Form(
+    Form {
       mapping(
         "profit" -> int("profit.error.required", "profit.error.wholeNumber", "profit.error.nonNumeric")
           .verifying(inRange(0, Int.MaxValue, "profit.error.outOfRange")),
@@ -42,5 +42,5 @@ class InputScreenFormProvider @Inject() extends Mappings {
         )
           .verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange"))
       )(InputScreenForm.apply)(InputScreenForm.unapply)
-    )
+    }
 }

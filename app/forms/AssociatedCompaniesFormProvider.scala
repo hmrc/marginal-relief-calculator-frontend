@@ -21,11 +21,21 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 import models.AssociatedCompanies
+import play.api.data.Forms.mapping
+
+import javax.inject.Inject
 
 class AssociatedCompaniesFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[AssociatedCompanies] =
-    Form(
-      "value" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required")
-    )
+  def apply(): Form[AssociatedCompaniesForm] =
+    Form {
+      mapping(
+        "associatedCompanies" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required"),
+      "associatedCompaniesAmount" -> int(
+        "associatedCompanies.error.blank",
+        "associatedCompanies.error.wholeNumber",
+        "associatedCompanies.error.nonNumeric"
+      ).verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange"))
+      ) (AssociatedCompaniesForm.apply) (AssociatedCompaniesForm.unapply)
+    }
 }

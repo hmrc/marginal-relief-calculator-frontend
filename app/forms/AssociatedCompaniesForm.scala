@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
+import play.api.libs.json.{ Format, _ }
 import models.AssociatedCompanies
-import play.api.libs.json.JsPath
-import forms.AssociatedCompaniesForm
 
-case object AssociatedCompaniesPage extends QuestionPage[AssociatedCompaniesForm] {
+final case class AssociatedCompaniesForm(
+  associatedCompanies: AssociatedCompanies,
+  associatedCompaniesAmount: Int
+)
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "associatedCompanies"
+object AssociatedCompaniesForm {
+  implicit val format: Format[AssociatedCompaniesForm] =
+    Json.format[AssociatedCompaniesForm]
 }
