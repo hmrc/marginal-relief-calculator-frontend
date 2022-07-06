@@ -17,11 +17,10 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
 import models.AssociatedCompanies
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{mapping, optional}
 
 import javax.inject.Inject
 
@@ -31,11 +30,11 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
     Form {
       mapping(
         "associatedCompanies" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required"),
-      "associatedCompaniesAmount" -> int(
+      "associatedCompaniesAmount" -> optional(int(
         "associatedCompanies.error.blank",
         "associatedCompanies.error.wholeNumber",
         "associatedCompanies.error.nonNumeric"
-      ).verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange"))
+      ).verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange")))
       ) (AssociatedCompaniesForm.apply) (AssociatedCompaniesForm.unapply)
     }
 }
