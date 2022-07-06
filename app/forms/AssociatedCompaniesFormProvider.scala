@@ -31,10 +31,10 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
       mapping(
         "associatedCompanies" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required"),
       "associatedCompaniesAmount" -> optional(int(
-        "associatedCompanies.error.blank",
-        "associatedCompanies.error.wholeNumber",
-        "associatedCompanies.error.nonNumeric"
-      ).verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange")))
+        "associatedCompaniesAmount.error.required",
+        "associatedCompaniesAmount.error.wholeNumber",
+        "associatedCompaniesAmount.error.nonNumeric"
+      ).verifying(inRange(0, 99, "associatedCompaniesAmount.error.outOfRange")))
       ) (AssociatedCompaniesForm.apply) (AssociatedCompaniesForm.unapply)
     }
 }
