@@ -127,3 +127,17 @@ associatedCompanies.error.wholeNumber = Enter your Number of associated companie
 associatedCompanies.error.outOfRange = Number of associated companies must be between {0} and {1}
 associatedCompanies.change.hidden = Number of associated companies
 
+
+taxableProfit.title = How much is your company''s taxable profit?
+taxableProfit.heading = How much is your company''s taxable profit?
+taxableProfit.label = Profit amount
+taxableProfit.checkYourAnswersLabel = Profit amount
+taxableProfit.error.required = Enter an amount for your taxable profits
+taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, 70000
+taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, 70000
+taxableProfit.error.outOfRange = Enter an taxable profit amount between {0} and {1}
+taxableProfit.change.hidden = TaxableProfit
+taxableProfit.chargeableProfitsOnCTR = Chargeable profits for Corporation Tax on your Company Tax Return.
+taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
+taxableProfit.youCanFindYourCompanyProfitVia = You can find your company's profit via your accountant or accounting software
+taxableProfit.hint = Must be entered as a whole number. For example, 70000

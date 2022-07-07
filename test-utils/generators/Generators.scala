@@ -16,24 +16,27 @@
 
 package generators
 
-import java.time.{ Instant, LocalDate, ZoneOffset }
-
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{ Gen, Shrink }
+
+import java.time.{ Instant, LocalDate, ZoneOffset }
 
 trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
 
-  def genIntersperseString(gen: Gen[String], value: String, frequencyV: Int = 1, frequencyN: Int = 10): Gen[String] = {
-
-    val genValue: Gen[Option[String]] = Gen.frequency(frequencyN -> None, frequencyV -> Gen.const(Some(value)))
-
+  def genIntersperseString(
+    numbers: Gen[String],
+    separator: String,
+    frequencyV: Int = 1,
+    frequencyN: Int = 10
+  ): Gen[String] = {
+    val genValue: Gen[Option[String]] = Gen.frequency(frequencyN -> None, frequencyV -> Gen.const(Some(separator)))
     for {
-      seq1 <- gen
-      seq2 <- Gen.listOfN(seq1.length, genValue)
-    } yield seq1.toSeq.zip(seq2).foldLeft("") {
+      number     <- numbers
+      separators <- Gen.listOfN(number.length, genValue)
+    } yield number.toSeq.zip(separators).foldLeft("") {
       case (acc, (n, Some(v))) =>
         acc + n + v
       case (acc, (n, _)) =>
@@ -41,19 +44,23 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     }
   }
 
-  def intsInRangeWithCommas(min: Int, max: Int): Gen[String] = {
-    val numberGen = choose[Int](min, max).map(_.toString)
-    genIntersperseString(numberGen, ",")
-  }
+  def intsInRangeWithCommas(min: Int, max: Int): Gen[String] =
+    choose[Int](min, max).map(_.toString.reverse.sliding(3, 3).mkString(",").reverse)
 
   def intsLargerThanMaxValue: Gen[BigInt] =
     arbitrary[BigInt] suchThat (x => x > Int.MaxValue)
 
+  def positiveIntsLargerThanMaxValue: Gen[BigInt] =
+    Gen.choose[BigInt](Int.MaxValue, Long.MaxValue)
+
   def intsSmallerThanMinValue: Gen[BigInt] =
     arbitrary[BigInt] suchThat (x => x < Int.MinValue)
 
+  def intsSmallerThanZero: Gen[BigInt] =
+    Gen.choose[BigInt](Int.MinValue, -1)
+
   def nonNumerics: Gen[String] =
-    alphaStr suchThat (_.size > 0)
+    alphaStr suchThat (_.nonEmpty)
 
   def decimals: Gen[String] =
     arbitrary[BigDecimal]
@@ -61,8 +68,13 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
       .suchThat(!_.isValidInt)
       .map(_.formatted("%f"))
 
-  def intsBelowValue(value: Int): Gen[Int] =
-    arbitrary[Int] suchThat (_ < value)
+  def positiveDecimals: Gen[BigDecimal] =
+    Gen
+      .choose[BigDecimal](0, Double.MaxValue)
+      .suchThat(v => v.toString.matches("""^(\d*\.[1-9]\d*)$"""))
+
+  def intsBelowValue(value: Int): Gen[BigInt] =
+    Gen.choose(Int.MinValue, value)
 
   def intsAboveValue(value: Int): Gen[Int] =
     arbitrary[Int] suchThat (_ > value)
