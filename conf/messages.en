@@ -131,6 +131,6 @@ associatedCompanies.checkYourAnswersLabel = Did your company have any active ass
 associatedCompanies.error.required = Select whether you have associated companies or not
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1
 associatedCompaniesCount.error.nonNumeric = Enter using numbers
-associatedCompaniesCount.error.outOfRange = Enter an amount that is less than 99
+associatedCompaniesCount.error.outOfRange = Enter an amount that is less than or equal to 99
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1
 associatedCompanies.change.hidden = AssociatedCompanies
