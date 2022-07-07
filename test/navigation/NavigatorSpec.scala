@@ -29,6 +29,24 @@ class NavigatorSpec extends SpecBase {
 
     "in Normal mode" - {
 
+      "must go from AccountingPeriod page to TaxableProfit page" in {
+        navigator.nextPage(AccountingPeriodPage, NormalMode, UserAnswers("id")) mustBe routes.TaxableProfitController
+          .onPageLoad(NormalMode)
+      }
+
+      "must go from TaxableProfit page to InputScreen page" in {
+        navigator.nextPage(TaxableProfitPage, NormalMode, UserAnswers("id")) mustBe routes.InputScreenController
+          .onPageLoad(NormalMode)
+      }
+
+      "must go from InputScreen page to ResultsPage page" in {
+        navigator.nextPage(
+          InputScreenPage,
+          NormalMode,
+          UserAnswers("id")
+        ) mustBe routes.ResultsPageController.onPageLoad
+      }
+
       "must go from a page that doesn't exist in the route map to Index" in {
 
         case object UnknownPage extends Page

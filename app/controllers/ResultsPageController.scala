@@ -20,15 +20,14 @@ import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
 import forms.{ AccountingPeriodForm, InputScreenForm }
 import org.slf4j.LoggerFactory
-import pages.{ AccountingPeriodPage, InputScreenPage }
-
-import javax.inject.Inject
+import pages.{ AccountingPeriodPage, InputScreenPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
+import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
 class ResultsPageController @Inject() (
@@ -46,14 +45,15 @@ class ResultsPageController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val maybeAccountingPeriodForm: Option[AccountingPeriodForm] = request.userAnswers.get(AccountingPeriodPage)
+    val maybeTaxableProfit: Option[Int] = request.userAnswers.get(TaxableProfitPage)
     val maybeInputScreenForm: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
-    (maybeAccountingPeriodForm, maybeInputScreenForm) match {
-      case (Some(accountingPeriodForm), Some(inputScreenForm)) =>
+    (maybeAccountingPeriodForm, maybeTaxableProfit, maybeInputScreenForm) match {
+      case (Some(accountingPeriodForm), Some(taxableProfit), Some(inputScreenForm)) =>
         marginalReliefCalculatorConnector
           .calculate(
             accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodForm.accountingPeriodEndDate.get,
-            inputScreenForm.profit,
+            taxableProfit.toDouble,
             Some(inputScreenForm.distribution),
             Some(inputScreenForm.associatedCompanies)
           )
@@ -61,9 +61,14 @@ class ResultsPageController @Inject() (
             logger.info(s"received results: $marginalReliefResult")
             Ok(view(marginalReliefResult))
           }
-      case (Some(_), None) => throw new BadRequestException("input screen parameters not provided")
-      case (None, Some(_)) => throw new BadRequestException("accounting period not provided")
-      case (None, None)    => throw new BadRequestException("Calculation parameters not provided")
+      case _ =>
+        throw new BadRequestException(
+          "Some of the input parameters are missing. Missing parameters: " + List(
+            (AccountingPeriodPage, maybeAccountingPeriodForm),
+            (TaxableProfitPage, maybeTaxableProfit),
+            (InputScreenPage, maybeInputScreenForm)
+          ).filter(_._2.isEmpty).map(_._1)
+        )
     }
   }
 }

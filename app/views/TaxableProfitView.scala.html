@@ -20,37 +20,44 @@
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
-    govukDateInput: GovukDateInput,
     govukInput: GovukInput,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails
 )
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("inputScreen.title"))) {
+@layout(pageTitle = title(form, messages("taxableProfit.title"))) {
 
-    @formHelper(action = routes.InputScreenController.onSubmit(mode)) {
+    @formHelper(action = routes.TaxableProfitController.onSubmit(mode), 'autoComplete -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @govukInput(
-            InputViewModel(
-                field = form("distribution"),
-                label = LabelViewModel(messages("distribution.heading")).asPageHeading()
-            )
-            .asNumeric()
-            .withWidth(Fixed10)
-        )
+        <h1 class="govuk-fieldset__legend--l">
+            @messages("taxableProfit.heading")
+        </h1>
+
+        <p class="govuk-body">
+            @messages("taxableProfit.chargeableProfitsOnCTR")
+        </p>
+
+        @govukDetails(Details(
+            summary = Text(messages("taxableProfit.whereCanIFindMyCompanyTaxProfit")),
+            content = Text(messages("taxableProfit.youCanFindYourCompanyProfitVia"))
+        ))
 
         @govukInput(
             InputViewModel(
-                field = form("associatedCompanies"),
-                label = LabelViewModel(messages("associatedCompanies.heading")).asPageHeading()
+                field = form("value"),
+                label = LabelViewModel(messages("taxableProfit.label"))
             )
             .asNumeric()
             .withWidth(Fixed10)
+            .withPrefix(PrefixOrSuffix(content = Text("£")))
+            .withCssClass("govuk-input--width-5")
+            .withHint(HintViewModel(messages("taxableProfit.hint")))
         )
 
         @govukButton(

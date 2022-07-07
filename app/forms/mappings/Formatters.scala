@@ -16,10 +16,12 @@
 
 package forms.mappings
 
+import cats.syntax.either._
+import models.Enumerable
 import play.api.data.FormError
 import play.api.data.format.Formatter
-import models.Enumerable
 
+import scala.util.Try
 import scala.util.control.Exception.nonFatalCatch
 
 trait Formatters {
@@ -87,6 +89,47 @@ trait Formatters {
                 .left
                 .map(_ => Seq(FormError(key, nonNumericKey, args)))
           }
+
+      override def unbind(key: String, value: Int) =
+        baseFormatter.unbind(key, value.toString)
+    }
+
+  private[mappings] def positiveAmountFormatter(
+    requiredKey: String,
+    outOfRangeKey: String,
+    doNotUseDecimalsKey: String,
+    nonNumericKey: String,
+    args: Seq[String] = Seq.empty
+  ): Formatter[Int] =
+    new Formatter[Int] {
+
+      private val DecimalRegexp = """^-?(\d*\.\d*)$"""
+      private val AmountWithCommas = """^\d{0,3}[,]?(,\d{3})*$"""
+      private val TrailingZeroesAfterDecimal = """[.][0]+$"""
+
+      private val baseFormatter = stringFormatter(requiredKey, args)
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = for {
+        result <- baseFormatter.bind(key, data)
+        resultWithoutPoundSymbol <-
+          (if (result.startsWith("£")) result.substring(1) else result).asRight[Seq[FormError]]
+        resultWithoutTrailingZeroesAfterDecimal <-
+          resultWithoutPoundSymbol.replaceAll(TrailingZeroesAfterDecimal, "").asRight[Seq[FormError]]
+        resultWithoutCommas <- (resultWithoutTrailingZeroesAfterDecimal match {
+                                 case s if s.matches(AmountWithCommas) => s.replace(",", "")
+                                 case other                            => other
+                               }).asRight[Seq[FormError]]
+        finalResult <- resultWithoutCommas match {
+                         case s if s.matches(DecimalRegexp) =>
+                           Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
+                         case s if Try(s.toLong).isFailure => Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
+                         case s if s.toLong < 0 =>
+                           Seq(FormError(key, outOfRangeKey, Seq(0, Integer.MAX_VALUE))).asLeft[Int]
+                         case s if s.toLong > Integer.MAX_VALUE =>
+                           Seq(FormError(key, outOfRangeKey, Seq(0, Integer.MAX_VALUE))).asLeft[Int]
+                         case s => s.toInt.asRight[Seq[FormError]]
+                       }
+      } yield finalResult
 
       override def unbind(key: String, value: Int) =
         baseFormatter.unbind(key, value.toString)

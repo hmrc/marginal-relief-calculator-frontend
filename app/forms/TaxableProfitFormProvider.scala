@@ -16,14 +16,19 @@
 
 package forms
 
-import play.api.libs.json.{ Format, _ }
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-final case class InputScreenForm(
-  distribution: Int,
-  associatedCompanies: Int
-)
+class TaxableProfitFormProvider @Inject() extends Mappings {
 
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+  def apply(): Form[Int] =
+    Form(
+      "value" -> positiveWholeAmount(
+        "taxableProfit.error.required",
+        "taxableProfit.error.outOfRange",
+        "taxableProfit.error.doNotUseDecimals",
+        "taxableProfit.error.nonNumeric"
+      )
+    )
 }
