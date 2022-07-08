@@ -141,3 +141,16 @@ taxableProfit.chargeableProfitsOnCTR = Chargeable profits for Corporation Tax on
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
 taxableProfit.youCanFindYourCompanyProfitVia = You can find your company's profit via your accountant or accounting software
 taxableProfit.hint = Must be entered as a whole number. For example, 70000
+
+distribution.title = Did your company receive any distributions?
+distribution.heading = Did your company receive any distributions?
+distribution.listHeading = Distributions include:
+distribution.listItem1 = dividends
+distribution.listItem2 = distributions of assets
+distribution.listItem3 = amounts treated as a distribution on the transfer of assets or liabilities
+distribution.listItem4 = the repayment of share capital
+distribution.yes = Yes
+distribution.no = No
+distribution.checkYourAnswersLabel = Did your company receive any distributions?
+distribution.error.required = Select whether you received distributions or not
+distribution.change.hidden = Distribution

@@ -31,6 +31,9 @@ class Navigator @Inject() () {
       _ => routes.TaxableProfitController.onPageLoad(NormalMode)
 
     case TaxableProfitPage =>
+      _ => routes.DistributionController.onPageLoad(NormalMode)
+
+    case DistributionPage =>
       _ => routes.InputScreenController.onPageLoad(NormalMode)
 
     case InputScreenPage =>

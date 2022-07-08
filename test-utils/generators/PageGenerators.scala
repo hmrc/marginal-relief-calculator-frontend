@@ -21,6 +21,9 @@ import pages.{ AccountingPeriodPage, TaxableProfitPage }
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryDistributionPage: Arbitrary[DistributionPage.type] =
+    Arbitrary(DistributionPage)
+
   implicit lazy val arbitraryTaxableProfitPage: Arbitrary[TaxableProfitPage.type] =
     Arbitrary(TaxableProfitPage)
   implicit lazy val arbitraryAccountingPeriodPage: Arbitrary[AccountingPeriodPage.type] =

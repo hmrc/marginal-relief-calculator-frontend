@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-trait ModelGenerators {}
+import javax.inject.Inject
 
-  implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
-    Arbitrary {
-      Gen.oneOf(Distribution.values.toSeq)
-    }
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.Distribution
+
+class DistributionFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Distribution] =
+    Form(
+      "value" -> enumerable[Distribution]("distribution.error.required")
+    )
+}
