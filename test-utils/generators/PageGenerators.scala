@@ -17,7 +17,7 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages.AccountingPeriodPage
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage }
 
 trait PageGenerators {
 

@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{ CheckMode, UserAnswers }
 import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -26,25 +26,23 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object AssociatedCompaniesSummary  {
+object AssociatedCompaniesSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AssociatedCompaniesPage).map {
-      answer =>
-
-        val value = ValueViewModel(
-          HtmlContent(
-            HtmlFormat.escape(messages(s"associatedCompanies.$answer"))
-          )
+    answers.get(AssociatedCompaniesPage).map { answer =>
+      val value = ValueViewModel(
+        HtmlContent(
+          HtmlFormat.escape(messages(s"associatedCompanies.$answer"))
         )
+      )
 
-        SummaryListRowViewModel(
-          key     = "associatedCompanies.checkYourAnswersLabel",
-          value   = value,
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key = "associatedCompanies.checkYourAnswersLabel",
+        value = value,
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
         )
+      )
     }
 }

@@ -16,9 +16,10 @@
 
 package generators
 
+import models.AssociatedCompanies
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.AccountingPeriodPage
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage }
 import play.api.libs.json.{ JsValue, Json }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {

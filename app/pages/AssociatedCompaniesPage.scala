@@ -16,9 +16,8 @@
 
 package pages
 
-import models.AssociatedCompanies
-import play.api.libs.json.JsPath
 import forms.AssociatedCompaniesForm
+import play.api.libs.json.JsPath
 
 case object AssociatedCompaniesPage extends QuestionPage[AssociatedCompaniesForm] {
 

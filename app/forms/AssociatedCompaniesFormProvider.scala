@@ -16,11 +16,13 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
-import play.api.data.Form
 import models.AssociatedCompanies
-import play.api.data.Forms.{ mapping, optional }
+import models.AssociatedCompanies.Yes
+import play.api.data.Form
+import play.api.data.Forms.mapping
+
+import javax.inject.Inject
 
 class AssociatedCompaniesFormProvider @Inject() extends Mappings {
 
@@ -28,13 +30,17 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
     Form {
       mapping(
         "associatedCompanies" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required"),
-        "associatedCompaniesCount" -> optional(
-          int(
-            "associatedCompaniesCount.error.required",
-            "associatedCompaniesCount.error.wholeNumber",
-            "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
-        )
+        "associatedCompaniesCount" ->
+          conditional[Int, AssociatedCompanies](
+            field = int(
+              "associatedCompaniesCount.error.required",
+              "associatedCompaniesCount.error.wholeNumber",
+              "associatedCompaniesCount.error.nonNumeric"
+            ).withPrefix("associatedCompaniesCount")
+              .verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange")),
+            conditionField = enumerable[AssociatedCompanies]().withPrefix("associatedCompanies"),
+            condition = _ == Yes
+          )
       )(AssociatedCompaniesForm.apply)(AssociatedCompaniesForm.unapply)
     }
 }

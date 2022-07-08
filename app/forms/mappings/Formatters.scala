@@ -16,9 +16,10 @@
 
 package forms.mappings
 
-import play.api.data.FormError
-import play.api.data.format.Formatter
+import cats.syntax.either._
 import models.Enumerable
+import play.api.data.format.Formatter
+import play.api.data.{ FormError, Mapping }
 
 import scala.util.control.Exception.nonFatalCatch
 
@@ -109,4 +110,24 @@ trait Formatters {
       override def unbind(key: String, value: A): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
+
+  private[mappings] def conditionalFormatter[A, B](
+    field: Mapping[A],
+    conditionField: Mapping[B],
+    condition: B => Boolean
+  ): Formatter[Option[A]] = new Formatter[Option[A]] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[A]] =
+      conditionField
+        .bind(data)
+        .toOption match {
+        case Some(value) if condition(value) =>
+          field.bind(data).map(Some(_))
+        case _ =>
+          None.asRight[Seq[FormError]]
+      }
+
+    override def unbind(key: String, value: Option[A]): Map[String, String] =
+      value.map(field.unbind).getOrElse(Map.empty)
+  }
 }
