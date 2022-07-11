@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-trait ModelGenerators {}
+import models.DistributionsIncluded
+import play.api.libs.json.JsPath
 
-  implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
-    Arbitrary {
-      Gen.oneOf(DistributionsIncluded.values.toSeq)
-    }
+case object DistributionsIncludedPage extends QuestionPage[DistributionsIncluded] {
 
-  implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
-    Arbitrary {
-      Gen.oneOf(Distribution.values.toSeq)
-    }
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "distributionsIncluded"
+}

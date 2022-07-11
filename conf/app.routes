@@ -35,3 +35,8 @@ GET        /distribution                        controllers.DistributionControll
 POST       /distribution                        controllers.DistributionController.onSubmit(mode: Mode = NormalMode)
 GET        /change-distribution                  controllers.DistributionController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-distribution                  controllers.DistributionController.onSubmit(mode: Mode = CheckMode)
+
+GET        /distributionsIncluded                        controllers.DistributionsIncludedController.onPageLoad(mode: Mode = NormalMode)
+POST       /distributionsIncluded                        controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
+GET        /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)

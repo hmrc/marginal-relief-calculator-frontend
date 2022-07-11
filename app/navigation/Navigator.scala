@@ -33,7 +33,9 @@ class Navigator @Inject() () {
     case TaxableProfitPage =>
       _ => routes.DistributionController.onPageLoad(NormalMode)
 
-    case DistributionPage =>
+    case DistributionPage => complexRoute
+
+    case DistributionsIncludedPage =>
       _ => routes.InputScreenController.onPageLoad(NormalMode)
 
     case InputScreenPage =>
@@ -45,6 +47,13 @@ class Navigator @Inject() () {
 
   private val checkRouteMap: Page => UserAnswers => Call = { case _ =>
     _ => routes.CheckYourAnswersController.onPageLoad
+  }
+
+  private def complexRoute(answers: UserAnswers): Call = {
+    (answers.get(DistributionPage)) match {
+      case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
+      case Some(Distribution.No)    => routes.InputScreenController.onPageLoad(NormalMode)
+    }
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
