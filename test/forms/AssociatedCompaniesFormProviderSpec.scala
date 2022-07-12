@@ -20,26 +20,81 @@ import forms.behaviours.OptionFieldBehaviours
 import models.AssociatedCompanies
 import play.api.data.FormError
 
+import java.time.LocalDate
+
 class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
 
   val form = new AssociatedCompaniesFormProvider()()
 
-  ".value" - {
+  "form values" - {
 
-    val fieldName = "value"
-    val requiredKey = "associatedCompanies.error.required"
+    "Are valid" in {
+      val data = buildDataMap("yes", "1")
+      val result = form.bind(data)
+      result.hasErrors mustBe false
+    }
 
-    behave like optionsField[AssociatedCompanies](
-      form,
-      fieldName,
-      validValues = AssociatedCompanies.values,
-      invalidError = FormError(fieldName, "error.invalid")
-    )
+    "Are inValid" in {
+      val data = buildDataMap("invalid value", "invalid value")
+      val result = form.bind(data)
+      result.hasErrors mustBe true
+      result.errors mustBe Seq(
+        FormError("associatedCompanies", List("error.invalid"))
+      )
+    }
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+    "Optional value not sent valid" in {
+      val data = buildDataMap2("no")
+      val result = form.bind(data)
+      result.hasErrors mustBe false
+    }
+
+    "Optional value not sent invalid" in {
+      val data = buildDataMap2("yes")
+      val result = form.bind(data)
+      result.hasErrors mustBe true
+      result.errors mustBe Seq(
+        FormError("associatedCompaniesCount", List("associatedCompaniesCount.error.required"))
+      )
+    }
+
+    "Associated Companies Count out of range above 99" in {
+
+      val rangeAbove = intsAboveValue(99);
+
+      forAll(rangeAbove) { (rangeAbove) =>
+        val data = buildDataMap("yes", rangeAbove.toString)
+        val result = form.bind(data)
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("associatedCompaniesCount", List("associatedCompaniesCount.error.outOfRange"), Seq(0, 99))
+        )
+      }
+    }
+
+    "Associated Companies Count out of range below 0" in {
+
+      val rangeBelow = intsBelowValue(0);
+
+      forAll(rangeBelow) { (rangeBelow) =>
+        val data = buildDataMap("yes", rangeBelow.toString)
+        val result = form.bind(data)
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("associatedCompaniesCount", List("associatedCompaniesCount.error.outOfRange"), Seq(0, 99))
+        )
+      }
+    }
   }
+
+  private def buildDataMap(associatedCompanies : String, associatedCompaniesCount: String) =
+    Map(
+      s"associatedCompanies"      -> associatedCompanies,
+      s"associatedCompaniesCount" -> associatedCompaniesCount
+    )
+
+  private def buildDataMap2(associatedCompanies : String) =
+    Map(
+      s"associatedCompanies"      -> associatedCompanies
+    )
 }

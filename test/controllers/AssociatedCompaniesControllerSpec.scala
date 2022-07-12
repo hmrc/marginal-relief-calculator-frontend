@@ -101,7 +101,7 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, associatedCompaniesRoute)
-            .withFormUrlEncodedBody(("value", AssociatedCompanies.values.head.toString))
+            .withFormUrlEncodedBody(("associatedCompanies", "yes"), ("associatedCompaniesCount", "1"))
 
         val result = route(application, request).value
 
@@ -117,9 +117,13 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, associatedCompaniesRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+            .withFormUrlEncodedBody(
+              ("associatedCompanies", "invalid value"),
+              ("associatedCompaniesCount", "invalid value")
+            )
 
-        val boundForm = form.bind(Map("value" -> "invalid value"))
+        val boundForm =
+          form.bind(Map("associatedCompanies" -> "invalid value", "associatedCompaniesCount" -> "invalid value"))
 
         val view = application.injector.instanceOf[AssociatedCompaniesView]
 
