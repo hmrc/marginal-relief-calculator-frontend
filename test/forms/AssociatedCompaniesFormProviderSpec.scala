@@ -29,9 +29,13 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
   "form values" - {
 
     "Are valid" in {
-      val data = buildDataMap("yes", "1")
-      val result = form.bind(data)
-      result.hasErrors mustBe false
+      val range = intsInRangeWithCommas(0,99)
+
+      forAll(range) { (range) =>
+        val data = buildDataMap("yes", range.toString())
+        val result = form.bind(data)
+        result.hasErrors mustBe false
+      }
     }
 
     "Are inValid" in {
