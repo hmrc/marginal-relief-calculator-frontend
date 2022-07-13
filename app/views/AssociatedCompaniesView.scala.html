@@ -46,7 +46,10 @@
     @formHelper(action = routes.AssociatedCompaniesController.onSubmit(mode), 'autoComplete -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
+            @govukErrorSummary(
+                ErrorSummaryViewModel(
+                    form,
+                    errorLinkOverrides = Map(form.errors.head.key -> form.errors.head.key)))
         }
 
         <h1 class="govuk-fieldset__legend--l">

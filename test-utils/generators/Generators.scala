@@ -123,4 +123,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
       Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate
     }
   }
+
+  def integerBetween(min: Int,max: Int): Gen[Int] =
+  choose[Int](min, max)
 }

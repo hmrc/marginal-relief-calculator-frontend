@@ -19,6 +19,7 @@ package forms
 import forms.behaviours.OptionFieldBehaviours
 import models.AssociatedCompanies
 import play.api.data.FormError
+import scala.util.Random
 
 import java.time.LocalDate
 
@@ -29,15 +30,16 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
   "form values" - {
 
     "Are valid" in {
-      val range = intsInRangeWithCommas(0, 99)
+      val range = integerBetween(0, 99)
 
       forAll(range) { range =>
+        println(range)
         val data = buildDataMap("yes", range.toString())
         val result = form.bind(data)
         result.hasErrors mustBe false
+        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes,Some(range.toInt))
       }
     }
-
     "Are inValid" in {
       val data = buildDataMap("invalid value", "invalid value")
       val result = form.bind(data)
