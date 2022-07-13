@@ -29,9 +29,9 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
   "form values" - {
 
     "Are valid" in {
-      val range = intsInRangeWithCommas(0,99)
+      val range = intsInRangeWithCommas(0, 99)
 
-      forAll(range) { (range) =>
+      forAll(range) { range =>
         val data = buildDataMap("yes", range.toString())
         val result = form.bind(data)
         result.hasErrors mustBe false
@@ -66,7 +66,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
 
       val rangeAbove = intsAboveValue(99);
 
-      forAll(rangeAbove) { (rangeAbove) =>
+      forAll(rangeAbove) { rangeAbove =>
         val data = buildDataMap("yes", rangeAbove.toString)
         val result = form.bind(data)
         result.hasErrors mustBe true
@@ -80,7 +80,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
 
       val rangeBelow = intsBelowValue(0);
 
-      forAll(rangeBelow) { (rangeBelow) =>
+      forAll(rangeBelow) { rangeBelow =>
         val data = buildDataMap("yes", rangeBelow.toString)
         val result = form.bind(data)
         result.hasErrors mustBe true
@@ -91,14 +91,14 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
     }
   }
 
-  private def buildDataMap(associatedCompanies : String, associatedCompaniesCount: String) =
+  private def buildDataMap(associatedCompanies: String, associatedCompaniesCount: String) =
     Map(
       s"associatedCompanies"      -> associatedCompanies,
       s"associatedCompaniesCount" -> associatedCompaniesCount
     )
 
-  private def buildDataMap2(associatedCompanies : String) =
+  private def buildDataMap2(associatedCompanies: String) =
     Map(
-      s"associatedCompanies"      -> associatedCompanies
+      s"associatedCompanies" -> associatedCompanies
     )
 }
