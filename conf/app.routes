@@ -1,32 +1,37 @@
 # microservice specific routes
 
-->          /hmrc-frontend                               hmrcfrontend.Routes
+->          /hmrc-frontend                      hmrcfrontend.Routes
 
-GET         /                                            controllers.IndexController.onPageLoad
+GET         /                                   controllers.IndexController.onPageLoad
 
-GET         /assets/*file                                controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET         /language/:lang                     controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET         /refresh-session                             controllers.KeepAliveController.keepAlive
+GET         /refresh-session                    controllers.KeepAliveController.keepAlive
 
-GET         /there-is-a-problem                          controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
+GET         /there-is-a-problem                 controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
 
-GET         /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
+GET         /check-your-answers                 controllers.CheckYourAnswersController.onPageLoad
 
 GET        /input-screen                        controllers.InputScreenController.onPageLoad(mode: Mode = NormalMode)
 POST       /input-screen                        controllers.InputScreenController.onSubmit(mode: Mode = NormalMode)
-GET        /change-input-screen                  controllers.InputScreenController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-input-screen                  controllers.InputScreenController.onSubmit(mode: Mode = CheckMode)
+GET        /change-input-screen                 controllers.InputScreenController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-input-screen                 controllers.InputScreenController.onSubmit(mode: Mode = CheckMode)
 
-GET        /results-page                       controllers.ResultsPageController.onPageLoad()
-
-GET        /accounting-period                  controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
-POST       /accounting-period                  controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
-GET        /change-accounting-period                        controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-accounting-period                        controllers.AccountingPeriodController.onSubmit(mode: Mode = CheckMode)
+GET        /results-page                        controllers.ResultsPageController.onPageLoad()
 
 GET        /associated-companies                        controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
 POST       /associated-companies                        controllers.AssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
 GET        /change-associated-companies                  controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-associated-companies                  controllers.AssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
+
+GET        /accounting-period                   controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
+POST       /accounting-period                   controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
+GET        /change-accounting-period            controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-accounting-period            controllers.AccountingPeriodController.onSubmit(mode: Mode = CheckMode)
+
+GET        /taxable-profit                      controllers.TaxableProfitController.onPageLoad(mode: Mode = NormalMode)
+POST       /taxable-profit                      controllers.TaxableProfitController.onSubmit(mode: Mode = NormalMode)
+GET        /change-taxable-profit               controllers.TaxableProfitController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-taxable-profit               controllers.TaxableProfitController.onSubmit(mode: Mode = CheckMode)

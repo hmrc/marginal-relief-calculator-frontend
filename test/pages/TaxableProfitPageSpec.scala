@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import play.api.libs.json.{ Format, _ }
+import pages.behaviours.PageBehaviours
 
-final case class InputScreenForm(
-  distribution: Int,
-  associatedCompanies: Int
-)
+class TaxableProfitPageSpec extends PageBehaviours {
 
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+  "TaxableProfitPage" - {
+
+    beRetrievable[Int](TaxableProfitPage)
+
+    beSettable[Int](TaxableProfitPage)
+
+    beRemovable[Int](TaxableProfitPage)
+  }
 }

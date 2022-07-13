@@ -205,4 +205,72 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.errors must contain(FormError("value", "error.nonNumeric"))
     }
   }
+
+  "positiveWholeAmount" - {
+
+    val testForm: Form[Int] =
+      Form(
+        "value" -> positiveWholeAmount()
+      )
+
+    "must bind a valid positive whole amount" in {
+      val result = testForm.bind(Map("value" -> "1"))
+      result.get mustEqual 1
+    }
+
+    "must remove valid commas in input" in {
+      val result = testForm.bind(Map("value" -> "1,111"))
+      result.get mustEqual 1111
+    }
+
+    "must remove leading £ symbol in input" in {
+      val result = testForm.bind(Map("value" -> "£1,111"))
+      result.get mustEqual 1111
+    }
+
+    "must remove trailing zeroes after decimals" in {
+      val result = testForm.bind(Map("value" -> "1.00"))
+      result.get mustEqual 1
+    }
+
+    "must not bind when value is non-numeric" in {
+      val result = testForm.bind(Map("value" -> "abc"))
+      result.errors must contain(FormError("value", "error.nonNumeric"))
+    }
+
+    "must not bind decimal values" in {
+      val result = testForm.bind(Map("value" -> "1.11"))
+      result.errors must contain(FormError("value", "error.wholeNumber"))
+    }
+
+    "must not bind values with comma in wrong places" in {
+      val result = testForm.bind(Map("value" -> "111,1,11"))
+      result.errors must contain(FormError("value", "error.nonNumeric"))
+    }
+
+    "must not bind when value is less than 0" in {
+      val result = testForm.bind(Map("value" -> "-1"))
+      result.errors must contain(FormError("value", "error.outOfRange", List(0, Integer.MAX_VALUE)))
+    }
+
+    "must not bind when value is greater than Int max" in {
+      val result = testForm.bind(Map("value" -> (Integer.MAX_VALUE.toLong + 1).toString))
+      result.errors must contain(FormError("value", "error.outOfRange", List(0, Integer.MAX_VALUE)))
+    }
+
+    "must not bind an empty value" in {
+      val result = testForm.bind(Map("value" -> ""))
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "must not bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "must unbind a valid value" in {
+      val result = testForm.fill(1)
+      result.apply("value").value.value mustEqual "1"
+    }
+  }
 }

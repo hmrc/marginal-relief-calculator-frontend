@@ -19,7 +19,7 @@ package generators
 import models.AssociatedCompanies
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TaxableProfitPage }
 import play.api.libs.json.{ JsValue, Json }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
@@ -31,6 +31,15 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
         value <- arbitrary[AssociatedCompanies].map(Json.toJson(_))
       } yield (page, value)
     }
+
+  implicit lazy val arbitraryTaxableProfitUserAnswersEntry: Arbitrary[(TaxableProfitPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TaxableProfitPage.type]
+        value <- arbitrary[Int].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryAccountingPeriodUserAnswersEntry: Arbitrary[(AccountingPeriodPage.type, JsValue)] =
     Arbitrary {
       for {

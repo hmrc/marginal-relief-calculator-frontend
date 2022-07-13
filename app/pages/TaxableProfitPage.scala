@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import play.api.libs.json.{ Format, _ }
+import play.api.libs.json.JsPath
 
-final case class InputScreenForm(
-  distribution: Int,
-  associatedCompanies: Int
-)
+case object TaxableProfitPage extends QuestionPage[Int] {
 
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "taxableProfit"
 }

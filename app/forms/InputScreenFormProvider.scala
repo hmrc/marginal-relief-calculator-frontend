@@ -27,8 +27,6 @@ class InputScreenFormProvider @Inject() extends Mappings {
   def apply(): Form[InputScreenForm] =
     Form {
       mapping(
-        "profit" -> int("profit.error.required", "profit.error.wholeNumber", "profit.error.nonNumeric")
-          .verifying(inRange(0, Int.MaxValue, "profit.error.outOfRange")),
         "distribution" -> int(
           "distribution.error.required",
           "distribution.error.wholeNumber",

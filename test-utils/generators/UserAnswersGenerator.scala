@@ -17,6 +17,7 @@
 package generators
 
 import models.UserAnswers
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{ Arbitrary, Gen }
 import org.scalatest.TryValues
 import pages._
@@ -27,6 +28,7 @@ trait UserAnswersGenerator extends TryValues {
 
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
     Arbitrary.arbitrary[(AssociatedCompaniesPage.type, JsValue)] ::
+      arbitrary[(TaxableProfitPage.type, JsValue)] ::
       Arbitrary.arbitrary[(AccountingPeriodPage.type, JsValue)] ::
       Nil
 

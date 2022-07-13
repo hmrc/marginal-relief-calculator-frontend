@@ -28,6 +28,9 @@ class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
     case AccountingPeriodPage =>
+      _ => routes.TaxableProfitController.onPageLoad(NormalMode)
+
+    case TaxableProfitPage =>
       _ => routes.InputScreenController.onPageLoad(NormalMode)
 
     case InputScreenPage =>
