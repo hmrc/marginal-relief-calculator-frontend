@@ -122,11 +122,7 @@ associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies between {0} to {1}?
 associatedCompanies.warning = Do not include the company you're currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect calculation.
 associatedCompanies.detailsTitle = What are associated companies?
-associatedCompanies.detailsHtml = A company is considered associated to another if:<br/><ul><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link">control</a> of the other</li><li>both companies are controlled by the same companies or people</li>
-associatedCompanies.option1Value = yes
-associatedCompanies.option1Label = Yes
-associatedCompanies.option2Value = no
-associatedCompanies.option2Label = No
+associatedCompanies.detailsHtml = A company is considered associated to another if:<br/><ul><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link">control</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = Enter only additional associated companies
 associatedCompanies.checkYourAnswersLabel = Did your company have any active associated companies between {0} to {1}?
 associatedCompanies.error.required = Select whether you have associated companies or not
