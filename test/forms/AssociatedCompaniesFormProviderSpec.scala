@@ -19,9 +19,6 @@ package forms
 import forms.behaviours.OptionFieldBehaviours
 import models.AssociatedCompanies
 import play.api.data.FormError
-import scala.util.Random
-
-import java.time.LocalDate
 
 class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
 
@@ -34,14 +31,14 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
 
       forAll(range) { range =>
         println(range)
-        val data = buildDataMap("yes", range.toString())
+        val data = buildDataMap("yes", Option(range.toString))
         val result = form.bind(data)
         result.hasErrors mustBe false
-        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes,Some(range.toInt))
+        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(range.toInt))
       }
     }
     "Are inValid" in {
-      val data = buildDataMap("invalid value", "invalid value")
+      val data = buildDataMap("invalid value", Option("invalid value"))
       val result = form.bind(data)
       result.hasErrors mustBe true
       result.errors mustBe Seq(
@@ -50,13 +47,13 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
     }
 
     "Optional value not sent valid" in {
-      val data = buildDataMap2("no")
+      val data = buildDataMap("no")
       val result = form.bind(data)
       result.hasErrors mustBe false
     }
 
     "Optional value not sent invalid" in {
-      val data = buildDataMap2("yes")
+      val data = buildDataMap("yes")
       val result = form.bind(data)
       result.hasErrors mustBe true
       result.errors mustBe Seq(
@@ -69,7 +66,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
       val rangeAbove = intsAboveValue(99);
 
       forAll(rangeAbove) { rangeAbove =>
-        val data = buildDataMap("yes", rangeAbove.toString)
+        val data = buildDataMap("yes", Option(rangeAbove.toString))
         val result = form.bind(data)
         result.hasErrors mustBe true
         result.errors mustBe Seq(
@@ -83,7 +80,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
       val rangeBelow = intsBelowValue(0);
 
       forAll(rangeBelow) { rangeBelow =>
-        val data = buildDataMap("yes", rangeBelow.toString)
+        val data = buildDataMap("yes", Option(rangeBelow.toString))
         val result = form.bind(data)
         result.hasErrors mustBe true
         result.errors mustBe Seq(
@@ -93,14 +90,8 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
     }
   }
 
-  private def buildDataMap(associatedCompanies: String, associatedCompaniesCount: String) =
-    Map(
-      s"associatedCompanies"      -> associatedCompanies,
-      s"associatedCompaniesCount" -> associatedCompaniesCount
-    )
-
-  private def buildDataMap2(associatedCompanies: String) =
+  private def buildDataMap(associatedCompanies: String, associatedCompaniesCount: Option[String] = None) =
     Map(
       s"associatedCompanies" -> associatedCompanies
-    )
+    ) ++ associatedCompaniesCount.map(c => "associatedCompaniesCount" -> c)
 }

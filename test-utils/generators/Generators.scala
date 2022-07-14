@@ -124,6 +124,6 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     }
   }
 
-  def integerBetween(min: Int,max: Int): Gen[Int] =
-  choose[Int](min, max)
+  def integerBetween(min: Int, max: Int): Gen[Int] =
+    choose[Int](min, max)
 }
