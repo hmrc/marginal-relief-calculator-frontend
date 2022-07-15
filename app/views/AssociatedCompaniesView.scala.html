@@ -15,6 +15,8 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import connectors.sharedmodel._
+@import forms.DateUtils._
 
 @this(
     layout: templates.Layout,
@@ -28,12 +30,12 @@
 )
 
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], associatedCompaniesParameter: AssociatedCompaniesParameter,mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@yesHtml = {
+@yesHtml(formParam: String) = {
     @govukInput(
         InputViewModel(
-            field = form("associatedCompaniesCount"),
+            field = form(formParam),
             label = Label(content = Text(messages("associatedCompanies.countLabel")))
         )
         .asNumeric()
@@ -52,37 +54,116 @@
                     errorLinkOverrides = Map(form.errors.head.key -> form.errors.head.key)))
         }
 
-        <h1 class="govuk-fieldset__legend--l">
-            @messages("associatedCompanies.heading")
-        </h1>
+        @associatedCompaniesParameter match {
+            case DontAsk => {
+                <span></span>
+            }
+            case AskFull => {
+                <span>
+                    <h1 class="govuk-fieldset__legend--l">
+                        @messages("associatedCompanies.heading")
+                    </h1>
 
-        @govukWarningText(WarningText(
-            iconFallbackText = "Warning",
-            content = Text(messages("associatedCompanies.warning"))
-        ))
+                    @govukWarningText(WarningText(
+                        iconFallbackText = "Warning",
+                        content = Text(messages("associatedCompanies.warning"))
+                    ))
 
-        @govukDetails(Details(
-            summary = Text(messages("associatedCompanies.detailsTitle")),
-            content = HtmlContent(messages("associatedCompanies.detailsHtml"))
-        ))
+                    @govukDetails(Details(
+                        summary = Text(messages("associatedCompanies.detailsTitle")),
+                        content = HtmlContent(messages("associatedCompanies.detailsHtml"))
+                    ))
 
-        @govukRadios(
-            RadiosViewModel(
-                field  = form("associatedCompanies"),
-                legend = LegendViewModel(""),
-                items = Seq(
-                    RadioItem(
-                        content = Text("Yes"),
-                        value = Some("yes"),
-                        conditionalHtml = Some(yesHtml)
-                    ),
-                    RadioItem(
-                        content = Text("No"),
-                        value = Some("no")
+                    @govukRadios(
+                        RadiosViewModel(
+                            field  = form("associatedCompanies"),
+                            legend = LegendViewModel(""),
+                            items = Seq(
+                                RadioItem(
+                                    content = Text(messages("associatedCompanies.option1Label")),
+                                    value = Some(messages("associatedCompanies.option1Value")),
+                                    conditionalHtml = Some(yesHtml("associatedCompaniesCount"))
+                                ),
+                                RadioItem(
+                                    content = Text(messages("associatedCompanies.option2Label")),
+                                    value = Some(messages("associatedCompanies.option2Value"))
+                                )
+                            )
+                        )
                     )
-                )
-            )
-        )
+                </span>
+            }
+            case AskOnePart(Period(start, end)) => {
+                <span>
+                    <h1 class="govuk-fieldset__legend--l">
+                        @messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+                    </h1>
+
+                    @govukWarningText(WarningText(
+                        iconFallbackText = "Warning",
+                        content = Text(messages("associatedCompanies.warning"))
+                    ))
+
+                    @govukDetails(Details(
+                        summary = Text(messages("associatedCompanies.detailsTitle")),
+                        content = HtmlContent(messages("associatedCompanies.detailsHtml"))
+                    ))
+
+                    @govukRadios(
+                        RadiosViewModel(
+                            field  = form("associatedCompanies"),
+                            legend = LegendViewModel(""),
+                            items = Seq(
+                                RadioItem(
+                                    content = Text(messages("associatedCompanies.option1Label")),
+                                    value = Some(messages("associatedCompanies.option1Value")),
+                                    conditionalHtml = Some(yesHtml("associatedCompaniesCount"))
+                                ),
+                                RadioItem(
+                                    content = Text(messages("associatedCompanies.option2Label")),
+                                    value = Some(messages("associatedCompanies.option2Value"))
+                                )
+                            )
+                        )
+                    )
+                </span>
+            }
+            case AskBothParts(Period(start1, end1), _) => {
+                <span>
+                    <h1 class="govuk-fieldset__legend--l">
+                        @messages("associatedCompanies.heading.between", start1.formatDate, end1.formatDate)
+                    </h1>
+
+                    @govukWarningText(WarningText(
+                        iconFallbackText = "Warning",
+                        content = Text(messages("associatedCompanies.warning"))
+                    ))
+
+                    @govukDetails(Details(
+                        summary = Text(messages("associatedCompanies.detailsTitle")),
+                        content = HtmlContent(messages("associatedCompanies.detailsHtml"))
+                    ))
+
+                    @govukRadios(
+                        RadiosViewModel(
+                            field  = form("associatedCompanies"),
+                            legend = LegendViewModel(""),
+                            items = Seq(
+                                RadioItem(
+                                    content = Text(messages("associatedCompanies.option1Label")),
+                                    value = Some(messages("associatedCompanies.option1Value")),
+                                    conditionalHtml = Some(yesHtml("associatedCompaniesFY1Count"))
+                                ),
+                                RadioItem(
+                                    content = Text(messages("associatedCompanies.option2Label")),
+                                    value = Some(messages("associatedCompanies.option2Value"))
+                                )
+                            )
+                        )
+                    )
+                </span>
+            }
+        }
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

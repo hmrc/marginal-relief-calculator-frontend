@@ -18,9 +18,8 @@ package forms
 
 import forms.mappings.Mappings
 import models.AssociatedCompanies
-import models.AssociatedCompanies.Yes
 import play.api.data.Form
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{ mapping, optional }
 
 import javax.inject.Inject
 
@@ -29,18 +28,31 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
   def apply(): Form[AssociatedCompaniesForm] =
     Form {
       mapping(
-        "associatedCompanies" -> enumerable[AssociatedCompanies]("associatedCompanies.error.required"),
-        "associatedCompaniesCount" ->
-          conditional[Int, AssociatedCompanies](
-            field = int(
-              "associatedCompaniesCount.error.required",
-              "associatedCompaniesCount.error.wholeNumber",
-              "associatedCompaniesCount.error.nonNumeric"
-            ).withPrefix("associatedCompaniesCount")
-              .verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange")),
-            conditionField = enumerable[AssociatedCompanies]().withPrefix("associatedCompanies"),
-            condition = _ == Yes
-          )
+        "associatedCompanies" -> enumerable[AssociatedCompanies](
+          "associatedCompanies.error.required",
+          "associatedCompanies.error.invalid"
+        ),
+        "associatedCompaniesCount" -> optional(
+          int(
+            "associatedCompaniesCount.error.required",
+            "associatedCompaniesCount.error.wholeNumber",
+            "associatedCompaniesCount.error.nonNumeric"
+          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
+        ),
+        "associatedCompaniesFY1Count" -> optional(
+          int(
+            "associatedCompaniesCount.error.required",
+            "associatedCompaniesCount.error.wholeNumber",
+            "associatedCompaniesCount.error.nonNumeric"
+          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
+        ),
+        "associatedCompaniesFY2Count" -> optional(
+          int(
+            "associatedCompaniesCount.error.required",
+            "associatedCompaniesCount.error.wholeNumber",
+            "associatedCompaniesCount.error.nonNumeric"
+          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
+        )
       )(AssociatedCompaniesForm.apply)(AssociatedCompaniesForm.unapply)
     }
 }

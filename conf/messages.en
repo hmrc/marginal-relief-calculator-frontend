@@ -119,16 +119,18 @@ distribution.error.outOfRange = Distributions must be between {0} and {1}
 distribution.change.hidden = Distributions
 
 associatedCompanies.title = Number of associated companies
-associatedCompanies.heading = Did your company have any active associated companies between {0} to {1}?
+associatedCompanies.heading = Did your company have any active associated companies?
+associatedCompanies.heading.between = Did your company have any active associated companies between {0} and {1}?
 associatedCompanies.warning = Do not include the company you're currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect calculation.
 associatedCompanies.detailsTitle = What are associated companies?
 associatedCompanies.detailsHtml = A company is considered associated to another if:<br/><ul><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link">control</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = Enter only additional associated companies
 associatedCompanies.checkYourAnswersLabel = Did your company have any active associated companies between {0} to {1}?
 associatedCompanies.error.required = Select whether you have associated companies or not
+associatedCompanies.error.invalid = Select whether you have associated companies or not
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1
 associatedCompaniesCount.error.nonNumeric = Enter your Number of associated companies using numbers
-associatedCompaniesCount.error.outOfRange = Enter an amount that is between 0 to 99
+associatedCompaniesCount.error.outOfRange = Enter a number between {0} and {1}
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1
 associatedCompanies.change.hidden = AssociatedCompanies
 

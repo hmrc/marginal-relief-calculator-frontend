@@ -20,7 +20,6 @@
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
-    govukDateInput: GovukDateInput,
     govukInput: GovukInput,
     govukButton: GovukButton
 )
@@ -39,15 +38,6 @@
             InputViewModel(
                 field = form("distribution"),
                 label = LabelViewModel(messages("distribution.heading")).asPageHeading()
-            )
-            .asNumeric()
-            .withWidth(Fixed10)
-        )
-
-        @govukInput(
-            InputViewModel(
-                field = form("associatedCompanies"),
-                label = LabelViewModel(messages("associatedCompanies.heading")).asPageHeading()
             )
             .asNumeric()
             .withWidth(Fixed10)

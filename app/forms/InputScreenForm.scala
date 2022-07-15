@@ -19,8 +19,7 @@ package forms
 import play.api.libs.json.{ Format, _ }
 
 final case class InputScreenForm(
-  distribution: Int,
-  associatedCompanies: Int
+  distribution: Int
 )
 
 object InputScreenForm {

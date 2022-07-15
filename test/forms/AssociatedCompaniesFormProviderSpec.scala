@@ -18,80 +18,110 @@ package forms
 
 import forms.behaviours.OptionFieldBehaviours
 import models.AssociatedCompanies
+import org.scalacheck.Shrink
 import play.api.data.FormError
 
 class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
+
+  implicit val noShrink: Shrink[BigInt] = Shrink.shrinkAny
 
   val form = new AssociatedCompaniesFormProvider()()
 
   "form values" - {
 
-    "Are valid" in {
-      val range = integerBetween(0, 99)
+    "associatedCompanies" - {
+      behave like optionsField[AssociatedCompanies](
+        form,
+        "associatedCompanies",
+        Seq(AssociatedCompanies.Yes, AssociatedCompanies.No),
+        FormError("associatedCompanies", "associatedCompanies.error.invalid")
+      )
+    }
 
-      forAll(range) { range =>
-        println(range)
-        val data = buildDataMap("yes", Option(range.toString))
-        val result = form.bind(data)
+    "associatedCompaniesCount" - {
+      behave like associatedCompaniesCountBehaviours("associatedCompaniesCount")
+    }
+
+    "associatedCompaniesFY1Count" - {
+      behave like associatedCompaniesCountBehaviours("associatedCompaniesFY1Count")
+    }
+
+    "associatedCompaniesFY2Count" - {
+      behave like associatedCompaniesCountBehaviours("associatedCompaniesFY2Count")
+    }
+
+    def associatedCompaniesCountBehaviours(associatedCompaniesCountKey: String): Unit = {
+      "bind valid values" in {
+        forAll(integerBetween(0, 99) -> "validValues") { integer =>
+          val result =
+            form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
+          result.hasErrors mustBe false
+          result.value.value mustBe (associatedCompaniesCountKey match {
+            case "associatedCompaniesCount" =>
+              AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(integer), None, None)
+            case "associatedCompaniesFY1Count" =>
+              AssociatedCompaniesForm(AssociatedCompanies.Yes, None, Some(integer), None)
+            case "associatedCompaniesFY2Count" =>
+              AssociatedCompaniesForm(AssociatedCompanies.Yes, None, None, Some(integer))
+          })
+        }
+      }
+
+      "bind to None when value empty" in {
+        val result = form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> ""))
         result.hasErrors mustBe false
-        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(range.toInt))
+        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, None, None, None)
       }
-    }
-    "Are inValid" in {
-      val data = buildDataMap("invalid value", Option("invalid value"))
-      val result = form.bind(data)
-      result.hasErrors mustBe true
-      result.errors mustBe Seq(
-        FormError("associatedCompanies", List("error.invalid"))
-      )
-    }
 
-    "Optional value not sent valid" in {
-      val data = buildDataMap("no")
-      val result = form.bind(data)
-      result.hasErrors mustBe false
-    }
-
-    "Optional value not sent invalid" in {
-      val data = buildDataMap("yes")
-      val result = form.bind(data)
-      result.hasErrors mustBe true
-      result.errors mustBe Seq(
-        FormError("associatedCompaniesCount", List("associatedCompaniesCount.error.required"))
-      )
-    }
-
-    "Associated Companies Count out of range above 99" in {
-
-      val rangeAbove = intsAboveValue(99);
-
-      forAll(rangeAbove) { rangeAbove =>
-        val data = buildDataMap("yes", Option(rangeAbove.toString))
-        val result = form.bind(data)
-        result.hasErrors mustBe true
-        result.errors mustBe Seq(
-          FormError("associatedCompaniesCount", List("associatedCompaniesCount.error.outOfRange"), Seq(0, 99))
-        )
+      "return out of range error when values are below 0" in {
+        forAll(intsBelowValue(-1) -> "belowMinValid") { integer =>
+          val result =
+            form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
+          result.hasErrors mustBe true
+          result.errors mustBe Seq(
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(0, 99))
+          )
+        }
       }
-    }
 
-    "Associated Companies Count out of range below 0" in {
+      "return out of range error when values are above 99" in {
+        forAll(intsAboveValue(100) -> "belowMinValid") { integer =>
+          val result =
+            form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
+          result.hasErrors mustBe true
+          result.errors mustBe Seq(
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(0, 99))
+          )
+        }
+      }
 
-      val rangeBelow = intsBelowValue(0);
+      "return error when values decimals" in {
+        forAll(decimals -> "decimals") { value =>
+          val result = form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> value))
+          result.hasErrors mustBe true
+          result.errors mustBe Seq(
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.wholeNumber"))
+          )
+        }
+      }
 
-      forAll(rangeBelow) { rangeBelow =>
-        val data = buildDataMap("yes", Option(rangeBelow.toString))
-        val result = form.bind(data)
-        result.hasErrors mustBe true
-        result.errors mustBe Seq(
-          FormError("associatedCompaniesCount", List("associatedCompaniesCount.error.outOfRange"), Seq(0, 99))
-        )
+      "return error when values are non-numbers" in {
+        forAll(nonEmptyString -> "nonNumbers") { value =>
+          val result = form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> value))
+          result.hasErrors mustBe true
+          result.errors mustBe Seq(
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.nonNumeric"))
+          )
+        }
       }
     }
   }
 
-  private def buildDataMap(associatedCompanies: String, associatedCompaniesCount: Option[String] = None) =
+  private def buildDataMap(
+    associatedCompanies: AssociatedCompanies,
+    associatedCompaniesCount: (String, String)*
+  ) =
     Map(
-      s"associatedCompanies" -> associatedCompanies
-    ) ++ associatedCompaniesCount.map(c => "associatedCompaniesCount" -> c)
+      s"associatedCompanies" -> associatedCompanies.toString
+    ) ++ associatedCompaniesCount
 }

@@ -17,151 +17,298 @@
 package controllers
 
 import base.SpecBase
-import forms.{ AssociatedCompaniesForm, AssociatedCompaniesFormProvider }
+import connectors.MarginalReliefCalculatorConnector
+import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, Period }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider }
 import models.{ AssociatedCompanies, NormalMode, UserAnswers }
-import navigation.{ FakeNavigator, Navigator }
-import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
-import pages.AssociatedCompaniesPage
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import org.scalatest.prop.TableDrivenPropertyChecks
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TaxableProfitPage }
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import uk.gov.hmrc.http.UpstreamErrorResponse
 import views.html.AssociatedCompaniesView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
-class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar {
+class AssociatedCompaniesControllerSpec
+    extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar with TableDrivenPropertyChecks {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  lazy val associatedCompaniesRoute = routes.AssociatedCompaniesController.onPageLoad(NormalMode).url
-
-  val formProvider = new AssociatedCompaniesFormProvider()
-  val form = formProvider()
+  private lazy val associatedCompaniesRoute = routes.AssociatedCompaniesController.onPageLoad(NormalMode).url
+  private val form = new AssociatedCompaniesFormProvider()()
 
   "AssociatedCompanies Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "GET page" - {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "must return OK and the correct view for a GET" in {
 
-      running(application) {
-        val request = FakeRequest(GET, associatedCompaniesRoute)
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
 
-        val result = route(application, request).value
+        val application = applicationBuilder(
+          userAnswers = (for {
+            u1 <- UserAnswers(userAnswersId)
+                    .set(
+                      AccountingPeriodPage,
+                      AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
+                    )
+            u2 <- u1.set(TaxableProfitPage, 1)
+          } yield u2).toOption
+        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          None
+        )(*) returns Future.successful(AskFull)
 
-        val view = application.injector.instanceOf[AssociatedCompaniesView]
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[AssociatedCompaniesView]
+
+          status(result) mustEqual OK
+          contentAsString(result).filterAndTrim mustEqual view(form, AskFull, NormalMode)(
+            request,
+            messages(application)
+          ).toString.filterAndTrim
+        }
       }
-    }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
+      "must populate the view correctly on a GET when the question has previously been answered" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
 
-      val userAnswers = UserAnswers(userAnswersId)
-        .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
-        .success
-        .value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, associatedCompaniesRoute)
-
-        val view = application.injector.instanceOf[AssociatedCompaniesView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(
-          form.fill(AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))),
-          NormalMode
-        )(request, messages(application)).toString
-      }
-    }
-
-    "must redirect to the next page when valid data is submitted" in {
-
-      val mockSessionRepository = mock[SessionRepository]
-
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
-          )
+        val application = applicationBuilder(
+          userAnswers = (for {
+            u1 <- UserAnswers(userAnswersId)
+                    .set(
+                      AccountingPeriodPage,
+                      AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
+                    )
+            u2 <- u1.set(TaxableProfitPage, 1)
+            u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
+          } yield u3).toOption
+        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, associatedCompaniesRoute)
-            .withFormUrlEncodedBody(("associatedCompanies", "yes"), ("associatedCompaniesCount", "1"))
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          None
+        )(*) returns Future.successful(AskFull)
 
-        val result = route(application, request).value
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+          val view = application.injector.instanceOf[AssociatedCompaniesView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result).filterAndTrim mustEqual view(
+            form.fill(AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None)),
+            AskFull,
+            NormalMode
+          )(request, messages(application)).toString.filterAndTrim
+        }
+      }
+
+      "must redirect to Journey Recovery for a GET if no existing data is found" in {
+        val application = applicationBuilder(userAnswers = None).build()
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
+
+          val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "must throw RuntimeException if existing UserAnswer does not have AccountingPeriodPage and TaxableProfitPage values" in {
+        val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
+          val result = route(application, request).value.failed.futureValue
+          result mustBe a[RuntimeException]
+          result.getMessage mustBe "Missing values for AccountingPeriodPage and(or) TaxableProfitPage"
+        }
+      }
+
+      "must throw an Exception if associated parameters HTTP call fails" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          None
+        )(*) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
+
+        val application = applicationBuilder(userAnswers = (for {
+          u1 <- UserAnswers(userAnswersId)
+                  .set(
+                    AccountingPeriodPage,
+                    AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
+                  )
+          u2 <- u1.set(TaxableProfitPage, 1)
+        } yield u2).toOption)
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
+          val result = route(application, request).value.failed.futureValue
+          result mustBe a[UpstreamErrorResponse]
+          result.getMessage mustBe "Bad request"
+        }
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "POST page" - {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "must redirect to the next page when valid data is submitted" in {
 
-      running(application) {
-        val request =
-          FakeRequest(POST, associatedCompaniesRoute)
-            .withFormUrlEncodedBody(
-              ("associatedCompanies", "invalid value"),
-              ("associatedCompaniesCount", "invalid value")
+        val mockSessionRepository = mock[SessionRepository]
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          None
+        )(*) returns Future.successful(AskFull)
+
+        val application =
+          applicationBuilder(
+            userAnswers = (for {
+              u1 <- UserAnswers(userAnswersId)
+                      .set(
+                        AccountingPeriodPage,
+                        AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
+                      )
+              u2 <- u1.set(TaxableProfitPage, 1)
+            } yield u2).toOption
+          ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(("associatedCompanies", "yes"), ("associatedCompaniesCount", "1"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.ResultsPageController.onPageLoad().url
+        }
+      }
+
+      "must return a Bad Request and errors when form parameters are invalid" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        val application =
+          applicationBuilder(
+            userAnswers = (for {
+              u1 <- UserAnswers(userAnswersId)
+                      .set(
+                        AccountingPeriodPage,
+                        AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
+                      )
+              u2 <- u1.set(TaxableProfitPage, 1)
+            } yield u2).toOption
+          ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .build()
+
+        running(application) {
+
+          val table = Table(
+            ("requestParams", "errorKey", "associatedCompaniesParameter"),
+            (Map("associatedCompanies" -> "invalid"), "associatedCompanies", AskFull),
+            (Map("associatedCompanies" -> "yes"), "associatedCompaniesCount", AskFull),
+            (
+              Map("associatedCompanies" -> "yes"),
+              "associatedCompaniesCount",
+              AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)))
+            ),
+            (
+              Map("associatedCompanies" -> "yes"),
+              "associatedCompaniesFY1Count",
+              AskBothParts(
+                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
+                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
+              )
+            ),
+            (
+              Map("associatedCompanies" -> "yes", "associatedCompaniesFY1Count" -> "1"),
+              "associatedCompaniesFY2Count",
+              AskBothParts(
+                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
+                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
+              )
             )
+          )
 
-        val boundForm =
-          form.bind(Map("associatedCompanies" -> "invalid value", "associatedCompaniesCount" -> "invalid value"))
+          forAll(table) { (requestParams, errorKey, associatedCompaniesParameter) =>
+            mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+              accountingPeriodStart = LocalDate.ofEpochDay(0),
+              accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+              1.0,
+              None
+            )(*) returns Future.successful(associatedCompaniesParameter)
 
-        val view = application.injector.instanceOf[AssociatedCompaniesView]
+            val request =
+              FakeRequest(POST, associatedCompaniesRoute)
+                .withFormUrlEncodedBody(
+                  requestParams.toList: _*
+                )
 
-        val result = route(application, request).value
+            val boundForm =
+              if (errorKey == "associatedCompanies")
+                form.bind(requestParams)
+              else
+                form.bind(requestParams).withError(errorKey, "associatedCompaniesCount.error.required")
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+            val view = application.injector.instanceOf[AssociatedCompaniesView]
+
+            val result = route(application, request).value
+
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result) mustEqual view(boundForm, associatedCompaniesParameter, NormalMode)(
+              request,
+              messages(application)
+            ).toString
+          }
+        }
       }
-    }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+      "redirect to Journey Recovery for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
-      running(application) {
-        val request = FakeRequest(GET, associatedCompaniesRoute)
+        running(application) {
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(("associatedCompanies", "yes"), ("associatedCompaniesCount", "1"))
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
-      }
-    }
+          status(result) mustEqual SEE_OTHER
 
-    "redirect to Journey Recovery for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, associatedCompaniesRoute)
-            .withFormUrlEncodedBody(("associatedCompanies", "yes"), ("associatedCompaniesCount", "1"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
       }
     }
   }

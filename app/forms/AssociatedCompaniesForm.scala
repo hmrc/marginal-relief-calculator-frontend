@@ -21,7 +21,9 @@ import models.AssociatedCompanies
 
 final case class AssociatedCompaniesForm(
   associatedCompanies: AssociatedCompanies,
-  associatedCompaniesCount: Option[Int]
+  associatedCompaniesCount: Option[Int],
+  associatedCompaniesFY1Count: Option[Int],
+  associatedCompaniesFY2Count: Option[Int]
 )
 
 object AssociatedCompaniesForm {

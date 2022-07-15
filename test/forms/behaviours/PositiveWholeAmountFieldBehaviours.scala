@@ -21,6 +21,9 @@ import play.api.data.{ Form, FormError }
 
 trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
 
+  implicit val noShrinkBigInt: Shrink[BigInt] = Shrink.shrinkAny
+  implicit val noShrinkBigDecimal: Shrink[BigDecimal] = Shrink.shrinkAny
+
   def positiveWholeAmountField(
     form: Form[_],
     fieldName: String,
@@ -38,7 +41,6 @@ trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
     }
 
     "not bind negative values" in {
-      implicit val noShrink: Shrink[BigInt] = Shrink.shrinkAny
       forAll(intsBelowValue(0) -> "negative") { negative =>
         val result = form.bind(Map(fieldName -> negative.toString)).apply(fieldName)
         result.errors must contain only outOfRangeError
@@ -46,7 +48,6 @@ trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
     }
 
     "not bind decimals" in {
-      implicit val noShrink: Shrink[BigDecimal] = Shrink.shrinkAny
       forAll(positiveDecimals -> "decimal") { decimal =>
         val result = form.bind(Map(fieldName -> decimal.toString)).apply(fieldName)
         result.errors must contain only doNotUseDecimalsError
@@ -54,7 +55,6 @@ trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
     }
 
     "not bind integers larger than Int.MaxValue" in {
-      implicit val noShrink: Shrink[BigInt] = Shrink.shrinkAny
       forAll(positiveIntsLargerThanMaxValue -> "massiveInt") { num: BigInt =>
         val result = form.bind(Map(fieldName -> num.toString)).apply(fieldName)
         result.errors must contain only outOfRangeError
@@ -62,7 +62,6 @@ trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
     }
 
     "not bind integers smaller than 0" in {
-      implicit val noShrink: Shrink[BigInt] = Shrink.shrinkAny
       forAll(intsSmallerThanZero) { num: BigInt =>
         val result = form.bind(Map(fieldName -> num.toString)).apply(fieldName)
         result.errors must contain only outOfRangeError

@@ -17,10 +17,16 @@
 package forms
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 object DateUtils {
+
+  private val FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy")
+
   implicit class DateOps(date: LocalDate) {
     def isEqualOrBefore(another: LocalDate): Boolean =
       date.equals(another) || date.isBefore(another)
+
+    def formatDate: String = FORMAT.format(date)
   }
 }

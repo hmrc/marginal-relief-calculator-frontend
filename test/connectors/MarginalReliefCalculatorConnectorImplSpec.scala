@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{ verify => _, _ }
 import com.typesafe.config.ConfigFactory
 import config.FrontendAppConfig
-import connectors.sharedmodel.{ MarginalReliefResult, SingleResult }
+import connectors.sharedmodel.{ AskFull, AssociatedCompaniesParameter, MarginalReliefResult, SingleResult }
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.freespec.AnyFreeSpec
@@ -65,13 +65,14 @@ private class MarginalReliefCalculatorConnectorImplSpec
         .withFallback(ConfigFactory.load())
     )
     val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
+
+    val marginalReliefCalculatorConnector: MarginalReliefCalculatorConnectorImpl =
+      new MarginalReliefCalculatorConnectorImpl(httpClient, frontendAppConfig)
   }
 
-  "MarginalReliefCalculator" - {
+  "MarginalReliefCalculatorConnectorImpl" - {
     "calculate" - {
       "should return successful response" in new Fixture {
-        val marginalReliefCalculatorConnector = new MarginalReliefCalculatorConnectorImpl(httpClient, frontendAppConfig)
-
         wireMockServer.stubFor(
           WireMock
             .get(
@@ -106,6 +107,40 @@ private class MarginalReliefCalculatorConnectorImplSpec
           .futureValue
 
         result shouldEqual SingleResult(1, 1, 1, 1, 1, 1)
+      }
+    }
+
+    "associatedCompaniesParameters" - {
+
+      "should return successful response" in new Fixture {
+
+        wireMockServer.stubFor(
+          WireMock
+            .get(
+              s"/ask-params/associated-companies?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
+                  .map(
+                    "exemptDistributions" +
+                      "=" + _
+                  )
+                  .getOrElse("")}"
+            )
+            .willReturn(aResponse().withBody(s"""
+                                                |{
+                                                |  "type":"AskFull"
+                                                |}
+                                                |""".stripMargin))
+        )
+
+        val result: AssociatedCompaniesParameter = marginalReliefCalculatorConnector
+          .associatedCompaniesParameters(
+            accountingPeriodStart,
+            accountingPeriodEnd,
+            profit,
+            exemptDistributions
+          )
+          .futureValue
+
+        result shouldEqual AskFull
       }
     }
   }
