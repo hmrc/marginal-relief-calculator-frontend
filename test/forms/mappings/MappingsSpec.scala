@@ -204,6 +204,16 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       val result = testForm.bind(Map("check" -> "yes", "value" -> "aaaaa"))
       result.errors must contain(FormError("value", "error.nonNumeric"))
     }
+
+    "must unbind value" in {
+      val result = testForm.fill(TestFormData("yes", Some(1)))
+      result.apply("value").value.value mustEqual "1"
+    }
+
+    "must unbind None value" in {
+      val result = testForm.fill(TestFormData("yes", None))
+      result.apply("value").value mustBe empty
+    }
   }
 
   "positiveWholeAmount" - {

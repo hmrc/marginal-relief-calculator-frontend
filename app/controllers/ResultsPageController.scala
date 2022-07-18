@@ -30,6 +30,7 @@ import views.html.ResultsPageView
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
+// $COVERAGE-OFF$
 class ResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
@@ -73,3 +74,4 @@ class ResultsPageController @Inject() (
     }
   }
 }
+// $COVERAGE-ON$

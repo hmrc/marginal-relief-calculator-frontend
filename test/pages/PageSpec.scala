@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package viewmodels
+package pages
 
-abstract class WithName(name: String) {
-  override val toString: String = name
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
+import Page._
+
+class PageSpec extends AnyFreeSpec with Matchers {
+  "Page" - {
+    "toString" - {
+      "should return a string representation of the page" in {
+        val page: Page = new Page {
+          override def toString: String = "page"
+        }
+        val pageString: String = page
+        pageString shouldBe "page"
+      }
+    }
+  }
 }

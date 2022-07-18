@@ -22,6 +22,7 @@ import play.api.data.Forms.mapping
 
 import javax.inject.Inject
 
+// $COVERAGE-OFF$
 class InputScreenFormProvider @Inject() extends Mappings {
 
   def apply(): Form[InputScreenForm] =
@@ -36,3 +37,4 @@ class InputScreenFormProvider @Inject() extends Mappings {
       )(InputScreenForm.apply)(InputScreenForm.unapply)
     }
 }
+// $COVERAGE-ON$

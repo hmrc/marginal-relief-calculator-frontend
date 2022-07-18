@@ -16,16 +16,17 @@
 
 package pages
 
+import forms.AssociatedCompaniesForm
 import pages.behaviours.PageBehaviours
 
-class AssociatedCompaniesSpec extends PageBehaviours {
+class AssociatedCompaniesPageSpec extends PageBehaviours {
 
   "AssociatedCompaniesPage" - {
 
-//    beRetrievable[AssociatedCompanies](AssociatedCompaniesPage)
-    //
-    //    beSettable[AssociatedCompanies](AssociatedCompaniesPage)
-    //
-    //    beRemovable[AssociatedCompanies](AssociatedCompaniesPage)
+    beRetrievable[AssociatedCompaniesForm](AssociatedCompaniesPage)
+
+    beSettable[AssociatedCompaniesForm](AssociatedCompaniesPage)
+
+    beRemovable[AssociatedCompaniesForm](AssociatedCompaniesPage)
   }
 }

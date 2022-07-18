@@ -16,23 +16,29 @@
 
 package pages
 
-import java.time.LocalDate
-
+import forms.AccountingPeriodForm
 import org.scalacheck.Arbitrary
+
+import java.time.LocalDate
+import org.scalacheck.Arbitrary._
 import pages.behaviours.PageBehaviours
 
 class AccountingPeriodPageSpec extends PageBehaviours {
 
+  implicit lazy val arbitraryLocalDate: Arbitrary[AccountingPeriodForm] = Arbitrary {
+    for {
+      startDate <- arbitrary[LocalDate]
+      endDate   <- arbitrary[Option[LocalDate]]
+    } yield AccountingPeriodForm(startDate, endDate)
+  }
+
   "AccountingPeriodPage" - {
 
-//    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
-//      datesBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1))
-//    }
-//
-//    beRetrievable[LocalDate](AccountingPeriodPage)
-//
-//    beSettable[LocalDate](AccountingPeriodPage)
-//
-//    beRemovable[LocalDate](AccountingPeriodPage)
+    beRetrievable[AccountingPeriodForm](AccountingPeriodPage)
+
+    beSettable[AccountingPeriodForm](AccountingPeriodPage)
+
+    beRemovable[AccountingPeriodForm](AccountingPeriodPage)
   }
+
 }

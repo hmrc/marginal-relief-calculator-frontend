@@ -26,6 +26,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
+// $COVERAGE-OFF$
 object AssociatedCompaniesSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
@@ -46,3 +47,4 @@ object AssociatedCompaniesSummary {
       )
     }
 }
+// $COVERAGE-ON$
