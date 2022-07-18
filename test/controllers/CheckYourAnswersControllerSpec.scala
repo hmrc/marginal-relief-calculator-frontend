@@ -17,12 +17,13 @@
 package controllers
 
 import base.SpecBase
+import org.mockito.IdiomaticMockito
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 
-class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency {
+class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency with IdiomaticMockito {
 
   "Check Your Answers Controller" - {
 

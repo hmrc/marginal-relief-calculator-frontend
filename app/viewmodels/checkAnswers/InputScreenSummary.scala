@@ -21,6 +21,7 @@ import pages.InputScreenPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 
+// $COVERAGE-OFF$
 object InputScreenSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] =
@@ -31,3 +32,4 @@ object InputScreenSummary {
       }
       .getOrElse(List.empty)
 }
+// $COVERAGE-ON$

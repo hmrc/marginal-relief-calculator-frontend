@@ -18,28 +18,35 @@ package connectors
 
 import com.google.inject.{ ImplementedBy, Inject }
 import config.FrontendAppConfig
-import connectors.sharedmodel.MarginalReliefResult
+import connectors.sharedmodel.{ AssociatedCompaniesParameter, MarginalReliefResult }
 import org.slf4j.LoggerFactory
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, StringContextOps }
 
 import java.time.LocalDate
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.language.higherKinds
+
 @ImplementedBy(classOf[MarginalReliefCalculatorConnectorImpl])
-trait MarginalReliefCalculatorConnector[F[_]] {
+trait MarginalReliefCalculatorConnector {
   def calculate(
     accountingPeriodStart: LocalDate,
     accountingPeriodEnd: LocalDate,
     profit: Double,
     exemptDistributions: Option[Double],
     associatedCompanies: Option[Int]
-  )(implicit hc: HeaderCarrier): F[MarginalReliefResult]
+  )(implicit hc: HeaderCarrier): Future[MarginalReliefResult]
+
+  def associatedCompaniesParameters(
+    accountingPeriodStart: LocalDate,
+    accountingPeriodEnd: LocalDate,
+    profit: Double,
+    exemptDistributions: Option[Double]
+  )(implicit hc: HeaderCarrier): Future[AssociatedCompaniesParameter]
 }
 
 class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, frontendAppConfig: FrontendAppConfig)(
   implicit ec: ExecutionContext
-) extends MarginalReliefCalculatorConnector[Future] {
+) extends MarginalReliefCalculatorConnector {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
@@ -50,10 +57,23 @@ class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, f
     exemptDistributions: Option[Double],
     associatedCompanies: Option[Int]
   )(implicit hc: HeaderCarrier): Future[MarginalReliefResult] = {
-    logger.info("Calling marginal relief backend - calculate")
+    logger.info("Calling marginal relief backend - /calculate")
     httpClient
       .GET[MarginalReliefResult](
         url"${frontendAppConfig.marginalReliefCalculatorUrl}/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptDistributions=$exemptDistributions&associatedCompanies=$associatedCompanies"
+      )
+  }
+
+  override def associatedCompaniesParameters(
+    accountingPeriodStart: LocalDate,
+    accountingPeriodEnd: LocalDate,
+    profit: Double,
+    exemptDistributions: Option[Double]
+  )(implicit hc: HeaderCarrier): Future[AssociatedCompaniesParameter] = {
+    logger.info("Calling marginal relief backend - /params/associated-companies")
+    httpClient
+      .GET[AssociatedCompaniesParameter](
+        url"${frontendAppConfig.marginalReliefCalculatorUrl}/ask-params/associated-companies?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptDistributions=$exemptDistributions"
       )
   }
 }

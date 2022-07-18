@@ -19,9 +19,11 @@ package pages
 import play.api.libs.json.JsPath
 import forms.InputScreenForm
 
+// $COVERAGE-OFF$
 case object InputScreenPage extends QuestionPage[InputScreenForm] {
 
   override def path: JsPath = JsPath \ toString
 
   override def toString: String = "inputScreen"
 }
+// $COVERAGE-ON$

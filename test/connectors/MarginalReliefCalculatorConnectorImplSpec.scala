@@ -21,12 +21,14 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{ verify => _, _ }
 import com.typesafe.config.ConfigFactory
 import config.FrontendAppConfig
-import connectors.sharedmodel.{ MarginalReliefResult, SingleResult }
+import connectors.sharedmodel._
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.Configuration
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.hooks.HttpHook
 import uk.gov.hmrc.http.test.{ HttpClientSupport, WireMockSupport }
@@ -34,9 +36,9 @@ import uk.gov.hmrc.http.test.{ HttpClientSupport, WireMockSupport }
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 
-private class MarginalReliefCalculatorConnectorImplSpec
+class MarginalReliefCalculatorConnectorImplSpec
     extends AnyFreeSpec with Matchers with WireMockSupport with MockitoSugar with ScalaFutures with IntegrationPatience
-    with HttpClientSupport {
+    with HttpClientSupport with TableDrivenPropertyChecks {
 
   implicit val as: ActorSystem = ActorSystem("MarginalReliefCalculatorConnectorImplSpec-as")
 
@@ -65,47 +67,98 @@ private class MarginalReliefCalculatorConnectorImplSpec
         .withFallback(ConfigFactory.load())
     )
     val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
+
+    val marginalReliefCalculatorConnector: MarginalReliefCalculatorConnectorImpl =
+      new MarginalReliefCalculatorConnectorImpl(httpClient, frontendAppConfig)
   }
 
-  "MarginalReliefCalculator" - {
+  "MarginalReliefCalculatorConnectorImpl" - {
     "calculate" - {
       "should return successful response" in new Fixture {
-        val marginalReliefCalculatorConnector = new MarginalReliefCalculatorConnectorImpl(httpClient, frontendAppConfig)
-
-        wireMockServer.stubFor(
-          WireMock
-            .get(
-              s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
-                  .map(
-                    "exemptDistributions" +
-                      "=" + _
-                  )
-                  .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
-            )
-            .willReturn(aResponse().withBody(s"""
-                                                |{
-                                                |   "type": "SingleResult",
-                                                |   "year": 1,
-                                                |   "corporationTaxBeforeMR": 1,
-                                                |   "effectiveTaxRateBeforeMR": 1,
-                                                |   "corporationTax": 1,
-                                                |   "effectiveTaxRate": 1,
-                                                |   "marginalRelief": 1
-                                                |}
-                                                |""".stripMargin))
+        val table = Table(
+          "marginalReliefResult",
+          SingleResult(1111, 1.0, 11.0, 111.0, 1111.0, 11111.0),
+          DualResult(
+            MarginalReliefByYear(
+              1111, 1.0, 11.0, 111.0, 1111.0, 11111.0
+            ),
+            MarginalReliefByYear(
+              2222, 2.0, 22.0, 222.0, 2222.0, 22222.0
+            ),
+            3,
+            4
+          )
         )
 
-        val result: MarginalReliefResult = marginalReliefCalculatorConnector
-          .calculate(
-            accountingPeriodStart,
-            accountingPeriodEnd,
-            profit,
-            exemptDistributions,
-            associatedCompanies
+        forAll(table) { marginalReliefResult: MarginalReliefResult =>
+          wireMockServer.stubFor(
+            WireMock
+              .get(
+                s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
+                    .map(
+                      "exemptDistributions" +
+                        "=" + _
+                    )
+                    .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
+              )
+              .willReturn(aResponse().withBody(Json.toJson(marginalReliefResult).toString()))
           )
-          .futureValue
 
-        result shouldEqual SingleResult(1, 1, 1, 1, 1, 1)
+          val result: MarginalReliefResult = marginalReliefCalculatorConnector
+            .calculate(
+              accountingPeriodStart,
+              accountingPeriodEnd,
+              profit,
+              exemptDistributions,
+              associatedCompanies
+            )
+            .futureValue
+
+          result shouldEqual marginalReliefResult
+        }
+      }
+    }
+
+    "associatedCompaniesParameters" - {
+
+      "should return successful response" in new Fixture {
+
+        val table = Table(
+          "associatedCompaniesParameter",
+          DontAsk,
+          AskFull,
+          AskOnePart(Period(accountingPeriodStart, accountingPeriodEnd)),
+          AskBothParts(
+            Period(accountingPeriodStart, accountingPeriodEnd),
+            Period(accountingPeriodStart, accountingPeriodEnd)
+          )
+        )
+
+        forAll(table) { (associatedCompaniesParameter: AssociatedCompaniesParameter) =>
+          wireMockServer.stubFor(
+            WireMock
+              .get(
+                s"/ask-params/associated-companies?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
+                    .map(
+                      "exemptDistributions" +
+                        "=" + _
+                    )
+                    .getOrElse("")}"
+              )
+              .willReturn(aResponse().withBody(Json.toJson(associatedCompaniesParameter).toString))
+          )
+
+          val result: AssociatedCompaniesParameter = marginalReliefCalculatorConnector
+            .associatedCompaniesParameters(
+              accountingPeriodStart,
+              accountingPeriodEnd,
+              profit,
+              exemptDistributions
+            )
+            .futureValue
+
+          result shouldEqual associatedCompaniesParameter
+        }
       }
     }
   }

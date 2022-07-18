@@ -31,6 +31,7 @@ import views.html.InputScreenView
 import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
+// $COVERAGE-OFF$
 class InputScreenController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -89,3 +90,4 @@ class InputScreenController @Inject() (
         )
     }
 }
+// $COVERAGE-ON$

@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import play.api.libs.json.{ Format, _ }
+sealed trait AssociatedCompanies
 
-final case class InputScreenForm(
-  distribution: Int
-)
+object AssociatedCompanies extends Enumerable.Implicits {
 
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+  case object Yes extends WithName("yes") with AssociatedCompanies
+  case object No extends WithName("no") with AssociatedCompanies
+
+  val values: Seq[AssociatedCompanies] = Seq(
+    Yes,
+    No
+  )
+
+  implicit val enumerable: Enumerable[AssociatedCompanies] =
+    Enumerable(values.map(v => v.toString -> v): _*)
 }

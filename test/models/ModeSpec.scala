@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import play.api.libs.json.{ Format, _ }
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.mvc.JavascriptLiteral
 
-final case class InputScreenForm(
-  distribution: Int
-)
+class ModeSpec extends AnyFreeSpec with Matchers {
+ "JavascriptLiteral[Mode]" - {
+   "to(Mode)" - {
+     "should return javascript literal representation for NormalMode" in {
+       implicitly[JavascriptLiteral[Mode]].to(NormalMode) shouldBe "NormalMode"
+     }
 
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+     "should return javascript literal representation for CheckMode" in {
+       implicitly[JavascriptLiteral[Mode]].to(CheckMode) shouldBe "CheckMode"
+     }
+   }
+ }
 }

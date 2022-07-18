@@ -23,6 +23,7 @@ import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 import java.time.Instant
 import scala.util.{ Failure, Success, Try }
 
+// $COVERAGE-OFF$
 final case class UserAnswers(
   id: String,
   data: JsObject = Json.obj(),
@@ -89,3 +90,4 @@ object UserAnswers {
 
   implicit val format: OFormat[UserAnswers] = OFormat(reads, writes)
 }
+// $COVERAGE-ON$

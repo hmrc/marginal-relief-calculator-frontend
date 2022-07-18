@@ -16,4 +16,12 @@
 
 package generators
 
-trait ModelGenerators {}
+import models.AssociatedCompanies
+import org.scalacheck.{ Arbitrary, Gen }
+
+trait ModelGenerators {
+  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
+    Arbitrary {
+      Gen.oneOf(AssociatedCompanies.values)
+    }
+}

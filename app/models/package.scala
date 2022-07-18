@@ -27,6 +27,7 @@ package object models {
       jsObject.remove(path).flatMap(_.validate[JsObject])
   }
 
+  // $COVERAGE-OFF$
   implicit class RichJsValue(jsValue: JsValue) {
 
     def set(path: JsPath, value: JsValue): JsResult[JsValue] =
@@ -145,4 +146,5 @@ package object models {
             }
       }
   }
+  // $COVERAGE-ON$
 }
