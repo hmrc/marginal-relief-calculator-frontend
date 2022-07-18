@@ -80,13 +80,13 @@
                             legend = LegendViewModel(""),
                             items = Seq(
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.option1Label")),
-                                    value = Some(messages("associatedCompanies.option1Value")),
+                                    content = Text(messages("associatedCompanies.yes.label")),
+                                    value = Some("yes"),
                                     conditionalHtml = Some(yesHtml("associatedCompaniesCount"))
                                 ),
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.option2Label")),
-                                    value = Some(messages("associatedCompanies.option2Value"))
+                                    content = Text(messages("associatedCompanies.no.label")),
+                                    value = Some("no")
                                 )
                             )
                         )

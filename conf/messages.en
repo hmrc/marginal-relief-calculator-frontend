@@ -133,6 +133,8 @@ associatedCompaniesCount.error.nonNumeric = Enter your Number of associated comp
 associatedCompaniesCount.error.outOfRange = Enter a number between {0} and {1}
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1
 associatedCompanies.change.hidden = AssociatedCompanies
+associatedCompanies.yes.label = Yes
+associatedCompanies.no.label = No
 
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
