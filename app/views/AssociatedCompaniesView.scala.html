@@ -80,12 +80,12 @@
                             legend = LegendViewModel(""),
                             items = Seq(
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.yes.label")),
+                                    content = Text(messages("site.yes")),
                                     value = Some("yes"),
                                     conditionalHtml = Some(yesHtml("associatedCompaniesCount"))
                                 ),
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.no.label")),
+                                    content = Text(messages("site.no")),
                                     value = Some("no")
                                 )
                             )
@@ -115,13 +115,13 @@
                             legend = LegendViewModel(""),
                             items = Seq(
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.option1Label")),
-                                    value = Some(messages("associatedCompanies.option1Value")),
+                                    content = Text(messages("site.yes")),
+                                    value = Some("yes"),
                                     conditionalHtml = Some(yesHtml("associatedCompaniesCount"))
                                 ),
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.option2Label")),
-                                    value = Some(messages("associatedCompanies.option2Value"))
+                                    content = Text(messages("site.no")),
+                                    value = Some("no")
                                 )
                             )
                         )
@@ -150,13 +150,13 @@
                             legend = LegendViewModel(""),
                             items = Seq(
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.option1Label")),
-                                    value = Some(messages("associatedCompanies.option1Value")),
+                                    content = Text(messages("site.yes")),
+                                    value = Some("yes"),
                                     conditionalHtml = Some(yesHtml("associatedCompaniesFY1Count"))
                                 ),
                                 RadioItem(
-                                    content = Text(messages("associatedCompanies.option2Label")),
-                                    value = Some(messages("associatedCompanies.option2Value"))
+                                    content = Text(messages("site.no")),
+                                    value = Some("no")
                                 )
                             )
                         )
