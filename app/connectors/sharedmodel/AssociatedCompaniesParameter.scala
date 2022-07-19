@@ -34,6 +34,9 @@ object Period {
 }
 
 case object DontAsk extends AssociatedCompaniesParameter
-case object AskFull extends AssociatedCompaniesParameter
-case class AskOnePart(period: Period) extends AssociatedCompaniesParameter
-case class AskBothParts(period1: Period, period2: Period) extends AssociatedCompaniesParameter
+
+sealed trait AskAssociatedCompaniesParameter
+case object AskFull extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
+case class AskOnePart(period: Period) extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
+case class AskBothParts(period1: Period, period2: Period)
+    extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter

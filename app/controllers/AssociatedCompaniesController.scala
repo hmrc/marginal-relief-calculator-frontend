@@ -17,7 +17,7 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter }
+import connectors.sharedmodel._
 import controllers.actions._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider }
 import models.requests.DataRequest
@@ -64,12 +64,16 @@ class AssociatedCompaniesController @Inject() (
                                             userParameters.taxableProfit,
                                             None
                                           )
-      } yield Ok(
-        view(
-          request.userAnswers.get(AssociatedCompaniesPage).map(form.fill).getOrElse(form),
-          associatedCompaniesParameter,
-          mode
-        )
+      } yield ifAskAssociatedCompaniesParameter(
+        associatedCompaniesParameter,
+        p =>
+          Ok(
+            view(
+              request.userAnswers.get(AssociatedCompaniesPage).map(form.fill).getOrElse(form),
+              p,
+              mode
+            )
+          )
       )
   }
 
@@ -88,11 +92,17 @@ class AssociatedCompaniesController @Inject() (
         result <- boundedForm
                     .fold(
                       formWithErrors =>
-                        Future.successful(BadRequest(view(formWithErrors, associatedCompaniesParameter, mode))),
+                        ifAskAssociatedCompaniesParameter(
+                          associatedCompaniesParameter,
+                          p => Future.successful(BadRequest(view(formWithErrors, p, mode)))
+                        ),
                       value =>
                         validateRequiredFields(value, associatedCompaniesParameter) match {
                           case Some(errorKey) =>
-                            badRequestWithError(boundedForm, associatedCompaniesParameter, errorKey, mode)
+                            ifAskAssociatedCompaniesParameter(
+                              associatedCompaniesParameter,
+                              badRequestWithError(boundedForm, _, errorKey, mode)
+                            )
                           case None =>
                             updateAndRedirect(value, mode)
                         }
@@ -102,7 +112,7 @@ class AssociatedCompaniesController @Inject() (
 
   private def badRequestWithError(
     form: Form[AssociatedCompaniesForm],
-    a: AssociatedCompaniesParameter,
+    a: AskAssociatedCompaniesParameter,
     errorKey: String,
     mode: Mode
   )(implicit request: DataRequest[AnyContent]) =
@@ -156,4 +166,13 @@ class AssociatedCompaniesController @Inject() (
         None
     }
 
+  private def ifAskAssociatedCompaniesParameter[T](
+    a: AssociatedCompaniesParameter,
+    f: AskAssociatedCompaniesParameter => T
+  ): T =
+    a match {
+      case DontAsk =>
+        throw new UnsupportedOperationException("Associated companies ask parameter is DontAsk")
+      case p: AskAssociatedCompaniesParameter => f(p)
+    }
 }

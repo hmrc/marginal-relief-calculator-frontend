@@ -18,7 +18,6 @@ package pages
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import Page._
 
 class PageSpec extends AnyFreeSpec with Matchers {
   "Page" - {
