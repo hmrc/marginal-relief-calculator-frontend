@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import forms.DistributionsIncludedForm
+import play.api.libs.json.{ Format, _ }
 import models.DistributionsIncluded
-import play.api.libs.json.JsPath
 
-case object DistributionsIncludedPage extends QuestionPage[DistributionsIncludedForm] {
+final case class DistributionsIncludedForm(
+  distributionsIncluded: DistributionsIncluded,
+  distributionsIncludedAmount: Option[Int]
+)
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "distributionsIncluded"
+object DistributionsIncludedForm {
+  implicit val format: Format[DistributionsIncludedForm] =
+    Json.format[DistributionsIncludedForm]
 }
+
+

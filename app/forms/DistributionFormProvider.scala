@@ -26,6 +26,6 @@ class DistributionFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Distribution] =
     Form(
-      "value" -> enumerable[Distribution]("distribution.error.required")
+      "distribution" -> enumerable[Distribution]("distribution.error.required")
     )
 }

@@ -16,14 +16,16 @@
 
 package generators
 
+import models._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{ AccountingPeriodPage, TaxableProfitPage }
+import pages.{ AccountingPeriodPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.libs.json.{ JsValue, Json }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
-  implicit lazy val arbitraryDistributionsIncludedUserAnswersEntry: Arbitrary[(DistributionsIncludedPage.type, JsValue)] =
+  implicit lazy val arbitraryDistributionsIncludedUserAnswersEntry
+    : Arbitrary[(DistributionsIncludedPage.type, JsValue)] =
     Arbitrary {
       for {
         page  <- arbitrary[DistributionsIncludedPage.type]

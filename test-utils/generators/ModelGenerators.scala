@@ -16,7 +16,11 @@
 
 package generators
 
-trait ModelGenerators {}
+import models._
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.{ Arbitrary, Gen }
+
+trait ModelGenerators {
 
   implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
     Arbitrary {
@@ -27,3 +31,4 @@ trait ModelGenerators {}
     Arbitrary {
       Gen.oneOf(Distribution.values.toSeq)
     }
+}

@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{ CheckMode, UserAnswers }
 import pages.DistributionPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -26,25 +26,23 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-object DistributionSummary  {
+object DistributionSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(DistributionPage).map {
-      answer =>
-
-        val value = ValueViewModel(
-          HtmlContent(
-            HtmlFormat.escape(messages(s"distribution.$answer"))
-          )
+    answers.get(DistributionPage).map { answer =>
+      val value = ValueViewModel(
+        HtmlContent(
+          HtmlFormat.escape(messages(s"distribution.$answer"))
         )
+      )
 
-        SummaryListRowViewModel(
-          key     = "distribution.checkYourAnswersLabel",
-          value   = value,
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText(messages("distribution.change.hidden"))
-          )
+      SummaryListRowViewModel(
+        key = "distribution.checkYourAnswersLabel",
+        value = value,
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
+            .withVisuallyHiddenText(messages("distribution.change.hidden"))
         )
+      )
     }
 }

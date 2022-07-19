@@ -49,12 +49,11 @@ class Navigator @Inject() () {
     _ => routes.CheckYourAnswersController.onPageLoad
   }
 
-  private def complexRoute(answers: UserAnswers): Call = {
-    (answers.get(DistributionPage)) match {
+  private def complexRoute(answers: UserAnswers): Call =
+    answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
-      case Some(Distribution.No)    => routes.InputScreenController.onPageLoad(NormalMode)
+      case Some(Distribution.No)  => routes.InputScreenController.onPageLoad(NormalMode)
     }
-  }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>

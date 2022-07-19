@@ -17,15 +17,26 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
 import play.api.data.Form
 import models.DistributionsIncluded
+import play.api.data.Forms.{mapping, optional}
 
 class DistributionsIncludedFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[DistributionsIncluded] =
-    Form(
-      "value" -> enumerable[DistributionsIncluded]("distributionsIncluded.error.required")
-    )
+  def apply(): Form[DistributionsIncludedForm] =
+    Form {
+      mapping(
+        "distributionsIncluded" -> enumerable[DistributionsIncluded](
+          "distributionsIncluded.error.required",
+          "distributionsIncluded.error.invalid"
+        ),
+        "distributionsIncludedAmount" -> optional(
+          int(
+            "distributionsIncludedAmount.error.required",
+            "distributionsIncludedAmount.error.wholeNumber",
+            "distributionsIncludedAmount.error.nonNumeric"
+          )
+        )
+      )(DistributionsIncludedForm.apply)(DistributionsIncludedForm.unapply)
+    }
 }
