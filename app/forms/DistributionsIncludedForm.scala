@@ -28,5 +28,3 @@ object DistributionsIncludedForm {
   implicit val format: Format[DistributionsIncludedForm] =
     Json.format[DistributionsIncludedForm]
 }
-
-

@@ -16,11 +16,13 @@
 
 package forms
 
-import forms.behaviours.OptionFieldBehaviours
+import forms.behaviours.{OptionFieldBehaviours, PositiveWholeAmountFieldBehaviours}
 import models.DistributionsIncluded
+import org.scalacheck.Shrink
 import play.api.data.FormError
 
-class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours {
+class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with PositiveWholeAmountFieldBehaviours {
+  implicit val noShrinkLong: Shrink[Long] = Shrink.shrinkAny
 
   val form = new DistributionsIncludedFormProvider()()
 
@@ -35,25 +37,42 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours {
       )
     }
 
-    def distributionsIncludedAmountBehaviours(distributionsIncludedCountKey: String): Unit = {
-      "bind valid values" in {
-        forAll(integerBetween(0, 99) -> "validValues") { integer =>
-          val result =
-            form.bind(buildDataMap(DistributionsIncluded.Yes, distributionsIncludedCountKey -> integer.toString))
-          result.hasErrors mustBe false
-          result.value.value mustBe DistributionsIncludedForm(DistributionsIncluded.Yes, Some(integer))
-        }
-      }
+    "distributions Included Amount" - {
+          val fieldName = "distributionsIncludedAmount"
 
+          val minimum = 1
+          val maximum = Integer.MAX_VALUE
+
+          behave like fieldThatBindsValidData(
+            form,
+            fieldName,
+            intsInRangeWithCommas(minimum, maximum)
+          )
+
+          behave like positiveWholeAmountField(
+            form,
+            fieldName,
+            nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
+            wholeNumberError = FormError(fieldName, "distributionsIncludedAmount.error.wholeNumber"),
+            doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
+            outOfRangeError = FormError(fieldName, "distributionsIncludedAmount.error.outOfRange", List(1, maximum))
+          )
+
+          "bind to None when value empty" in {
+            val result = form.bind(buildDataMap(DistributionsIncluded.Yes))
+            result.hasErrors mustBe true
+            result.errors mustBe Seq(
+              FormError("distributionsIncludedAmount", "distributionsIncludedAmount.error.required")
+            )
+          }
+    }
   }
 
   private def buildDataMap(
-                            distributionsIncluded: DistributionsIncluded,
-                            distributionsIncludedAmount: (String, String)*
-                          ) =
+    distributionsIncluded: DistributionsIncluded,
+    distributionsIncludedAmount: (String, String)*
+  ) =
     Map(
       s"distributionsIncluded" -> distributionsIncluded.toString
     ) ++ distributionsIncludedAmount
 }
-
-

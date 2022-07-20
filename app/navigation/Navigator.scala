@@ -36,9 +36,6 @@ class Navigator @Inject() () {
     case DistributionPage => complexRoute
 
     case DistributionsIncludedPage =>
-      _ => routes.InputScreenController.onPageLoad(NormalMode)
-
-    case InputScreenPage =>
       _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
 
     case AssociatedCompaniesPage =>
@@ -55,7 +52,8 @@ class Navigator @Inject() () {
   private def complexRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
-      case Some(Distribution.No)  => routes.InputScreenController.onPageLoad(NormalMode)
+      case Some(Distribution.No)  => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+      case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {

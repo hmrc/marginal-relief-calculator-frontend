@@ -20,7 +20,7 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 import models.DistributionsIncluded
-import play.api.data.Forms.{mapping, optional}
+import play.api.data.Forms.{ mapping, optional }
 
 class DistributionsIncludedFormProvider @Inject() extends Mappings {
   def apply(): Form[DistributionsIncludedForm] =
@@ -30,12 +30,15 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
           "distributionsIncluded.error.required",
           "distributionsIncluded.error.invalid"
         ),
-        "distributionsIncludedAmount" -> optional(
-          int(
+        "distributionsIncludedAmount" -> conditional[Int, DistributionsIncluded](
+          positiveWholeAmount(
             "distributionsIncludedAmount.error.required",
-            "distributionsIncludedAmount.error.wholeNumber",
+            "distributionsIncludedAmount.error.outOfRange",
+            "distributionsIncludedAmount.error.doNotUseDecimals",
             "distributionsIncludedAmount.error.nonNumeric"
-          )
+          ).verifying(inRange(1, 2147483647, "distributionsIncludedAmount.error.outOfRange")).withPrefix("distributionsIncludedAmount"),
+          enumerable[DistributionsIncluded]().withPrefix("distributionsIncluded"),
+          _ == DistributionsIncluded.Yes
         )
       )(DistributionsIncludedForm.apply)(DistributionsIncludedForm.unapply)
     }
