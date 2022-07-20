@@ -1,0 +1,121 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import connectors.sharedmodel._
+@import forms.DateUtils._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukRadios: GovukRadios,
+    govukInput : GovukInput,
+    govukButton: GovukButton,
+    govukWarningText : GovukWarningText,
+    govukDetails : GovukDetails
+)
+
+
+@(form: Form[_], associatedCompaniesParameter: AskAssociatedCompaniesParameter,mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@yesHtml(formParam: String) = {
+    @govukInput(
+        InputViewModel(
+            field = form(formParam),
+            label = Label(content = Text(messages("associatedCompanies.countLabel")))
+        )
+        .asNumeric()
+        .withCssClass("govuk-!-width-one-third")
+    )
+}
+
+@formContent(p: AskAssociatedCompaniesParameter) = {
+   <span>
+       <h1 class="govuk-fieldset__legend--l">
+		   @p match {
+			   case AskFull => {
+			   		@messages("associatedCompanies.heading")
+               }
+			   case AskOnePart(Period(start, end)) => {
+                    @messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+               }
+               case AskBothParts(Period(start, end), _) => {
+           			@messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+               }
+		   }
+       </h1>
+
+       @govukWarningText(WarningText(
+           iconFallbackText = "Warning",
+           content = Text(messages("associatedCompanies.warning"))
+       ))
+
+       @govukDetails(Details(
+           summary = Text(messages("associatedCompanies.detailsTitle")),
+           content = HtmlContent(messages("associatedCompanies.detailsHtml"))
+       ))
+
+       @govukRadios(
+           RadiosViewModel(
+               field  = form("associatedCompanies"),
+               legend = LegendViewModel(""),
+               items = Seq(
+                   RadioItem(
+                       content = Text(messages("site.yes")),
+                       value = Some("yes"),
+                       conditionalHtml = Some(
+                           yesHtml(p match {
+                               case AskFull => {
+                                    "associatedCompaniesCount"
+                               }
+                               case AskOnePart(_) => {
+                                    "associatedCompaniesCount"
+                               }
+                               case AskBothParts(_, _) => {
+                                    "associatedCompaniesFY1Count"
+                               }
+                           })
+                       )
+                   ),
+                   RadioItem(
+                       content = Text(messages("site.no")),
+                       value = Some("no")
+                   )
+               )
+           )
+       )
+   </span>
+}
+
+@layout(pageTitle = title(form, messages("associatedCompanies.title"))) {
+
+    @formHelper(action = routes.AssociatedCompaniesController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(
+                ErrorSummaryViewModel(
+                    form,
+                    errorLinkOverrides = Map(form.errors.head.key -> form.errors.head.key)))
+        }
+
+        @formContent(associatedCompaniesParameter)
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

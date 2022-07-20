@@ -22,23 +22,19 @@ import play.api.data.Forms.mapping
 
 import javax.inject.Inject
 
+// $COVERAGE-OFF$
 class InputScreenFormProvider @Inject() extends Mappings {
 
   def apply(): Form[InputScreenForm] =
-    Form(
+    Form {
       mapping(
         "distribution" -> int(
           "distribution.error.required",
           "distribution.error.wholeNumber",
           "distribution.error.nonNumeric"
         )
-          .verifying(inRange(0, Int.MaxValue, "distribution.error.outOfRange")),
-        "associatedCompanies" -> int(
-          "associatedCompanies.error.required",
-          "associatedCompanies.error.wholeNumber",
-          "associatedCompanies.error.nonNumeric"
-        )
-          .verifying(inRange(0, Int.MaxValue, "associatedCompanies.error.outOfRange"))
+          .verifying(inRange(0, Int.MaxValue, "distribution.error.outOfRange"))
       )(InputScreenForm.apply)(InputScreenForm.unapply)
-    )
+    }
 }
+// $COVERAGE-ON$

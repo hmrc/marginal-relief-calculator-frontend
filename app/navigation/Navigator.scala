@@ -39,6 +39,9 @@ class Navigator @Inject() () {
       _ => routes.InputScreenController.onPageLoad(NormalMode)
 
     case InputScreenPage =>
+      _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+
+    case AssociatedCompaniesPage =>
       _ => routes.ResultsPageController.onPageLoad
 
     case _ =>

@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import play.api.libs.json.{ Format, _ }
+import forms.AssociatedCompaniesForm
+import pages.behaviours.PageBehaviours
 
-final case class InputScreenForm(
-  distribution: Int
-)
+class AssociatedCompaniesPageSpec extends PageBehaviours {
 
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+  "AssociatedCompaniesPage" - {
+
+    beRetrievable[AssociatedCompaniesForm](AssociatedCompaniesPage)
+
+    beSettable[AssociatedCompaniesForm](AssociatedCompaniesPage)
+
+    beRemovable[AssociatedCompaniesForm](AssociatedCompaniesPage)
+  }
 }

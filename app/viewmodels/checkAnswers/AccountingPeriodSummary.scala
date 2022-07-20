@@ -25,6 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
+// $COVERAGE-OFF$
 object AccountingPeriodSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] =
     answers
@@ -52,3 +53,4 @@ object AccountingPeriodSummary {
       }
       .getOrElse(List.empty)
 }
+// $COVERAGE-ON$

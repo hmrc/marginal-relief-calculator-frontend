@@ -22,6 +22,7 @@ import play.api.i18n.Lang
 import play.api.mvc._
 import uk.gov.hmrc.play.language.{ LanguageController, LanguageUtils }
 
+// $COVERAGE-OFF$
 class LanguageSwitchController @Inject() (
   appConfig: FrontendAppConfig,
   languageUtils: LanguageUtils,
@@ -32,3 +33,4 @@ class LanguageSwitchController @Inject() (
 
   override def languageMap: Map[String, Lang] = appConfig.languageMap
 }
+// $COVERAGE-ON$

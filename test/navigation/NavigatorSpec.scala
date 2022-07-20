@@ -44,7 +44,7 @@ class NavigatorSpec extends SpecBase {
           InputScreenPage,
           NormalMode,
           UserAnswers("id")
-        ) mustBe routes.ResultsPageController.onPageLoad
+        ) mustBe routes.AssociatedCompaniesController.onPageLoad(NormalMode)
       }
 
       "must go from a page that doesn't exist in the route map to Index" in {

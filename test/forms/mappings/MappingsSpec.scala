@@ -16,11 +16,12 @@
 
 package forms.mappings
 
+import models.Enumerable
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
+import play.api.data.Forms.mapping
 import play.api.data.{ Form, FormError }
-import models.Enumerable
 
 object MappingsSpec {
 
@@ -165,6 +166,53 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
     "must not bind an empty map" in {
       val result = testForm.bind(Map.empty[String, String])
       result.errors must contain(FormError("value", "error.required"))
+    }
+  }
+
+  "conditional" - {
+
+    case class TestFormData(check: String, value: Option[Int])
+
+    val testForm = Form {
+      mapping(
+        "check" -> text(),
+        "value" -> conditional[Int, String](
+          field = int()
+            .withPrefix("value"),
+          conditionField = text().withPrefix("check"),
+          condition = _ == "yes"
+        )
+      )(TestFormData.apply)(TestFormData.unapply)
+    }
+
+    "must bind when condition true (value set to non-empty)" in {
+      val result = testForm.bind(Map("check" -> "yes", "value" -> "1"))
+      result.get mustEqual TestFormData("yes", Some(1))
+    }
+
+    "must bind when condition false (value set to empty)" in {
+      val result = testForm.bind(Map("check" -> "no"))
+      result.get mustEqual TestFormData("no", None)
+    }
+
+    "must return error when condition true and value empty" in {
+      val result = testForm.bind(Map("check" -> "yes", "value" -> ""))
+      result.errors must contain(FormError("value", "error.required"))
+    }
+
+    "must return error when condition true and value is invalid" in {
+      val result = testForm.bind(Map("check" -> "yes", "value" -> "aaaaa"))
+      result.errors must contain(FormError("value", "error.nonNumeric"))
+    }
+
+    "must unbind value" in {
+      val result = testForm.fill(TestFormData("yes", Some(1)))
+      result.apply("value").value.value mustEqual "1"
+    }
+
+    "must unbind None value" in {
+      val result = testForm.fill(TestFormData("yes", None))
+      result.apply("value").value mustBe empty
     }
   }
 

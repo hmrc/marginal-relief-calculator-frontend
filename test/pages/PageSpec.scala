@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import play.api.libs.json.{ Format, _ }
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
 
-final case class InputScreenForm(
-  distribution: Int
-)
-
-object InputScreenForm {
-  implicit val format: Format[InputScreenForm] =
-    Json.format[InputScreenForm]
+class PageSpec extends AnyFreeSpec with Matchers {
+  "Page" - {
+    "toString" - {
+      "should return a string representation of the page" in {
+        val page: Page = new Page {
+          override def toString: String = "page"
+        }
+        val pageString: String = page
+        pageString shouldBe "page"
+      }
+    }
+  }
 }

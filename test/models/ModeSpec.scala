@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package viewmodels
+package models
 
-abstract class WithName(name: String) {
-  override val toString: String = name
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.mvc.JavascriptLiteral
+
+class ModeSpec extends AnyFreeSpec with Matchers {
+  "JavascriptLiteral[Mode]" - {
+    "to(Mode)" - {
+      "should return javascript literal representation for NormalMode" in {
+        implicitly[JavascriptLiteral[Mode]].to(NormalMode) shouldBe "NormalMode"
+      }
+
+      "should return javascript literal representation for CheckMode" in {
+        implicitly[JavascriptLiteral[Mode]].to(CheckMode) shouldBe "CheckMode"
+      }
+    }
+  }
 }

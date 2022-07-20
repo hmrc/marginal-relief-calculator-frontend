@@ -18,6 +18,7 @@ package generators
 
 import models._
 import org.scalacheck.Arbitrary.arbitrary
+import models.AssociatedCompanies
 import org.scalacheck.{ Arbitrary, Gen }
 
 trait ModelGenerators {
@@ -30,5 +31,10 @@ trait ModelGenerators {
   implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
     Arbitrary {
       Gen.oneOf(Distribution.values.toSeq)
+    }
+
+  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
+    Arbitrary {
+      Gen.oneOf(AssociatedCompanies.values)
     }
 }

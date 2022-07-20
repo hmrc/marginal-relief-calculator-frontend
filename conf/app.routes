@@ -21,6 +21,11 @@ POST       /change-input-screen                 controllers.InputScreenControlle
 
 GET        /results-page                        controllers.ResultsPageController.onPageLoad()
 
+GET        /associated-companies                controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
+POST       /associated-companies                controllers.AssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
+GET        /change-associated-companies         controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-associated-companies         controllers.AssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
+
 GET        /accounting-period                   controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
 POST       /accounting-period                   controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
 GET        /change-accounting-period            controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
@@ -40,3 +45,4 @@ GET        /distributionsIncluded                        controllers.Distributio
 POST       /distributionsIncluded                        controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
 GET        /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
+
