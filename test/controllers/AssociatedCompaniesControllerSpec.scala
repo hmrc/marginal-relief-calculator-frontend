@@ -198,7 +198,7 @@ class AssociatedCompaniesControllerSpec
           val request = FakeRequest(GET, associatedCompaniesRoute)
           val result = route(application, request).value.failed.futureValue
           result mustBe a[UnsupportedOperationException]
-          result.getMessage mustBe "Associated companies ask parameter is DontAsk"
+          result.getMessage mustBe "Associated companies ask parameter value is 'DontAsk'"
         }
       }
     }
@@ -240,7 +240,7 @@ class AssociatedCompaniesControllerSpec
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.ResultsPageController.onPageLoad().url
+          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
         }
       }
 

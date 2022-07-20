@@ -16,10 +16,16 @@
 
 package viewmodels.checkAnswers
 
-import models.UserAnswers
+import models.{ CheckMode, UserAnswers }
 import pages.InputScreenPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import viewmodels.govuk.summarylist._
+
+import java.text.NumberFormat
+import java.util.Locale
+import controllers.routes
+import viewmodels.implicits._
 
 // $COVERAGE-OFF$
 object InputScreenSummary {
@@ -27,8 +33,17 @@ object InputScreenSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] =
     answers
       .get(InputScreenPage)
-      .map { _ =>
-        List.empty
+      .map { answer =>
+        List(
+          SummaryListRowViewModel(
+            key = "distribution.checkYourAnswersLabel",
+            value = ValueViewModel(s"£${NumberFormat.getNumberInstance(Locale.UK).format(answer.distribution)}"),
+            actions = Seq(
+              ActionItemViewModel("site.change", routes.InputScreenController.onPageLoad(CheckMode).url)
+                .withVisuallyHiddenText(messages("distribution.change.hidden"))
+            )
+          )
+        )
       }
       .getOrElse(List.empty)
 }

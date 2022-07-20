@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter
 
 object DateUtils {
 
-  private val FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy")
+  private val FORMAT = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   implicit class DateOps(date: LocalDate) {
     def isEqualOrBefore(another: LocalDate): Boolean =

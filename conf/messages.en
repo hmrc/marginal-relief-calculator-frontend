@@ -10,6 +10,7 @@ site.start = Start now
 site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
+site.from.to = {0} to {1}
 
 date.day = Day
 date.month = Month
@@ -41,6 +42,7 @@ index.guidance = Welcome to your new frontend. Please see the README file for a 
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.continue = Calculate Marginal Relief
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -66,7 +68,7 @@ inputScreen.change.hidden = InputScreen
 accountingPeriod.title = What are your accounting period dates?
 accountingPeriod.heading = What are your accounting period dates?
 accountingPeriod.hint = For example, 12 11 2007
-accountingPeriod.checkYourAnswersLabel = AccountingPeriod
+accountingPeriod.checkYourAnswersLabel = Accounting period dates
 accountingPeriod.error.required.all = Enter the accountingPeriod
 accountingPeriod.error.required.two = The accountingPeriod must include {0} and {1}
 accountingPeriod.error.required = The accountingPeriod must include {0}
@@ -125,7 +127,7 @@ associatedCompanies.warning = Do not include the company you're currently calcul
 associatedCompanies.detailsTitle = What are associated companies?
 associatedCompanies.detailsHtml = A company is considered associated to another if:<br/><ul><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link">control</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = Enter only additional associated companies
-associatedCompanies.checkYourAnswersLabel = Did your company have any active associated companies between {0} to {1}?
+associatedCompanies.checkYourAnswersLabel = Number of associated companies
 associatedCompanies.error.required = Select whether you have associated companies or not
 associatedCompanies.error.invalid = Select whether you have associated companies or not
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1
@@ -137,7 +139,7 @@ associatedCompanies.change.hidden = AssociatedCompanies
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
 taxableProfit.label = Profit amount
-taxableProfit.checkYourAnswersLabel = Profit amount
+taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits
 taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, 70000
 taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, 70000
