@@ -24,23 +24,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours {
 
   val form = new DistributionsIncludedFormProvider()()
 
-  ".value" - {
-
-    val fieldName = "value"
-    val requiredKey = "distributionsIncluded.error.required"
-
-    behave like optionsField[DistributionsIncluded](
-      form,
-      fieldName,
-      validValues = DistributionsIncluded.values,
-      invalidError = FormError(fieldName, "error.invalid")
-    )
-
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+  "form values" - {
 
     "distributionsIncluded" - {
       behave like optionsField[DistributionsIncluded](
@@ -50,6 +34,16 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours {
         FormError("distributionsIncluded", "distributionsIncluded.error.invalid")
       )
     }
+
+    def distributionsIncludedAmountBehaviours(distributionsIncludedCountKey: String): Unit = {
+      "bind valid values" in {
+        forAll(integerBetween(0, 99) -> "validValues") { integer =>
+          val result =
+            form.bind(buildDataMap(DistributionsIncluded.Yes, distributionsIncludedCountKey -> integer.toString))
+          result.hasErrors mustBe false
+          result.value.value mustBe DistributionsIncludedForm(DistributionsIncluded.Yes, Some(integer))
+        }
+      }
 
   }
 

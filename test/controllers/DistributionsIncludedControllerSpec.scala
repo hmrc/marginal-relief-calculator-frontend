@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import forms.DistributionsIncludedFormProvider
-import models.{ DistributionsIncluded, NormalMode, UserAnswers }
-import navigation.{ FakeNavigator, Navigator }
+import forms.{DistributionsIncludedForm, DistributionsIncludedFormProvider}
+import models.{DistributionsIncluded, NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -63,7 +63,7 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers =
-        UserAnswers(userAnswersId).set(DistributionsIncludedPage, DistributionsIncluded.values.head).success.value
+        UserAnswers(userAnswersId).set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1))).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -75,7 +75,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(DistributionsIncluded.values.head), NormalMode)(
+        contentAsString(result) mustEqual view(
+          form.fill(DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1))), NormalMode)(
           request,
           messages(application)
         ).toString

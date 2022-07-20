@@ -17,7 +17,7 @@
 package pages
 
 import forms.DistributionsIncludedForm
-import models.DistributionsIncluded
+
 import play.api.libs.json.JsPath
 
 case object DistributionsIncludedPage extends QuestionPage[DistributionsIncludedForm] {
