@@ -52,7 +52,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
 
     def associatedCompaniesCountBehaviours(associatedCompaniesCountKey: String): Unit = {
       "bind valid values" in {
-        forAll(integerBetween(0, 99) -> "validValues") { integer =>
+        forAll(integerBetween(1, 99) -> "validValues") { integer =>
           val result =
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe false
@@ -79,7 +79,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
           result.errors mustBe Seq(
-            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(0, 99))
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(1, 99))
           )
         }
       }
@@ -90,7 +90,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
           result.errors mustBe Seq(
-            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(0, 99))
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(1, 99))
           )
         }
       }
