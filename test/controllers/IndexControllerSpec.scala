@@ -17,28 +17,87 @@
 package controllers
 
 import base.SpecBase
+import forms.AccountingPeriodForm
+import models.NormalMode
+import pages.AccountingPeriodPage
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
+import uk.gov.hmrc.http.SessionKeys
 import views.html.IndexView
+
+import java.time.LocalDate
 
 class IndexControllerSpec extends SpecBase {
 
+  private val epoch: LocalDate = LocalDate.ofEpochDay(0)
+
   "Index Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "GET /" - {
+      "must return OK and the correct view" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = None).build()
 
-      running(application) {
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad.url)
+        running(application) {
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad.url)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[IndexView]
+          val view = application.injector.instanceOf[IndexView]
 
-        status(result) mustEqual OK
+          status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+          contentAsString(result) mustEqual view()(request, messages(application)).toString
+        }
+      }
+    }
+
+    "GET /start" - {
+
+      "must create empty user answers when missing and redirect to /accounting-period" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+        running(application) {
+          val request = FakeRequest(GET, routes.IndexController.onStart.url)
+            .withSession(SessionKeys.sessionId -> "test-session-id")
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result) mustBe Some(routes.AccountingPeriodController.onPageLoad(NormalMode).url)
+          val userAnswers = sessionRepository
+            .get("test-session-id")
+            .futureValue
+          userAnswers.get.id mustBe "test-session-id"
+          userAnswers.get.data mustBe Json.obj()
+        }
+      }
+
+      "must clear user answers when present and redirect to /accounting-period" in {
+
+        val application = applicationBuilder(userAnswers =
+          Some(emptyUserAnswers.set(AccountingPeriodPage, AccountingPeriodForm(epoch, Some(epoch))).get)
+        ).build()
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+
+        running(application) {
+          val request = FakeRequest(GET, routes.IndexController.onStart.url)
+            .withSession(SessionKeys.sessionId -> "test-session-id")
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result) mustBe Some(routes.AccountingPeriodController.onPageLoad(NormalMode).url)
+          val userAnswers = sessionRepository
+            .get("test-session-id")
+            .futureValue
+          userAnswers.get.id mustBe "test-session-id"
+          userAnswers.get.data mustBe Json.obj()
+        }
       }
     }
   }
