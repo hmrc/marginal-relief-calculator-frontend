@@ -37,21 +37,21 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
             "associatedCompaniesCount.error.required",
             "associatedCompaniesCount.error.wholeNumber",
             "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
+          ).verifying(inRange(1, 99, "associatedCompaniesCount.error.outOfRange"))
         ),
         "associatedCompaniesFY1Count" -> optional(
           int(
             "associatedCompaniesCount.error.required",
             "associatedCompaniesCount.error.wholeNumber",
             "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
+          ).verifying(inRange(1, 99, "associatedCompaniesCount.error.outOfRange"))
         ),
         "associatedCompaniesFY2Count" -> optional(
           int(
             "associatedCompaniesCount.error.required",
             "associatedCompaniesCount.error.wholeNumber",
             "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(inRange(0, 99, "associatedCompaniesCount.error.outOfRange"))
+          ).verifying(inRange(1, 99, "associatedCompaniesCount.error.outOfRange"))
         )
       )(AssociatedCompaniesForm.apply)(AssociatedCompaniesForm.unapply)
     }
