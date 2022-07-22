@@ -20,26 +20,18 @@ import controllers.routes
 import models.{ CheckMode, UserAnswers }
 import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-// $COVERAGE-OFF$
 object AssociatedCompaniesSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(AssociatedCompaniesPage).map { answer =>
-      val value = ValueViewModel(
-        HtmlContent(
-          HtmlFormat.escape(messages(s"associatedCompanies.$answer"))
-        )
-      )
-
+      val count = answer.associatedCompaniesCount.orElse(answer.associatedCompaniesFY1Count).getOrElse(0)
       SummaryListRowViewModel(
         key = "associatedCompanies.checkYourAnswersLabel",
-        value = value,
+        value = ValueViewModel(count.toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
@@ -47,4 +39,3 @@ object AssociatedCompaniesSummary {
       )
     }
 }
-// $COVERAGE-ON$

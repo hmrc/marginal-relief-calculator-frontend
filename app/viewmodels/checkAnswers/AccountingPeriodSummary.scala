@@ -16,8 +16,8 @@
 
 package viewmodels.checkAnswers
 
-import java.time.format.DateTimeFormatter
 import controllers.routes
+import forms.DateUtils._
 import models.{ CheckMode, UserAnswers }
 import pages.AccountingPeriodPage
 import play.api.i18n.Messages
@@ -25,32 +25,27 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-// $COVERAGE-OFF$
 object AccountingPeriodSummary {
   def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] =
     answers
       .get(AccountingPeriodPage)
       .map { answer =>
-        val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
         List(
           SummaryListRowViewModel(
-            key = "accountingPeriodStartDate.checkYourAnswersLabel",
-            value = ValueViewModel(answer.accountingPeriodStartDate.format(dateFormatter)),
+            key = "accountingPeriod.checkYourAnswersLabel",
+            value = ValueViewModel(
+              messages(
+                "site.from.to",
+                answer.accountingPeriodStartDate.formatDate,
+                answer.accountingPeriodEndDate.map(_.formatDate).getOrElse("")
+              )
+            ),
             actions = Seq(
               ActionItemViewModel("site.change", routes.AccountingPeriodController.onPageLoad(CheckMode).url)
                 .withVisuallyHiddenText(messages("accountingPeriodStartDate.change.hidden"))
-            )
-          ),
-          SummaryListRowViewModel(
-            key = "accountingPeriodEndDate.checkYourAnswersLabel",
-            value = ValueViewModel(answer.accountingPeriodEndDate.map(_.format(dateFormatter)).getOrElse[String]("")),
-            actions = Seq(
-              ActionItemViewModel("site.change", routes.AccountingPeriodController.onPageLoad(CheckMode).url)
-                .withVisuallyHiddenText(messages("accountingPeriodEndDate.change.hidden"))
             )
           )
         )
       }
       .getOrElse(List.empty)
 }
-// $COVERAGE-ON$

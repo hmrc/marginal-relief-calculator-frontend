@@ -37,7 +37,7 @@ class Navigator @Inject() () {
       _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
 
     case AssociatedCompaniesPage =>
-      _ => routes.ResultsPageController.onPageLoad
+      _ => routes.CheckYourAnswersController.onPageLoad
 
     case _ =>
       _ => routes.IndexController.onPageLoad

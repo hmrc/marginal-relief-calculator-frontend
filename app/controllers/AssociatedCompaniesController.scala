@@ -64,7 +64,7 @@ class AssociatedCompaniesController @Inject() (
                                             userParameters.taxableProfit,
                                             None
                                           )
-      } yield ifAskAssociatedCompaniesParameter(
+      } yield ifAskAssociatedCompaniesThen(
         associatedCompaniesParameter,
         p =>
           Ok(
@@ -92,14 +92,14 @@ class AssociatedCompaniesController @Inject() (
         result <- boundedForm
                     .fold(
                       formWithErrors =>
-                        ifAskAssociatedCompaniesParameter(
+                        ifAskAssociatedCompaniesThen(
                           associatedCompaniesParameter,
                           p => Future.successful(BadRequest(view(formWithErrors, p, mode)))
                         ),
                       value =>
                         validateRequiredFields(value, associatedCompaniesParameter) match {
                           case Some(errorKey) =>
-                            ifAskAssociatedCompaniesParameter(
+                            ifAskAssociatedCompaniesThen(
                               associatedCompaniesParameter,
                               badRequestWithError(boundedForm, _, errorKey, mode)
                             )
@@ -128,11 +128,21 @@ class AssociatedCompaniesController @Inject() (
 
   private def updateAndRedirect(value: AssociatedCompaniesForm, mode: Mode)(implicit
     request: DataRequest[AnyContent]
-  ) =
+  ) = {
+    val valueUpdated = value.associatedCompanies match {
+      case AssociatedCompanies.Yes => value
+      case AssociatedCompanies.No =>
+        value.copy(
+          associatedCompaniesCount = None,
+          associatedCompaniesFY1Count = None,
+          associatedCompaniesFY2Count = None
+        )
+    }
     for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(AssociatedCompaniesPage, value))
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(AssociatedCompaniesPage, valueUpdated))
       _              <- sessionRepository.set(updatedAnswers)
     } yield Redirect(navigator.nextPage(AssociatedCompaniesPage, mode, updatedAnswers))
+  }
 
   case class AccountingPeriodTaxableProfit(accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int)
   private def getUserParameters()(implicit
@@ -166,13 +176,13 @@ class AssociatedCompaniesController @Inject() (
         None
     }
 
-  private def ifAskAssociatedCompaniesParameter[T](
+  private def ifAskAssociatedCompaniesThen[T](
     a: AssociatedCompaniesParameter,
     f: AskAssociatedCompaniesParameter => T
   ): T =
     a match {
       case DontAsk =>
-        throw new UnsupportedOperationException("Associated companies ask parameter is DontAsk")
+        throw new UnsupportedOperationException("Associated companies ask parameter value is 'DontAsk'")
       case p: AskAssociatedCompaniesParameter => f(p)
     }
 }

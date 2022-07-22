@@ -24,14 +24,16 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-// $COVERAGE-OFF$
+import java.text.NumberFormat
+import java.util.Locale
+
 object TaxableProfitSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(TaxableProfitPage).map { answer =>
       SummaryListRowViewModel(
         key = "taxableProfit.checkYourAnswersLabel",
-        value = ValueViewModel(answer.toString),
+        value = ValueViewModel(s"£${NumberFormat.getNumberInstance(Locale.UK).format(answer)}"),
         actions = Seq(
           ActionItemViewModel("site.change", routes.TaxableProfitController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("taxableProfit.change.hidden"))
@@ -39,4 +41,3 @@ object TaxableProfitSummary {
       )
     }
 }
-// $COVERAGE-ON$
