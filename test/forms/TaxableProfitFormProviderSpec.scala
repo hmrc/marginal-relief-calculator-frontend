@@ -33,16 +33,18 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
+      Map.empty,
       intsInRangeWithCommas(minimum, maximum)
     )
 
     behave like positiveWholeAmountField(
       form,
       fieldName,
+      Map.empty,
       nonNumericError = FormError(fieldName, "taxableProfit.error.nonNumeric"),
       wholeNumberError = FormError(fieldName, "taxableProfit.error.wholeNumber"),
       doNotUseDecimalsError = FormError(fieldName, "taxableProfit.error.doNotUseDecimals"),
-      outOfRangeError = FormError(fieldName, "taxableProfit.error.outOfRange", List(0, Integer.MAX_VALUE))
+      outOfRangeError = FormError(fieldName, "taxableProfit.error.outOfRange", List(1, Integer.MAX_VALUE))
     )
 
     behave like mandatoryField(

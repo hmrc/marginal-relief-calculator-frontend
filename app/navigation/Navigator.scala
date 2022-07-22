@@ -49,7 +49,7 @@ class Navigator @Inject() () {
     _ => routes.CheckYourAnswersController.onPageLoad
   }
 
-  private def complexRoute(answers: UserAnswers): Call =
+  def complexRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
       case Some(Distribution.No)  => routes.AssociatedCompaniesController.onPageLoad(NormalMode)

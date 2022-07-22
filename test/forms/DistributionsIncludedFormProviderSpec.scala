@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.behaviours.{OptionFieldBehaviours, PositiveWholeAmountFieldBehaviours}
+import forms.behaviours.{ OptionFieldBehaviours, PositiveWholeAmountFieldBehaviours }
 import models.DistributionsIncluded
 import org.scalacheck.Shrink
 import play.api.data.FormError
@@ -38,33 +38,35 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with P
     }
 
     "distributions Included Amount" - {
-          val fieldName = "distributionsIncludedAmount"
+      val fieldName = "distributionsIncludedAmount"
 
-          val minimum = 1
-          val maximum = Integer.MAX_VALUE
+      val minimum = 1
+      val maximum = Integer.MAX_VALUE
 
-          behave like fieldThatBindsValidData(
-            form,
-            fieldName,
-            intsInRangeWithCommas(minimum, maximum)
-          )
+      behave like fieldThatBindsValidData(
+        form,
+        fieldName,
+        Map("distributionsIncluded" -> DistributionsIncluded.Yes.toString),
+        intsInRangeWithCommas(minimum, maximum)
+      )
 
-          behave like positiveWholeAmountField(
-            form,
-            fieldName,
-            nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
-            wholeNumberError = FormError(fieldName, "distributionsIncludedAmount.error.wholeNumber"),
-            doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
-            outOfRangeError = FormError(fieldName, "distributionsIncludedAmount.error.outOfRange", List(1, maximum))
-          )
+      behave like positiveWholeAmountField(
+        form,
+        fieldName,
+        Map("distributionsIncluded" -> DistributionsIncluded.Yes.toString),
+        nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
+        wholeNumberError = FormError(fieldName, "distributionsIncludedAmount.error.wholeNumber"),
+        doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
+        outOfRangeError = FormError(fieldName, "distributionsIncludedAmount.error.outOfRange", List(1, maximum))
+      )
 
-          "bind to None when value empty" in {
-            val result = form.bind(buildDataMap(DistributionsIncluded.Yes))
-            result.hasErrors mustBe true
-            result.errors mustBe Seq(
-              FormError("distributionsIncludedAmount", "distributionsIncludedAmount.error.required")
-            )
-          }
+      "bind to None when value empty" in {
+        val result = form.bind(buildDataMap(DistributionsIncluded.Yes))
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("distributionsIncludedAmount", "distributionsIncludedAmount.error.required")
+        )
+      }
     }
   }
 

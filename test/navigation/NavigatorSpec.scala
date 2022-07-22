@@ -18,7 +18,7 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import pages._
+import pages.{ DistributionPage, _ }
 import models._
 
 class NavigatorSpec extends SpecBase {
@@ -34,14 +34,14 @@ class NavigatorSpec extends SpecBase {
           .onPageLoad(NormalMode)
       }
 
-      "must go from TaxableProfit page to InputScreen page" in {
-        navigator.nextPage(TaxableProfitPage, NormalMode, UserAnswers("id")) mustBe routes.InputScreenController
+      "must go from TaxableProfit page to Distribution page" in {
+        navigator.nextPage(TaxableProfitPage, NormalMode, UserAnswers("id")) mustBe routes.DistributionController
           .onPageLoad(NormalMode)
       }
 
-      "must go from InputScreen page to ResultsPage page" in {
+      "must go from Distribution Included page to Associated Companies page" in {
         navigator.nextPage(
-          InputScreenPage,
+          DistributionsIncludedPage,
           NormalMode,
           UserAnswers("id")
         ) mustBe routes.AssociatedCompaniesController.onPageLoad(NormalMode)

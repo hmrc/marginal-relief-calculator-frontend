@@ -100,7 +100,7 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, taxableProfitRoute)
-            .withFormUrlEncodedBody(("value", validAnswer.toString))
+            .withFormUrlEncodedBody(("value", "1"))
 
         val result = route(application, request).value
 

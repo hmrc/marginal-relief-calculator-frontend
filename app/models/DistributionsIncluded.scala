@@ -16,10 +16,6 @@
 
 package models
 
-import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
-
 sealed trait DistributionsIncluded
 
 object DistributionsIncluded extends Enumerable.Implicits {
@@ -31,14 +27,6 @@ object DistributionsIncluded extends Enumerable.Implicits {
     Yes,
     No
   )
-
-  def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map { case (value, index) =>
-    RadioItem(
-      content = Text(messages(s"distributionsIncluded.${value.toString}")),
-      value = Some(value.toString),
-      id = Some(s"value_$index")
-    )
-  }
 
   implicit val enumerable: Enumerable[DistributionsIncluded] =
     Enumerable(values.map(v => v.toString -> v): _*)

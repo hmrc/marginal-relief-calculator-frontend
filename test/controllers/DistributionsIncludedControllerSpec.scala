@@ -105,7 +105,7 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, distributionsIncludedRoute)
-            .withFormUrlEncodedBody(("value", DistributionsIncluded.values.head.toString))
+            .withFormUrlEncodedBody(("distributionsIncluded", "yes"), ("distributionsIncludedAmount", "1"))
 
         val result = route(application, request).value
 

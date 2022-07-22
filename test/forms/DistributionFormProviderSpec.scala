@@ -26,14 +26,14 @@ class DistributionFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" - {
 
-    val fieldName = "value"
+    val fieldName = "distribution"
     val requiredKey = "distribution.error.required"
 
     behave like optionsField[Distribution](
       form,
       fieldName,
       validValues = Distribution.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, "distribution.error.invalid")
     )
 
     behave like mandatoryField(
