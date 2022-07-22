@@ -33,7 +33,7 @@ class DistributionFormProviderSpec extends OptionFieldBehaviours {
       form,
       fieldName,
       validValues = Distribution.values,
-      invalidError = FormError(fieldName, "distribution.error.invalid")
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(
