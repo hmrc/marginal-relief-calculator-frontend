@@ -14,8 +14,12 @@
  * limitations under the License.
  *@
 
+@import controllers.routes
+
 @this(
-    layout: templates.Layout
+    layout: templates.Layout,
+    govukInsetText : GovukInsetText,
+    govukButton: GovukButton
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -25,7 +29,34 @@
     showBackLink = false
 ) {
 
-    <h1 class="govuk-heading-xl">@messages("index.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("index.heading")</h1>
 
-    <p class="govuk-body">@messages("index.guidance")</p>
+    <p class="govuk-body">@messages("index.guidance.useThisServiceTo")</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("index.guidance.check.item1")</li>
+        <li>@messages("index.guidance.check.item2")</li>
+        <li>@messages("index.guidance.check.item3")</li>
+    </ul>
+
+    @govukInsetText(InsetText(
+        content = Text(messages("index.guidance.inset"))
+    ))
+
+    <h1 class="govuk-heading-l">@messages("index.guidance.beforeYouStart")</h1>
+
+    <p class="govuk-body">@messages("index.guidance.youNeedToKnow")</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("index.guidance.requirements.item1")</li>
+        <li>@messages("index.guidance.requirements.item2")</li>
+        <li>@Html(messages("index.guidance.requirements.item3","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm15120' class='govuk-link'>","</a>"))</li>
+        <li>@Html(messages("index.guidance.requirements.item4","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm03570' class='govuk-link'>","</a>"))</li>
+    </ul>
+
+    @govukButton(Button(
+        href = Some(routes.IndexController.onStart.url),
+        isStartButton = true,
+        content = Text(messages("site.start"))
+    ))
 }

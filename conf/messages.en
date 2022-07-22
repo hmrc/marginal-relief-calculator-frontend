@@ -37,8 +37,18 @@ error.required = Please enter a value
 error.summary.title = There is a problem
 
 index.title = marginal-relief-calculator-frontend
-index.heading = marginal-relief-calculator-frontend
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+index.heading = Calculate Marginal Relief for Corporation Tax
+index.guidance.useThisServiceTo = Use this service to:
+index.guidance.check.item1 = check your company's eligibility for Marginal Relief
+index.guidance.check.item2 = calculate how much Marginal Relief your company could be entitled to
+index.guidance.check.item3 = get an indication of your Corporation Tax and effective tax rates before and after Marginal Relief
+index.guidance.inset = HMRC does not save any data you enter within this service. Any calculations produced are for your records only and not stored by the service.
+index.guidance.beforeYouStart = Before you start
+index.guidance.youNeedToKnow = You need to know:
+index.guidance.requirements.item1 = your company's accounting period start and end dates
+index.guidance.requirements.item2 = your company's total taxable profit
+index.guidance.requirements.item3 = any {0}distributions{1} from unrelated, unassociated companies
+index.guidance.requirements.item4 = any {0}associated{1} company details
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers

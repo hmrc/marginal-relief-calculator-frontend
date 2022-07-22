@@ -16,20 +16,41 @@
 
 package controllers
 
-import controllers.actions.IdentifierAction
-import javax.inject.Inject
+import controllers.actions.{ DataRetrievalAction, IdentifierAction }
+import models.{ NormalMode, UserAnswers }
 import play.api.i18n.I18nSupport
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
 
+import javax.inject.Inject
+import scala.concurrent.{ ExecutionContext, Future }
+
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
+  sessionRepository: SessionRepository,
   identify: IdentifierAction,
+  getData: DataRetrievalAction,
   view: IndexView
-) extends FrontendBaseController with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = identify { implicit request =>
+  def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(view())
+  }
+
+  def onStart: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+    for {
+      updatedAnswers <- Future.successful(request.userAnswers match {
+                          case Some(answers) =>
+                            answers.clean
+                          case None =>
+                            UserAnswers(request.userId)
+                        })
+      _ <- sessionRepository.set(updatedAnswers)
+    } yield Redirect(
+      routes.AccountingPeriodController.onPageLoad(NormalMode).url
+    )
   }
 }
