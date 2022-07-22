@@ -20,6 +20,7 @@ import base.SpecBase
 import controllers.routes
 import pages.{ DistributionPage, _ }
 import models._
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 
 class NavigatorSpec extends SpecBase {
 
@@ -37,6 +38,13 @@ class NavigatorSpec extends SpecBase {
       "must go from TaxableProfit page to Distribution page" in {
         navigator.nextPage(TaxableProfitPage, NormalMode, UserAnswers("id")) mustBe routes.DistributionController
           .onPageLoad(NormalMode)
+      }
+
+      "must go from Distribution to Distributions Included page" in {
+        val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.values.head).success.value
+        navigator.distributionsNextRoute(userAnswers) mustBe routes.DistributionsIncludedController.onPageLoad(
+          NormalMode
+        )
       }
 
       "must go from Distribution Included page to Associated Companies page" in {

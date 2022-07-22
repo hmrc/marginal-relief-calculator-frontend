@@ -16,17 +16,17 @@
 
 package pages
 
-import models.DistributionsIncluded
+import forms.DistributionsIncludedForm
 import pages.behaviours.PageBehaviours
 
 class DistributionsIncludedSpec extends PageBehaviours {
 
   "DistributionsIncludedPage" - {
 
-    /*beRetrievable[DistributionsIncluded](DistributionsIncludedPage)
+    beRetrievable[DistributionsIncludedForm]
 
-    beSettable[DistributionsIncluded](DistributionsIncludedPage)
+    beSettable[DistributionsIncludedForm]
 
-    beRemovable[DistributionsIncluded](DistributionsIncludedPage)*/
+    beRemovable[DistributionsIncludedForm]
   }
 }

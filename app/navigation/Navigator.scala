@@ -33,7 +33,7 @@ class Navigator @Inject() () {
     case TaxableProfitPage =>
       _ => routes.DistributionController.onPageLoad(NormalMode)
 
-    case DistributionPage => complexRoute
+    case DistributionPage => distributionsNextRoute
 
     case DistributionsIncludedPage =>
       _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
@@ -49,7 +49,7 @@ class Navigator @Inject() () {
     _ => routes.CheckYourAnswersController.onPageLoad
   }
 
-  def complexRoute(answers: UserAnswers): Call =
+  def distributionsNextRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
       case Some(Distribution.No)  => routes.AssociatedCompaniesController.onPageLoad(NormalMode)

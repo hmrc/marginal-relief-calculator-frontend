@@ -109,15 +109,6 @@ profit.error.wholeNumber = Enter your Taxable profit using whole numbers
 profit.error.outOfRange = Taxable profit must be between {0} and {1}
 profit.change.hidden = Taxable profit
 
-distribution.title = Distributions
-distribution.heading = Distributions
-distribution.checkYourAnswersLabel = Distributions
-sdistribution.error.nonNumeric = Enter your Distributions using numbers
-distribution.error.required = Enter your Distributions
-distribution.error.wholeNumber = Enter your Distributions using whole numbers
-distribution.error.outOfRange = Distributions must be between {0} and {1}
-distribution.change.hidden = Distributions
-
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
 associatedCompanies.heading.between = Did your company have any active associated companies between {0} and {1}?
