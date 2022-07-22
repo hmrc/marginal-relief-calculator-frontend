@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import forms.AssociatedCompaniesForm
-import models.{AssociatedCompanies, CheckMode, UserAnswers}
+import models.{ AssociatedCompanies, CheckMode, UserAnswers }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import pages.AssociatedCompaniesPage
