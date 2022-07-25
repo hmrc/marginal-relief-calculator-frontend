@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.{ CheckMode, UserAnswers }
 import pages.DistributionsIncludedPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -31,7 +31,9 @@ object DistributionsIncludedSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(DistributionsIncludedPage).map { answer =>
-      val value = answer.distributionsIncludedAmount map (amount => s"£${NumberFormat.getNumberInstance(Locale.UK).format(amount)}") getOrElse ("None")
+      val value = answer.distributionsIncludedAmount map (amount =>
+        s"£${NumberFormat.getNumberInstance(Locale.UK).format(amount)}"
+      ) getOrElse "None"
 
       SummaryListRowViewModel(
         key = "distributionsIncluded.checkYourAnswersLabel",
