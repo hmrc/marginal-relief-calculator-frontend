@@ -31,7 +31,7 @@ object DistributionsIncludedSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(DistributionsIncludedPage).map { answer =>
-      val value = s"£${NumberFormat.getNumberInstance(Locale.UK).format((answer.distributionsIncludedAmount).get)}"
+      val value = answer.distributionsIncludedAmount map (amount => s"£${NumberFormat.getNumberInstance(Locale.UK).format(amount)}") getOrElse ("None")
 
       SummaryListRowViewModel(
         key = "distributionsIncluded.checkYourAnswersLabel",
