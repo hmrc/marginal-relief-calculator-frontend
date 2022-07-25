@@ -40,11 +40,25 @@ class NavigatorSpec extends SpecBase {
           .onPageLoad(NormalMode)
       }
 
-      "must go from Distribution to Distributions Included page" in {
-        val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.values.head).success.value
-        navigator.distributionsNextRoute(userAnswers) mustBe routes.DistributionsIncludedController.onPageLoad(
-          NormalMode
-        )
+      "must go from Distribution to Distributions Included page" - {
+        "With Distribution Page Yes" in {
+          val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.Yes).success.value
+          navigator.distributionsNextRoute(userAnswers) mustBe routes.DistributionsIncludedController.onPageLoad(
+            NormalMode
+          )
+        }
+
+        "With Distribution Page No" in {
+          val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.No).success.value
+          navigator.distributionsNextRoute(userAnswers) mustBe routes.AssociatedCompaniesController.onPageLoad(
+            NormalMode
+          )
+        }
+
+        "With Distribution Page Unknown" in {
+          val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.Unknown).success.value
+          navigator.distributionsNextRoute(userAnswers) mustBe routes.JourneyRecoveryController.onPageLoad()
+        }
       }
 
       "must go from Distribution Included page to Associated Companies page" in {
