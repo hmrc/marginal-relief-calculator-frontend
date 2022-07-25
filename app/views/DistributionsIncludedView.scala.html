@@ -68,13 +68,13 @@
                 legend = LegendViewModel(messages("distributionsIncluded.heading")).withCssClass("govuk-visually-hidden"),
                 items = Seq(
                     RadioItem(
-                        content = Text(messages("distributionsIncluded.option1Label")),
-                        value = Some(messages("site.yes")),
+                        content = Text(messages("site.yes")),
+                        value = Some("yes"),
                         conditionalHtml = Some(yesHtml)
                     ),
                     RadioItem(
-                        content = Text(messages("distributionsIncluded.option2Label")),
-                        value = Some(messages("site.No"))
+                        content = Text(messages("site.no")),
+                        value = Some("no")
                     )
                 )
             )
