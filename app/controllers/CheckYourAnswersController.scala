@@ -17,11 +17,11 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, InputScreenSummary, TaxableProfitSummary }
+import viewmodels.checkAnswers.{AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionsIncludedSummary, InputScreenSummary, TaxableProfitSummary}
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
 
@@ -38,6 +38,7 @@ class CheckYourAnswersController @Inject() (
     val list = SummaryListViewModel(
       AccountingPeriodSummary.row(request.userAnswers) ++
         TaxableProfitSummary.row(request.userAnswers) ++
+        DistributionsIncludedSummary.row(request.userAnswers) ++
         InputScreenSummary.row(request.userAnswers) ++
         AssociatedCompaniesSummary.row(request.userAnswers)
     )
