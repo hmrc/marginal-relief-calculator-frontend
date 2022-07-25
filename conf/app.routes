@@ -36,3 +36,14 @@ GET        /taxable-profit                      controllers.TaxableProfitControl
 POST       /taxable-profit                      controllers.TaxableProfitController.onSubmit(mode: Mode = NormalMode)
 GET        /change-taxable-profit               controllers.TaxableProfitController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-taxable-profit               controllers.TaxableProfitController.onSubmit(mode: Mode = CheckMode)
+
+GET        /distribution                        controllers.DistributionController.onPageLoad(mode: Mode = NormalMode)
+POST       /distribution                        controllers.DistributionController.onSubmit(mode: Mode = NormalMode)
+GET        /change-distribution                  controllers.DistributionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-distribution                  controllers.DistributionController.onSubmit(mode: Mode = CheckMode)
+
+GET        /distributionsIncluded                        controllers.DistributionsIncludedController.onPageLoad(mode: Mode = NormalMode)
+POST       /distributionsIncluded                        controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
+GET        /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
+

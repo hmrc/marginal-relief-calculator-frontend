@@ -17,9 +17,15 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TaxableProfitPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryDistributionsIncludedPage: Arbitrary[DistributionsIncludedPage.type] =
+    Arbitrary(DistributionsIncludedPage)
+
+  implicit lazy val arbitraryDistributionPage: Arbitrary[DistributionPage.type] =
+    Arbitrary(DistributionPage)
 
   implicit lazy val arbitraryAssociatedCompaniesPage: Arbitrary[AssociatedCompaniesPage.type] =
     Arbitrary(AssociatedCompaniesPage)

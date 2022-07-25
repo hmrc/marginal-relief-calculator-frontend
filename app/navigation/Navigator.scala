@@ -31,9 +31,11 @@ class Navigator @Inject() () {
       _ => routes.TaxableProfitController.onPageLoad(NormalMode)
 
     case TaxableProfitPage =>
-      _ => routes.InputScreenController.onPageLoad(NormalMode)
+      _ => routes.DistributionController.onPageLoad(NormalMode)
 
-    case InputScreenPage =>
+    case DistributionPage => distributionsNextRoute
+
+    case DistributionsIncludedPage =>
       _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
 
     case AssociatedCompaniesPage =>
@@ -46,6 +48,13 @@ class Navigator @Inject() () {
   private val checkRouteMap: Page => UserAnswers => Call = { case _ =>
     _ => routes.CheckYourAnswersController.onPageLoad
   }
+
+  def distributionsNextRoute(answers: UserAnswers): Call =
+    answers.get(DistributionPage) match {
+      case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
+      case Some(Distribution.No)  => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+      case _                      => routes.JourneyRecoveryController.onPageLoad()
+    }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>

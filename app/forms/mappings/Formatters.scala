@@ -123,10 +123,10 @@ trait Formatters {
                          case s if s.matches(DecimalRegexp) =>
                            Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
                          case s if Try(s.toLong).isFailure => Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
-                         case s if s.toLong < 0 =>
-                           Seq(FormError(key, outOfRangeKey, Seq(0, Integer.MAX_VALUE))).asLeft[Int]
+                         case s if s.toLong < 1 =>
+                           Seq(FormError(key, outOfRangeKey, Seq(1, Integer.MAX_VALUE))).asLeft[Int]
                          case s if s.toLong > Integer.MAX_VALUE =>
-                           Seq(FormError(key, outOfRangeKey, Seq(0, Integer.MAX_VALUE))).asLeft[Int]
+                           Seq(FormError(key, outOfRangeKey, Seq(1, Integer.MAX_VALUE))).asLeft[Int]
                          case s => s.toInt.asRight[Seq[FormError]]
                        }
       } yield finalResult

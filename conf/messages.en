@@ -121,15 +121,6 @@ profit.error.wholeNumber = Enter your Taxable profit using whole numbers
 profit.error.outOfRange = Taxable profit must be between {0} and {1}
 profit.change.hidden = Taxable profit
 
-distribution.title = Distributions
-distribution.heading = Distributions
-distribution.checkYourAnswersLabel = Distributions
-distribution.error.nonNumeric = Enter your Distributions using numbers
-distribution.error.required = Enter your Distributions
-distribution.error.wholeNumber = Enter your Distributions using whole numbers
-distribution.error.outOfRange = Distributions must be between {0} and {1}
-distribution.change.hidden = Distributions
-
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
 associatedCompanies.heading.between = Did your company have any active associated companies between {0} and {1}?
@@ -159,3 +150,41 @@ taxableProfit.chargeableProfitsOnCTR = Chargeable profits for Corporation Tax on
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
 taxableProfit.youCanFindYourCompanyProfitVia = You can find your company's profit via your accountant or accounting software
 taxableProfit.hint = Must be entered as a whole number. For example, 70000
+
+distribution.title = Did your company receive any distributions?
+distribution.heading = Did your company receive any distributions?
+distribution.listHeading = Distributions include:
+distribution.listItem1 = dividends
+distribution.listItem2 = distributions of assets
+distribution.listItem3 = amounts treated as a distribution on the transfer of assets or liabilities
+distribution.listItem4 = the repayment of share capital
+distribution.yes = Yes
+distribution.no = No
+distribution.checkYourAnswersLabel = Did your company receive any distributions?
+distribution.error.required = Select whether you received distributions or not
+distribution.error.invalid = Select whether you received distributions or not
+distribution.change.hidden = Distribution
+
+distributionsIncluded.title = Do any distributions need to be included with your profits?
+distributionsIncluded.heading = Do any distributions need to be included with your profits?
+distributionsIncluded.listHeading = You must declare any distributions your company receives from an unrelated, unconnected company. Distributions include:
+distributionsIncluded.listItem1 = dividends from an investment you made
+distributionsIncluded.listItem2 = assets. For example, property or separate businesses
+distributionsIncluded.listItem3 = repayment of share capital through the transfer of cash or fixed assets
+distributionsIncluded.detailsTitle = Distributions you should not include
+distributionsIncluded.detailsHtml = <p>Do not include distributions that your company receives from an associated company in the same 51% ownership. For example:</p><ul class="govuk-list govuk-list--bullet"><li>a 51% subsidiary of your company</li><li>a company of which your company is a 51% subsidiary</li></ul>
+distributionsIncluded.yes = Yes
+distributionsIncluded.no = No
+distributionsIncluded.option1Value = yes
+distributionsIncluded.option1Label = Yes
+distributionsIncluded.option2Value = no
+distributionsIncluded.option2Label = No
+distributionsIncluded.amountLabel = Must be entered as a whole number. For example, 1300.
+distributionsIncluded.checkYourAnswersLabel = Do any distributions need to be included with your profits?
+distributionsIncluded.error.required = Select whether you have distributions or not
+distributionsIncluded.error.invalid = Select whether you have distributions or not
+distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, 70000
+distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, 70000
+distributionsIncludedAmount.error.required = Enter a valid received distributions amount. For example, 70000
+distributionsIncludedAmount.error.outOfRange = Enter an amount that is between 1 and 1000000000
+distributionsIncluded.change.hidden = DistributionsIncluded

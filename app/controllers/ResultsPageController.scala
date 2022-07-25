@@ -18,9 +18,9 @@ package controllers
 
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, InputScreenForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import org.slf4j.LoggerFactory
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, InputScreenPage, TaxableProfitPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import uk.gov.hmrc.http.BadRequestException
@@ -48,15 +48,21 @@ class ResultsPageController @Inject() (
     val maybeAccountingPeriodForm: Option[AccountingPeriodForm] = request.userAnswers.get(AccountingPeriodPage)
     val maybeTaxableProfit: Option[Int] = request.userAnswers.get(TaxableProfitPage)
     val maybeAssociatedCompanies: Option[AssociatedCompaniesForm] = request.userAnswers.get(AssociatedCompaniesPage)
-    val maybeInputScreenForm: Option[InputScreenForm] = request.userAnswers.get(InputScreenPage)
-    (maybeAccountingPeriodForm, maybeTaxableProfit, maybeInputScreenForm, maybeAssociatedCompanies) match {
-      case (Some(accountingPeriodForm), Some(taxableProfit), Some(inputScreenForm), Some(associatedCompanies)) =>
+    val maybeDistributionsIncludedForm: Option[DistributionsIncludedForm] =
+      request.userAnswers.get(DistributionsIncludedPage)
+    (maybeAccountingPeriodForm, maybeTaxableProfit, maybeDistributionsIncludedForm, maybeAssociatedCompanies) match {
+      case (
+            Some(accountingPeriodForm),
+            Some(taxableProfit),
+            Some(distributionsIncludedForm),
+            Some(associatedCompanies)
+          ) =>
         marginalReliefCalculatorConnector
           .calculate(
             accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodForm.accountingPeriodEndDate.get,
             taxableProfit.toDouble,
-            Some(inputScreenForm.distribution),
+            distributionsIncludedForm.distributionsIncludedAmount.map(_.toDouble),
             associatedCompanies.associatedCompaniesCount
           )
           .map { marginalReliefResult =>
@@ -68,7 +74,7 @@ class ResultsPageController @Inject() (
           "Some of the input parameters are missing. Missing parameters: " + List(
             (AccountingPeriodPage, maybeAccountingPeriodForm),
             (TaxableProfitPage, maybeTaxableProfit),
-            (InputScreenPage, maybeInputScreenForm)
+            (DistributionsIncludedPage, maybeDistributionsIncludedForm)
           ).filter(_._2.isEmpty).map(_._1)
         )
     }

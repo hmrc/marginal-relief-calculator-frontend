@@ -17,45 +17,43 @@
 package controllers
 
 import base.SpecBase
-import forms.TaxableProfitFormProvider
-import models.{ NormalMode, UserAnswers }
+import forms.{ DistributionsIncludedForm, DistributionsIncludedFormProvider }
+import models.{ DistributionsIncluded, NormalMode, UserAnswers }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TaxableProfitPage
+import pages.DistributionsIncludedPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.TaxableProfitView
+import views.html.DistributionsIncludedView
 
 import scala.concurrent.Future
 
-class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
-
-  val formProvider = new TaxableProfitFormProvider()
-  val form = formProvider()
+class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = 0
+  lazy val distributionsIncludedRoute = routes.DistributionsIncludedController.onPageLoad(NormalMode).url
 
-  lazy val taxableProfitRoute = routes.TaxableProfitController.onPageLoad(NormalMode).url
+  val formProvider = new DistributionsIncludedFormProvider()
+  val form = formProvider()
 
-  "TaxableProfit Controller" - {
+  "DistributionsIncluded Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableProfitRoute)
+        val request = FakeRequest(GET, distributionsIncludedRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[TaxableProfitView]
+        val view = application.injector.instanceOf[DistributionsIncludedView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
@@ -64,19 +62,26 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TaxableProfitPage, validAnswer).success.value
+      val userAnswers =
+        UserAnswers(userAnswersId)
+          .set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
+          .success
+          .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableProfitRoute)
+        val request = FakeRequest(GET, distributionsIncludedRoute)
 
-        val view = application.injector.instanceOf[TaxableProfitView]
+        val view = application.injector.instanceOf[DistributionsIncludedView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(
+        contentAsString(result) mustEqual view(
+          form.fill(DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1))),
+          NormalMode
+        )(
           request,
           messages(application)
         ).toString
@@ -99,8 +104,8 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, taxableProfitRoute)
-            .withFormUrlEncodedBody(("value", "1"))
+          FakeRequest(POST, distributionsIncludedRoute)
+            .withFormUrlEncodedBody(("distributionsIncluded", "yes"), ("distributionsIncludedAmount", "1"))
 
         val result = route(application, request).value
 
@@ -115,12 +120,12 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, taxableProfitRoute)
+          FakeRequest(POST, distributionsIncludedRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
-        val view = application.injector.instanceOf[TaxableProfitView]
+        val view = application.injector.instanceOf[DistributionsIncludedView]
 
         val result = route(application, request).value
 
@@ -134,7 +139,7 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableProfitRoute)
+        val request = FakeRequest(GET, distributionsIncludedRoute)
 
         val result = route(application, request).value
 
@@ -143,14 +148,14 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+    "redirect to Journey Recovery for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request =
-          FakeRequest(POST, taxableProfitRoute)
-            .withFormUrlEncodedBody(("value", validAnswer.toString))
+          FakeRequest(POST, distributionsIncludedRoute)
+            .withFormUrlEncodedBody(("value", DistributionsIncluded.values.head.toString))
 
         val result = route(application, request).value
 
