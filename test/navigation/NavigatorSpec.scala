@@ -87,6 +87,16 @@ class NavigatorSpec extends SpecBase {
           UserAnswers("id")
         ) mustBe routes.CheckYourAnswersController.onPageLoad
       }
+
+      "must go from distribution to distributions included" in {
+        val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.Yes).success.value
+        navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.DistributionsIncludedController.onPageLoad(CheckMode)
+      }
+
+      "must go from distribution to CheckYourAnswers" in {
+        val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.No).success.value
+        navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+      }
     }
   }
 }

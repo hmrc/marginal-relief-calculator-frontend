@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import forms.DistributionsIncludedForm
-import models.{ CheckMode, DistributionsIncluded, UserAnswers }
+import models.{CheckMode, DistributionsIncluded, UserAnswers}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import pages.DistributionsIncludedPage
@@ -26,6 +26,8 @@ import play.api.i18n.Messages
 import play.api.test.Helpers
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
+
+import scala.xml.Null
 
 class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
 
@@ -47,7 +49,29 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
           key = "distributionsIncluded.checkYourAnswersLabel",
           value = ValueViewModel("£1,000"),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.DistributionsIncludedController.onPageLoad(CheckMode).url)
+            ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText("distributionsIncluded.change.hidden")
+          )
+        )
+      )
+    }
+
+    "when answer available but no amount, return the summary row" in {
+      val userAnswers = UserAnswers("id")
+        .set(
+          DistributionsIncludedPage,
+          DistributionsIncludedForm(
+            DistributionsIncluded.Yes,
+            None
+          )
+        )
+        .get
+      DistributionsIncludedSummary.row(userAnswers) shouldBe Some(
+        SummaryListRowViewModel(
+          key = "distributionsIncluded.checkYourAnswersLabel",
+          value = ValueViewModel(messages("distributionsIncluded.EmptyValue")),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText("distributionsIncluded.change.hidden")
           )
         )
