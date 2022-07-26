@@ -18,9 +18,8 @@ package navigation
 
 import javax.inject.{Inject, Singleton}
 import models.{Mode, UserAnswers}
-import play.api.mvc.{Call, JavascriptLiteral}
+import play.api.mvc.{Call}
 import controllers.routes
-import forms.DistributionsIncludedForm
 import pages._
 import models._
 
