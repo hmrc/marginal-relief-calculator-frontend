@@ -16,9 +16,9 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
-import models.{Mode, UserAnswers}
-import play.api.mvc.{Call}
+import javax.inject.{ Inject, Singleton }
+import models.{ Mode, UserAnswers }
+import play.api.mvc.Call
 import controllers.routes
 import pages._
 import models._
@@ -26,7 +26,7 @@ import models._
 @Singleton
 class Navigator @Inject() () {
 
-  private val normalRoutes:  Page => UserAnswers => Call = {
+  private val normalRoutes: Page => UserAnswers => Call = {
     case AccountingPeriodPage =>
       _ => routes.TaxableProfitController.onPageLoad(NormalMode)
 
@@ -47,24 +47,22 @@ class Navigator @Inject() () {
 
   private val checkRouteMap: Page => UserAnswers => Call = {
     case DistributionPage => distributionsChangeRoute
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad
+    case _                => _ => routes.CheckYourAnswersController.onPageLoad
   }
 
-  def distributionsNextRoute(answers: UserAnswers): Call = {
+  def distributionsNextRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
-      case Some(Distribution.No) => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
-      case _ => routes.JourneyRecoveryController.onPageLoad()
+      case Some(Distribution.No)  => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+      case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
-  }
 
-  def distributionsChangeRoute(answers: UserAnswers): Call = {
+  def distributionsChangeRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(CheckMode)
-      case Some(Distribution.No) => routes.CheckYourAnswersController.onPageLoad
-      case _ => routes.JourneyRecoveryController.onPageLoad()
+      case Some(Distribution.No)  => routes.CheckYourAnswersController.onPageLoad
+      case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
-  }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
