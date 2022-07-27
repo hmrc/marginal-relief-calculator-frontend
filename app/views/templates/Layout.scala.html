@@ -30,10 +30,16 @@
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcScripts: HmrcScripts,
-    alphaBanner: StandardAlphaBanner
+    alphaBanner: StandardAlphaBanner,
+    defaultMainContentLayout: TwoThirdsMainContent
 )
 
-@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = false)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: String,
+  showBackLink: Boolean = true,
+  timeout: Boolean = true,
+  showSignOut: Boolean = false,
+  mainContentLayout: Option[Html => Html] = Some(defaultMainContentLayout(_))
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @head = {
 
@@ -56,6 +62,7 @@
 
 @additionalScripts = {
     <script src='@controllers.routes.Assets.versioned("javascripts/application.min.js")'></script>
+    <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' rel="stylesheet" type="text/css" />
 }
 
 @beforeContent = {
@@ -94,5 +101,6 @@
     scriptsBlock       = Some(hmrcScripts(
         nonce        = CSPNonce.get,
         scriptsBlock = Some(additionalScripts)
-    ))
+    )),
+    mainContentLayout = mainContentLayout
 )(content)

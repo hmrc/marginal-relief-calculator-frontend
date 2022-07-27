@@ -26,37 +26,68 @@
 
 @layout(
     pageTitle    = titleNoForm(messages("index.title")),
-    showBackLink = false
+    showBackLink = false,
+    mainContentLayout = Some(new templates.FullMainContent()(_))
 ) {
 
-    <h1 class="govuk-heading-l">@messages("index.heading")</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">@messages("index.heading")</h1>
 
-    <p class="govuk-body">@messages("index.guidance.useThisServiceTo")</p>
+        <p class="govuk-body">@messages("index.guidance.useThisServiceTo")</p>
 
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("index.guidance.check.item1")</li>
-        <li>@messages("index.guidance.check.item2")</li>
-        <li>@messages("index.guidance.check.item3")</li>
-    </ul>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("index.guidance.check.item1")</li>
+            <li>@messages("index.guidance.check.item2")</li>
+            <li>@messages("index.guidance.check.item3")</li>
+        </ul>
 
-    @govukInsetText(InsetText(
-        content = Text(messages("index.guidance.inset"))
-    ))
+        @govukInsetText(InsetText(
+            content = Text(messages("index.guidance.inset"))
+        ))
 
-    <h1 class="govuk-heading-l">@messages("index.guidance.beforeYouStart")</h1>
+        <h1 class="govuk-heading-m">@messages("index.guidance.beforeYouStart")</h1>
 
-    <p class="govuk-body">@messages("index.guidance.youNeedToKnow")</p>
+        <p class="govuk-body">@messages("index.guidance.youNeedToKnow")</p>
 
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("index.guidance.requirements.item1")</li>
-        <li>@messages("index.guidance.requirements.item2")</li>
-        <li>@Html(messages("index.guidance.requirements.item3","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm15120' class='govuk-link'>","</a>"))</li>
-        <li>@Html(messages("index.guidance.requirements.item4","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm03570' class='govuk-link'>","</a>"))</li>
-    </ul>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("index.guidance.requirements.item1")</li>
+            <li>@messages("index.guidance.requirements.item2")</li>
+            <li>@Html(messages("index.guidance.requirements.item3","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm15120' class='govuk-link'>","</a>"))</li>
+            <li>@Html(messages("index.guidance.requirements.item4","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm03570' class='govuk-link'>","</a>"))</li>
+        </ul>
 
-    @govukButton(Button(
-        href = Some(routes.IndexController.onStart.url),
-        isStartButton = true,
-        content = Text(messages("site.start"))
-    ))
+        @govukButton(Button(
+            href = Some(routes.IndexController.onStart.url),
+            isStartButton = true,
+            content = Text(messages("site.start"))
+        ))
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <aside class="app-related-items" role="complementary">
+            <h2 class="govuk-heading-m" id="subsection-title">
+                @messages("index.guidance.relatedContent")
+            </h2>
+            <nav role="navigation" aria-labelledby="subsection-title">
+                <ul class="govuk-list govuk-!-font-size-16">
+                    <li>
+                        <a class="govuk-link" href="https://www.gov.uk/guidance/marginal-relief-calculator">
+                            @messages("index.guidance.mrcTaxGuidance")
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="https://www.gov.uk/guidance/corporate-tax">
+                            @messages("index.guidance.corporationTaxGuidance")
+                        </a>
+                    </li>
+                    <li>
+                        <a class="govuk-link" href="https://www.gov.uk/corporation-tax-rates">
+                            @messages("index.guidance.corporationTaxRatesAndReliefs")
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
+</div>
 }
