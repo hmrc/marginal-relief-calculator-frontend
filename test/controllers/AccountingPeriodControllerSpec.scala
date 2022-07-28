@@ -17,13 +17,13 @@
 package controllers
 
 import base.SpecBase
-import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
-import models.{ NormalMode, UserAnswers }
+import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AccountingPeriodPage
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
@@ -42,11 +42,45 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new AccountingPeriodFormProvider()
   private def form = formProvider()
 
+  lazy val completedUserAnswers = UserAnswers(
+    "test-session-id"
+  ).set(
+    AccountingPeriodPage,
+    AccountingPeriodForm(
+      LocalDate.parse("2023-03-23"),
+      Some(LocalDate.parse("2024-02-23"))
+    )
+  ).flatMap(
+    _.set(
+      TaxableProfitPage,
+      70000
+    )
+  ).flatMap(
+    _.set(
+      DistributionPage,
+      Distribution.Yes
+    )
+  ).flatMap(
+    _.set(
+      DistributionsIncludedPage,
+      DistributionsIncludedForm(
+        DistributionsIncluded.No,
+        None
+      )
+    )
+  ).flatMap(
+    _.set(
+      AssociatedCompaniesPage,
+      AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+    )
+  ).get
+
   def onwardRoute = Call("GET", "/foo")
 
   val validAnswer = AccountingPeriodForm(LocalDate.now(ZoneOffset.UTC), Some(LocalDate.now(ZoneOffset.UTC).plusDays(1)))
 
   lazy val accountingPeriodRoute = routes.AccountingPeriodController.onPageLoad(NormalMode).url
+  lazy val accountingPeriodRouteCheckMode = routes.AccountingPeriodController.onPageLoad(CheckMode).url
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
 
@@ -206,6 +240,55 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
             accountingPeriodEndDate = Some(epoch.plusYears(1).minusDays(1))
           )
         )
+      }
+    }
+
+    "must redirect to the next page if user changed existing accounting period dates" in {
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
+
+      running(application) {
+        val form = completedUserAnswers.get(AccountingPeriodPage).get
+        val sDate = form.accountingPeriodStartDate
+        val eDate = form.accountingPeriodEndDate.get
+        val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
+            "accountingPeriodStartDate.year"  -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day"     -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> (eDate.getMonth.getValue - 1).toString,
+            "accountingPeriodEndDate.year"    -> eDate.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
+      }
+    }
+    "must redirect to change page if user did not change existing accounting period dates" in {
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
+
+      running(application) {
+        val form = completedUserAnswers.get(AccountingPeriodPage).get
+        val sDate = form.accountingPeriodStartDate
+        val eDate = form.accountingPeriodEndDate.get
+        val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
+            "accountingPeriodStartDate.year"  -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day"     -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> eDate.getMonth.getValue.toString,
+            "accountingPeriodEndDate.year"    -> eDate.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad.url))
       }
     }
   }
