@@ -77,7 +77,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     Gen.choose(Int.MinValue, value)
 
   def intsAboveValue(value: Int): Gen[Int] =
-    arbitrary[Int] suchThat (_ > value)
+    Gen.choose(value, Int.MaxValue)
 
   def intsOutsideRange(min: Int, max: Int): Gen[Int] =
     arbitrary[Int] suchThat (x => x < min || x > max)

@@ -30,27 +30,38 @@
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcScripts: HmrcScripts,
-    alphaBanner: StandardAlphaBanner
+    alphaBanner: StandardAlphaBanner,
+    defaultMainContentLayout: TwoThirdsMainContent
 )
 
-@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = false)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: String,
+  showBackLink: Boolean = true,
+  timeout: Boolean = true,
+  showSignOut: Boolean = false,
+  mainContentLayout: Option[Html => Html] = Some(defaultMainContentLayout(_))
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+
+
+@headBlock = {
+    @if(timeout) {
+        @hmrcTimeoutDialog(TimeoutDialog(
+            timeout             = Some(appConfig.timeout),
+            countdown           = Some(appConfig.countdown),
+            keepAliveUrl        = Some(routes.KeepAliveController.keepAlive.url),
+            keepAliveButtonText = Some(messages("timeout.keepAlive")),
+            signOutUrl          = None,
+            signOutButtonText   = None,
+            title               = Some(messages("timeout.title")),
+            message             = Some(messages("timeout.message"))
+        ))
+    }
+    <link href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
+}
 
 @head = {
-
     @hmrcHead(
         nonce     = CSPNonce.get,
-        headBlock = if(timeout) { Some(
-            hmrcTimeoutDialog(TimeoutDialog(
-                timeout             = Some(appConfig.timeout),
-                countdown           = Some(appConfig.countdown),
-                keepAliveUrl        = Some(routes.KeepAliveController.keepAlive.url),
-                keepAliveButtonText = Some(messages("timeout.keepAlive")),
-                signOutUrl          = None,
-                signOutButtonText   = None,
-                title               = Some(messages("timeout.title")),
-                message             = Some(messages("timeout.message"))
-            )))
-        } else None
+        headBlock = Some(headBlock)
     )
 }
 
@@ -94,5 +105,6 @@
     scriptsBlock       = Some(hmrcScripts(
         nonce        = CSPNonce.get,
         scriptsBlock = Some(additionalScripts)
-    ))
+    )),
+    mainContentLayout = mainContentLayout
 )(content)
