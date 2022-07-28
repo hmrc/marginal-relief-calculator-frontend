@@ -17,13 +17,13 @@
 package controllers
 
 import base.SpecBase
-import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
-import models.{ CheckMode, NormalMode, UserAnswers }
+import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.AccountingPeriodPage
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.libs.json.{ JsObject, Json }
 import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
@@ -44,19 +44,37 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   private def form = formProvider()
 
   lazy val completedUserAnswers = UserAnswers(
-    "test-session-id",
-    Json
-      .parse("""
-               |{"accountingPeriod":{
-               |"accountingPeriodStartDate":"2023-03-23",
-               |"accountingPeriodEndDate":"2024-02-23"},
-               |"taxableProfit":70000,
-               |"distribution":"yes",
-               |"distributionsIncluded":{
-               |"distributionsIncluded":"no"},
-               |"associatedCompanies":{"associatedCompanies":"no"}} """.stripMargin)
-      .as[JsObject]
-  )
+    "test-session-id"
+  ).set(
+    AccountingPeriodPage,
+    AccountingPeriodForm(
+      LocalDate.parse("2023-03-23"),
+      Some(LocalDate.parse("2024-02-23"))
+    )
+  ).flatMap(
+    _.set(
+      TaxableProfitPage,
+      70000
+    )
+  ).flatMap(
+    _.set(
+      DistributionPage,
+      Distribution.Yes
+    )
+  ).flatMap(
+    _.set(
+      DistributionsIncludedPage,
+      DistributionsIncludedForm(
+        DistributionsIncluded.No,
+        None
+      )
+    )
+  ).flatMap(
+    _.set(
+      AssociatedCompaniesPage,
+      AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+    )
+  ).get
 
   def onwardRoute = Call("GET", "/foo")
 
