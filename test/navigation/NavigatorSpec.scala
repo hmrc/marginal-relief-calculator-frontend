@@ -55,8 +55,8 @@ class NavigatorSpec extends SpecBase {
           )
         }
 
-        "With Distribution Page Unknown" in {
-          val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.Unknown).success.value
+        "With Distribution value not set" in {
+          val userAnswers = UserAnswers("id")
           navigator.distributionsNextRoute(userAnswers) mustBe routes.JourneyRecoveryController.onPageLoad()
         }
       }
@@ -99,8 +99,8 @@ class NavigatorSpec extends SpecBase {
         navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
       }
 
-      "must go from distribution to JourneyRecoveryController" in {
-        val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.Unknown).success.value
+      "must go from distribution to JourneyRecoveryController when value not set" in {
+        val userAnswers = UserAnswers("id")
         navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.JourneyRecoveryController
           .onPageLoad()
       }

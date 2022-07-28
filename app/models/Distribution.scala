@@ -26,7 +26,6 @@ object Distribution extends Enumerable.Implicits {
 
   case object Yes extends WithName("yes") with Distribution
   case object No extends WithName("no") with Distribution
-  case object Unknown extends WithName("") with Distribution
 
   val values: Seq[Distribution] = Seq(
     Yes,

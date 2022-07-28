@@ -69,7 +69,7 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
       DistributionsIncludedSummary.row(userAnswers) shouldBe Some(
         SummaryListRowViewModel(
           key = "distributionsIncluded.checkYourAnswersLabel",
-          value = ValueViewModel(messages("distributionsIncluded.EmptyValue")),
+          value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
           actions = Seq(
             ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText("distributionsIncluded.change.hidden")
@@ -91,7 +91,7 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
       DistributionsIncludedSummary.row(userAnswers) shouldBe Some(
         SummaryListRowViewModel(
           key = "distributionsIncluded.checkYourAnswersLabel",
-          value = ValueViewModel(messages("distributionsIncluded.EmptyValue")),
+          value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
           actions = Seq(
             ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
               .withVisuallyHiddenText("distributionsIncluded.change.hidden")
