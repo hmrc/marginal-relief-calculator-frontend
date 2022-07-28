@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
-import models.{ NormalMode, UserAnswers }
+import models.{ CheckMode, NormalMode, UserAnswers }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -43,17 +43,20 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new AccountingPeriodFormProvider()
   private def form = formProvider()
 
-  lazy val completedUserAnswers = UserAnswers("test-session-id",
-    Json.parse(
-      """
-        |{"accountingPeriod":{
-        |"accountingPeriodStartDate":"2023-03-23",
-        |"accountingPeriodEndDate":"2024-02-23"},
-        |"taxableProfit":70000,
-        |"distribution":"yes",
-        |"distributionsIncluded":{
-        |"distributionsIncluded":"no"},
-        |"associatedCompanies":{"associatedCompanies":"no"}} """.stripMargin).as[JsObject])
+  lazy val completedUserAnswers = UserAnswers(
+    "test-session-id",
+    Json
+      .parse("""
+               |{"accountingPeriod":{
+               |"accountingPeriodStartDate":"2023-03-23",
+               |"accountingPeriodEndDate":"2024-02-23"},
+               |"taxableProfit":70000,
+               |"distribution":"yes",
+               |"distributionsIncluded":{
+               |"distributionsIncluded":"no"},
+               |"associatedCompanies":{"associatedCompanies":"no"}} """.stripMargin)
+      .as[JsObject]
+  )
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -232,13 +235,14 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val eDate = form.accountingPeriodEndDate.get
         val request = FakeRequest(POST, accountingPeriodRouteChangeMode)
           .withFormUrlEncodedBody(
-            "accountingPeriodStartDate.day" -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
             "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
-            "accountingPeriodStartDate.year" -> sDate.getYear.toString,
-            "accountingPeriodEndDate.day" -> eDate.getDayOfMonth.toString,
-            "accountingPeriodEndDate.month" -> (eDate.getMonth.getValue - 1).toString,
-            "accountingPeriodEndDate.year" -> eDate.getYear.toString
-          ).withSession(SessionKeys.sessionId -> "test-session-id")
+            "accountingPeriodStartDate.year"  -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day"     -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> (eDate.getMonth.getValue - 1).toString,
+            "accountingPeriodEndDate.year"    -> eDate.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
 
         val result = route(application, request).value
 
@@ -255,13 +259,14 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val eDate = form.accountingPeriodEndDate.get
         val request = FakeRequest(POST, accountingPeriodRouteChangeMode)
           .withFormUrlEncodedBody(
-            "accountingPeriodStartDate.day" -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
             "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
-            "accountingPeriodStartDate.year" -> sDate.getYear.toString,
-            "accountingPeriodEndDate.day" -> eDate.getDayOfMonth.toString,
-            "accountingPeriodEndDate.month" -> (eDate.getMonth.getValue).toString,
-            "accountingPeriodEndDate.year" -> eDate.getYear.toString
-          ).withSession(SessionKeys.sessionId -> "test-session-id")
+            "accountingPeriodStartDate.year"  -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day"     -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> eDate.getMonth.getValue.toString,
+            "accountingPeriodEndDate.year"    -> eDate.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
 
         val result = route(application, request).value
 
