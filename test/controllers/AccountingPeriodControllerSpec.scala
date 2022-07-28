@@ -25,6 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.AccountingPeriodPage
 import play.api.inject.bind
+import play.api.libs.json.{ JsObject, Json }
 import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -42,11 +43,24 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new AccountingPeriodFormProvider()
   private def form = formProvider()
 
+  lazy val completedUserAnswers = UserAnswers("test-session-id",
+    Json.parse(
+      """
+        |{"accountingPeriod":{
+        |"accountingPeriodStartDate":"2023-03-23",
+        |"accountingPeriodEndDate":"2024-02-23"},
+        |"taxableProfit":70000,
+        |"distribution":"yes",
+        |"distributionsIncluded":{
+        |"distributionsIncluded":"no"},
+        |"associatedCompanies":{"associatedCompanies":"no"}} """.stripMargin).as[JsObject])
+
   def onwardRoute = Call("GET", "/foo")
 
   val validAnswer = AccountingPeriodForm(LocalDate.now(ZoneOffset.UTC), Some(LocalDate.now(ZoneOffset.UTC).plusDays(1)))
 
   lazy val accountingPeriodRoute = routes.AccountingPeriodController.onPageLoad(NormalMode).url
+  lazy val accountingPeriodRouteChangeMode = routes.AccountingPeriodController.onPageLoad(CheckMode).url
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
 
@@ -206,6 +220,53 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
             accountingPeriodEndDate = Some(epoch.plusYears(1).minusDays(1))
           )
         )
+      }
+    }
+
+    "must redirect to the next page if user changed existing accounting period dates" in {
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
+
+      running(application) {
+        val form = completedUserAnswers.get(AccountingPeriodPage).get
+        val sDate = form.accountingPeriodStartDate
+        val eDate = form.accountingPeriodEndDate.get
+        val request = FakeRequest(POST, accountingPeriodRouteChangeMode)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day" -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
+            "accountingPeriodStartDate.year" -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day" -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month" -> (eDate.getMonth.getValue - 1).toString,
+            "accountingPeriodEndDate.year" -> eDate.getYear.toString
+          ).withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
+      }
+    }
+    "must redirect to change page if user did not change existing accounting period dates" in {
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
+
+      running(application) {
+        val form = completedUserAnswers.get(AccountingPeriodPage).get
+        val sDate = form.accountingPeriodStartDate
+        val eDate = form.accountingPeriodEndDate.get
+        val request = FakeRequest(POST, accountingPeriodRouteChangeMode)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day" -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
+            "accountingPeriodStartDate.year" -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day" -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month" -> (eDate.getMonth.getValue).toString,
+            "accountingPeriodEndDate.year" -> eDate.getYear.toString
+          ).withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad.url))
       }
     }
   }
