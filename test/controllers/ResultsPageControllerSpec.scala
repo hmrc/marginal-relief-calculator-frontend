@@ -18,14 +18,14 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{MarginalRate, SingleResult}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm}
-import models.{AssociatedCompanies, DistributionsIncluded, UserAnswers}
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionsIncludedPage, TaxableProfitPage}
+import connectors.sharedmodel.{ MarginalRate, SingleResult }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, DistributionsIncluded, UserAnswers }
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, contentAsString, route, running, status, _}
+import play.api.test.Helpers.{ GET, contentAsString, route, running, status, _ }
 import uk.gov.hmrc.http.BadRequestException
 import views.html.ResultsPageView
 
