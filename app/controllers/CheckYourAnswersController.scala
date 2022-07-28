@@ -21,7 +21,7 @@ import controllers.actions.{ DataRequiredAction, DataRetrievalAction, Identifier
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionsIncludedSummary, InputScreenSummary, TaxableProfitSummary }
+import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionsIncludedSummary, TaxableProfitSummary }
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
 
@@ -39,7 +39,6 @@ class CheckYourAnswersController @Inject() (
       AccountingPeriodSummary.row(request.userAnswers) ++
         TaxableProfitSummary.row(request.userAnswers) ++
         DistributionsIncludedSummary.row(request.userAnswers) ++
-        InputScreenSummary.row(request.userAnswers) ++
         AssociatedCompaniesSummary.row(request.userAnswers)
     )
     Ok(view(list, routes.ResultsPageController.onPageLoad().url))

@@ -15,11 +15,6 @@ GET         /there-is-a-problem                 controllers.JourneyRecoveryContr
 
 GET         /check-your-answers                 controllers.CheckYourAnswersController.onPageLoad
 
-GET        /input-screen                        controllers.InputScreenController.onPageLoad(mode: Mode = NormalMode)
-POST       /input-screen                        controllers.InputScreenController.onSubmit(mode: Mode = NormalMode)
-GET        /change-input-screen                 controllers.InputScreenController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-input-screen                 controllers.InputScreenController.onSubmit(mode: Mode = CheckMode)
-
 GET        /results-page                        controllers.ResultsPageController.onPageLoad()
 
 GET        /associated-companies                controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
