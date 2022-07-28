@@ -18,19 +18,19 @@ package controllers
 
 import controllers.actions._
 import forms.AccountingPeriodFormProvider
-import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import models.{ CheckMode, Mode, NormalMode, UserAnswers }
 
 import javax.inject.Inject
 import navigation.Navigator
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{ Logger, LoggerFactory }
 import pages.AccountingPeriodPage
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AccountingPeriodView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class AccountingPeriodController @Inject() (
   override val messagesApi: MessagesApi,
