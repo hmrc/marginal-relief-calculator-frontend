@@ -18,19 +18,19 @@ package controllers
 
 import controllers.actions._
 import forms.AccountingPeriodFormProvider
-import models.{ Mode, UserAnswers }
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
 
 import javax.inject.Inject
 import navigation.Navigator
-import org.slf4j.{ Logger, LoggerFactory }
+import org.slf4j.{Logger, LoggerFactory}
 import pages.AccountingPeriodPage
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AccountingPeriodView
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class AccountingPeriodController @Inject() (
   override val messagesApi: MessagesApi,
@@ -80,15 +80,27 @@ class AccountingPeriodController @Inject() (
             )
 
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers match {
+              (updatedAnswers, dynamicMode) <- Future.fromTry(request.userAnswers match {
                                   case Some(answers) =>
-                                    answers.set(AccountingPeriodPage, formWithAccountingPeriodEnd)
+
+                                    val maybePrevAnswer = answers.get(AccountingPeriodPage)
+
+                                    val answerChanged = maybePrevAnswer.forall {
+                                      case prevAnswer if prevAnswer == formWithAccountingPeriodEnd => false
+                                      case _ => true
+                                    }
+
+                                    val mode = if(answerChanged) NormalMode else CheckMode
+
+                                    val finalAnswers = if(answerChanged) answers.clean else answers
+
+                                    finalAnswers.set(AccountingPeriodPage, formWithAccountingPeriodEnd).map(_ -> mode)
                                   case None =>
-                                    UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd)
+                                    UserAnswers(request.userId).set(AccountingPeriodPage, formWithAccountingPeriodEnd).map(_ -> mode)
                                 })
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(
-              navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
+              navigator.nextPage(AccountingPeriodPage, dynamicMode, updatedAnswers)
             )
           }
         )
