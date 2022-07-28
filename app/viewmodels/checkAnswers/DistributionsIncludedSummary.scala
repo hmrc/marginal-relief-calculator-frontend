@@ -35,9 +35,9 @@ object DistributionsIncludedSummary {
         if (amount > 0) {
           s"£${NumberFormat.getNumberInstance(Locale.UK).format(amount)}"
         } else {
-          messages("distributionsIncluded.EmptyValue")
+          messages("distributionsIncluded.emptyValue")
         }
-      ) getOrElse messages("distributionsIncluded.EmptyValue")
+      ) getOrElse messages("distributionsIncluded.emptyValue")
 
       SummaryListRowViewModel(
         key = "distributionsIncluded.checkYourAnswersLabel",

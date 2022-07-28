@@ -195,4 +195,4 @@ distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributi
 distributionsIncludedAmount.error.required = Enter a valid received distributions amount. For example, 70000
 distributionsIncludedAmount.error.outOfRange = Enter an amount that is between 1 and 1000000000
 distributionsIncluded.change.hidden = DistributionsIncluded
-distributionsIncluded.EmptyValue = None
+distributionsIncluded.emptyValue = None
