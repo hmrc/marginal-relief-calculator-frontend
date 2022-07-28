@@ -134,6 +134,35 @@ class AssociatedCompaniesControllerSpec
         }
       }
 
+      "must redirect to CheckYourAnswers page, if AssociatedCompanies parameter is DontAsk" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          None
+        )(*) returns Future.successful(DontAsk)
+
+        val application = applicationBuilder(userAnswers = (for {
+          u1 <- UserAnswers(userAnswersId)
+                  .set(
+                    AccountingPeriodPage,
+                    AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
+                  )
+          u2 <- u1.set(TaxableProfitPage, 1)
+        } yield u2).toOption)
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
+          val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
+        }
+      }
+
       "must throw RuntimeException if existing UserAnswer does not have AccountingPeriodPage and TaxableProfitPage values" in {
         val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
         running(application) {
@@ -170,35 +199,6 @@ class AssociatedCompaniesControllerSpec
           val result = route(application, request).value.failed.futureValue
           result mustBe a[UpstreamErrorResponse]
           result.getMessage mustBe "Bad request"
-        }
-      }
-
-      "must throw an Exception if associated companies parameter is DontAsk" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          None
-        )(*) returns Future.successful(DontAsk)
-
-        val application = applicationBuilder(userAnswers = (for {
-          u1 <- UserAnswers(userAnswersId)
-                  .set(
-                    AccountingPeriodPage,
-                    AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                  )
-          u2 <- u1.set(TaxableProfitPage, 1)
-        } yield u2).toOption)
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
-          .build()
-
-        running(application) {
-          val request = FakeRequest(GET, associatedCompaniesRoute)
-          val result = route(application, request).value.failed.futureValue
-          result mustBe a[UnsupportedOperationException]
-          result.getMessage mustBe "Associated companies ask parameter value is 'DontAsk'"
         }
       }
     }

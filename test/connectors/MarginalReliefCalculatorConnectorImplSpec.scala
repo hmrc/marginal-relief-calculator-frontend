@@ -77,20 +77,18 @@ class MarginalReliefCalculatorConnectorImplSpec
       "should return successful response" in new Fixture {
         val table = Table(
           "marginalReliefResult",
-          SingleResult(1111, 1.0, 11.0, 111.0, 1111.0, 11111.0),
+          SingleResult(FlatRate(1111, 1.0, 11.0, 111.0)),
           DualResult(
-            MarginalReliefByYear(
-              1111, 1.0, 11.0, 111.0, 1111.0, 11111.0
+            MarginalRate(
+              1111, 1.0, 11.0, 111.0, 1111.0, 11111.0, 0, 0, 0, 0
             ),
-            MarginalReliefByYear(
-              2222, 2.0, 22.0, 222.0, 2222.0, 22222.0
-            ),
-            3,
-            4
+            MarginalRate(
+              2222, 2.0, 22.0, 222.0, 2222.0, 22222.0, 0, 0, 0, 0
+            )
           )
         )
 
-        forAll(table) { marginalReliefResult: MarginalReliefResult =>
+        forAll(table) { calculatorResult: CalculatorResult =>
           wireMockServer.stubFor(
             WireMock
               .get(
@@ -101,10 +99,10 @@ class MarginalReliefCalculatorConnectorImplSpec
                     )
                     .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
               )
-              .willReturn(aResponse().withBody(Json.toJson(marginalReliefResult).toString()))
+              .willReturn(aResponse().withBody(Json.toJson(calculatorResult).toString()))
           )
 
-          val result: MarginalReliefResult = marginalReliefCalculatorConnector
+          val result: CalculatorResult = marginalReliefCalculatorConnector
             .calculate(
               accountingPeriodStart,
               accountingPeriodEnd,
@@ -114,7 +112,7 @@ class MarginalReliefCalculatorConnectorImplSpec
             )
             .futureValue
 
-          result shouldEqual marginalReliefResult
+          result shouldEqual calculatorResult
         }
       }
     }

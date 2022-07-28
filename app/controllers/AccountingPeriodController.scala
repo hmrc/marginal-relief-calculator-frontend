@@ -22,8 +22,8 @@ import models.{ Mode, UserAnswers }
 
 import javax.inject.Inject
 import navigation.Navigator
+import org.slf4j.{ Logger, LoggerFactory }
 import pages.AccountingPeriodPage
-import play.api.i18n.Lang.logger
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
@@ -43,6 +43,8 @@ class AccountingPeriodController @Inject() (
   view: AccountingPeriodView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
+
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   def form = formProvider()
 

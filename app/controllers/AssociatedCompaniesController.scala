@@ -27,7 +27,7 @@ import org.slf4j.{ Logger, LoggerFactory }
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TaxableProfitPage }
 import play.api.data.Form
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Result }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AssociatedCompaniesView
@@ -64,17 +64,20 @@ class AssociatedCompaniesController @Inject() (
                                             userParameters.taxableProfit,
                                             None
                                           )
-      } yield ifAskAssociatedCompaniesThen(
-        associatedCompaniesParameter,
-        p =>
-          Ok(
-            view(
-              request.userAnswers.get(AssociatedCompaniesPage).map(form.fill).getOrElse(form),
-              p,
-              mode
-            )
-          )
-      )
+        result <- ifAskAssociatedCompaniesThen(
+                    associatedCompaniesParameter,
+                    p =>
+                      Future.successful(
+                        Ok(
+                          view(
+                            request.userAnswers.get(AssociatedCompaniesPage).map(form.fill).getOrElse(form),
+                            p,
+                            mode
+                          )
+                        )
+                      )
+                  )
+      } yield result
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
@@ -176,13 +179,13 @@ class AssociatedCompaniesController @Inject() (
         None
     }
 
-  private def ifAskAssociatedCompaniesThen[T](
+  private def ifAskAssociatedCompaniesThen(
     a: AssociatedCompaniesParameter,
-    f: AskAssociatedCompaniesParameter => T
-  ): T =
+    f: AskAssociatedCompaniesParameter => Future[Result]
+  ): Future[Result] =
     a match {
       case DontAsk =>
-        throw new UnsupportedOperationException("Associated companies ask parameter value is 'DontAsk'")
+        Future.successful(Redirect(routes.CheckYourAnswersController.onPageLoad.url))
       case p: AskAssociatedCompaniesParameter => f(p)
     }
 }

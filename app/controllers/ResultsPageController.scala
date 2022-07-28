@@ -30,7 +30,6 @@ import views.html.ResultsPageView
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-// $COVERAGE-OFF$
 class ResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
@@ -50,24 +49,27 @@ class ResultsPageController @Inject() (
     val maybeAssociatedCompanies: Option[AssociatedCompaniesForm] = request.userAnswers.get(AssociatedCompaniesPage)
     val maybeDistributionsIncludedForm: Option[DistributionsIncludedForm] =
       request.userAnswers.get(DistributionsIncludedPage)
-    (maybeAccountingPeriodForm, maybeTaxableProfit, maybeDistributionsIncludedForm, maybeAssociatedCompanies) match {
-      case (
-            Some(accountingPeriodForm),
-            Some(taxableProfit),
-            Some(distributionsIncludedForm),
-            Some(associatedCompanies)
-          ) =>
+    (maybeAccountingPeriodForm, maybeTaxableProfit, maybeDistributionsIncludedForm) match {
+      case (Some(accountingPeriodForm), Some(taxableProfit), Some(distributionsIncludedForm)) =>
         marginalReliefCalculatorConnector
           .calculate(
             accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodForm.accountingPeriodEndDate.get,
             taxableProfit.toDouble,
             distributionsIncludedForm.distributionsIncludedAmount.map(_.toDouble),
-            associatedCompanies.associatedCompaniesCount
+            maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount)
           )
           .map { marginalReliefResult =>
             logger.info(s"received results: $marginalReliefResult")
-            Ok(view(marginalReliefResult))
+            Ok(
+              view(
+                marginalReliefResult,
+                accountingPeriodForm,
+                taxableProfit,
+                distributionsIncludedForm.distributionsIncludedAmount.getOrElse(0),
+                maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
+              )
+            )
           }
       case _ =>
         throw new BadRequestException(
@@ -75,9 +77,8 @@ class ResultsPageController @Inject() (
             (AccountingPeriodPage, maybeAccountingPeriodForm),
             (TaxableProfitPage, maybeTaxableProfit),
             (DistributionsIncludedPage, maybeDistributionsIncludedForm)
-          ).filter(_._2.isEmpty).map(_._1)
+          ).filter(_._2.isEmpty).map(_._1).mkString(",")
         )
     }
   }
 }
-// $COVERAGE-ON$

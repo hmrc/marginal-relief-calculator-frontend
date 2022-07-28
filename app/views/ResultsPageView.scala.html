@@ -16,42 +16,94 @@
 
 @import connectors.sharedmodel._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import utils.CurrencyUtils
+@import forms.DateUtils._
+@import forms._
 
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton,
-        govukPanel : GovukPanel
+        govukPanel : GovukPanel,
+        govukTable : GovukTable
 )
 
-@(marginalReliefResult: MarginalReliefResult)(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
 
-@displayResults(corporationTaxBeforeMR: Double, effectiveTaxRateBeforeMR: Double, corporationTax: Double, effectiveTaxRate: Double, marginalRelief: Double) = {
-    <span>
-        @govukPanel(Panel(
-            title = Text("Marginal Relief for your accounting period is"),
-            content = HtmlContent(s"£$marginalRelief")
+@marginalReliefBanner(m: MarginalRate) = @{
+    if( m.marginalRelief > 0 ) {
+        govukPanel(Panel(
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = HtmlContent(s"${CurrencyUtils.format(m.marginalRelief)}")
         ))
-        <h2 class="govuk-heading-m">Your Corporation Tax after Marginal Relief:</h2>
-        <h2 class="govuk-heading-m">£@corporationTax</h2>
-        <p class="govuk-body">Corporation Tax liability<br>
-            Reduced from £@corporationTaxBeforeMR after £@marginalRelief Marginal Relief
-        </p>
-        <h2 class="govuk-heading-m">@effectiveTaxRate%</h2>
-        <p class="govuk-body">Effective tax rate after Marginal Relief<br>
-            Reduced from @effectiveTaxRateBeforeMR%
-        </p>
-    </span>
+    } else if ( m.adjustedAugmentedProfit > m.adjustedUpperThreshold ) {
+        govukPanel(Panel(
+            title = Text(messages("resultsPage.marginalReliefNotEligible")),
+            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit" else "resultsPage.yourProfitsAboveMarginalReliefLimit"))
+        ))
+    } else if( m.adjustedAugmentedProfit < m.adjustedLowerThreshold ) {
+        govukPanel(Panel(
+            title = Text(messages("resultsPage.marginalReliefNotEligible")),
+            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit" else "resultsPage.yourProfitsBelowMarginalReliefLimit"))
+        ))
+    }
 }
+
+@displayBanner(calculatorResult: CalculatorResult) = @{
+    calculatorResult match {
+        case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
+            govukPanel(Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+            ))
+        case SingleResult(m: MarginalRate) =>
+            marginalReliefBanner(m)
+        case DualResult(_: FlatRate, m: MarginalRate) =>
+            marginalReliefBanner(m)
+        case DualResult(m: MarginalRate, _: FlatRate) =>
+            marginalReliefBanner(m)
+        case DualResult(_: MarginalRate, _: MarginalRate) =>
+            ???
+    }
+}
+
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
-        @marginalReliefResult match {
-            case SingleResult(year, corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief) => {
-                @displayResults(corporationTaxBeforeMR, effectiveTaxRateBeforeMR, corporationTax, effectiveTaxRate, marginalRelief)
-            }
-            case r: DualResult => {
-                @displayResults(r.totalCorporationTaxBeforeMR, r.effectiveTaxRateBeforeMR, r.totalCorporationTax, r.effectiveTaxRate, r.totalMarginalRelief)
-            }
-        }
+    @displayBanner(calculatorResult)
 
+    <h2 class="govuk-heading-m">@messages("resultsPage.yourDetails")</h2>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                @messages("resultsPage.accountPeriod")
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                @messages("resultsPage.companysProfit")
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @{CurrencyUtils.format(taxableProfit)}
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                @messages("resultsPage.distributions")
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @{CurrencyUtils.format(distributions)}
+            </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+                @messages("resultsPage.associatedCompanies")
+            </dt>
+            <dd class="govuk-summary-list__value">
+                @{associatedCompanies.toString}
+            </dd>
+        </div>
+    </dl>
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 }

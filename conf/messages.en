@@ -1,4 +1,4 @@
-service.name = marginal-relief-calculator-frontend
+service.name = Calculate Marginal Relief for Corporation Tax
 
 site.back = Back
 site.remove = Remove
@@ -109,17 +109,20 @@ accountingPeriodEndDate.error.required = The End date must include {0}
 accountingPeriodEndDate.error.invalid = Enter a valid End date for the accounting period, like 27 3 2023
 accountingPeriodEndDate.change.hidden = End date
 
-resultsPage.title = resultsPage
-resultsPage.heading = resultsPage
-
-profit.title = Taxable profit
-profit.heading = Taxable profit
-profit.checkYourAnswersLabel = Taxable profit
-profit.error.nonNumeric = Enter your Taxable profit using numbers
-profit.error.required = Enter your Taxable profit
-profit.error.wholeNumber = Enter your Taxable profit using whole numbers
-profit.error.outOfRange = Taxable profit must be between {0} and {1}
-profit.change.hidden = Taxable profit
+resultsPage.title = Marginal Relief Results
+resultsPage.heading = Marginal Relief Results
+resultsPage.marginalReliefNotEligible = You''re not eligible for marginal relief
+resultsPage.marginalReliefNotApplicable = Marginal relief not applicable
+resultsPage.marginalReliefForAccPeriodIs = Marginal Relief for your accounting period is
+resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit = Your taxable profits and included distributions are above the Marginal Relief limit
+resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit = Your taxable profits and included distributions are below the Marginal Relief limit
+resultsPage.yourProfitsAboveMarginalReliefLimit = Your taxable profits are above the Marginal Relief limit
+resultsPage.yourProfitsBelowMarginalReliefLimit = Your taxable profits are below the Marginal Relief limit
+resultsPage.accountPeriod = Accounting Period
+resultsPage.companysProfit = Company''s Profit
+resultsPage.associatedCompanies = Associated companies
+resultsPage.distributions = Distributions
+resultsPage.yourDetails = Your details
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?

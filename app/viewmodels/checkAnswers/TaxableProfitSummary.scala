@@ -21,11 +21,9 @@ import models.{ CheckMode, UserAnswers }
 import pages.TaxableProfitPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import utils.CurrencyUtils
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
-
-import java.text.NumberFormat
-import java.util.Locale
 
 object TaxableProfitSummary {
 
@@ -33,7 +31,7 @@ object TaxableProfitSummary {
     answers.get(TaxableProfitPage).map { answer =>
       SummaryListRowViewModel(
         key = "taxableProfit.checkYourAnswersLabel",
-        value = ValueViewModel(s"£${NumberFormat.getNumberInstance(Locale.UK).format(answer)}"),
+        value = ValueViewModel(CurrencyUtils.format(answer)),
         actions = Seq(
           ActionItemViewModel("site.change", routes.TaxableProfitController.onPageLoad(CheckMode).url)
             .withVisuallyHiddenText(messages("taxableProfit.change.hidden"))
