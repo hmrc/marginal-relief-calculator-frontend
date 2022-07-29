@@ -30,14 +30,14 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
-import views.html.AccountingPeriodView
+import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
 import java.time.{ LocalDate, ZoneOffset }
 import scala.concurrent.Future
 
 class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
-  private val epoch: LocalDate = LocalDate.ofEpochDay(0)
+  private val epoch: LocalDate = LocalDate.parse("2022-04-02")
 
   val formProvider = new AccountingPeriodFormProvider()
   private def form = formProvider()
@@ -77,7 +77,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = AccountingPeriodForm(LocalDate.now(ZoneOffset.UTC), Some(LocalDate.now(ZoneOffset.UTC).plusDays(1)))
+  val validAnswer = AccountingPeriodForm(LocalDate.parse("2023-04-02"), Some(LocalDate.parse("2023-04-02").plusDays(1)))
 
   lazy val accountingPeriodRoute = routes.AccountingPeriodController.onPageLoad(NormalMode).url
   lazy val accountingPeriodRouteCheckMode = routes.AccountingPeriodController.onPageLoad(CheckMode).url
@@ -143,7 +143,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(emptyUserAnswers.set(AccountingPeriodPage, validAnswer).get))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -289,6 +289,63 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad.url))
+      }
+    }
+
+    "must be able to open irrelevant period page" in {
+      val application = applicationBuilder(None).build()
+      running(application) {
+        val view = application.injector.instanceOf[IrrelevantPeriodView]
+
+        val request = FakeRequest(routes.AccountingPeriodController.irrelevantPeriodPage())
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result).filterAndTrim mustEqual view()(
+          request,
+          messages(application)
+        ).toString.filterAndTrim
+      }
+    }
+
+    "must redirect to irrelevant period page if start date is before 2nd of April 2022" in {
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> "1",
+            "accountingPeriodStartDate.month" -> "4",
+            "accountingPeriodStartDate.year"  -> "2022"
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage().url))
+      }
+    }
+
+    "must redirect to irrelevant period page if end date is before 1st of April 2023" in {
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> "2",
+            "accountingPeriodStartDate.month" -> "4",
+            "accountingPeriodStartDate.year"  -> "2022",
+            "accountingPeriodEndDate.day"     -> "31",
+            "accountingPeriodEndDate.month"   -> "3",
+            "accountingPeriodEndDate.year"    -> "2023"
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
+
+        val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage().url))
       }
     }
   }
