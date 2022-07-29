@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DistributionView
 
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.Try
 
 class DistributionController @Inject() (
   override val messagesApi: MessagesApi,
@@ -65,15 +66,15 @@ class DistributionController @Inject() (
             for {
               updatedAnswers <-
                 Future.fromTry(
-                  if (value == Distribution.No) {
-                    request.userAnswers
-                      .set(DistributionPage, value)
-                      .flatMap(answer =>
+                  request.userAnswers
+                    .set(DistributionPage, value)
+                    .flatMap(answer =>
+                      if (value == Distribution.No) {
                         answer.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.No, None))
-                      )
-                  } else {
-                    request.userAnswers.set(DistributionPage, value)
-                  }
+                      } else {
+                        Try(answer)
+                      }
+                    )
                 )
               _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(DistributionPage, mode, updatedAnswers))
