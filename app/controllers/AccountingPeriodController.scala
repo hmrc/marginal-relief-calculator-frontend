@@ -17,7 +17,8 @@
 package controllers
 
 import controllers.actions._
-import forms.AccountingPeriodFormProvider
+import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
+import models.requests.OptionalDataRequest
 import models.{ CheckMode, Mode, NormalMode, UserAnswers }
 
 import javax.inject.Inject
@@ -25,11 +26,12 @@ import navigation.Navigator
 import org.slf4j.{ Logger, LoggerFactory }
 import pages.AccountingPeriodPage
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Request }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AccountingPeriodView
 
+import java.time.LocalDate
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Success
 
@@ -47,7 +49,7 @@ class AccountingPeriodController @Inject() (
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  def form = formProvider()
+  private def form = formProvider()
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm =
@@ -58,6 +60,36 @@ class AccountingPeriodController @Inject() (
 
     Ok(view(preparedForm, mode))
   }
+
+  private def updatedAnswersAndMode(request:OptionalDataRequest[AnyContent],
+                    form:AccountingPeriodForm,
+                    mode: Mode) =
+    Future.fromTry(request.userAnswers match {
+      case Some(answers) =>
+        answers
+          .get(AccountingPeriodPage)
+          .map {
+            case prevAnswer if prevAnswer == form =>
+              Success((answers, CheckMode))
+            case _ =>
+              answers.clean
+                .set(AccountingPeriodPage, form)
+                .map(_ -> NormalMode)
+          }
+          .getOrElse {
+            answers
+              .set(AccountingPeriodPage, form)
+              .map(_ -> mode)
+          }
+      case None =>
+        UserAnswers(request.userId)
+          .set(AccountingPeriodPage, form)
+          .map(_ -> mode)
+    })
+
+  private def accountingPeriodIsRelevant(form:AccountingPeriodForm) =
+    form.accountingPeriodStartDate.isBefore(LocalDate.parse("2022-04-02")) &&
+      form.accountingPeriodEndDate.get.isBefore(LocalDate.parse("2023-04-01"))
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (identify andThen getData).async { implicit request =>
@@ -80,33 +112,18 @@ class AccountingPeriodController @Inject() (
               form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
             )
 
-            for {
-              (updatedAnswers, mode) <- Future.fromTry(request.userAnswers match {
-                                          case Some(answers) =>
-                                            answers
-                                              .get(AccountingPeriodPage)
-                                              .map {
-                                                case prevAnswer if prevAnswer == formWithAccountingPeriodEnd =>
-                                                  Success((answers, CheckMode))
-                                                case _ =>
-                                                  answers.clean
-                                                    .set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-                                                    .map(_ -> NormalMode)
-                                              }
-                                              .getOrElse {
-                                                answers
-                                                  .set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-                                                  .map(_ -> mode)
-                                              }
-                                          case None =>
-                                            UserAnswers(request.userId)
-                                              .set(AccountingPeriodPage, formWithAccountingPeriodEnd)
-                                              .map(_ -> mode)
-                                        })
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(
-              navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
-            )
+            if(accountingPeriodIsRelevant(formWithAccountingPeriodEnd)) {
+              for {
+                (updatedAnswers, mode) <- updatedAnswersAndMode(request, formWithAccountingPeriodEnd, mode)
+                _ <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(
+                navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
+              )
+            } else {
+              Future.successful(Redirect(
+                ???
+              ))
+            }
           }
         )
     }
