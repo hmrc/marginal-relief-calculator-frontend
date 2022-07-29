@@ -64,7 +64,7 @@ class AccountingPeriodController @Inject() (
 
   private def updatedAnswersAndMode(request: OptionalDataRequest[AnyContent], form: AccountingPeriodForm, mode: Mode) =
     Future.fromTry(request.userAnswers match {
-      case Some(answers) =>
+      case Some(answers) if mode == CheckMode =>
         answers
           .get(AccountingPeriodPage)
           .map {
@@ -80,7 +80,7 @@ class AccountingPeriodController @Inject() (
               .set(AccountingPeriodPage, form)
               .map(_ -> mode)
           }
-      case None =>
+      case _ =>
         UserAnswers(request.userId)
           .set(AccountingPeriodPage, form)
           .map(_ -> mode)
