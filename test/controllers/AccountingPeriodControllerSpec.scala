@@ -293,7 +293,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must NOT redirect to change page if form is prefilled, not changed and in normal mode" in {
+    "must NOT redirect to Check your answers page if form is prefilled, not changed and in normal mode" in {
       val answers = emptyUserAnswers.set(AccountingPeriodPage, validAnswer).get
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
