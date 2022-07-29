@@ -30,7 +30,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
-import views.html.AccountingPeriodView
+import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
 import java.time.{ LocalDate, ZoneOffset }
 import scala.concurrent.Future
@@ -291,6 +291,25 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad.url))
       }
     }
+
+    "must be able to open irrelevant period page" in {
+      val application = applicationBuilder(None).build()
+      running(application) {
+        val view = application.injector.instanceOf[IrrelevantPeriodView]
+
+        val request = FakeRequest(routes.AccountingPeriodController.irrelevantPeriodPage())
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+
+        contentAsString(result).filterAndTrim mustEqual view()(
+          request,
+          messages(application)
+        ).toString.filterAndTrim
+      }
+    }
+
     "must redirect to irrelevant period page if start date is before 2nd of April 2022" in {
       val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
 
@@ -308,6 +327,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage().url))
       }
     }
+
     "must redirect to irrelevant period page if end date is before 1st of April 2023" in {
       val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
 
