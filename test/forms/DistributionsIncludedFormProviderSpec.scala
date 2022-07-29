@@ -41,7 +41,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with P
       val fieldName = "distributionsIncludedAmount"
 
       val minimum = 1
-      val maximum = Integer.MAX_VALUE
+      val maximum = 1000000000
 
       behave like fieldThatBindsValidData(
         form,

@@ -28,7 +28,7 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
     val fieldName = "value"
 
     val minimum = 0
-    val maximum = Integer.MAX_VALUE
+    val maximum = 1000000000
 
     behave like fieldThatBindsValidData(
       form,
@@ -44,7 +44,7 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
       nonNumericError = FormError(fieldName, "taxableProfit.error.nonNumeric"),
       wholeNumberError = FormError(fieldName, "taxableProfit.error.wholeNumber"),
       doNotUseDecimalsError = FormError(fieldName, "taxableProfit.error.doNotUseDecimals"),
-      outOfRangeError = FormError(fieldName, "taxableProfit.error.outOfRange", List(1, Integer.MAX_VALUE))
+      outOfRangeError = FormError(fieldName, "taxableProfit.error.outOfRange", List(1, 1000000000))
     )
 
     behave like mandatoryField(

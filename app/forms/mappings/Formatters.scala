@@ -103,6 +103,7 @@ trait Formatters {
   ): Formatter[Int] =
     new Formatter[Int] {
 
+      private val ONE_BILLION = 1000000000
       private val DecimalRegexp = """^-?(\d*\.\d*)$"""
       private val AmountWithCommas = """^\d{0,3}[,]?(,\d{3})*$"""
       private val TrailingZeroesAfterDecimal = """[.][0]+$"""
@@ -124,9 +125,9 @@ trait Formatters {
                            Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
                          case s if Try(s.toLong).isFailure => Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
                          case s if s.toLong < 1 =>
-                           Seq(FormError(key, outOfRangeKey, Seq(1, Integer.MAX_VALUE))).asLeft[Int]
-                         case s if s.toLong > Integer.MAX_VALUE =>
-                           Seq(FormError(key, outOfRangeKey, Seq(1, Integer.MAX_VALUE))).asLeft[Int]
+                           Seq(FormError(key, outOfRangeKey, Seq(1, ONE_BILLION))).asLeft[Int]
+                         case s if s.toLong > ONE_BILLION =>
+                           Seq(FormError(key, outOfRangeKey, Seq(1, ONE_BILLION))).asLeft[Int]
                          case s => s.toInt.asRight[Seq[FormError]]
                        }
       } yield finalResult
