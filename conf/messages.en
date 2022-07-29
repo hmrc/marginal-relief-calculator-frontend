@@ -113,8 +113,8 @@ accountingPeriodEndDate.error.required = The End date must include {0}
 accountingPeriodEndDate.error.invalid = Enter a valid End date for the accounting period, like 27 3 2023
 accountingPeriodEndDate.change.hidden = End date
 
-accountingPeriodIrrelevant.title = You're not eligible for Marginal Relief
-accountingPeriodIrrelevant.heading = You're not eligible for Marginal Relief
+accountingPeriodIrrelevant.title = You''re not eligible for Marginal Relief
+accountingPeriodIrrelevant.heading = You''re not eligible for Marginal Relief
 accountingPeriodIrrelevant.body = Your accounting period is before the 1 April 2023 start date for Marginal Relief.
 accountingPeriodIrrelevant.guidance = Read more about Marginal Relief guidance
 accountingPeriodIrrelevant.restart = Restart calculation
