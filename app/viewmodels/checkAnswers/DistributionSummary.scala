@@ -17,8 +17,8 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{ CheckMode, UserAnswers }
-import pages.DistributionsIncludedPage
+import models.{CheckMode, Distribution, UserAnswers}
+import pages.{DistributionPage, DistributionsIncludedPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
@@ -27,17 +27,22 @@ import viewmodels.implicits._
 import java.text.NumberFormat
 import java.util.Locale
 
-object DistributionsIncludedSummary {
+object DistributionSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(DistributionsIncludedPage).map { answer =>
-      val value = answer.distributionsIncludedAmount map (amount =>
-        if (amount > 0) {
-          s"£${NumberFormat.getNumberInstance(Locale.UK).format(amount)}"
-        } else {
-          messages("distributionsIncluded.emptyValue")
-        }
-      ) getOrElse messages("distributionsIncluded.emptyValue")
+    answers.get(DistributionPage).map { answer =>
+      val value = if(answer == Distribution.Yes) {
+        answers.get(DistributionsIncludedPage).map (
+          form =>
+            if (form.distributionsIncludedAmount.exists(_>0)) {
+              s"£${NumberFormat.getNumberInstance(Locale.UK).format(form.distributionsIncludedAmount.getOrElse(0))}"
+            } else {
+              messages("distributionsIncluded.emptyValue")
+            }
+        ) getOrElse messages("distributionsIncluded.emptyValue")
+      } else {
+        messages("distributionsIncluded.emptyValue")
+      }
 
       SummaryListRowViewModel(
         key = "distributionsIncluded.checkYourAnswersLabel",

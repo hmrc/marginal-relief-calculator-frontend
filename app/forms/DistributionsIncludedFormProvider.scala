@@ -20,7 +20,7 @@ import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 import models.DistributionsIncluded
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{mapping, optional}
 
 class DistributionsIncludedFormProvider @Inject() extends Mappings {
   def apply(): Form[DistributionsIncludedForm] =
