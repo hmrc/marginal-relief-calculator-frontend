@@ -62,9 +62,7 @@ class AccountingPeriodController @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  private def updatedAnswersAndMode(request:OptionalDataRequest[AnyContent],
-                    form:AccountingPeriodForm,
-                    mode: Mode) =
+  private def updatedAnswersAndMode(request: OptionalDataRequest[AnyContent], form: AccountingPeriodForm, mode: Mode) =
     Future.fromTry(request.userAnswers match {
       case Some(answers) =>
         answers
@@ -88,7 +86,7 @@ class AccountingPeriodController @Inject() (
           .map(_ -> mode)
     })
 
-  private def accountingPeriodIsIrrelevant(form:AccountingPeriodForm) =
+  private def accountingPeriodIsIrrelevant(form: AccountingPeriodForm) =
     form.accountingPeriodStartDate.isBefore(LocalDate.parse("2022-04-02")) ||
       form.accountingPeriodEndDate.get.isBefore(LocalDate.parse("2023-04-01"))
 
@@ -113,14 +111,16 @@ class AccountingPeriodController @Inject() (
               form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
             )
 
-            if(accountingPeriodIsIrrelevant(formWithAccountingPeriodEnd)) {
-              Future.successful(Redirect(
-                routes.AccountingPeriodController.irrelevantPeriodPage()
-              ))
+            if (accountingPeriodIsIrrelevant(formWithAccountingPeriodEnd)) {
+              Future.successful(
+                Redirect(
+                  routes.AccountingPeriodController.irrelevantPeriodPage()
+                )
+              )
             } else {
               for {
                 (updatedAnswers, mode) <- updatedAnswersAndMode(request, formWithAccountingPeriodEnd, mode)
-                _ <- sessionRepository.set(updatedAnswers)
+                _                      <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
               )
