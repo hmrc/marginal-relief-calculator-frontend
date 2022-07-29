@@ -17,33 +17,41 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{ CheckMode, UserAnswers }
-import pages.DistributionPage
+import models.{ CheckMode, Distribution, UserAnswers }
+import pages.{ DistributionPage, DistributionsIncludedPage }
 import play.api.i18n.Messages
-import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
-// $COVERAGE-OFF$
+
+import java.text.NumberFormat
+import java.util.Locale
+
 object DistributionSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(DistributionPage).map { answer =>
-      val value = ValueViewModel(
-        HtmlContent(
-          HtmlFormat.escape(messages(s"distribution.$answer"))
-        )
-      )
+      val value = if (answer == Distribution.Yes) {
+        answers
+          .get(DistributionsIncludedPage)
+          .map(form =>
+            if (form.distributionsIncludedAmount.exists(_ > 0)) {
+              s"£${NumberFormat.getNumberInstance(Locale.UK).format(form.distributionsIncludedAmount.getOrElse(0))}"
+            } else {
+              messages("distributionsIncluded.emptyValue")
+            }
+          ) getOrElse messages("distributionsIncluded.emptyValue")
+      } else {
+        messages("distributionsIncluded.emptyValue")
+      }
 
       SummaryListRowViewModel(
-        key = "distribution.checkYourAnswersLabel",
-        value = value,
+        key = "distributionsIncluded.checkYourAnswersLabel",
+        value = ValueViewModel(value),
         actions = Seq(
           ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("distribution.change.hidden"))
+            .withVisuallyHiddenText(messages("distributionsIncluded.change.hidden"))
         )
       )
     }
 }
-// $COVERAGE-ON$

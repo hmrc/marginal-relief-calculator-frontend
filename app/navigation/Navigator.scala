@@ -45,14 +45,22 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = { case _ =>
-    _ => routes.CheckYourAnswersController.onPageLoad
+  private val checkRouteMap: Page => UserAnswers => Call = {
+    case DistributionPage => distributionsChangeRoute
+    case _                => _ => routes.CheckYourAnswersController.onPageLoad
   }
 
   def distributionsNextRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(NormalMode)
       case Some(Distribution.No)  => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+      case _                      => routes.JourneyRecoveryController.onPageLoad()
+    }
+
+  def distributionsChangeRoute(answers: UserAnswers): Call =
+    answers.get(DistributionPage) match {
+      case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(CheckMode)
+      case Some(Distribution.No)  => routes.CheckYourAnswersController.onPageLoad
       case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
 

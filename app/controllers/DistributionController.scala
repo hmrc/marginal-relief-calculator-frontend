@@ -17,11 +17,12 @@
 package controllers
 
 import controllers.actions._
-import forms.DistributionFormProvider
+import forms.{ DistributionFormProvider, DistributionsIncludedForm }
+
 import javax.inject.Inject
-import models.Mode
+import models.{ Distribution, DistributionsIncluded, Mode }
 import navigation.Navigator
-import pages.DistributionPage
+import pages.{ DistributionPage, DistributionsIncludedPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
@@ -29,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DistributionView
 
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.{ Success, Try }
 
 class DistributionController @Inject() (
   override val messagesApi: MessagesApi,
@@ -62,8 +64,19 @@ class DistributionController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(DistributionPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
+              updatedAnswers <-
+                Future.fromTry(
+                  request.userAnswers
+                    .set(DistributionPage, value)
+                    .flatMap(answer =>
+                      if (value == Distribution.No) {
+                        answer.remove(DistributionsIncludedPage)
+                      } else {
+                        Success(answer)
+                      }
+                    )
+                )
+              _ <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(DistributionPage, mode, updatedAnswers))
         )
   }
