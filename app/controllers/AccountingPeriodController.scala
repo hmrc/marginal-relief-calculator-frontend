@@ -29,7 +29,7 @@ import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Request }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.AccountingPeriodView
+import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
 import java.time.LocalDate
 import scala.concurrent.{ ExecutionContext, Future }
@@ -43,7 +43,8 @@ class AccountingPeriodController @Inject() (
   getData: DataRetrievalAction,
   formProvider: AccountingPeriodFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: AccountingPeriodView
+  view: AccountingPeriodView,
+  irrelevantPeriodView: IrrelevantPeriodView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -87,8 +88,8 @@ class AccountingPeriodController @Inject() (
           .map(_ -> mode)
     })
 
-  private def accountingPeriodIsRelevant(form:AccountingPeriodForm) =
-    form.accountingPeriodStartDate.isBefore(LocalDate.parse("2022-04-02")) &&
+  private def accountingPeriodIsIrrelevant(form:AccountingPeriodForm) =
+    form.accountingPeriodStartDate.isBefore(LocalDate.parse("2022-04-02")) ||
       form.accountingPeriodEndDate.get.isBefore(LocalDate.parse("2023-04-01"))
 
   def onSubmit(mode: Mode): Action[AnyContent] =
@@ -112,19 +113,23 @@ class AccountingPeriodController @Inject() (
               form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
             )
 
-            if(accountingPeriodIsRelevant(formWithAccountingPeriodEnd)) {
+            if(accountingPeriodIsIrrelevant(formWithAccountingPeriodEnd)) {
+              Future.successful(Redirect(
+                routes.AccountingPeriodController.irrelevantPeriodPage()
+              ))
+            } else {
               for {
                 (updatedAnswers, mode) <- updatedAnswersAndMode(request, formWithAccountingPeriodEnd, mode)
                 _ <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
               )
-            } else {
-              Future.successful(Redirect(
-                ???
-              ))
             }
           }
         )
     }
+
+  def irrelevantPeriodPage(): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    Ok(irrelevantPeriodView())
+  }
 }
