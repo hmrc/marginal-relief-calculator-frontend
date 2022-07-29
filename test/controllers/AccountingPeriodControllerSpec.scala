@@ -267,6 +267,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
       }
     }
+
     "must redirect to change page if user did not change existing accounting period dates" in {
       val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
 
@@ -289,6 +290,31 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad.url))
+      }
+    }
+
+    "must NOT redirect to change page if form is prefilled, not changed and in normal mode" in {
+      val answers = emptyUserAnswers.set(AccountingPeriodPage, validAnswer).get
+      val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+      running(application) {
+        val form = answers.get(AccountingPeriodPage).get
+        val sDate = form.accountingPeriodStartDate
+        val eDate = form.accountingPeriodEndDate.get
+        val request = FakeRequest(POST, accountingPeriodRoute)
+          .withFormUrlEncodedBody(
+            "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
+            "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
+            "accountingPeriodStartDate.year"  -> sDate.getYear.toString,
+            "accountingPeriodEndDate.day"     -> eDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> eDate.getMonth.getValue.toString,
+            "accountingPeriodEndDate.year"    -> eDate.getYear.toString
+          )
+          .withSession(SessionKeys.sessionId -> "test-session-id")
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result) must not be (Some(routes.CheckYourAnswersController.onPageLoad.url))
       }
     }
 
