@@ -88,7 +88,7 @@ class AccountingPeriodController @Inject() (
 
   private def accountingPeriodIsIrrelevant(form: AccountingPeriodForm) =
     form.accountingPeriodStartDate.isBefore(LocalDate.parse("2022-04-02")) ||
-      form.accountingPeriodEndDate.get.isBefore(LocalDate.parse("2023-04-01"))
+      form.accountingPeriodEndDate.exists(_.isBefore(LocalDate.parse("2023-04-01")))
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (identify andThen getData).async { implicit request =>
