@@ -17,8 +17,8 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
-import models.{CheckMode, Distribution, UserAnswers}
-import pages.{DistributionPage, DistributionsIncludedPage}
+import models.{ CheckMode, Distribution, UserAnswers }
+import pages.{ DistributionPage, DistributionsIncludedPage }
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
@@ -31,15 +31,16 @@ object DistributionSummary {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get(DistributionPage).map { answer =>
-      val value = if(answer == Distribution.Yes) {
-        answers.get(DistributionsIncludedPage).map (
-          form =>
-            if (form.distributionsIncludedAmount.exists(_>0)) {
+      val value = if (answer == Distribution.Yes) {
+        answers
+          .get(DistributionsIncludedPage)
+          .map(form =>
+            if (form.distributionsIncludedAmount.exists(_ > 0)) {
               s"£${NumberFormat.getNumberInstance(Locale.UK).format(form.distributionsIncludedAmount.getOrElse(0))}"
             } else {
               messages("distributionsIncluded.emptyValue")
             }
-        ) getOrElse messages("distributionsIncluded.emptyValue")
+          ) getOrElse messages("distributionsIncluded.emptyValue")
       } else {
         messages("distributionsIncluded.emptyValue")
       }

@@ -18,10 +18,10 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import forms.DistributionsIncludedForm
-import models.{ CheckMode, DistributionsIncluded, UserAnswers }
+import models.{ CheckMode, Distribution, DistributionsIncluded, UserAnswers }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import pages.DistributionsIncludedPage
+import pages.{ DistributionPage, DistributionsIncludedPage }
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import viewmodels.govuk.summarylist._
@@ -29,13 +29,18 @@ import viewmodels.implicits._
 
 import scala.xml.Null
 
-class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
+class DistributionSummarySpec extends AnyFreeSpec with Matchers {
 
   private implicit val messages: Messages = Helpers.stubMessages()
 
   "row" - {
-    "when answer available, return the summary row" in {
+    "when answer Yes and Distributions amount set, return the summary row" in {
       val userAnswers = UserAnswers("id")
+        .set(
+          DistributionPage,
+          Distribution.Yes
+        )
+        .get
         .set(
           DistributionsIncludedPage,
           DistributionsIncludedForm(
@@ -44,7 +49,7 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
           )
         )
         .get
-      DistributionsIncludedSummary.row(userAnswers) shouldBe Some(
+      DistributionSummary.row(userAnswers) shouldBe Some(
         SummaryListRowViewModel(
           key = "distributionsIncluded.checkYourAnswersLabel",
           value = ValueViewModel("£1,000"),
@@ -56,17 +61,22 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
       )
     }
 
-    "when answer available but no amount, return the summary row" in {
+    "when answer Yes and Distributions amount 0, return the summary row" in {
       val userAnswers = UserAnswers("id")
+        .set(
+          DistributionPage,
+          Distribution.Yes
+        )
+        .get
         .set(
           DistributionsIncludedPage,
           DistributionsIncludedForm(
             DistributionsIncluded.Yes,
-            None
+            Some(0)
           )
         )
         .get
-      DistributionsIncludedSummary.row(userAnswers) shouldBe Some(
+      DistributionSummary.row(userAnswers) shouldBe Some(
         SummaryListRowViewModel(
           key = "distributionsIncluded.checkYourAnswersLabel",
           value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
@@ -78,17 +88,68 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
       )
     }
 
-    "when answer available but amount 0, return the summary row" in {
+    "when answer Yes and Distributions amount blank, return the summary row" in {
       val userAnswers = UserAnswers("id")
+        .set(
+          DistributionPage,
+          Distribution.Yes
+        )
+        .get
         .set(
           DistributionsIncludedPage,
           DistributionsIncludedForm(
             DistributionsIncluded.Yes,
-            Some(0)
+            None
           )
         )
         .get
-      DistributionsIncludedSummary.row(userAnswers) shouldBe Some(
+      DistributionSummary.row(userAnswers) shouldBe Some(
+        SummaryListRowViewModel(
+          key = "distributionsIncluded.checkYourAnswersLabel",
+          value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText("distributionsIncluded.change.hidden")
+          )
+        )
+      )
+    }
+
+    "when answer Yes and Distributions N0, return the summary row" in {
+      val userAnswers = UserAnswers("id")
+        .set(
+          DistributionPage,
+          Distribution.Yes
+        )
+        .get
+        .set(
+          DistributionsIncludedPage,
+          DistributionsIncludedForm(
+            DistributionsIncluded.No,
+            None
+          )
+        )
+        .get
+      DistributionSummary.row(userAnswers) shouldBe Some(
+        SummaryListRowViewModel(
+          key = "distributionsIncluded.checkYourAnswersLabel",
+          value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText("distributionsIncluded.change.hidden")
+          )
+        )
+      )
+    }
+
+    "when answer No, return the summary row" in {
+      val userAnswers = UserAnswers("id")
+        .set(
+          DistributionPage,
+          Distribution.No
+        )
+        .get
+      DistributionSummary.row(userAnswers) shouldBe Some(
         SummaryListRowViewModel(
           key = "distributionsIncluded.checkYourAnswersLabel",
           value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
@@ -102,7 +163,7 @@ class DistributionsIncludedSummarySpec extends AnyFreeSpec with Matchers {
 
     "when answer unavailable, return empty" in {
       val userAnswers = UserAnswers("id")
-      DistributionsIncludedSummary.row(userAnswers) shouldBe None
+      DistributionSummary.row(userAnswers) shouldBe None
     }
   }
 }

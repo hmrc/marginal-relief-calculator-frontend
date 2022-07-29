@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DistributionView
 
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.Try
+import scala.util.{ Success, Try }
 
 class DistributionController @Inject() (
   override val messagesApi: MessagesApi,
@@ -70,9 +70,9 @@ class DistributionController @Inject() (
                     .set(DistributionPage, value)
                     .flatMap(answer =>
                       if (value == Distribution.No) {
-                        answer.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.No, None))
+                        answer.remove(DistributionsIncludedPage)
                       } else {
-                        Try(answer)
+                        Success(answer)
                       }
                     )
                 )
