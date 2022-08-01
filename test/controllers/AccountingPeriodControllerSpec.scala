@@ -32,7 +32,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
-import java.time.{ LocalDate, ZoneOffset }
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
