@@ -52,7 +52,7 @@ index.guidance.corporationTaxRatesAndReliefs = Corporation Tax rates and reliefs
 index.guidance.requirements.item1 = your company''s accounting period start and end dates
 index.guidance.requirements.item2 = your company''s total taxable profit
 index.guidance.requirements.item3 = any {0}distributions{1} from unrelated, unassociated companies
-index.guidance.requirements.item4 = any {0}associated{1} company details
+index.guidance.requirements.item4 = any {0}associated company{1} details
 
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers

@@ -17,10 +17,10 @@
 package controllers
 
 import controllers.actions._
-import forms.{ DistributionFormProvider, DistributionsIncludedForm }
+import forms.DistributionFormProvider
 
 import javax.inject.Inject
-import models.{ Distribution, DistributionsIncluded, Mode }
+import models.{ Distribution, Mode }
 import navigation.Navigator
 import pages.{ DistributionPage, DistributionsIncludedPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DistributionView
 
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.{ Success, Try }
+import scala.util.Success
 
 class DistributionController @Inject() (
   override val messagesApi: MessagesApi,

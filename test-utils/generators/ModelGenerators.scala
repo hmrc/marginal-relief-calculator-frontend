@@ -17,7 +17,6 @@
 package generators
 
 import models._
-import org.scalacheck.Arbitrary.arbitrary
 import models.AssociatedCompanies
 import org.scalacheck.{ Arbitrary, Gen }
 

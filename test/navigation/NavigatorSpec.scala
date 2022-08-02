@@ -20,7 +20,6 @@ import base.SpecBase
 import controllers.routes
 import pages.{ DistributionPage, _ }
 import models._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks.forAll
 
 class NavigatorSpec extends SpecBase {
 

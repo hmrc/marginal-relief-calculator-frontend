@@ -27,8 +27,6 @@ import play.api.test.Helpers
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-import scala.xml.Null
-
 class DistributionSummarySpec extends AnyFreeSpec with Matchers {
 
   private implicit val messages: Messages = Helpers.stubMessages()
