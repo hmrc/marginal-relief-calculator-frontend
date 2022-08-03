@@ -66,20 +66,18 @@ class AccountingPeriodController @Inject() (
     Future.fromTry(request.userAnswers match {
       case Some(answers) if mode == CheckMode =>
         answers
-          .get(AccountingPeriodPage)
-          .map {
-            case prevAnswer if prevAnswer == form =>
-              Success((answers, CheckMode))
-            case _ =>
-              answers.clean
-                .set(AccountingPeriodPage, form)
-                .map(_ -> NormalMode)
-          }
-          .getOrElse {
+          .set(AccountingPeriodPage, form)
+          .map(_ -> {
             answers
-              .set(AccountingPeriodPage, form)
-              .map(_ -> mode)
-          }
+              .get(AccountingPeriodPage)
+              .collect {
+                case prevAnswer if prevAnswer == form =>
+                  CheckMode
+                case _ =>
+                  NormalMode
+              }
+              .getOrElse(mode)
+          })
       case _ =>
         UserAnswers(request.userId)
           .set(AccountingPeriodPage, form)

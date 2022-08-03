@@ -23,7 +23,7 @@ import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
+import pages._
 import play.api.inject.bind
 import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
@@ -84,10 +84,10 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
   override val emptyUserAnswers = UserAnswers(userAnswersId)
 
-  def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
+  def getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, accountingPeriodRoute)
 
-  def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
+  def postRequest: FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, accountingPeriodRoute)
       .withFormUrlEncodedBody(
         "accountingPeriodStartDate.day"   -> validAnswer.accountingPeriodStartDate.getDayOfMonth.toString,
@@ -243,28 +243,46 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page if user changed existing accounting period dates" in {
+    "must redirect to the next page if user changed existing accounting period dates and session is not cleared" in {
       val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
 
       running(application) {
         val form = completedUserAnswers.get(AccountingPeriodPage).get
         val sDate = form.accountingPeriodStartDate
-        val eDate = form.accountingPeriodEndDate.get
+        val eDate = form.accountingPeriodEndDate.get.minusMonths(1)
         val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
           .withFormUrlEncodedBody(
             "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
             "accountingPeriodStartDate.month" -> sDate.getMonth.getValue.toString,
             "accountingPeriodStartDate.year"  -> sDate.getYear.toString,
             "accountingPeriodEndDate.day"     -> eDate.getDayOfMonth.toString,
-            "accountingPeriodEndDate.month"   -> (eDate.getMonth.getValue - 1).toString,
+            "accountingPeriodEndDate.month"   -> eDate.getMonth.getValue.toString,
             "accountingPeriodEndDate.year"    -> eDate.getYear.toString
           )
           .withSession(SessionKeys.sessionId -> "test-session-id")
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
+        sessionRepository
+          .get("test-session-id")
+          .futureValue
+          .get
+          .data must be(
+          completedUserAnswers
+            .set(
+              AccountingPeriodPage,
+              AccountingPeriodForm(
+                accountingPeriodStartDate = sDate,
+                accountingPeriodEndDate = Some(eDate)
+              )
+            )
+            .success
+            .value
+            .data
+        )
       }
     }
 
