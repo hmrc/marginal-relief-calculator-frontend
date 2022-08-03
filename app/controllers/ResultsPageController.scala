@@ -49,14 +49,14 @@ class ResultsPageController @Inject() (
     val maybeAssociatedCompanies: Option[AssociatedCompaniesForm] = request.userAnswers.get(AssociatedCompaniesPage)
     val maybeDistributionsIncludedForm: Option[DistributionsIncludedForm] =
       request.userAnswers.get(DistributionsIncludedPage)
-    (maybeAccountingPeriodForm, maybeTaxableProfit, maybeDistributionsIncludedForm) match {
-      case (Some(accountingPeriodForm), Some(taxableProfit), Some(distributionsIncludedForm)) =>
+    (maybeAccountingPeriodForm, maybeTaxableProfit) match {
+      case (Some(accountingPeriodForm), Some(taxableProfit)) =>
         marginalReliefCalculatorConnector
           .calculate(
             accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodForm.accountingPeriodEndDate.get,
             taxableProfit.toDouble,
-            distributionsIncludedForm.distributionsIncludedAmount.map(_.toDouble),
+            maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount.map(_.toDouble)),
             maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount)
           )
           .map { marginalReliefResult =>
@@ -66,7 +66,7 @@ class ResultsPageController @Inject() (
                 marginalReliefResult,
                 accountingPeriodForm,
                 taxableProfit,
-                distributionsIncludedForm.distributionsIncludedAmount.getOrElse(0),
+                maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0),
                 maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
               )
             )
@@ -75,8 +75,7 @@ class ResultsPageController @Inject() (
         throw new BadRequestException(
           "Some of the input parameters are missing. Missing parameters: " + List(
             (AccountingPeriodPage, maybeAccountingPeriodForm),
-            (TaxableProfitPage, maybeTaxableProfit),
-            (DistributionsIncludedPage, maybeDistributionsIncludedForm)
+            (TaxableProfitPage, maybeTaxableProfit)
           ).filter(_._2.isEmpty).map(_._1).mkString(",")
         )
     }
