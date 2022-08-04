@@ -37,12 +37,12 @@
     } else if ( m.adjustedAugmentedProfit > m.adjustedUpperThreshold ) {
         govukPanel(Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
-            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit" else "resultsPage.yourProfitsAboveMarginalReliefLimit"))
+            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAboveMarginalReliefLimit" else "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
         ))
     } else if( m.adjustedAugmentedProfit < m.adjustedLowerThreshold ) {
         govukPanel(Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
-            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit" else "resultsPage.yourProfitsBelowMarginalReliefLimit"))
+            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsBelowMarginalReliefLimit" else "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
         ))
     }
 }
