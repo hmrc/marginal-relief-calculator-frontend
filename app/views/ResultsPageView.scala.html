@@ -40,7 +40,7 @@
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAboveMarginalReliefLimit" else "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
         ))
-    } else if( m.adjustedAugmentedProfit < m.adjustedLowerThreshold ) {
+    } else if( m.adjustedAugmentedProfit <= m.adjustedLowerThreshold ) {
         govukPanel(Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsBelowMarginalReliefLimit" else "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
