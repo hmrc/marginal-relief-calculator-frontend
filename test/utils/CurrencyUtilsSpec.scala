@@ -43,13 +43,17 @@ class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenProper
   }
 
   "format" - {
-    "should format the given number in UK locale and prefix with £ symbol" in {
-      val table = Table(
+    "should format the given number in GBP currency" in {
+      val table = Table[Double, String](
         ("input", "expected"),
         (0, "£0"),
+        (0.01, "£0.01"),
+        (0.1, "£0.10"),
         (1, "£1"),
         (100, "£100"),
         (1000, "£1,000"),
+        (1000.01, "£1,000.01"),
+        (1000.1, "£1,000.10"),
         (10000, "£10,000"),
         (100000, "£100,000"),
         (1000000, "£1,000,000")

@@ -16,13 +16,18 @@
 
 package utils
 
-import java.text.NumberFormat
-import java.util.Locale
+import java.util.{ Currency, Locale }
 
 object CurrencyUtils {
 
+  private val currencyFormatter = {
+    val f = java.text.NumberFormat.getCurrencyInstance
+    f.setCurrency(Currency.getInstance(Locale.UK))
+    f
+  }
+
   def format(value: Number): String =
-    "£" + NumberFormat.getNumberInstance(Locale.UK).format(value)
+    currencyFormatter.format(value).replace(".00", "")
 
   def roundUp(value: BigDecimal): Double =
     value.setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
