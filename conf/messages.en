@@ -136,6 +136,7 @@ resultsPage.companysProfit = Company''s Profit
 resultsPage.associatedCompanies = Associated companies
 resultsPage.distributions = Distributions
 resultsPage.yourDetails = Your details
+resultsPage.runAnotherCalculation = Run another calculation
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
