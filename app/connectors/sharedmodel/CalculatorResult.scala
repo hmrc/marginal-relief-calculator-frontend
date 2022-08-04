@@ -18,6 +18,7 @@ package connectors.sharedmodel
 
 import julienrf.json.derived
 import play.api.libs.json.{ OFormat, __ }
+import utils.CurrencyUtils.roundUp
 
 sealed trait TaxDetails
 case class FlatRate(year: Int, corporationTax: Double, taxRate: Double, adjustedProfit: Double) extends TaxDetails
@@ -33,7 +34,7 @@ case class MarginalRate(
   adjustedLowerThreshold: Double,
   adjustedUpperThreshold: Double
 ) extends TaxDetails {
-  def adjustedAugmentedProfit: Double = adjustedProfit + adjustedDistributions
+  def adjustedAugmentedProfit: Double = roundUp(BigDecimal(adjustedProfit) + BigDecimal(adjustedDistributions))
 }
 
 object TaxDetails {
