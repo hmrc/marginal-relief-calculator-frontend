@@ -27,7 +27,10 @@ object CurrencyUtils {
   }
 
   def format(value: Number): String =
-    currencyFormatter.format(value).replace(".00", "")
+    currencyFormatter
+      .format(value)
+      .replace("GBP", "£")
+      .replace(".00", "")
 
   def roundUp(value: BigDecimal): Double =
     value.setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
