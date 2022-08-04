@@ -78,7 +78,13 @@ case class DualResult(
   year2: TaxDetails
 ) extends CalculatorResult {
   override def totalDays: Int = year1.days + year2.days
-  override def totalMarginalRelief: Double = year1.marginalRelief + year2.marginalRelief
-  override def totalCorporationTaxBeforeMR: Double = year1.corporationTaxBeforeMR + year2.corporationTaxBeforeMR
-  override def totalCorporationTax: Double = year1.corporationTax + year2.corporationTax
+  override def totalMarginalRelief: Double = roundUp(
+    BigDecimal(year1.marginalRelief) + BigDecimal(year2.marginalRelief)
+  )
+  override def totalCorporationTaxBeforeMR: Double = roundUp(
+    BigDecimal(year1.corporationTaxBeforeMR) + BigDecimal(year2.corporationTaxBeforeMR)
+  )
+  override def totalCorporationTax: Double = roundUp(
+    BigDecimal(year1.corporationTax) + BigDecimal(year2.corporationTax)
+  )
 }

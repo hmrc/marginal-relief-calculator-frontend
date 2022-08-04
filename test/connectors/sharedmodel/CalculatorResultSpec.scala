@@ -18,6 +18,7 @@ package connectors.sharedmodel
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
+import utils.CurrencyUtils.roundUp
 
 class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
@@ -28,12 +29,11 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
       "should return 0" in {
         flatRate.marginalRelief shouldBe 0
       }
-      "should return corporation tax" in {
-        flatRate.corporationTaxBeforeMR shouldBe 11
-      }
     }
     "corporationTaxBeforeMR" - {
-      "sh"
+      "should return corporation tax" in {
+        flatRate.corporationTaxBeforeMR shouldBe flatRate.corporationTax
+      }
     }
   }
 
@@ -42,7 +42,9 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
   "MarginalRate" - {
     "adjustedAugmentedProfit" - {
       "should return sum of adjustedProfit and adjustedDistributions" in {
-        marginalRate.adjustedAugmentedProfit shouldBe 15
+        marginalRate.adjustedAugmentedProfit shouldBe roundUp(
+          BigDecimal(marginalRate.adjustedProfit) + BigDecimal(marginalRate.adjustedDistributions)
+        )
       }
     }
   }
@@ -86,19 +88,25 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
     "totalMarginalRelief" - {
       "should be the total marginal relief from underlying tax details" in {
-        dualResult.totalMarginalRelief shouldBe flatRate.marginalRelief + marginalRate.marginalRelief
+        dualResult.totalMarginalRelief shouldBe roundUp(
+          BigDecimal(flatRate.marginalRelief) + BigDecimal(marginalRate.marginalRelief)
+        )
       }
     }
 
     "totalCorporationTax" - {
       "should be the total corporation tax from underlying tax details" in {
-        dualResult.totalCorporationTax shouldBe flatRate.corporationTax + marginalRate.corporationTax
+        dualResult.totalCorporationTax shouldBe roundUp(
+          BigDecimal(flatRate.corporationTax) + BigDecimal(marginalRate.corporationTax)
+        )
       }
     }
 
     "totalCorporationTaxBeforeMR" - {
       "should be the total corporation tax before MR from underlying tax details" in {
-        dualResult.totalCorporationTaxBeforeMR shouldBe flatRate.corporationTaxBeforeMR + marginalRate.corporationTaxBeforeMR
+        dualResult.totalCorporationTaxBeforeMR shouldBe roundUp(
+          BigDecimal(flatRate.corporationTaxBeforeMR) + BigDecimal(marginalRate.corporationTaxBeforeMR)
+        )
       }
     }
   }
