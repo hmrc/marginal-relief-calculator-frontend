@@ -35,7 +35,7 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
             "distributionsIncludedAmount.error.required",
             "distributionsIncludedAmount.error.doNotUseDecimals",
             "distributionsIncludedAmount.error.nonNumeric"
-          ).verifying(inRange(1, 2147483647, "distributionsIncludedAmount.error.outOfRange"))
+          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(1000000000,"error.greaterThanOneBillion"))
             .withPrefix("distributionsIncludedAmount"),
           enumerable[DistributionsIncluded]().withPrefix("distributionsIncluded"),
           _ == DistributionsIncluded.Yes

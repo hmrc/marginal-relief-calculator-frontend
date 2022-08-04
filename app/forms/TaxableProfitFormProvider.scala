@@ -28,6 +28,6 @@ class TaxableProfitFormProvider @Inject() extends Mappings {
         "taxableProfit.error.required",
         "taxableProfit.error.doNotUseDecimals",
         "taxableProfit.error.nonNumeric"
-      )
+      ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(1000000000,"error.greaterThanOneBillion"))
     )
 }
