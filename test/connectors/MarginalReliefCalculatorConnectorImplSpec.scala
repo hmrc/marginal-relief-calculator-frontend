@@ -77,13 +77,13 @@ class MarginalReliefCalculatorConnectorImplSpec
       "should return successful response" in new Fixture {
         val table = Table(
           "marginalReliefResult",
-          SingleResult(FlatRate(1111, 1.0, 11.0, 111.0)),
+          SingleResult(FlatRate(1111, 1.0, 11.0, 111.0, 0)),
           DualResult(
             MarginalRate(
-              1111, 1.0, 11.0, 111.0, 1111.0, 11111.0, 0, 0, 0, 0
+              1111, 1.0, 11.0, 111.0, 1111.0, 11111.0, 0, 0, 0, 0, 0
             ),
             MarginalRate(
-              2222, 2.0, 22.0, 222.0, 2222.0, 22222.0, 0, 0, 0, 0
+              2222, 2.0, 22.0, 222.0, 2222.0, 22222.0, 0, 0, 0, 0, 0
             )
           )
         )

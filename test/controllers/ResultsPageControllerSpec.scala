@@ -55,7 +55,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           } yield u4).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
@@ -97,7 +97,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           } yield u3).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),

@@ -20,8 +20,18 @@ import julienrf.json.derived
 import play.api.libs.json.{ OFormat, __ }
 import utils.CurrencyUtils.roundUp
 
-sealed trait TaxDetails
-case class FlatRate(year: Int, corporationTax: Double, taxRate: Double, adjustedProfit: Double) extends TaxDetails
+sealed trait TaxDetails {
+  def year: Int
+  def days: Int
+  def marginalRelief: Double
+  def corporationTaxBeforeMR: Double
+  def corporationTax: Double
+}
+case class FlatRate(year: Int, corporationTax: Double, taxRate: Double, adjustedProfit: Double, days: Int)
+    extends TaxDetails {
+  override def marginalRelief: Double = 0
+  override def corporationTaxBeforeMR: Double = corporationTax
+}
 case class MarginalRate(
   year: Int,
   corporationTaxBeforeMR: Double,
@@ -32,7 +42,8 @@ case class MarginalRate(
   adjustedProfit: Double,
   adjustedDistributions: Double,
   adjustedLowerThreshold: Double,
-  adjustedUpperThreshold: Double
+  adjustedUpperThreshold: Double,
+  days: Int
 ) extends TaxDetails {
   def adjustedAugmentedProfit: Double = roundUp(BigDecimal(adjustedProfit) + BigDecimal(adjustedDistributions))
 }
@@ -42,7 +53,12 @@ object TaxDetails {
     derived.flat.oformat[TaxDetails]((__ \ "type").format[String])
 }
 
-sealed trait CalculatorResult
+sealed trait CalculatorResult {
+  def totalDays: Int
+  def totalMarginalRelief: Double
+  def totalCorporationTaxBeforeMR: Double
+  def totalCorporationTax: Double
+}
 object CalculatorResult {
   implicit val format: OFormat[CalculatorResult] =
     derived.flat.oformat[CalculatorResult]((__ \ "type").format[String])
@@ -50,9 +66,19 @@ object CalculatorResult {
 
 case class SingleResult(
   details: TaxDetails
-) extends CalculatorResult
+) extends CalculatorResult {
+  override def totalDays: Int = details.days
+  override def totalMarginalRelief: Double = details.marginalRelief
+  override def totalCorporationTax: Double = details.corporationTax
+  override def totalCorporationTaxBeforeMR: Double = details.corporationTaxBeforeMR
+}
 
 case class DualResult(
   year1: TaxDetails,
   year2: TaxDetails
-) extends CalculatorResult
+) extends CalculatorResult {
+  override def totalDays: Int = year1.days + year2.days
+  override def totalMarginalRelief: Double = year1.marginalRelief + year2.marginalRelief
+  override def totalCorporationTaxBeforeMR: Double = year1.corporationTaxBeforeMR + year2.corporationTaxBeforeMR
+  override def totalCorporationTax: Double = year1.corporationTax + year2.corporationTax
+}

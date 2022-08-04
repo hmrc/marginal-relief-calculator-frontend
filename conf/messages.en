@@ -14,6 +14,8 @@ site.from.to = {0} to {1}
 site.home = Home
 site.corporationTax = Corporation Tax
 site.marginalReliefForCorporationTax = Marginal Relief for Corporation Tax
+site.marginalRelief = Marginal Relief
+site.overall = Overall
 
 date.day = Day
 date.month = Month
@@ -136,6 +138,12 @@ resultsPage.companysProfit = Company''s Profit
 resultsPage.associatedCompanies = Associated companies
 resultsPage.distributions = Distributions
 resultsPage.yourDetails = Your details
+resultsPage.corporationTaxLiability = Corporation Tax liability
+resultsPage.corporationTaxReducedFrom = Reduced from {0} after {1} Marginal Relief
+resultsPage.daysAllocatedToFinancialYear = Days allocated to financial year
+resultsPage.corporationTaxLiabilityBeforeMarginalRelief = Corporation Tax liability before Marginal Relief
+resultsPage.corporationTaxLiabilityAfterMarginalRelief = Corporation Tax liability after Marginal Relief
+resultsPage.daysAllocatedToEachFinancialYear = Days allocated to each financial year
 resultsPage.runAnotherCalculation = Run another calculation
 
 associatedCompanies.title = Number of associated companies

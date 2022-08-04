@@ -108,6 +108,85 @@
     </dl>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
+    <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
+
+    <h2 class="govuk-heading-l" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalCorporationTax)}</h2>
+
+    @if(calculatorResult.totalMarginalRelief > 0) {
+        <p class="govuk-body">@messages("resultsPage.corporationTaxReducedFrom", CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR), CurrencyUtils.format(calculatorResult.totalMarginalRelief))</p>
+    }
+
+    @{calculatorResult match {
+        case SingleResult(details: TaxDetails) =>
+            govukTable(Table(
+                rows = Seq(
+                    Seq(
+                        TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                        TableRow(content = Text(details.days.toString))
+                    ),
+                    Seq(
+                        TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
+                        TableRow(content = Text(CurrencyUtils.format(details.corporationTaxBeforeMR)))
+                    ),
+                    Seq(
+                        TableRow(content = Text(messages("site.marginalRelief"))),
+                        TableRow(content = Text((if(details.marginalRelief > 0) "-" else "") + CurrencyUtils.format(details.marginalRelief)))
+                    ),
+                    Seq(
+                        TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
+                        TableRow(content = Text(CurrencyUtils.format(details.corporationTax)))
+                    )
+                ),
+                head = Some(
+                            Seq(
+                                HeadCell(content = Text("")),
+                                HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
+                            )
+                        ),
+                caption = None,
+                firstCellIsHeader = true
+            ))
+        case d @ DualResult(year1: TaxDetails, year2: TaxDetails) =>
+            govukTable(Table(
+                rows = Seq(
+                    Seq(
+                        TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
+                        TableRow(content = Text(year1.days.toString)),
+                        TableRow(content = Text(year2.days.toString)),
+                        TableRow(content = Text(d.totalDays.toString)),
+                    ),
+                    Seq(
+                        TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
+                        TableRow(content = Text(CurrencyUtils.format(year1.corporationTaxBeforeMR))),
+                        TableRow(content = Text(CurrencyUtils.format(year2.corporationTaxBeforeMR))),
+                        TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTaxBeforeMR)))
+                    ),
+                    Seq(
+                        TableRow(content = Text(messages("site.marginalRelief"))),
+                        TableRow(content = Text((if(year1.marginalRelief > 0) "-" else "") + CurrencyUtils.format(year1.marginalRelief))),
+                        TableRow(content = Text((if(year2.marginalRelief > 0) "-" else "") + CurrencyUtils.format(year2.marginalRelief))),
+                        TableRow(content = Text((if(d.totalMarginalRelief > 0) "-" else "") + CurrencyUtils.format(d.totalMarginalRelief)))
+                    ),
+                    Seq(
+                        TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
+                        TableRow(content = Text(CurrencyUtils.format(year1.corporationTax))),
+                        TableRow(content = Text(CurrencyUtils.format(year2.corporationTax))),
+                        TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTax)))
+                    )
+                ),
+                head = Some(
+                            Seq(
+                                HeadCell( content = Text("")),
+                                HeadCell( content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString))),
+                                HeadCell( content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString))),
+                                HeadCell( content = Text(messages("site.overall")))
+                            )
+                        ),
+                caption = None,
+                firstCellIsHeader = true
+            ))
+    }}
+
     @govukButton(
         Button(
             href = Some(routes.IndexController.onPageLoad.url),
