@@ -37,21 +37,21 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
             "associatedCompaniesCount.error.required",
             "associatedCompaniesCount.error.wholeNumber",
             "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan"))
+          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
         ),
         "associatedCompaniesFY1Count" -> optional(
           int(
             "associatedCompaniesCount.error.required",
             "associatedCompaniesCount.error.wholeNumber",
             "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan"))
+          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
         ),
         "associatedCompaniesFY2Count" -> optional(
           int(
             "associatedCompaniesCount.error.required",
             "associatedCompaniesCount.error.wholeNumber",
             "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan"))
+          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
         )
       )(AssociatedCompaniesForm.apply)(AssociatedCompaniesForm.unapply)
     }

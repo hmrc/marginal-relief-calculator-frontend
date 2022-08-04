@@ -38,9 +38,9 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
-error.lessThanOne = Less than 1
-error.greaterThanOneBillion = Greater than 1 billion
-error.greaterThan = Greater than {0}
+error.greaterThanOneBillion = Enter an amount lower than 1000000000
+error.greaterThan99 = Enter an amount lower than 100
+error.lessThanOne = Enter an amount greater than 0
 
 index.title = marginal-relief-calculator-frontend
 index.heading = Calculate Marginal Relief for Corporation Tax
