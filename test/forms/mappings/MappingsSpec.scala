@@ -258,16 +258,6 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.errors must contain(FormError("value", "error.nonNumeric"))
     }
 
-    "must not bind when value is less than 1" in {
-      val result = testForm.bind(Map("value" -> "-1"))
-      result.errors must contain(FormError("value", "error.outOfRange", List(1, 1000000000)))
-    }
-
-    "must not bind when value is greater than 1 billion" in {
-      val result = testForm.bind(Map("value" -> 1000000001.toString))
-      result.errors must contain(FormError("value", "error.outOfRange", List(1, 1000000000)))
-    }
-
     "must not bind an empty value" in {
       val result = testForm.bind(Map("value" -> ""))
       result.errors must contain(FormError("value", "error.required"))

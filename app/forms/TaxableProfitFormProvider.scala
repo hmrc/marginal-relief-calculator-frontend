@@ -26,7 +26,6 @@ class TaxableProfitFormProvider @Inject() extends Mappings {
     Form(
       "value" -> positiveWholeAmount(
         "taxableProfit.error.required",
-        "taxableProfit.error.outOfRange",
         "taxableProfit.error.doNotUseDecimals",
         "taxableProfit.error.nonNumeric"
       )

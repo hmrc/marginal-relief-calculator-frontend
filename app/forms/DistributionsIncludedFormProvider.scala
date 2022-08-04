@@ -33,7 +33,6 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
         "distributionsIncludedAmount" -> conditional[Int, DistributionsIncluded](
           positiveWholeAmount(
             "distributionsIncludedAmount.error.required",
-            "distributionsIncludedAmount.error.outOfRange",
             "distributionsIncludedAmount.error.doNotUseDecimals",
             "distributionsIncludedAmount.error.nonNumeric"
           ).verifying(inRange(1, 2147483647, "distributionsIncludedAmount.error.outOfRange"))
