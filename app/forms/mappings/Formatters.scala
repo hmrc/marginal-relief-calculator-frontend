@@ -94,7 +94,7 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
-  private[mappings] def positiveAmountFormatter(
+  private[mappings] def wholeAmountFormatter(
     requiredKey: String,
     doNotUseDecimalsKey: String,
     nonNumericKey: String,
@@ -122,7 +122,7 @@ trait Formatters {
                          case s if s.matches(DecimalRegexp) =>
                            Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
                          case s if Try(s.toLong).isFailure => Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
-                         case s => s.toInt.asRight[Seq[FormError]]
+                         case s                            => s.toInt.asRight[Seq[FormError]]
                        }
       } yield finalResult
 

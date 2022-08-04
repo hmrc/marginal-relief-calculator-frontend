@@ -220,7 +220,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
 
     val testForm: Form[Int] =
       Form(
-        "value" -> positiveWholeAmount()
+        "value" -> wholeAmount()
       )
 
     "must bind a valid positive whole amount" in {
