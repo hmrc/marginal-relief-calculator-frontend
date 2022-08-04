@@ -33,7 +33,6 @@ import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
 import java.time.LocalDate
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.util.Success
 
 class AccountingPeriodController @Inject() (
   override val messagesApi: MessagesApi,
