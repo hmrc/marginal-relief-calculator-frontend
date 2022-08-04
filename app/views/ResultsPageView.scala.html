@@ -23,7 +23,8 @@
 @this(
         layout: templates.Layout,
         govukPanel : GovukPanel,
-        govukTable : GovukTable
+        govukTable : GovukTable,
+        govukButton: GovukButton
 )
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
@@ -106,4 +107,12 @@
         </div>
     </dl>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    @govukButton(
+        Button(
+            href = Some(routes.IndexController.onPageLoad.url),
+            isStartButton = true,
+            content = Text(messages("resultsPage.runAnotherCalculation"))
+        )
+    )
 }
