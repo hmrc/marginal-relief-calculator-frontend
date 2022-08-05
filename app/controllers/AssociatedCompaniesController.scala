@@ -156,7 +156,6 @@ class AssociatedCompaniesController @Inject() (
       case (Some(accountingPeriodForm), Some(taxableProfit)) =>
         Future.successful(AccountingPeriodTaxableProfit(accountingPeriodForm, taxableProfit))
       case _ =>
-        logger.error("Missing values for AccountingPeriodPage and(or) TaxableProfitPage")
         Future.failed(new RuntimeException("Missing values for AccountingPeriodPage and(or) TaxableProfitPage"))
     }
   }
@@ -185,6 +184,7 @@ class AssociatedCompaniesController @Inject() (
   ): Future[Result] =
     a match {
       case DontAsk =>
+        logger.info("Associated companies ask parameter is 'DontAsk'. Redirecting to CheckYourAnswers page")
         Future.successful(Redirect(routes.CheckYourAnswersController.onPageLoad.url))
       case p: AskAssociatedCompaniesParameter => f(p)
     }

@@ -58,7 +58,10 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[TaxableProfitView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
+          request,
+          messages(application)
+        ).toString.filterAndTrim
       }
     }
 
@@ -76,10 +79,10 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(validAnswer), NormalMode)(
+        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode)(
           request,
           messages(application)
-        ).toString
+        ).toString.filterAndTrim
       }
     }
 

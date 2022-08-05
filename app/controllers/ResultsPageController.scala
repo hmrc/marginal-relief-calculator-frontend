@@ -19,7 +19,6 @@ package controllers
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
-import org.slf4j.LoggerFactory
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
@@ -41,8 +40,6 @@ class ResultsPageController @Inject() (
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  private val logger = LoggerFactory.getLogger(getClass)
-
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val maybeAccountingPeriodForm: Option[AccountingPeriodForm] = request.userAnswers.get(AccountingPeriodPage)
     val maybeTaxableProfit: Option[Int] = request.userAnswers.get(TaxableProfitPage)
@@ -60,7 +57,6 @@ class ResultsPageController @Inject() (
             maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount)
           )
           .map { marginalReliefResult =>
-            logger.info(s"received results: $marginalReliefResult")
             Ok(
               view(
                 marginalReliefResult,
@@ -73,10 +69,11 @@ class ResultsPageController @Inject() (
           }
       case _ =>
         throw new BadRequestException(
-          "Some of the input parameters are missing. Missing parameters: " + List(
-            (AccountingPeriodPage, maybeAccountingPeriodForm),
-            (TaxableProfitPage, maybeTaxableProfit)
-          ).filter(_._2.isEmpty).map(_._1).mkString(",")
+          "One or more user parameters required for calculation are missing. This could be either because the session has expired or " +
+            "the user navigated directly to the results page. Missing parameters are [" + List(
+              (AccountingPeriodPage, maybeAccountingPeriodForm),
+              (TaxableProfitPage, maybeTaxableProfit)
+            ).filter(_._2.isEmpty).map(_._1).mkString(",") + "]"
         )
     }
   }

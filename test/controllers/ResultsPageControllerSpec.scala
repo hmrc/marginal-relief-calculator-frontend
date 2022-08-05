@@ -110,7 +110,9 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           val request = FakeRequest(GET, resultsPageRoute)
           val result = route(application, request).value.failed.futureValue
           result mustBe a[BadRequestException]
-          result.getMessage mustBe "Some of the input parameters are missing. Missing parameters: accountingPeriod"
+          result.getMessage mustBe "One or more user parameters required for calculation are missing. " +
+            "This could be either because the session has expired or the user navigated directly to the results page. " +
+            "Missing parameters are [accountingPeriod]"
         }
       }
     }
