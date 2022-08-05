@@ -56,7 +56,10 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[DistributionsIncludedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
+          request,
+          messages(application)
+        ).toString.filterAndTrim
       }
     }
 
@@ -78,13 +81,13 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(
+        contentAsString(result).filterAndTrim mustEqual view(
           form.fill(DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1))),
           NormalMode
         )(
           request,
           messages(application)
-        ).toString
+        ).toString.filterAndTrim
       }
     }
 
@@ -130,7 +133,10 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result).filterAndTrim mustEqual view(boundForm, NormalMode)(
+          request,
+          messages(application)
+        ).toString.filterAndTrim
       }
     }
 

@@ -20,8 +20,6 @@ import controllers.actions._
 import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
 import models.requests.OptionalDataRequest
 import models.{ CheckMode, Mode, NormalMode, UserAnswers }
-
-import javax.inject.Inject
 import navigation.Navigator
 import org.slf4j.{ Logger, LoggerFactory }
 import pages.AccountingPeriodPage
@@ -32,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
 import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
 class AccountingPeriodController @Inject() (
@@ -92,23 +91,17 @@ class AccountingPeriodController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => {
-            logger.error(
-              s"Failed to bind request for marginal relief calculation [errors=${formWithErrors.errors.map(_.message)}]"
-            )
-            Future.successful(BadRequest(view(formWithErrors, mode)))
-          },
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           form => {
-            logger.info(
-              s"Received request for marginal relief calculation [data=${request.userAnswers.map(_.data.toString()).getOrElse("")}]"
-            )
-
             // setting defaults for missing fields
-            val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate =
-              form.accountingPeriodEndDate.orElse(Some(form.accountingPeriodStartDate.plusYears(1).minusDays(1)))
-            )
+            val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate = form.accountingPeriodEndDate.orElse {
+              val endDate = form.accountingPeriodStartDate.plusYears(1).minusDays(1)
+              logger.info(s"End date not provided, setting default end date to $endDate")
+              Some(endDate)
+            })
 
             if (accountingPeriodIsIrrelevant(formWithAccountingPeriodEnd)) {
+              logger.info("Accounting period is irrelevant as it lies before the beginning of the 2023 tax year")
               Future.successful(
                 Redirect(
                   routes.AccountingPeriodController.irrelevantPeriodPage()

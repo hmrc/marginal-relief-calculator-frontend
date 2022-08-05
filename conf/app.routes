@@ -35,11 +35,11 @@ POST       /change-taxable-profit               controllers.TaxableProfitControl
 
 GET        /distribution                        controllers.DistributionController.onPageLoad(mode: Mode = NormalMode)
 POST       /distribution                        controllers.DistributionController.onSubmit(mode: Mode = NormalMode)
-GET        /change-distribution                  controllers.DistributionController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-distribution                  controllers.DistributionController.onSubmit(mode: Mode = CheckMode)
+GET        /change-distribution                 controllers.DistributionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-distribution                 controllers.DistributionController.onSubmit(mode: Mode = CheckMode)
 
-GET        /distributionsIncluded                        controllers.DistributionsIncludedController.onPageLoad(mode: Mode = NormalMode)
-POST       /distributionsIncluded                        controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
-GET        /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
-POST       /changeDistributionsIncluded                  controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
+GET        /distributions-included              controllers.DistributionsIncludedController.onPageLoad(mode: Mode = NormalMode)
+POST       /distributions-included              controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
+GET        /change-distributions-included       controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-distributions-included       controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
 
