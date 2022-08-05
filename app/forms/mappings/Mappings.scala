@@ -36,11 +36,12 @@ trait Mappings extends Formatters with Constraints {
 
   protected def wholeAmount(
     requiredKey: String = "error.required",
+    outOfRangeKey: String = "error.outOfRange",
     doNotUseDecimalsKey: String = "error.wholeNumber",
     nonNumericKey: String = "error.nonNumeric",
     args: Seq[String] = Seq.empty
   ): FieldMapping[Int] =
-    of(wholeAmountFormatter(requiredKey, doNotUseDecimalsKey, nonNumericKey, args))
+    of(wholeAmountFormatter(requiredKey, outOfRangeKey, doNotUseDecimalsKey, nonNumericKey, args))
 
   protected def boolean(
     requiredKey: String = "error.required",

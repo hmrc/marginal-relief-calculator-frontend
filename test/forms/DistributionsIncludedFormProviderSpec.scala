@@ -16,12 +16,12 @@
 
 package forms
 
-import forms.behaviours.{ OptionFieldBehaviours, PositiveWholeAmountFieldBehaviours }
+import forms.behaviours.{ OptionFieldBehaviours, WholeAmountFieldBehaviours }
 import models.DistributionsIncluded
 import org.scalacheck.Shrink
 import play.api.data.FormError
 
-class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with PositiveWholeAmountFieldBehaviours {
+class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with WholeAmountFieldBehaviours {
   implicit val noShrinkLong: Shrink[Long] = Shrink.shrinkAny
 
   val form = new DistributionsIncludedFormProvider()()
@@ -50,14 +50,13 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with P
         intsInRangeWithCommas(minimum, maximum)
       )
 
-      behave like positiveWholeAmountField(
+      behave like wholeAmountField(
         form,
         fieldName,
         Map("distributionsIncluded" -> DistributionsIncluded.Yes.toString),
         nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
-        wholeNumberError = FormError(fieldName, "distributionsIncludedAmount.error.wholeNumber"),
         doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
-        outOfRangeError = FormError(fieldName, "distributionsIncludedAmount.error.outOfRange", List(1, maximum))
+        outOfRangeError = FormError(fieldName, "error.outOfRange", List(Int.MinValue, Int.MaxValue))
       )
 
       "bind to None when value empty" in {

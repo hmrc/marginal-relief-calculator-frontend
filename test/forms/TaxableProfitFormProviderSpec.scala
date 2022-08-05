@@ -16,10 +16,10 @@
 
 package forms
 
-import forms.behaviours.PositiveWholeAmountFieldBehaviours
+import forms.behaviours.WholeAmountFieldBehaviours
 import play.api.data.FormError
 
-class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
+class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
 
   val form = new TaxableProfitFormProvider()()
 
@@ -37,14 +37,13 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
       intsInRangeWithCommas(minimum, maximum)
     )
 
-    behave like positiveWholeAmountField(
+    behave like wholeAmountField(
       form,
       fieldName,
       Map.empty,
       nonNumericError = FormError(fieldName, "taxableProfit.error.nonNumeric"),
-      wholeNumberError = FormError(fieldName, "taxableProfit.error.wholeNumber"),
       doNotUseDecimalsError = FormError(fieldName, "taxableProfit.error.doNotUseDecimals"),
-      outOfRangeError = FormError(fieldName, "taxableProfit.error.outOfRange", List(1, 1000000000))
+      outOfRangeError = FormError(fieldName, "error.outOfRange", List(Int.MinValue, Int.MaxValue))
     )
 
     behave like mandatoryField(

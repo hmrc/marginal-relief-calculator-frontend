@@ -96,6 +96,7 @@ trait Formatters {
 
   private[mappings] def wholeAmountFormatter(
     requiredKey: String,
+    outOfRangeKey: String,
     doNotUseDecimalsKey: String,
     nonNumericKey: String,
     args: Seq[String] = Seq.empty
@@ -105,6 +106,7 @@ trait Formatters {
       private val DecimalRegexp = """^-?(\d*\.\d*)$"""
       private val AmountWithCommas = """^\d{0,3}[,]?(,\d{3})*$"""
       private val TrailingZeroesAfterDecimal = """[.][0]+$"""
+      private val WholeNumber = """^[-+]?\d*$"""
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
@@ -121,8 +123,13 @@ trait Formatters {
         finalResult <- resultWithoutCommas match {
                          case s if s.matches(DecimalRegexp) =>
                            Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
-                         case s if Try(s.toLong).isFailure => Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
-                         case s                            => s.toInt.asRight[Seq[FormError]]
+                         case s if Try(s.toLong).isFailure && !s.matches(WholeNumber) =>
+                           Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
+                         case s if Try(s.toLong).isFailure =>
+                           Seq(FormError(key, outOfRangeKey, Seq(Int.MinValue, Int.MaxValue))).asLeft[Int]
+                         case s if s.toLong < Int.MinValue || s.toLong > Int.MaxValue =>
+                           Seq(FormError(key, outOfRangeKey, Seq(Int.MinValue, Int.MaxValue))).asLeft[Int]
+                         case s => s.toInt.asRight[Seq[FormError]]
                        }
       } yield finalResult
 

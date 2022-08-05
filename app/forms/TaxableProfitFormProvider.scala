@@ -26,6 +26,7 @@ class TaxableProfitFormProvider @Inject() extends Mappings {
     Form(
       "value" -> wholeAmount(
         "taxableProfit.error.required",
+        "error.outOfRange",
         "taxableProfit.error.doNotUseDecimals",
         "taxableProfit.error.nonNumeric"
       ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(1000000000, "error.greaterThanOneBillion"))
