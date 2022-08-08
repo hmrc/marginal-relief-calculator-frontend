@@ -21,6 +21,7 @@ import forms.mappings.Mappings
 import play.api.data.Form
 import models.DistributionsIncluded
 import play.api.data.Forms.mapping
+import utils.ConstraintsUtils.ONE_BILLION
 
 class DistributionsIncludedFormProvider @Inject() extends Mappings {
   def apply(): Form[DistributionsIncludedForm] =
@@ -31,12 +32,12 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
           "distributionsIncluded.error.invalid"
         ),
         "distributionsIncludedAmount" -> conditional[Int, DistributionsIncluded](
-          positiveWholeAmount(
+          wholeAmount(
             "distributionsIncludedAmount.error.required",
-            "distributionsIncludedAmount.error.outOfRange",
+            "error.outOfRange",
             "distributionsIncludedAmount.error.doNotUseDecimals",
             "distributionsIncludedAmount.error.nonNumeric"
-          ).verifying(inRange(1, 2147483647, "distributionsIncludedAmount.error.outOfRange"))
+          ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(ONE_BILLION, "error.greaterThanOneBillion"))
             .withPrefix("distributionsIncludedAmount"),
           enumerable[DistributionsIncluded]().withPrefix("distributionsIncluded"),
           _ == DistributionsIncluded.Yes

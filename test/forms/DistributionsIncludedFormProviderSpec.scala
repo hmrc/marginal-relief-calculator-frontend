@@ -16,12 +16,13 @@
 
 package forms
 
-import forms.behaviours.{ OptionFieldBehaviours, PositiveWholeAmountFieldBehaviours }
+import forms.behaviours.{ OptionFieldBehaviours, WholeAmountFieldBehaviours }
 import models.DistributionsIncluded
 import org.scalacheck.Shrink
 import play.api.data.FormError
+import utils.ConstraintsUtils.ONE_BILLION
 
-class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with PositiveWholeAmountFieldBehaviours {
+class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with WholeAmountFieldBehaviours {
   implicit val noShrinkLong: Shrink[Long] = Shrink.shrinkAny
 
   val form = new DistributionsIncludedFormProvider()()
@@ -41,7 +42,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with P
       val fieldName = "distributionsIncludedAmount"
 
       val minimum = 1
-      val maximum = 1000000000
+      val maximum = ONE_BILLION
 
       behave like fieldThatBindsValidData(
         form,
@@ -50,14 +51,13 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with P
         intsInRangeWithCommas(minimum, maximum)
       )
 
-      behave like positiveWholeAmountField(
+      behave like wholeAmountField(
         form,
         fieldName,
         Map("distributionsIncluded" -> DistributionsIncluded.Yes.toString),
         nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
-        wholeNumberError = FormError(fieldName, "distributionsIncludedAmount.error.wholeNumber"),
         doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
-        outOfRangeError = FormError(fieldName, "distributionsIncludedAmount.error.outOfRange", List(1, maximum))
+        outOfRangeError = FormError(fieldName, "error.outOfRange", List(Int.MinValue, Int.MaxValue))
       )
 
       "bind to None when value empty" in {
@@ -65,6 +65,24 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with P
         result.hasErrors mustBe true
         result.errors mustBe Seq(
           FormError("distributionsIncludedAmount", "distributionsIncludedAmount.error.required")
+        )
+      }
+
+      "return greater than billion error" in {
+        val result = form.bind(
+          buildDataMap(DistributionsIncluded.Yes, "distributionsIncludedAmount" -> (ONE_BILLION.toLong + 1).toString)
+        )
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("distributionsIncludedAmount", "error.greaterThanOneBillion", List(ONE_BILLION))
+        )
+      }
+
+      "return less than one error" in {
+        val result = form.bind(buildDataMap(DistributionsIncluded.Yes, "distributionsIncludedAmount" -> 0.toString))
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("distributionsIncludedAmount", "error.lessThanOne", List(1))
         )
       }
     }

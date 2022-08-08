@@ -19,18 +19,17 @@ package forms.behaviours
 import org.scalacheck.Shrink
 import play.api.data.{ Form, FormError }
 
-trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
+trait WholeAmountFieldBehaviours extends FieldBehaviours {
 
   implicit val noShrinkBigInt: Shrink[BigInt] = Shrink.shrinkAny
   implicit val noShrinkBigDecimal: Shrink[BigDecimal] = Shrink.shrinkAny
 
-  def positiveWholeAmountField(
+  def wholeAmountField(
     form: Form[_],
     fieldName: String,
     dependentFields: Map[String, String],
     nonNumericError: FormError,
     doNotUseDecimalsError: FormError,
-    wholeNumberError: FormError,
     outOfRangeError: FormError
   ): Unit = {
 
@@ -41,13 +40,6 @@ trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
       }
     }
 
-    "not bind negative values" in {
-      forAll(intsBelowValue(0) -> "negative") { negative =>
-        val result = form.bind(Map(fieldName -> negative.toString) ++ dependentFields).apply(fieldName)
-        result.errors must contain only outOfRangeError
-      }
-    }
-
     "not bind decimals" in {
       forAll(positiveDecimals -> "decimal") { decimal =>
         val result = form.bind(Map(fieldName -> decimal.toString) ++ dependentFields).apply(fieldName)
@@ -55,15 +47,15 @@ trait PositiveWholeAmountFieldBehaviours extends FieldBehaviours {
       }
     }
 
-    "not bind integers larger than Int.MaxValue" in {
-      forAll(positiveIntsLargerThanMaxValue -> "massiveInt") { num: BigInt =>
+    "not bind integers smaller than Int.MinValue" in {
+      forAll(intsSmallerThanMinValue -> "tinyInt") { num: BigInt =>
         val result = form.bind(Map(fieldName -> num.toString) ++ dependentFields).apply(fieldName)
         result.errors must contain only outOfRangeError
       }
     }
 
-    "not bind integers smaller than 1" in {
-      forAll(intsSmallerThanOne) { num: BigInt =>
+    "not bind integers larger than Int.MaxValue" in {
+      forAll(positiveIntsLargerThanMaxValue -> "massiveInt") { num: BigInt =>
         val result = form.bind(Map(fieldName -> num.toString) ++ dependentFields).apply(fieldName)
         result.errors must contain only outOfRangeError
       }

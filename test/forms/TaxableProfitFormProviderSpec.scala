@@ -16,10 +16,11 @@
 
 package forms
 
-import forms.behaviours.PositiveWholeAmountFieldBehaviours
+import forms.behaviours.WholeAmountFieldBehaviours
 import play.api.data.FormError
+import utils.ConstraintsUtils.ONE_BILLION
 
-class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
+class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
 
   val form = new TaxableProfitFormProvider()()
 
@@ -28,7 +29,7 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
     val fieldName = "value"
 
     val minimum = 0
-    val maximum = 1000000000
+    val maximum = ONE_BILLION
 
     behave like fieldThatBindsValidData(
       form,
@@ -37,14 +38,13 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
       intsInRangeWithCommas(minimum, maximum)
     )
 
-    behave like positiveWholeAmountField(
+    behave like wholeAmountField(
       form,
       fieldName,
       Map.empty,
       nonNumericError = FormError(fieldName, "taxableProfit.error.nonNumeric"),
-      wholeNumberError = FormError(fieldName, "taxableProfit.error.wholeNumber"),
       doNotUseDecimalsError = FormError(fieldName, "taxableProfit.error.doNotUseDecimals"),
-      outOfRangeError = FormError(fieldName, "taxableProfit.error.outOfRange", List(1, 1000000000))
+      outOfRangeError = FormError(fieldName, "error.outOfRange", List(Int.MinValue, Int.MaxValue))
     )
 
     behave like mandatoryField(
@@ -52,5 +52,29 @@ class TaxableProfitFormProviderSpec extends PositiveWholeAmountFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, "taxableProfit.error.required")
     )
+
+    "return greater than billion error" in {
+      val result = form.bind(
+        Map(
+          "value" -> (ONE_BILLION.toLong + 1).toString
+        )
+      )
+      result.hasErrors mustBe true
+      result.errors mustBe Seq(
+        FormError("value", "error.greaterThanOneBillion", List(ONE_BILLION))
+      )
+    }
+
+    "return less than one error" in {
+      val result = form.bind(
+        Map(
+          "value" -> 0.toString
+        )
+      )
+      result.hasErrors mustBe true
+      result.errors mustBe Seq(
+        FormError("value", "error.lessThanOne", List(1))
+      )
+    }
   }
 }

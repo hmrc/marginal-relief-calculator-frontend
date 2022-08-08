@@ -40,6 +40,10 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.greaterThanOneBillion = Enter an amount lower than 1000000000
+error.greaterThan99 = Enter an amount lower than 100
+error.lessThanOne = Enter an amount greater than 0
+error.outOfRange = Enter an amount that is between {0} and {1}
 
 index.title = marginal-relief-calculator-frontend
 index.heading = Calculate Marginal Relief for Corporation Tax
@@ -158,7 +162,6 @@ associatedCompanies.error.required = Select whether you have associated companie
 associatedCompanies.error.invalid = Select whether you have associated companies or not
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1
 associatedCompaniesCount.error.nonNumeric = Enter your Number of associated companies using numbers
-associatedCompaniesCount.error.outOfRange = Enter an amount between {0} and {1}
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1
 associatedCompanies.change.hidden = AssociatedCompanies
 

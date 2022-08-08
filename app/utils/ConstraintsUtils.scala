@@ -14,23 +14,8 @@
  * limitations under the License.
  */
 
-package forms
+package utils
 
-import forms.mappings.Mappings
-
-import javax.inject.Inject
-import play.api.data.Form
-import utils.ConstraintsUtils.ONE_BILLION
-
-class TaxableProfitFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[Int] =
-    Form(
-      "value" -> wholeAmount(
-        "taxableProfit.error.required",
-        "error.outOfRange",
-        "taxableProfit.error.doNotUseDecimals",
-        "taxableProfit.error.nonNumeric"
-      ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(ONE_BILLION, "error.greaterThanOneBillion"))
-    )
+object ConstraintsUtils {
+  val ONE_BILLION = 1000000000
 }

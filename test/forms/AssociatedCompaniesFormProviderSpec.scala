@@ -73,24 +73,24 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
         result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, None, None, None)
       }
 
-      "return out of range error when values are below 0" in {
-        forAll(intsBelowValue(-1) -> "belowMinValid") { integer =>
+      "return lessThanOne error when values are below 1" in {
+        forAll(intsBelowValue(1) -> "belowMinValid") { integer =>
           val result =
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
           result.errors mustBe Seq(
-            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(1, 99))
+            FormError(associatedCompaniesCountKey, List("error.lessThanOne"), List(1))
           )
         }
       }
 
-      "return out of range error when values are above 99" in {
-        forAll(intsAboveValue(100) -> "belowMinValid") { integer =>
+      "return greaterThan99 error when values are above 99" in {
+        forAll(intsAboveValue(99) -> "belowMaxValid") { integer =>
           val result =
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
           result.errors mustBe Seq(
-            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.outOfRange"), List(1, 99))
+            FormError(associatedCompaniesCountKey, List("error.greaterThan99"), List(99))
           )
         }
       }
