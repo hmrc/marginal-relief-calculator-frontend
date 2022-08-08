@@ -18,6 +18,7 @@ package forms
 
 import forms.behaviours.WholeAmountFieldBehaviours
 import play.api.data.FormError
+import utils.ConstraintsUtils.ONE_BILLION
 
 class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
 
@@ -28,7 +29,7 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
     val fieldName = "value"
 
     val minimum = 0
-    val maximum = 1000000000
+    val maximum = ONE_BILLION
 
     behave like fieldThatBindsValidData(
       form,

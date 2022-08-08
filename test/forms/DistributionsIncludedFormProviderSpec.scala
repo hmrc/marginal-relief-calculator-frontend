@@ -20,6 +20,7 @@ import forms.behaviours.{ OptionFieldBehaviours, WholeAmountFieldBehaviours }
 import models.DistributionsIncluded
 import org.scalacheck.Shrink
 import play.api.data.FormError
+import utils.ConstraintsUtils.ONE_BILLION
 
 class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with WholeAmountFieldBehaviours {
   implicit val noShrinkLong: Shrink[Long] = Shrink.shrinkAny
@@ -41,7 +42,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
       val fieldName = "distributionsIncludedAmount"
 
       val minimum = 1
-      val maximum = 1000000000
+      val maximum = ONE_BILLION
 
       behave like fieldThatBindsValidData(
         form,
