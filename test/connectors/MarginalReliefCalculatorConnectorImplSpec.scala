@@ -17,8 +17,9 @@
 package connectors
 
 import akka.actor.ActorSystem
-import com.github.tomakehurst.wiremock.client.WireMock
+import akka.http.scaladsl.model.StatusCodes
 import com.github.tomakehurst.wiremock.client.WireMock.{ verify => _, _ }
+import com.github.tomakehurst.wiremock.client.{ ResponseDefinitionBuilder, WireMock }
 import com.typesafe.config.ConfigFactory
 import config.FrontendAppConfig
 import connectors.sharedmodel._
@@ -29,12 +30,13 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import play.api.Configuration
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.hooks.HttpHook
 import uk.gov.hmrc.http.test.{ HttpClientSupport, WireMockSupport }
+import uk.gov.hmrc.http.{ GatewayTimeoutException, HeaderCarrier, HttpClient, UpstreamErrorResponse }
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.{ Duration, _ }
 
 class MarginalReliefCalculatorConnectorImplSpec
     extends AnyFreeSpec with Matchers with WireMockSupport with MockitoSugar with ScalaFutures with IntegrationPatience
@@ -51,7 +53,11 @@ class MarginalReliefCalculatorConnectorImplSpec
     val mockHttpHook: HttpHook = mock[HttpHook](withSettings.lenient)
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val config: Configuration = Configuration(
+    lazy val connectionTimeout: String = "60 seconds"
+    lazy val idleTimeout: String = "60 seconds"
+    lazy val requestTimeout: String = "60 seconds"
+
+    lazy val config: Configuration = Configuration(
       ConfigFactory
         .parseString(s"""
                         |microservice {
@@ -63,16 +69,103 @@ class MarginalReliefCalculatorConnectorImplSpec
                         |   }
                         | }
                         |}
+                        |
+                        |play.ws.timeout.connection = $connectionTimeout
+                        |play.ws.timeout.idle = $idleTimeout
+                        |play.ws.timeout.request = $requestTimeout
                         |""".stripMargin)
         .withFallback(ConfigFactory.load())
     )
-    val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
+    lazy val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
 
-    val marginalReliefCalculatorConnector: MarginalReliefCalculatorConnectorImpl =
+    lazy val httpClient: HttpClient = mkHttpClient(config.underlying)
+
+    lazy val marginalReliefCalculatorConnector: MarginalReliefCalculatorConnectorImpl =
       new MarginalReliefCalculatorConnectorImpl(httpClient, frontendAppConfig)
+
+    def stubCalculate(response: ResponseDefinitionBuilder): Unit =
+      wireMockServer.stubFor(
+        WireMock
+          .get(
+            s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
+                .map(
+                  "exemptDistributions" +
+                    "=" + _
+                )
+                .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
+          )
+          .willReturn(response)
+      )
   }
 
   "MarginalReliefCalculatorConnectorImpl" - {
+
+    "http errors" - {
+
+      "should handle idle timeout" in new Fixture {
+        override lazy val idleTimeout: String = "1 seconds"
+        stubCalculate(
+          aResponse()
+            .withBody(Json.toJson(SingleResult(FlatRate(1, 1, 1, 1, 1)): CalculatorResult).toString())
+            .withFixedDelay(((Duration(idleTimeout) + 1.seconds).toSeconds * 1000).toInt)
+        )
+        val result = marginalReliefCalculatorConnector
+          .calculate(
+            accountingPeriodStart,
+            accountingPeriodEnd,
+            profit,
+            exemptDistributions,
+            associatedCompanies
+          )
+          .failed
+          .futureValue
+        result shouldBe a[GatewayTimeoutException]
+      }
+
+      "should handle request timeout" in new Fixture {
+        override lazy val requestTimeout: String = "1 seconds"
+        stubCalculate(
+          aResponse()
+            .withBody(Json.toJson(SingleResult(FlatRate(1, 1, 1, 1, 1)): CalculatorResult).toString())
+            .withFixedDelay(((Duration(requestTimeout) + 1.seconds).toSeconds * 1000).toInt)
+        )
+        val result = marginalReliefCalculatorConnector
+          .calculate(
+            accountingPeriodStart,
+            accountingPeriodEnd,
+            profit,
+            exemptDistributions,
+            associatedCompanies
+          )
+          .failed
+          .futureValue
+        result shouldBe a[GatewayTimeoutException]
+      }
+
+      "should handle service unavailable error" in new Fixture {
+        stubCalculate(
+          aResponse()
+            .withStatus(StatusCodes.ServiceUnavailable.intValue)
+            .withBody("Service is unavailable")
+        )
+        val result = marginalReliefCalculatorConnector
+          .calculate(
+            accountingPeriodStart,
+            accountingPeriodEnd,
+            profit,
+            exemptDistributions,
+            associatedCompanies
+          )
+          .failed
+          .futureValue
+        result shouldBe a[UpstreamErrorResponse]
+        result
+          .asInstanceOf[UpstreamErrorResponse]
+          .getMessage shouldBe "GET of 'http://localhost:6001/calculate?accountingPeriodStart=1970-01-01&accountingPeriodEnd=1970-01-01&profit=1.0&exemptDistributions=1.0&associatedCompanies=1' returned 503. Response body: 'Service is unavailable'"
+        result.asInstanceOf[UpstreamErrorResponse].statusCode shouldBe StatusCodes.ServiceUnavailable.intValue
+      }
+    }
+
     "calculate" - {
       "should return successful response" in new Fixture {
         val table = Table(
@@ -89,17 +182,9 @@ class MarginalReliefCalculatorConnectorImplSpec
         )
 
         forAll(table) { calculatorResult: CalculatorResult =>
-          wireMockServer.stubFor(
-            WireMock
-              .get(
-                s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
-                    .map(
-                      "exemptDistributions" +
-                        "=" + _
-                    )
-                    .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
-              )
-              .willReturn(aResponse().withBody(Json.toJson(calculatorResult).toString()))
+          stubCalculate(
+            aResponse()
+              .withBody(Json.toJson(calculatorResult).toString())
           )
 
           val result: CalculatorResult = marginalReliefCalculatorConnector
