@@ -1,0 +1,51 @@
+/*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package pages
+
+import akka.http.scaladsl.model.StatusCodes
+import base.SpecBase
+import handlers.ErrorHandler
+import play.api.test.Helpers._
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{ GET, contentAsString, running, status }
+import views.html.ErrorTemplate
+
+class ErrorHandlerSpec extends SpecBase with MockitoSugar {
+  "Error handler renders view" in {
+    val application = applicationBuilder(None).build()
+    running(application) {
+
+      val errorHandler = application.injector.instanceOf[ErrorHandler]
+      val request = FakeRequest(GET, "/fake")
+      val statusCode = StatusCodes.NotFound
+      val message = "Please check that you have entered the correct web address."
+
+      val result = errorHandler.onClientError(request, statusCode.intValue, message)
+
+      status(result) mustEqual 404
+
+      val view = application.injector.instanceOf[ErrorTemplate]
+
+      contentAsString(result).filterAndTrim mustEqual view("Page not found - 404", "This page can’t be found", message)(
+        request,
+        messages(application)
+      ).toString.filterAndTrim
+
+    }
+  }
+}
