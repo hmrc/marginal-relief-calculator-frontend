@@ -67,6 +67,24 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
           FormError("distributionsIncludedAmount", "distributionsIncludedAmount.error.required")
         )
       }
+
+      "return greater than billion error" in {
+        val result = form.bind(
+          buildDataMap(DistributionsIncluded.Yes, "distributionsIncludedAmount" -> (ONE_BILLION.toLong + 1).toString)
+        )
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("distributionsIncludedAmount", "error.greaterThanOneBillion", List(ONE_BILLION))
+        )
+      }
+
+      "return less than one error" in {
+        val result = form.bind(buildDataMap(DistributionsIncluded.Yes, "distributionsIncludedAmount" -> 0.toString))
+        result.hasErrors mustBe true
+        result.errors mustBe Seq(
+          FormError("distributionsIncludedAmount", "error.lessThanOne", List(1))
+        )
+      }
     }
   }
 

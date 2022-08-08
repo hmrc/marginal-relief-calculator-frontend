@@ -52,5 +52,29 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, "taxableProfit.error.required")
     )
+
+    "return greater than billion error" in {
+      val result = form.bind(
+        Map(
+          "value" -> (ONE_BILLION.toLong + 1).toString
+        )
+      )
+      result.hasErrors mustBe true
+      result.errors mustBe Seq(
+        FormError("value", "error.greaterThanOneBillion", List(ONE_BILLION))
+      )
+    }
+
+    "return less than one error" in {
+      val result = form.bind(
+        Map(
+          "value" -> 0.toString
+        )
+      )
+      result.hasErrors mustBe true
+      result.errors mustBe Seq(
+        FormError("value", "error.lessThanOne", List(1))
+      )
+    }
   }
 }

@@ -73,8 +73,8 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
         result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, None, None, None)
       }
 
-      "return lessThanOne error when values are below 0" in {
-        forAll(intsBelowValue(-1) -> "belowMinValid") { integer =>
+      "return lessThanOne error when values are below 1" in {
+        forAll(intsBelowValue(1) -> "belowMinValid") { integer =>
           val result =
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
@@ -85,7 +85,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
       }
 
       "return greaterThan99 error when values are above 99" in {
-        forAll(intsAboveValue(99) -> "belowMinValid") { integer =>
+        forAll(intsAboveValue(99) -> "belowMaxValid") { integer =>
           val result =
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
