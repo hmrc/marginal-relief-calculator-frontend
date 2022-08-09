@@ -57,7 +57,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
         Map("distributionsIncluded" -> DistributionsIncluded.Yes.toString),
         nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
         doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
-        outOfRangeError = FormError(fieldName, "error.outOfRange", List(Int.MinValue, Int.MaxValue))
+        outOfRangeError = FormError(fieldName, "error.outOfRange", List(Long.MinValue, Long.MaxValue))
       )
 
       "bind to None when value empty" in {

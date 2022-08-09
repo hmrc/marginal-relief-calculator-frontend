@@ -42,7 +42,7 @@ class ResultsPageController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val maybeAccountingPeriodForm: Option[AccountingPeriodForm] = request.userAnswers.get(AccountingPeriodPage)
-    val maybeTaxableProfit: Option[Int] = request.userAnswers.get(TaxableProfitPage)
+    val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)
     val maybeAssociatedCompanies: Option[AssociatedCompaniesForm] = request.userAnswers.get(AssociatedCompaniesPage)
     val maybeDistributionsIncludedForm: Option[DistributionsIncludedForm] =
       request.userAnswers.get(DistributionsIncludedPage)
@@ -62,7 +62,7 @@ class ResultsPageController @Inject() (
                 marginalReliefResult,
                 accountingPeriodForm,
                 taxableProfit,
-                maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0),
+                maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0L),
                 maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
               )
             )

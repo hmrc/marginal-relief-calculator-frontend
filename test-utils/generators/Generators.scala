@@ -53,8 +53,14 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def positiveIntsLargerThanMaxValue: Gen[BigInt] =
     Gen.choose[BigInt](Int.MaxValue, Long.MaxValue)
 
+  def longsLargerThanMaxValue: Gen[BigInt] =
+    arbitrary[BigInt] suchThat (x => x > Long.MaxValue)
+
   def intsSmallerThanMinValue: Gen[BigInt] =
     arbitrary[BigInt] suchThat (x => x < Int.MinValue)
+
+  def longsSmallerThanMinValue: Gen[BigInt] =
+    arbitrary[BigInt] suchThat (x => x < Long.MinValue)
 
   def intsSmallerThanOne: Gen[BigInt] =
     Gen.choose[BigInt](Int.MinValue, 0)

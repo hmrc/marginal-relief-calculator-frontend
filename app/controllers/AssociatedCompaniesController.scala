@@ -147,7 +147,7 @@ class AssociatedCompaniesController @Inject() (
     } yield Redirect(navigator.nextPage(AssociatedCompaniesPage, mode, updatedAnswers))
   }
 
-  case class AccountingPeriodTaxableProfit(accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int)
+  case class AccountingPeriodTaxableProfit(accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long)
   private def getUserParameters()(implicit
     request: DataRequest[AnyContent]
   ): Future[AccountingPeriodTaxableProfit] = {

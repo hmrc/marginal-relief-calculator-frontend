@@ -57,7 +57,7 @@ class AssociatedCompaniesControllerSpec
                       AccountingPeriodPage,
                       AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
                     )
-            u2 <- u1.set(TaxableProfitPage, 1)
+            u2 <- u1.set(TaxableProfitPage, 1L)
           } yield u2).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
@@ -94,7 +94,7 @@ class AssociatedCompaniesControllerSpec
                       AccountingPeriodPage,
                       AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
                     )
-            u2 <- u1.set(TaxableProfitPage, 1)
+            u2 <- u1.set(TaxableProfitPage, 1L)
             u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
           } yield u3).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
@@ -150,7 +150,7 @@ class AssociatedCompaniesControllerSpec
                     AccountingPeriodPage,
                     AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
                   )
-          u2 <- u1.set(TaxableProfitPage, 1)
+          u2 <- u1.set(TaxableProfitPage, 1L)
         } yield u2).toOption)
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
@@ -189,7 +189,7 @@ class AssociatedCompaniesControllerSpec
                     AccountingPeriodPage,
                     AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
                   )
-          u2 <- u1.set(TaxableProfitPage, 1)
+          u2 <- u1.set(TaxableProfitPage, 1L)
         } yield u2).toOption)
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
@@ -227,7 +227,7 @@ class AssociatedCompaniesControllerSpec
                         AccountingPeriodPage,
                         AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
                       )
-              u2 <- u1.set(TaxableProfitPage, 1)
+              u2 <- u1.set(TaxableProfitPage, 1L)
             } yield u2).toOption
           ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
             .build()
@@ -256,7 +256,7 @@ class AssociatedCompaniesControllerSpec
                         AccountingPeriodPage,
                         AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
                       )
-              u2 <- u1.set(TaxableProfitPage, 1)
+              u2 <- u1.set(TaxableProfitPage, 1L)
             } yield u2).toOption
           ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
             .build()
