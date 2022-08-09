@@ -58,6 +58,7 @@
             .withPrefix(PrefixOrSuffix(content = Text("£")))
             .withCssClass("govuk-input--width-5")
             .withHint(HintViewModel(messages("taxableProfit.hint")))
+            .withAttribute("maxlength" -> "20")
         )
 
         @govukButton(
