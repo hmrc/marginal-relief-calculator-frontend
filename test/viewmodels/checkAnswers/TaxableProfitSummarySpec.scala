@@ -35,7 +35,7 @@ class TaxableProfitSummarySpec extends AnyFreeSpec with Matchers {
       val userAnswers = UserAnswers("id")
         .set(
           TaxableProfitPage,
-          1000
+          1000L
         )
         .get
       TaxableProfitSummary.row(userAnswers) shouldBe Some(

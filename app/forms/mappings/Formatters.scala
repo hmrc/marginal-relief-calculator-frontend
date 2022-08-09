@@ -100,8 +100,8 @@ trait Formatters {
     doNotUseDecimalsKey: String,
     nonNumericKey: String,
     args: Seq[String] = Seq.empty
-  ): Formatter[Int] =
-    new Formatter[Int] {
+  ): Formatter[Long] =
+    new Formatter[Long] {
 
       private val DecimalRegexp = """^-?(\d*\.\d*)$"""
       private val AmountWithCommas = """^\d{0,3}[,]?(,\d{3})*$"""
@@ -110,7 +110,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = for {
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Long] = for {
         result <- baseFormatter.bind(key, data)
         resultWithoutPoundSymbol <-
           (if (result.startsWith("£")) result.substring(1) else result).asRight[Seq[FormError]]
@@ -122,18 +122,18 @@ trait Formatters {
                                }).asRight[Seq[FormError]]
         finalResult <- resultWithoutCommas match {
                          case s if s.matches(DecimalRegexp) =>
-                           Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
+                           Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Long]
                          case s if Try(s.toLong).isFailure && !s.matches(WholeNumber) =>
-                           Seq(FormError(key, nonNumericKey, args)).asLeft[Int]
+                           Seq(FormError(key, nonNumericKey, args)).asLeft[Long]
                          case s if Try(s.toLong).isFailure =>
-                           Seq(FormError(key, outOfRangeKey, Seq(Int.MinValue, Int.MaxValue))).asLeft[Int]
-                         case s if s.toLong < Int.MinValue || s.toLong > Int.MaxValue =>
-                           Seq(FormError(key, outOfRangeKey, Seq(Int.MinValue, Int.MaxValue))).asLeft[Int]
-                         case s => s.toInt.asRight[Seq[FormError]]
+                           Seq(FormError(key, outOfRangeKey, Seq(Long.MinValue, Long.MaxValue))).asLeft[Long]
+                         case s if s.toLong < Long.MinValue || s.toLong > Long.MaxValue =>
+                           Seq(FormError(key, outOfRangeKey, Seq(Long.MinValue, Long.MaxValue))).asLeft[Long]
+                         case s => s.toLong.asRight[Seq[FormError]]
                        }
       } yield finalResult
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Long) =
         baseFormatter.unbind(key, value.toString)
     }
 

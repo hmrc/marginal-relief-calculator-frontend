@@ -47,15 +47,15 @@ trait WholeAmountFieldBehaviours extends FieldBehaviours {
       }
     }
 
-    "not bind integers smaller than Int.MinValue" in {
-      forAll(intsSmallerThanMinValue -> "tinyInt") { num: BigInt =>
+    "not bind integers smaller than Long.MinValue" in {
+      forAll(longsSmallerThanMinValue -> "tinyInt") { num: BigInt =>
         val result = form.bind(Map(fieldName -> num.toString) ++ dependentFields).apply(fieldName)
         result.errors must contain only outOfRangeError
       }
     }
 
-    "not bind integers larger than Int.MaxValue" in {
-      forAll(positiveIntsLargerThanMaxValue -> "massiveInt") { num: BigInt =>
+    "not bind integers larger than Long.MaxValue" in {
+      forAll(longsLargerThanMaxValue -> "massiveInt") { num: BigInt =>
         val result = form.bind(Map(fieldName -> num.toString) ++ dependentFields).apply(fieldName)
         result.errors must contain only outOfRangeError
       }

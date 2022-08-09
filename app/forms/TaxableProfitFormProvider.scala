@@ -24,13 +24,16 @@ import utils.ConstraintsUtils.ONE_BILLION
 
 class TaxableProfitFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Int] =
+  def apply(): Form[Long] =
     Form(
       "value" -> wholeAmount(
         "taxableProfit.error.required",
         "error.outOfRange",
         "taxableProfit.error.doNotUseDecimals",
         "taxableProfit.error.nonNumeric"
-      ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(ONE_BILLION, "error.greaterThanOneBillion"))
+      ).verifying(
+        minimumValue(1L, "error.lessThanOne"),
+        maximumValue(ONE_BILLION.toLong, "error.greaterThanOneBillion")
+      )
     )
 }

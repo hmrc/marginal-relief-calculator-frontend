@@ -40,7 +40,7 @@ trait Mappings extends Formatters with Constraints {
     doNotUseDecimalsKey: String = "error.wholeNumber",
     nonNumericKey: String = "error.nonNumeric",
     args: Seq[String] = Seq.empty
-  ): FieldMapping[Int] =
+  ): FieldMapping[Long] =
     of(wholeAmountFormatter(requiredKey, outOfRangeKey, doNotUseDecimalsKey, nonNumericKey, args))
 
   protected def boolean(

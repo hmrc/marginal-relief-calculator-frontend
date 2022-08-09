@@ -49,7 +49,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
                       AccountingPeriodPage,
                       AccountingPeriodForm(epoch, Some(epoch.plusDays(1)))
                     )
-            u2 <- u1.set(TaxableProfitPage, 1)
+            u2 <- u1.set(TaxableProfitPage, 1L)
             u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
             u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
           } yield u4).toOption
@@ -91,7 +91,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
 
         val application = applicationBuilder(
           userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId).set(TaxableProfitPage, 1)
+            u1 <- UserAnswers(userAnswersId).set(TaxableProfitPage, 1L)
             u2 <- u1.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
             u3 <- u2.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
           } yield u3).toOption

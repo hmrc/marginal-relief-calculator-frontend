@@ -44,7 +44,7 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
       Map.empty,
       nonNumericError = FormError(fieldName, "taxableProfit.error.nonNumeric"),
       doNotUseDecimalsError = FormError(fieldName, "taxableProfit.error.doNotUseDecimals"),
-      outOfRangeError = FormError(fieldName, "error.outOfRange", List(Int.MinValue, Int.MaxValue))
+      outOfRangeError = FormError(fieldName, "error.outOfRange", List(Long.MinValue, Long.MaxValue))
     )
 
     behave like mandatoryField(
