@@ -15,7 +15,7 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.config.StandardAlphaBanner
+@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import views.html.helper.CSPNonce
 
 @this(
@@ -30,7 +30,7 @@
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
     hmrcScripts: HmrcScripts,
-    alphaBanner: StandardAlphaBanner,
+    betaBanner: StandardBetaBanner,
     defaultMainContentLayout: TwoThirdsMainContent
 )
 
@@ -49,7 +49,7 @@
             countdown           = Some(appConfig.countdown),
             keepAliveUrl        = Some(routes.KeepAliveController.keepAlive.url),
             keepAliveButtonText = Some(messages("timeout.keepAlive")),
-            signOutUrl          = None,
+            signOutUrl          = Some(routes.IndexController.onPageLoad.url),
             signOutButtonText   = None,
             title               = Some(messages("timeout.title")),
             message             = Some(messages("timeout.message"))
@@ -92,7 +92,7 @@
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl  = Some(routes.IndexController.onPageLoad.url),
         signOutUrl  = None,
-        phaseBanner = Some(alphaBanner(appConfig.feedbackUrl))
+        phaseBanner = Some(betaBanner(appConfig.feedbackUrl))
     )),
     beforeContentBlock = Some(beforeContent),
     footerBlock        = Some(hmrcStandardFooter()),
