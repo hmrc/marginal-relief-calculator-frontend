@@ -22,7 +22,7 @@ date.month = Month
 date.year = Year
 
 timeout.title = You’re about to be signed out
-timeout.message = For security reasons, you will be signed out of this service in
+timeout.message = Your session will expire soon. For your security, we will delete your answers in
 timeout.keepAlive = Stay signed in
 timeout.signOut = Sign out
 
@@ -217,3 +217,8 @@ distributionsIncludedAmount.error.required = Enter a valid received distribution
 distributionsIncludedAmount.error.outOfRange = Enter an amount that is between 1 and 1000000000
 distributionsIncluded.change.hidden = DistributionsIncluded
 distributionsIncluded.emptyValue = None
+
+session.expired.title = Session expired
+session.expired.heading = Your session has ended due to inactivity
+session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information to keep it secure.
+session.expired.btn.restart = Start again

@@ -41,3 +41,4 @@ POST       /distributions-included              controllers.DistributionsInclude
 GET        /change-distributions-included       controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-distributions-included       controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
 
+GET        /session-expired                     controllers.SessionExpiredController.onPageLoad()
