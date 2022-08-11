@@ -100,11 +100,7 @@
                 @messages("resultsPage.accountPeriod")
             </dt>
             <dd class="govuk-summary-list__value">
-                <div>@messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)</div>
-                @calculatorResult match {
-                    case x:DualResult => {  <div>@messages("resultsPage.2years")</div> }
-                    case x:SingleResult => { }
-                }
+                @messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)
             </dd>
         </div>
         <div class="govuk-summary-list__row">

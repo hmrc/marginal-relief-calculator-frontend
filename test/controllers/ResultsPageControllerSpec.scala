@@ -169,8 +169,6 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
 
           status(result) mustEqual OK
           requestContent mustEqual viewContent
-
-          requestContent.contains("Covers 2 HMRC financial years") mustEqual true
           requestContent.contains("2022 to 2023: 1 January 2023 to 31 March 2023") mustEqual true
           requestContent.contains("2023 to 2024: 1 April 2023 to 31 December 2023") mustEqual true
         }

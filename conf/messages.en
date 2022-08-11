@@ -149,7 +149,6 @@ resultsPage.corporationTaxLiabilityBeforeMarginalRelief = Corporation Tax liabil
 resultsPage.corporationTaxLiabilityAfterMarginalRelief = Corporation Tax liability after Marginal Relief
 resultsPage.daysAllocatedToEachFinancialYear = Days allocated to each financial year
 resultsPage.runAnotherCalculation = Run another calculation
-resultsPage.2years = Covers 2 HMRC financial years.
 resultsPage.2years.period.heading = Your account period covers 2 HMRC financial years
 
 
