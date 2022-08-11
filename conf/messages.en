@@ -151,7 +151,6 @@ resultsPage.daysAllocatedToEachFinancialYear = Days allocated to each financial 
 resultsPage.runAnotherCalculation = Run another calculation
 resultsPage.2years = Covers 2 HMRC financial years.
 resultsPage.2years.period.heading = Your account period covers 2 HMRC financial years
-resultsPage.2years.description = {0} to {1}: {2} to {3}
 
 
 associatedCompanies.title = Number of associated companies

@@ -44,8 +44,10 @@
     val toYear2 = fromYear2 + 1
 
     Html("<p class='govuk-body'>" +
-        messages("resultsPage.2years.description", fromYear1.toString, toYear1.toString, fromDate1.formatFullDate, endDate1.formatFullDate) + "<br/>" +
-        messages("resultsPage.2years.description", fromYear2.toString, toYear2.toString, fromDate2.formatFullDate, endDate2.formatFullDate) +
+        messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
+        messages("site.from.to", fromDate1.formatFullDate, endDate1.formatFullDate) + "<br/>" +
+        messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
+        messages("site.from.to", fromDate2.formatFullDate, endDate2.formatFullDate) +
     "</p>")
 }
 
