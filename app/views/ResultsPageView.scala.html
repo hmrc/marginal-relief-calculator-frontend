@@ -19,6 +19,7 @@
 @import utils.CurrencyUtils
 @import forms.DateUtils._
 @import forms._
+@import java.time.LocalDate
 
 @this(
         layout: templates.Layout,
@@ -28,6 +29,25 @@
 )
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long, distributions: Long, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
+
+@yearDescription(dualResult: DualResult) = @{
+    val year1 = dualResult.year1
+    val fromDate1 = accountingPeriodForm.accountingPeriodStartDate
+    val endDate1 = fromDate1.plusDays(year1.days - 1)
+    val fromYear1 = year1.year
+    val toYear1 = fromYear1 + 1
+
+    val year2 = dualResult.year1
+    val fromDate2 = endDate1.plusDays(1)
+    val endDate2 = accountingPeriodForm.accountingPeriodEndDate.getOrElse(accountingPeriodForm.accountingPeriodStartDate.plusMonths(12))
+    val fromYear2 = year2.year
+    val toYear2 = fromYear2 + 1
+
+    Html("<p class='govuk-body'>" +
+        messages("resultsPage.2years.description", fromYear1.toString, toYear1.toString, fromDate1.formatFullDate, endDate1.formatFullDate) + "<br/>" +
+        messages("resultsPage.2years.description", fromYear2.toString, toYear2.toString, fromDate2.formatFullDate, endDate2.formatFullDate) +
+    "</p>")
+}
 
 @marginalReliefBanner(m: MarginalRate) = @{
     if( m.marginalRelief > 0 ) {
@@ -78,7 +98,11 @@
                 @messages("resultsPage.accountPeriod")
             </dt>
             <dd class="govuk-summary-list__value">
-                @messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)
+                <div>@messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)</div>
+                @calculatorResult match {
+                    case x:DualResult => {  <div>@messages("resultsPage.2years")</div> }
+                    case x:SingleResult => { }
+                }
             </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -106,6 +130,15 @@
             </dd>
         </div>
     </dl>
+
+    @calculatorResult match {
+        case x:DualResult => {
+                <div class="govuk-heading-s">@messages("resultsPage.2years.period.heading")</div>
+                @yearDescription(x)
+            }
+        case x:SingleResult => { }
+    }
+
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
