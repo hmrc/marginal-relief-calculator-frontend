@@ -19,7 +19,8 @@ package utils
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import utils.CurrencyUtils.{ format, roundUp }
+import utils.CurrencyUtils.format
+import utils.NumberUtils.roundUp
 
 class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
   "roundUp" - {

@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-package utils
+package connectors.sharedmodel
 
-import java.text.NumberFormat
-import java.util.{ Currency, Locale }
+import julienrf.json.derived
+import play.api.libs.json.{ OFormat, __ }
 
-object CurrencyUtils {
-
-  private val currencyFormatter = {
-    val f = NumberFormat.getCurrencyInstance
-    f.setCurrency(Currency.getInstance(Locale.UK))
-    f
-  }
-
-  def format(value: Number): String =
-    currencyFormatter
-      .format(value)
-      .replace("GBP", "£")
-      .replace(".00", "")
+sealed trait FYConfig {
+  def year: Int
+  def mainRate: Double
 }
+
+object FYConfig {
+  implicit val format: OFormat[FYConfig] =
+    derived.flat.oformat[FYConfig]((__ \ "type").format[String])
+}
+
+case class FlatRateConfig(year: Int, mainRate: Double) extends FYConfig
+case class MarginalReliefConfig(
+  year: Int,
+  lowerThreshold: Int,
+  upperThreshold: Int,
+  smallProfitRate: Double,
+  mainRate: Double,
+  marginalReliefFraction: Double
+) extends FYConfig

@@ -149,6 +149,13 @@ resultsPage.corporationTaxLiabilityBeforeMarginalRelief = Corporation Tax liabil
 resultsPage.corporationTaxLiabilityAfterMarginalRelief = Corporation Tax liability after Marginal Relief
 resultsPage.daysAllocatedToEachFinancialYear = Days allocated to each financial year
 resultsPage.runAnotherCalculation = Run another calculation
+resultsPage.effectiveTaxRate = Effective tax rate
+resultsPage.corporationTaxMainRateBeforeMarginalRelief = Corporation Tax main rate before Marginal Relief
+resultsPage.corporationTaxMainRate = Corporation Tax main rate
+resultsPage.smallProfitRate = Small Profit Rate
+resultsPage.effectiveCorporationTaxAfterMarginalRelief = Effective Corporation Tax rate after Marginal Relief
+resultsPage.effectiveCorporationTax = Effective Corporation Tax rate
+resultsPage.reducedFromAfterMR = Reduced from {0} after Marginal Relief
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
