@@ -32,27 +32,6 @@
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long, distributions: Long, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
 
-@yearDescription(dualResult: DualResult) = @{
-    val year1 = dualResult.year1
-    val fromDate1 = accountingPeriodForm.accountingPeriodStartDate
-    val endDate1 = fromDate1.plusDays(year1.days - 1)
-    val fromYear1 = year1.year
-    val toYear1 = fromYear1 + 1
-
-    val year2 = dualResult.year2
-    val fromDate2 = endDate1.plusDays(1)
-    val endDate2 = accountingPeriodForm.accountingPeriodEndDate.getOrElse(accountingPeriodForm.accountingPeriodStartDate.plusMonths(12))
-    val fromYear2 = year2.year
-    val toYear2 = fromYear2 + 1
-
-    Html("<p class='govuk-body'>" +
-        messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
-        messages("site.from.to", fromDate1.formatDate, endDate1.formatDate) + "<br/>" +
-        messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
-        messages("site.from.to", fromDate2.formatDate, endDate2.formatDate) +
-    "</p>")
-}
-
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
     @displayBanner(calculatorResult)
