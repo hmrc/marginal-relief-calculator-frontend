@@ -72,10 +72,10 @@
         </div>
     </dl>
 
-    @calculatorResult.fold(single => {}){ dual => {
+    @calculatorResult.fold(single => Html("")){ dual =>
         <div class="govuk-heading-s">@messages("resultsPage.2years.period.heading")</div>
         @yearDescription(accountingPeriodForm, dual)
-    } }
+    }
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
