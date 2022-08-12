@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ MarginalRate, SingleResult }
+import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, DistributionsIncluded, UserAnswers }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
-  private lazy val resultsPageRoute = routes.ResultsPageController.onPageLoad.url
+  private lazy val resultsPageRoute = routes.ResultsPageController.onPageLoad().url
 
   "ResultsPageController" - {
     "GET page" - {
@@ -113,6 +113,64 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           result.getMessage mustBe "One or more user parameters required for calculation are missing. " +
             "This could be either because the session has expired or the user navigated directly to the results page. " +
             "Missing parameters are [accountingPeriod]"
+        }
+      }
+
+      "must contain proper wording while accounting period covers 2 financial years" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        val startDate = LocalDate.of(2023, 1, 1)
+        val endDate = LocalDate.of(2023, 12, 31)
+
+        val application = applicationBuilder(
+          userAnswers = (for {
+            u1 <- UserAnswers(userAnswersId)
+                    .set(
+                      AccountingPeriodPage,
+                      AccountingPeriodForm(startDate, Some(endDate))
+                    )
+            u2 <- u1.set(TaxableProfitPage, 1L)
+            u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
+            u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
+          } yield u4).toOption
+        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+
+        val calculatorResult =
+          DualResult(MarginalRate(2022, 1, 1, 1, 1, 1, 1, 1, 1, 1, 90), FlatRate(2023, 1, 1, 1, 275))
+        mockMarginalReliefCalculatorConnector.calculate(
+          accountingPeriodStart = startDate,
+          accountingPeriodEnd = endDate,
+          1.0,
+          Some(1),
+          Some(1)
+        )(*) returns Future.successful(calculatorResult)
+
+        running(application) {
+
+          val request = FakeRequest(GET, resultsPageRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[ResultsPageView]
+
+          val requestContent = contentAsString(result).filterAndTrim
+          val viewContent = view(
+            calculatorResult,
+            AccountingPeriodForm(startDate, Some(endDate)),
+            1,
+            1,
+            1
+          )(
+            request,
+            messages(application)
+          ).toString.filterAndTrim
+
+          status(result) mustEqual OK
+          requestContent mustEqual viewContent
+          requestContent.contains("2022 to 2023: 1 Jan 2023 to 31 Mar 2023") mustEqual true
+          requestContent.contains("2023 to 2024: 1 Apr 2023 to 31 Dec 2023") mustEqual true
         }
       }
     }

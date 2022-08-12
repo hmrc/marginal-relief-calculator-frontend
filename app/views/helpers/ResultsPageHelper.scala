@@ -17,6 +17,8 @@
 package views.helpers
 
 import connectors.sharedmodel._
+import forms.AccountingPeriodForm
+import forms.DateUtils.DateOps
 import org.slf4j.{ Logger, LoggerFactory }
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
@@ -329,4 +331,31 @@ object ResultsPageHelper {
 
   private def marginalRelief(details: TaxDetails): Double =
     details.fold(_ => 0.0)(_.marginalRelief)
+
+  def yearDescription(accountingPeriodForm: AccountingPeriodForm, dualResult: DualResult)(implicit
+    messages: Messages
+  ): Html = {
+    val year1 = dualResult.year1
+    val fromDate1 = accountingPeriodForm.accountingPeriodStartDate
+    val endDate1 = fromDate1.plusDays(year1.days - 1)
+    val fromYear1 = year1.year
+    val toYear1 = fromYear1 + 1
+
+    val year2 = dualResult.year2
+    val fromDate2 = endDate1.plusDays(1)
+    val endDate2 = accountingPeriodForm.accountingPeriodEndDate.getOrElse(
+      accountingPeriodForm.accountingPeriodStartDate.plusMonths(12)
+    )
+    val fromYear2 = year2.year
+    val toYear2 = fromYear2 + 1
+
+    Html(
+      "<p class='govuk-body'>" +
+        messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
+        messages("site.from.to", fromDate1.formatDate, endDate1.formatDate) + "<br/>" +
+        messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
+        messages("site.from.to", fromDate2.formatDate, endDate2.formatDate) +
+        "</p>"
+    )
+  }
 }
