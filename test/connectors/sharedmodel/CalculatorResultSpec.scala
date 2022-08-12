@@ -18,24 +18,11 @@ package connectors.sharedmodel
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import utils.CurrencyUtils.roundUp
+import utils.NumberUtils.roundUp
 
 class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
   private val flatRate = FlatRate(1, 11, 111, 1111, 1111)
-
-  "FlatRate" - {
-    "marginalRelief" - {
-      "should return 0" in {
-        flatRate.marginalRelief shouldBe 0
-      }
-    }
-    "corporationTaxBeforeMR" - {
-      "should return corporation tax" in {
-        flatRate.corporationTaxBeforeMR shouldBe flatRate.corporationTax
-      }
-    }
-  }
 
   private val marginalRate = MarginalRate(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 
@@ -89,7 +76,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
     "totalMarginalRelief" - {
       "should be the total marginal relief from underlying tax details" in {
         dualResult.totalMarginalRelief shouldBe roundUp(
-          BigDecimal(flatRate.marginalRelief) + BigDecimal(marginalRate.marginalRelief)
+          BigDecimal(marginalRate.marginalRelief)
         )
       }
     }
@@ -105,7 +92,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
     "totalCorporationTaxBeforeMR" - {
       "should be the total corporation tax before MR from underlying tax details" in {
         dualResult.totalCorporationTaxBeforeMR shouldBe roundUp(
-          BigDecimal(flatRate.corporationTaxBeforeMR) + BigDecimal(marginalRate.corporationTaxBeforeMR)
+          BigDecimal(flatRate.corporationTax) + BigDecimal(marginalRate.corporationTaxBeforeMR)
         )
       }
     }
