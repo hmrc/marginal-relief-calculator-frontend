@@ -53,44 +53,6 @@
     "</p>")
 }
 
-@marginalReliefBanner(m: MarginalRate) = @{
-    if( m.marginalRelief > 0 ) {
-        govukPanel(Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"${CurrencyUtils.format(m.marginalRelief)}")
-        ))
-    } else if ( m.adjustedAugmentedProfit > m.adjustedUpperThreshold ) {
-        govukPanel(Panel(
-            title = Text(messages("resultsPage.marginalReliefNotEligible")),
-            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsAboveMarginalReliefLimit" else "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
-        ))
-    } else if( m.adjustedAugmentedProfit <= m.adjustedLowerThreshold ) {
-        govukPanel(Panel(
-            title = Text(messages("resultsPage.marginalReliefNotEligible")),
-            content = Text(messages(if(m.adjustedDistributions == 0) "resultsPage.yourProfitsBelowMarginalReliefLimit" else "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
-        ))
-    }
-}
-
-@displayBanner(calculatorResult: CalculatorResult) = @{
-    calculatorResult match {
-        case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
-            govukPanel(Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.marginalReliefNotApplicable"))
-            ))
-        case SingleResult(m: MarginalRate) =>
-            marginalReliefBanner(m)
-        case DualResult(_: FlatRate, m: MarginalRate) =>
-            marginalReliefBanner(m)
-        case DualResult(m: MarginalRate, _: FlatRate) =>
-            marginalReliefBanner(m)
-        case DualResult(_: MarginalRate, _: MarginalRate) =>
-            ???
-    }
-}
-
-
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
     @displayBanner(calculatorResult)
