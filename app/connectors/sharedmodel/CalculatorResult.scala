@@ -18,19 +18,25 @@ package connectors.sharedmodel
 
 import julienrf.json.derived
 import play.api.libs.json.{ OFormat, __ }
-import utils.CurrencyUtils.roundUp
+import utils.NumberUtils.roundUp
 
 sealed trait TaxDetails {
   def year: Int
   def days: Int
-  def marginalRelief: Double
-  def corporationTaxBeforeMR: Double
   def corporationTax: Double
+  def adjustedProfit: Double
+  def taxRate: Double
+  def adjustedAugmentedProfit: Double
+
+  def fold[T](f: FlatRate => T)(g: MarginalRate => T): T =
+    this match {
+      case x: FlatRate     => f(x)
+      case x: MarginalRate => g(x)
+    }
 }
 case class FlatRate(year: Int, corporationTax: Double, taxRate: Double, adjustedProfit: Double, days: Int)
     extends TaxDetails {
-  override def marginalRelief: Double = 0
-  override def corporationTaxBeforeMR: Double = corporationTax
+  override def adjustedAugmentedProfit: Double = adjustedProfit
 }
 case class MarginalRate(
   year: Int,
@@ -45,7 +51,7 @@ case class MarginalRate(
   adjustedUpperThreshold: Double,
   days: Int
 ) extends TaxDetails {
-  def adjustedAugmentedProfit: Double = roundUp(BigDecimal(adjustedProfit) + BigDecimal(adjustedDistributions))
+  override def adjustedAugmentedProfit: Double = roundUp(BigDecimal(adjustedProfit) + BigDecimal(adjustedDistributions))
 }
 
 object TaxDetails {
@@ -58,6 +64,14 @@ sealed trait CalculatorResult {
   def totalMarginalRelief: Double
   def totalCorporationTaxBeforeMR: Double
   def totalCorporationTax: Double
+  def effectiveTaxRate: Double
+  def effectiveTaxRateBeforeMR: Double
+
+  def fold[T](f: SingleResult => T)(g: DualResult => T): T =
+    this match {
+      case x: SingleResult => f(x)
+      case x: DualResult   => g(x)
+    }
 }
 object CalculatorResult {
   implicit val format: OFormat[CalculatorResult] =
@@ -68,9 +82,15 @@ case class SingleResult(
   details: TaxDetails
 ) extends CalculatorResult {
   override def totalDays: Int = details.days
-  override def totalMarginalRelief: Double = details.marginalRelief
+  override def totalMarginalRelief: Double = details.fold(_ => 0.0)(_.marginalRelief)
   override def totalCorporationTax: Double = details.corporationTax
-  override def totalCorporationTaxBeforeMR: Double = details.corporationTaxBeforeMR
+  override def totalCorporationTaxBeforeMR: Double = details.fold(_.corporationTax)(_.corporationTaxBeforeMR)
+  override def effectiveTaxRate: Double = details.taxRate
+  override def effectiveTaxRateBeforeMR: Double = (
+    (BigDecimal(this.totalCorporationTaxBeforeMR) / BigDecimal(
+      details.adjustedProfit
+    )) * 100
+  ).toDouble
 }
 
 case class DualResult(
@@ -79,12 +99,25 @@ case class DualResult(
 ) extends CalculatorResult {
   override def totalDays: Int = year1.days + year2.days
   override def totalMarginalRelief: Double = roundUp(
-    BigDecimal(year1.marginalRelief) + BigDecimal(year2.marginalRelief)
+    BigDecimal(year1.fold(_ => 0.0)(_.marginalRelief)) + BigDecimal(year2.fold(_ => 0.0)(_.marginalRelief))
   )
   override def totalCorporationTaxBeforeMR: Double = roundUp(
-    BigDecimal(year1.corporationTaxBeforeMR) + BigDecimal(year2.corporationTaxBeforeMR)
+    BigDecimal(year1.fold(_.corporationTax)(_.corporationTaxBeforeMR)) + BigDecimal(
+      year2.fold(_.corporationTax)(_.corporationTaxBeforeMR)
+    )
   )
   override def totalCorporationTax: Double = roundUp(
     BigDecimal(year1.corporationTax) + BigDecimal(year2.corporationTax)
   )
+
+  override def effectiveTaxRateBeforeMR: Double =
+    (((BigDecimal(year1.fold(_.corporationTax)(_.corporationTaxBeforeMR)) + BigDecimal(
+      year2.fold(_.corporationTax)(_.corporationTaxBeforeMR)
+    )) /
+      (BigDecimal(year1.adjustedProfit) + BigDecimal(year2.adjustedProfit))) * 100).toDouble
+
+  override def effectiveTaxRate: Double =
+    (((BigDecimal(year1.corporationTax) + BigDecimal(year2.corporationTax)) /
+      (BigDecimal(year1.adjustedProfit) + BigDecimal(year2.adjustedProfit))) * 100).toDouble
+
 }

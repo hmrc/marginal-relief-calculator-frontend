@@ -16,20 +16,17 @@
 
 package utils
 
-import java.text.NumberFormat
-import java.util.{ Currency, Locale }
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
-object CurrencyUtils {
+object PercentageUtils {
 
-  private val currencyFormatter = {
-    val f = NumberFormat.getCurrencyInstance
-    f.setCurrency(Currency.getInstance(Locale.UK))
-    f
+  private val twoDecimalFormat = {
+    val df = new DecimalFormat("0.00")
+    df.setRoundingMode(RoundingMode.DOWN)
+    df
   }
 
-  def format(value: Number): String =
-    currencyFormatter
-      .format(value)
-      .replace("GBP", "£")
-      .replace(".00", "")
+  def format(value: Double): String =
+    twoDecimalFormat.format(value) + "%"
 }

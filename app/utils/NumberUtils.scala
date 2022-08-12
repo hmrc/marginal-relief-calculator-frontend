@@ -16,20 +16,7 @@
 
 package utils
 
-import java.text.NumberFormat
-import java.util.{ Currency, Locale }
-
-object CurrencyUtils {
-
-  private val currencyFormatter = {
-    val f = NumberFormat.getCurrencyInstance
-    f.setCurrency(Currency.getInstance(Locale.UK))
-    f
-  }
-
-  def format(value: Number): String =
-    currencyFormatter
-      .format(value)
-      .replace("GBP", "£")
-      .replace(".00", "")
+object NumberUtils {
+  def roundUp(value: BigDecimal): Double =
+    value.setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
 }
