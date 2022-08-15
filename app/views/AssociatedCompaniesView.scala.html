@@ -51,10 +51,10 @@
 			   		@messages("associatedCompanies.heading")
                }
 			   case AskOnePart(Period(start, end)) => {
-                    @messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+                    @messages("associatedCompanies.heading.between", start.formatDate, end.formatDateFull)
                }
                case AskBothParts(Period(start, end), _) => {
-           			@messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+           			@messages("associatedCompanies.heading.between", start.formatDate, end.formatDateFull)
                }
 		   }
        </h1>
