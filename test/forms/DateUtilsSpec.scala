@@ -16,20 +16,25 @@
 
 package forms
 
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
+import forms.DateUtils._
+
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-object DateUtils {
+class DateUtilsSpec extends AnyFreeSpec with Matchers {
 
-  private val FORMAT = DateTimeFormatter.ofPattern("d MMM yyyy")
-  private val FORMAT_FULL = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  private val epoch = LocalDate.ofEpochDay(0)
 
-  implicit class DateOps(date: LocalDate) {
-    def isEqualOrBefore(another: LocalDate): Boolean =
-      date.equals(another) || date.isBefore(another)
+  "formatDate" - {
+    "should format date correctly" in {
+      epoch.formatDate shouldBe "1 Jan 1970"
+    }
+  }
 
-    def formatDate: String = FORMAT.format(date)
-
-    def formatDateFull: String = FORMAT_FULL.format(date)
+  "formatDateFull" - {
+    "should format date correctly" in {
+      epoch.formatDateFull shouldBe "1 January 1970"
+    }
   }
 }
