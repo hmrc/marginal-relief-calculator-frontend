@@ -265,7 +265,7 @@ object ResultsPageHelper {
           TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
           TableRow(content = Text(d.year1.days.toString)),
           TableRow(content = Text(d.year2.days.toString)),
-          TableRow(content = Text((d.year2.days + d.year2.days).toString))
+          TableRow(content = Text((d.year1.days + d.year2.days).toString))
         )
       ) ++ ((d.year1, d.year2) match {
         case (_: FlatRate, _: FlatRate) =>
