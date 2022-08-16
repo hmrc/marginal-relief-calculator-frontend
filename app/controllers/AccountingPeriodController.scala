@@ -76,7 +76,11 @@ class AccountingPeriodController @Inject() (
               }
               .getOrElse(mode)
           })
-      case _ =>
+      case Some(answers) =>
+        answers
+          .set(AccountingPeriodPage, form)
+          .map(_ -> mode)
+      case None =>
         UserAnswers(request.userId)
           .set(AccountingPeriodPage, form)
           .map(_ -> mode)
