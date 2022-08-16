@@ -156,7 +156,7 @@ resultsPage.smallProfitRate = Small Profit Rate
 resultsPage.effectiveCorporationTaxAfterMarginalRelief = Effective Corporation Tax rate after Marginal Relief
 resultsPage.effectiveCorporationTax = Effective Corporation Tax rate
 resultsPage.reducedFromAfterMR = Reduced from {0} after Marginal Relief
-resultsPage.2years.period.heading = Your account period covers 2 HMRC financial years
+resultsPage.2years.period.heading = Your accounting period covers 2 HMRC financial years
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
