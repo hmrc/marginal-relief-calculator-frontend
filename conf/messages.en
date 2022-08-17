@@ -157,13 +157,14 @@ resultsPage.effectiveCorporationTaxAfterMarginalRelief = Effective Corporation T
 resultsPage.effectiveCorporationTax = Effective Corporation Tax rate
 resultsPage.reducedFromAfterMR = Reduced from {0} after Marginal Relief
 resultsPage.2years.period.heading = Your accounting period covers 2 HMRC financial years
+resultsPage.covers2FinancialYears = Covers 2 HMRC financial years
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
 associatedCompanies.heading.between = Did your company have any active associated companies between {0} and {1}?
 associatedCompanies.warning = Do not include the company you''re currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect result.
 associatedCompanies.detailsTitle = What are associated companies?
-associatedCompanies.detailsHtml = A company is considered associated to another if:<br/><ul><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link" target="_blank">control</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
+associatedCompanies.detailsHtml = <p>A company is considered associated to another if:</p><ul class="govuk-list govuk-list--bullet"><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link" target="_blank">control (opens in new tab)</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = Enter only additional associated companies
 associatedCompanies.checkYourAnswersLabel = Number of associated companies
 associatedCompanies.error.required = Select whether you have associated companies or not

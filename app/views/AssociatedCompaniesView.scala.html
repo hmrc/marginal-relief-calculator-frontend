@@ -38,13 +38,11 @@
             field = form(formParam),
             label = Label(content = Text(messages("associatedCompanies.countLabel")))
         )
-        .asNumeric()
         .withCssClass("govuk-!-width-one-third")
     )
 }
 
 @formContent(p: AskAssociatedCompaniesParameter) = {
-   <span>
        <h1 class="govuk-fieldset__legend--l">
 		   @p match {
 			   case AskFull => {
@@ -98,7 +96,6 @@
                )
            )
        )
-   </span>
 }
 
 @layout(pageTitle = title(form, messages("associatedCompanies.title"))) {

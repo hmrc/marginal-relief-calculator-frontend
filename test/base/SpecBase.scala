@@ -52,5 +52,10 @@ trait SpecBase
         .filterNot(_.contains("csrfToken"))
         .map(_.trim)
         .mkString
+
+    def trimNewLines = value
+      .split("\n")
+      .map(_.trim)
+      .mkString
   }
 }
