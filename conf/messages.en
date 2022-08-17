@@ -63,8 +63,8 @@ index.guidance.requirements.item2 = your company''s total taxable profit
 index.guidance.requirements.item3 = any {0}distributions{1} from unrelated, unassociated companies
 index.guidance.requirements.item4 = any {0}associated company{1} details
 
-checkYourAnswers.title = Check Your Answers
-checkYourAnswers.heading = Check Your Answers
+checkYourAnswers.title = Check your answers
+checkYourAnswers.heading = Check your answers
 checkYourAnswers.continue = Calculate Marginal Relief
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
