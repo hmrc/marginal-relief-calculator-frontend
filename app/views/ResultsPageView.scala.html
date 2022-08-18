@@ -99,6 +99,10 @@
 
     @{displayEffectiveTaxTable(calculatorResult)}
 
+    <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>
+    <p class="govuk-body">@messages("resultsPage.howWeCalculated.body")</p>
+    <p class="govuk-body"><a href="@routes.ResultsPageController.fullResultsOnPageLoad().url" class="govuk-link">@messages("resultsPage.howWeCalculated.link")</a></p>
+
     @govukButton(
         Button(
             href = Some(routes.IndexController.onPageLoad.url),
