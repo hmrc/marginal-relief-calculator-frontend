@@ -137,8 +137,8 @@ object ResultsPageHelper extends ViewHelper {
     if (marginalRate.marginalRelief > 0) {
       govukPanel(
         Panel(
-          title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-          content = HtmlContent(s"${CurrencyUtils.format(marginalRate.marginalRelief)}")
+          title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages("resultsPage.marginalReliefForAccPeriodIs")}</span>"""),
+          content = HtmlContent(s"""<span class="govuk-!-font-weight-bold">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>""")
         )
       )
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
