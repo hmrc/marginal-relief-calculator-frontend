@@ -1,0 +1,67 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import connectors.sharedmodel._
+@import forms.DateUtils._
+@import forms._
+@import utils.CurrencyUtils
+@import views.helpers.ResultsPageHelper._
+
+@this()
+
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long, distributions: Long, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
+<h2 class="govuk-heading-m">@messages("resultsPage.yourDetails")</h2>
+<dl class="govuk-summary-list govuk-summary-list--no-border">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      @messages("resultsPage.accountPeriod")
+    </dt>
+    <dd class="govuk-summary-list__value">
+      @messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      @messages("resultsPage.companysProfit")
+    </dt>
+    <dd class="govuk-summary-list__value">
+      @{CurrencyUtils.format(taxableProfit)}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      @messages("resultsPage.distributions")
+    </dt>
+    <dd class="govuk-summary-list__value">
+      @{CurrencyUtils.format(distributions)}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      @messages("resultsPage.associatedCompanies")
+    </dt>
+    <dd class="govuk-summary-list__value">
+      @{associatedCompanies.toString}
+    </dd>
+  </div>
+</dl>
+
+@calculatorResult.fold(single => Html("")){ dual =>
+<div class="govuk-heading-s">@messages("resultsPage.2years.period.heading")</div>
+@yearDescription(accountingPeriodForm, dual)
+}
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

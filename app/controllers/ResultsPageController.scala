@@ -105,7 +105,7 @@ class ResultsPageController @Inject() (
         calculatorResult,
         distributionsIncludedAmount,
         associatedCompaniesCount)) =>
-        Ok(fullView())
+        Ok(fullView(calculatorResult, accountingPeriodForm, taxableProfit, distributionsIncludedAmount, associatedCompaniesCount))
       case None =>
         val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
         val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)

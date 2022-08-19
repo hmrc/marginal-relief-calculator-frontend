@@ -14,12 +14,27 @@
  * limitations under the License.
  *@
 
+@import connectors.sharedmodel._
+@import forms._
+@import utils.CurrencyUtils
+
 @this(
-layout: templates.Layout
+    layout: templates.Layout,
+    details: templates.ResultsPageYourDetails,
+    govukTable : GovukTable
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long, distributions: Long, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
+
+@yearDetail(taxDetails:TaxDetails) = {<div></div>}
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
+
+    <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
+    @details(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
+
+    <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("fullResultsPage.howItsCalculated")</h2>
+    <h2 class="govuk-heading-l" style="margin-bottom: 4px;">@{CurrencyUtils.format(554.79)}</h2>
+    <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
 }

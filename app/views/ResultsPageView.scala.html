@@ -23,10 +23,10 @@
 @import java.time.LocalDate
 @import views.helpers.ResultsPageHelper._
 
+
 @this(
         layout: templates.Layout,
-        govukPanel : GovukPanel,
-        govukTable : GovukTable,
+        details: templates.ResultsPageYourDetails,
         govukButton: GovukButton
 )
 
@@ -36,48 +36,7 @@
 
     @displayBanner(calculatorResult)
 
-    <h2 class="govuk-heading-m">@messages("resultsPage.yourDetails")</h2>
-    <dl class="govuk-summary-list govuk-summary-list--no-border">
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                @messages("resultsPage.accountPeriod")
-            </dt>
-            <dd class="govuk-summary-list__value">
-                @messages("site.from.to", accountingPeriodForm.accountingPeriodStartDate.formatDate, accountingPeriodForm.accountingPeriodEndDate.get.formatDate)
-            </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                @messages("resultsPage.companysProfit")
-            </dt>
-            <dd class="govuk-summary-list__value">
-                @{CurrencyUtils.format(taxableProfit)}
-            </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                @messages("resultsPage.distributions")
-            </dt>
-            <dd class="govuk-summary-list__value">
-                @{CurrencyUtils.format(distributions)}
-            </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-                @messages("resultsPage.associatedCompanies")
-            </dt>
-            <dd class="govuk-summary-list__value">
-                @{associatedCompanies.toString}
-            </dd>
-        </div>
-    </dl>
-
-    @calculatorResult.fold(single => Html("")){ dual =>
-        <div class="govuk-heading-s">@messages("resultsPage.2years.period.heading")</div>
-        @yearDescription(accountingPeriodForm, dual)
-    }
-
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    @details(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
 
