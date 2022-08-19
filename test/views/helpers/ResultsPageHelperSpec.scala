@@ -163,8 +163,12 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 365))
         displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"£50")
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
           )
         )
       }
@@ -267,8 +271,12 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"£50")
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
           )
         )
       }
@@ -280,8 +288,12 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"£50")
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
           )
         )
       }
@@ -306,7 +318,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -332,7 +344,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -366,7 +378,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -394,7 +406,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -429,7 +441,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -464,7 +476,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -499,7 +511,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -547,7 +559,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -572,7 +584,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -603,7 +615,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -637,7 +649,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -677,7 +689,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -711,7 +723,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -744,7 +756,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -779,7 +791,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -814,7 +826,7 @@ class ResultsPageHelperSpec extends SpecBase {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
