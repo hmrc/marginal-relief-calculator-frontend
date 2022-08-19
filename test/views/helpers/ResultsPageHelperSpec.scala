@@ -703,7 +703,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 TableRow(content = Text("200"))
               ),
               Seq(
-                TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
+                TableRow(content = Text(messages("resultsPage.smallProfitsRate"))),
                 TableRow(content = Text("25.00%")),
                 TableRow(content = Text("30.00%")),
                 TableRow(content = Text("27.50%"))
