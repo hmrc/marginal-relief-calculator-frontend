@@ -334,7 +334,7 @@ object ResultsPageHelper extends ViewHelper {
               } else if (s.details.fold(_ => true)(m => m.adjustedAugmentedProfit > m.adjustedLowerThreshold)) {
                 "resultsPage.corporationTaxMainRate"
               } else {
-                "resultsPage.smallProfitsRate"
+                "resultsPage.smallProfitRate"
               }))),
               TableRow(content = Text(PercentageUtils.format(s.details.taxRate)))
             )
@@ -382,7 +382,7 @@ object ResultsPageHelper extends ViewHelper {
                       List(d.year1, d.year2)
                         .forall(_.fold(_ => false)(m => m.adjustedAugmentedProfit <= m.adjustedLowerThreshold))
                     ) // if all rates are Marginal Rates, display "Small profits rate"
-                      messages("resultsPage.smallProfitsRate")
+                      messages("resultsPage.smallProfitRate")
                     else
                       messages("resultsPage.effectiveCorporationTax")
                   )
