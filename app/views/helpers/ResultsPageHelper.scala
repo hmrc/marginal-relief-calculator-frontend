@@ -435,9 +435,9 @@ object ResultsPageHelper extends ViewHelper {
 
     p(
       messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
-        messages("site.from.to", fromDate1.formatDate, endDate1.formatDate) + "<br/>" +
+        messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull) + "<br/>" +
         messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
-        messages("site.from.to", fromDate2.formatDate, endDate2.formatDate)
+        messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
     )
   }
 }
