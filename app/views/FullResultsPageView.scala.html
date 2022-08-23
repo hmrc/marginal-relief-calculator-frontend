@@ -17,6 +17,7 @@
 @import connectors.sharedmodel._
 @import forms._
 @import utils.CurrencyUtils
+@import views.helpers.ResultsPageHelper._
 
 @this(
     layout: templates.Layout,
@@ -33,8 +34,11 @@
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
     @details(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
 
-    <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("fullResultsPage.howItsCalculated")</h2>
-    <h2 class="govuk-heading-l" style="margin-bottom: 4px;">@{CurrencyUtils.format(554.79)}</h2>
+    <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
+    <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
+    @Html(calculatorResult.toString)
+
+    @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions)
 }
