@@ -218,7 +218,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
 
   "wholeAmount" - {
 
-    val testForm: Form[Long] =
+    val testForm: Form[Int] =
       Form(
         "value" -> wholeAmount()
       )
@@ -258,14 +258,32 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.errors must contain(FormError("value", "error.nonNumeric"))
     }
 
-    "must not bind when value is less than Long min value" in {
-      val result = testForm.bind(Map("value" -> (BigInt(Long.MinValue) - 1).toString))
-      result.errors must contain(FormError("value", "error.outOfRange", List(Long.MinValue, Long.MaxValue)))
+    "must not bind when value is less than Int min value" in {
+      val result = testForm.bind(Map("value" -> (BigInt(Int.MinValue) - 1).toString))
+      result.errors must contain(FormError("value", "error.outOfRange", List(Int.MinValue, Int.MaxValue)))
     }
 
-    "must not bind when value is greater than Long max value" in {
-      val result = testForm.bind(Map("value" -> (BigInt(Long.MaxValue) + 1).toString))
-      result.errors must contain(FormError("value", "error.outOfRange", List(Long.MinValue, Long.MaxValue)))
+    "must not bind when value is greater than Int max value" in {
+      val result = testForm.bind(Map("value" -> (BigInt(Int.MaxValue) + 1).toString))
+      result.errors must contain(FormError("value", "error.outOfRange", List(Int.MinValue, Int.MaxValue)))
+    }
+
+    "must not bind when value is lower than the given range" in {
+      val testForm: Form[Int] =
+        Form(
+          "value" -> wholeAmount(minValue = 1, maxValue = 100)
+        )
+      val result = testForm.bind(Map("value" -> "-1"))
+      result.errors must contain(FormError("value", "error.lowerThanMin"))
+    }
+
+    "must not bind when value is greater than the given range" in {
+      val testForm: Form[Int] =
+        Form(
+          "value" -> wholeAmount(minValue = 1, maxValue = 100)
+        )
+      val result = testForm.bind(Map("value" -> "101"))
+      result.errors must contain(FormError("value", "error.greaterThanMax"))
     }
 
     "must not bind an empty value" in {

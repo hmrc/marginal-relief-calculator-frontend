@@ -64,7 +64,7 @@ class ResultsPageController @Inject() (
             marginalReliefResult,
             accountingPeriodForm,
             taxableProfit,
-            maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0L),
+            maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0),
             maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
           )
         )
