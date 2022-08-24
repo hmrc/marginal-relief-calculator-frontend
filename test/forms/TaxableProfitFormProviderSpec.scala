@@ -28,7 +28,7 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
 
     val fieldName = "value"
 
-    val minimum = 0
+    val minimum = 1
     val maximum = ONE_BILLION
 
     behave like fieldThatBindsValidData(
@@ -44,7 +44,7 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
       Map.empty,
       nonNumericError = FormError(fieldName, "taxableProfit.error.nonNumeric"),
       doNotUseDecimalsError = FormError(fieldName, "taxableProfit.error.doNotUseDecimals"),
-      outOfRangeError = FormError(fieldName, "error.outOfRange", List(Long.MinValue, Long.MaxValue))
+      outOfRangeError = FormError(fieldName, "error.outOfRange", List(1, ONE_BILLION))
     )
 
     behave like mandatoryField(
@@ -56,24 +56,24 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
     "return greater than billion error" in {
       val result = form.bind(
         Map(
-          "value" -> (ONE_BILLION.toLong + 1).toString
+          "value" -> (maximum + 1).toString
         )
       )
       result.hasErrors mustBe true
       result.errors mustBe Seq(
-        FormError("value", "error.greaterThanOneBillion", List(ONE_BILLION))
+        FormError("value", "error.greaterThanOneBillion")
       )
     }
 
     "return less than one error" in {
       val result = form.bind(
         Map(
-          "value" -> 0.toString
+          "value" -> (minimum - 1).toString
         )
       )
       result.hasErrors mustBe true
       result.errors mustBe Seq(
-        FormError("value", "error.lessThanOne", List(1))
+        FormError("value", "error.lessThanOne")
       )
     }
   }

@@ -22,10 +22,10 @@ class TaxableProfitPageSpec extends PageBehaviours {
 
   "TaxableProfitPage" - {
 
-    beRetrievable[Long](TaxableProfitPage)
+    beRetrievable[Int](TaxableProfitPage)
 
-    beSettable[Long](TaxableProfitPage)
+    beSettable[Int](TaxableProfitPage)
 
-    beRemovable[Long](TaxableProfitPage)
+    beRemovable[Int](TaxableProfitPage)
   }
 }
