@@ -26,7 +26,6 @@
 
 @this(
         layout: templates.Layout,
-        details: templates.ResultsPageYourDetails,
         govukButton: GovukButton
 )
 
@@ -44,7 +43,6 @@
     }
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    @details(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
 

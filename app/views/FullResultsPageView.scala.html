@@ -21,18 +21,17 @@
 
 @this(
     layout: templates.Layout,
-    details: templates.ResultsPageYourDetails,
     govukTable : GovukTable
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long, distributions: Long, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
 
 @yearDetail(taxDetails:TaxDetails) = {<div></div>}
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
-    @details(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>

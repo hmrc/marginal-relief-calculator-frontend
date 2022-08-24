@@ -20,7 +20,6 @@ import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
 import models.ResultsPageData
 import models.requests.DataRequest
-import models.ResultsPageData
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
@@ -66,7 +65,7 @@ class ResultsPageController @Inject() (
                 accountingPeriodForm,
                 taxableProfit,
                 calculatorResult,
-                maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0L),
+                maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0),
                 maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
               )
             )

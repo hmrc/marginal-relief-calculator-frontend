@@ -21,8 +21,8 @@ import forms.AccountingPeriodForm
 
 case class ResultsPageData(
   accountingPeriodForm: AccountingPeriodForm,
-  taxableProfit: Long,
+  taxableProfit: Int,
   calculatorResult: CalculatorResult,
-  distributionsIncludedAmount: Long,
+  distributionsIncludedAmount: Int,
   associatedCompaniesCount: Int
 )
