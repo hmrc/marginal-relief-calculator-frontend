@@ -51,36 +51,49 @@ object ResultsPageHelper extends ViewHelper {
       immutable.Seq(
         h1(messages(messages("resultsPage.yourDetails"))),
         Html(
-          summaryList(
-            SummaryList(
-              rows = Seq(
-                SummaryListRow(
-                  key = messages("resultsPage.accountPeriod").toKey,
-                  value = Value(
-                    displayAccountingPeriodText(
-                      calculatorResult,
-                      accountingPeriodForm,
-                      displayCoversFinancialYears,
-                      messages
+          Seq(
+            summaryList(
+              SummaryList(
+                rows = Seq(
+                  SummaryListRow(
+                    key = messages("resultsPage.accountPeriod").toKey,
+                    value = Value(
+                      displayAccountingPeriodText(
+                        calculatorResult,
+                        accountingPeriodForm,
+                        displayCoversFinancialYears,
+                        messages
+                      )
                     )
+                  ),
+                  SummaryListRow(
+                    key = messages("resultsPage.companysProfit").toKey,
+                    value = Value(CurrencyUtils.format(taxableProfit).toText)
+                  ),
+                  SummaryListRow(
+                    key = messages("resultsPage.distributions").toKey,
+                    value = Value(CurrencyUtils.format(distributions).toText)
+                  ),
+                  SummaryListRow(
+                    key = messages("resultsPage.associatedCompanies").toKey,
+                    value = Value(associatedCompanies.toString.toText)
                   )
                 ),
-                SummaryListRow(
-                  key = messages("resultsPage.companysProfit").toKey,
-                  value = Value(CurrencyUtils.format(taxableProfit).toText)
-                ),
-                SummaryListRow(
-                  key = messages("resultsPage.distributions").toKey,
-                  value = Value(CurrencyUtils.format(distributions).toText)
-                ),
-                SummaryListRow(
-                  key = messages("resultsPage.associatedCompanies").toKey,
-                  value = Value(associatedCompanies.toString.toText)
+                classes = "govuk-summary-list--no-border"
+              )
+            ).body,
+            calculatorResult
+              .fold(single => Html("")) { dual =>
+                Html(
+                  Seq(
+                    headingS(messages("resultsPage.2years.period.heading")).body,
+                    yearDescription(accountingPeriodForm, dual).body
+                  ).mkString
                 )
-              ),
-              classes = "govuk-summary-list--no-border"
-            )
-          ).body
+              }
+              .body,
+            hr.body
+          ).mkString
         )
       )
     )
@@ -197,7 +210,7 @@ object ResultsPageHelper extends ViewHelper {
         val days = td.days
         td.fold { flat =>
           Seq(
-            s"""<h2 class="govuk-heading-l" style="margin-bottom: 4px;">${messages(
+            s"""<h3 class="govuk-heading-m" style="margin-bottom: 4px;">${messages(
                 "fullResultsPage.forFinancialYear",
                 year.toString,
                 (year + 1).toString,
@@ -211,7 +224,7 @@ object ResultsPageHelper extends ViewHelper {
           ).mkString
         } { marginal =>
           Seq(
-            s"""<h2 class="govuk-heading-l" style="margin-bottom: 4px;">${messages(
+            s"""<h3 class="govuk-heading-m" style="margin-bottom: 4px;">${messages(
                 "fullResultsPage.forFinancialYear",
                 year.toString,
                 (year + 1).toString,
