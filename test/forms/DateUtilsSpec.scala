@@ -14,13 +14,27 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers
+import forms.DateUtils._
 
-case object TaxableProfitPage extends QuestionPage[Int] {
+import java.time.LocalDate
 
-  override def path: JsPath = JsPath \ toString
+class DateUtilsSpec extends AnyFreeSpec with Matchers {
 
-  override def toString: String = "taxableProfit"
+  private val epoch = LocalDate.ofEpochDay(0)
+
+  "formatDate" - {
+    "should format date correctly" in {
+      epoch.formatDate shouldBe "1 Jan 1970"
+    }
+  }
+
+  "formatDateFull" - {
+    "should format date correctly" in {
+      epoch.formatDateFull shouldBe "1 January 1970"
+    }
+  }
 }

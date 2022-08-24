@@ -38,23 +38,22 @@
             field = form(formParam),
             label = Label(content = Text(messages("associatedCompanies.countLabel")))
         )
-        .asNumeric()
         .withCssClass("govuk-!-width-one-third")
+        .withAttribute("maxlength" -> "2")
     )
 }
 
 @formContent(p: AskAssociatedCompaniesParameter) = {
-   <span>
        <h1 class="govuk-fieldset__legend--l">
 		   @p match {
 			   case AskFull => {
 			   		@messages("associatedCompanies.heading")
                }
 			   case AskOnePart(Period(start, end)) => {
-                    @messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+                    @messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
                }
                case AskBothParts(Period(start, end), _) => {
-           			@messages("associatedCompanies.heading.between", start.formatDate, end.formatDate)
+           			@messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
                }
 		   }
        </h1>
@@ -98,7 +97,6 @@
                )
            )
        )
-   </span>
 }
 
 @layout(pageTitle = title(form, messages("associatedCompanies.title"))) {

@@ -22,11 +22,14 @@ import java.time.format.DateTimeFormatter
 object DateUtils {
 
   private val FORMAT = DateTimeFormatter.ofPattern("d MMM yyyy")
+  private val FORMAT_FULL = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
   implicit class DateOps(date: LocalDate) {
     def isEqualOrBefore(another: LocalDate): Boolean =
       date.equals(another) || date.isBefore(another)
 
     def formatDate: String = FORMAT.format(date)
+
+    def formatDateFull: String = FORMAT_FULL.format(date)
   }
 }

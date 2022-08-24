@@ -16,28 +16,142 @@
 
 package views.helpers
 
+import base.SpecBase
 import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult }
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.should.Matchers
+import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.Aliases.{ HeadCell, HtmlContent, Panel, Table, Text }
+import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable }
+import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
-class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
+import java.time.LocalDate
+
+class ResultsPageHelperSpec extends SpecBase {
 
   private implicit val messages: Messages = Helpers.stubMessages()
   private val govukTable = new GovukTable()
   private val govukPanel = new GovukPanel()
+  private val epoch = LocalDate.ofEpochDay(0)
+
+  "displayYourDetails" - {
+    "when accounting period falls in a single year" - {
+      "should return valid summary" in {
+        val calculatorResult = SingleResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        displayYourDetails(
+          calculatorResult,
+          AccountingPeriodForm(
+            epoch,
+            Some(epoch.plusDays(1))
+          ),
+          1,
+          11,
+          111,
+          true
+        ).body.trimNewLines mustBe
+          """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
+            |<dl class="govuk-summary-list govuk-summary-list--no-border">
+            | <div class="govuk-summary-list__row">
+            |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
+            |   <dd class="govuk-summary-list__value">site.from.to</dd>
+            | </div>
+            | <div class="govuk-summary-list__row">
+            |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
+            |   <dd class="govuk-summary-list__value">£1</dd>
+            | </div>
+            | <div class="govuk-summary-list__row">
+            |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
+            |   <dd class="govuk-summary-list__value">£11</dd>
+            | </div>
+            | <div class="govuk-summary-list__row">
+            |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
+            |   <dd class="govuk-summary-list__value">111</dd>
+            | </div>
+            |</dl>""".stripMargin.trimNewLines
+      }
+    }
+
+    "when accounting period spans multiple years and displayCoversFinancialYears is false" - {
+      val calculatorResult =
+        DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+      displayYourDetails(
+        calculatorResult,
+        AccountingPeriodForm(
+          epoch,
+          Some(epoch.plusDays(1))
+        ),
+        1,
+        11,
+        111,
+        true
+      ).body.trimNewLines mustBe
+        """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
+          |<dl class="govuk-summary-list govuk-summary-list--no-border">
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
+          |   <dd class="govuk-summary-list__value">
+          |     <p class="govuk-body">site.from.to</p>
+          |     <p class="govuk-body">resultsPage.covers2FinancialYears</p>
+          |   </dd>
+          | </div>
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
+          |   <dd class="govuk-summary-list__value">£1</dd>
+          | </div>
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
+          |   <dd class="govuk-summary-list__value">£11</dd>
+          | </div>
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
+          |   <dd class="govuk-summary-list__value">111</dd>
+          | </div>
+          |</dl>""".stripMargin.trimNewLines
+    }
+
+    "when accounting period spans multiple years and displayCoversFinancialYears is true" - {
+      val calculatorResult =
+        DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+      displayYourDetails(
+        calculatorResult,
+        AccountingPeriodForm(
+          epoch,
+          Some(epoch.plusDays(1))
+        ),
+        1,
+        11,
+        111,
+        false
+      ).body.trimNewLines mustBe
+        """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
+          |<dl class="govuk-summary-list govuk-summary-list--no-border">
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
+          |   <dd class="govuk-summary-list__value">site.from.to</dd>
+          | </div>
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
+          |   <dd class="govuk-summary-list__value">£1</dd>
+          | </div>
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
+          |   <dd class="govuk-summary-list__value">£11</dd>
+          | </div>
+          | <div class="govuk-summary-list__row">
+          |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
+          |   <dd class="govuk-summary-list__value">111</dd>
+          | </div>
+          |</dl>""".stripMargin.trimNewLines
+    }
+  }
 
   "displayBanner" - {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.marginalReliefNotApplicable"))
@@ -47,17 +161,21 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"£50")
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
           )
         )
       }
 
       "when marginal rate, profits are equal to lower threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 100, 1000, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
@@ -67,7 +185,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate, profits are equal to lower threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 110, 1000, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
@@ -77,7 +195,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are below lower threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 200, 1000, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
@@ -87,7 +205,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are below threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 200, 1000, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
@@ -97,7 +215,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate, profits are equal to upper threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 100, 1000, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
@@ -107,7 +225,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate, profits are equal to upper threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 100, 1000, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
@@ -117,7 +235,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are above upper threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 200, 900, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
@@ -127,7 +245,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are above threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 200, 900, 365))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
@@ -139,7 +257,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
     "when accounting period spans 2 years" - {
       "when flat rate for both years" in {
         val calculatorResult = DualResult(FlatRate(1970, 190, 19, 1000, 100), FlatRate(1971, 200, 20, 1000, 100))
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
             title = Text(messages("resultsPage.marginalReliefNotEligible")),
             content = Text(messages("resultsPage.marginalReliefNotApplicable"))
@@ -151,10 +269,14 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           FlatRate(1970, 190, 19, 1000, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100)
         )
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"£50")
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
           )
         )
       }
@@ -164,10 +286,14 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100),
           FlatRate(1970, 190, 19, 1000, 100)
         )
-        displayBanner(calculatorResult) shouldBe govukPanel(
+        displayBanner(calculatorResult) mustBe govukPanel(
           Panel(
-            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-            content = HtmlContent(s"£50")
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
           )
         )
       }
@@ -177,7 +303,7 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100)
         )
-        displayBanner(calculatorResult) shouldBe HtmlFormat.empty
+        displayBanner(calculatorResult) mustBe HtmlFormat.empty
       }
     }
   }
@@ -188,11 +314,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4))
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -214,11 +340,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 365))
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -248,11 +374,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
 
       "when marginal rate and profits are below lower threshold" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 500, 1500, 365))
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -276,11 +402,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
     "when accounting period spans 2 years" - {
       "when flat rate for both years" in {
         val calculatorResult = DualResult(FlatRate(1970, 190, 19, 1000, 100), FlatRate(1971, 200, 20, 1000, 100))
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -311,11 +437,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 500, 1000, 100)
         )
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -346,11 +472,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1970, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100),
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 100, 500, 100)
         )
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -381,11 +507,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100)
         )
-        displayCorporationTaxTable(calculatorResult) shouldBe govukTable(
+        displayCorporationTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -429,11 +555,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4))
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -454,11 +580,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
       }
       "when marginal rate" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 1100, 365))
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
               )
             ),
@@ -485,11 +611,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
     "when accounting period spans 2 years" - {
       "when flat rate for both years, display corporation tax main rate row" in {
         val calculatorResult = DualResult(FlatRate(1970, 190, 19, 1000, 100), FlatRate(1971, 200, 20, 1000, 100))
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -519,11 +645,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 100, 1100, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1100, 100)
         )
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -559,11 +685,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 500, 1000, 100)
         )
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -593,11 +719,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 10, 50, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 10, 50, 100)
         )
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -626,11 +752,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
       "when flat rate for one year and marginal rate for another year and profits below MR threshold, display effective corporation tax rate row" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 19, 19, 100, 100), MarginalRate(1971, 25, 25, 25, 25, 0, 100, 10, 500, 1000, 100))
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -661,11 +787,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           FlatRate(1970, 190, 19, 1000, 100),
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 500, 1000, 100)
         )
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -696,11 +822,11 @@ class ResultsPageHelperSpec extends AnyFreeSpec with Matchers {
           FlatRate(1970, 190, 19, 1000, 100),
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100)
         )
-        displayEffectiveTaxTable(calculatorResult) shouldBe govukTable(
+        displayEffectiveTaxTable(calculatorResult) mustBe govukTable(
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
                 HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
                 HeadCell(content = Text(messages("site.overall")))

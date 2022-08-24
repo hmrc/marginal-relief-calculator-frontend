@@ -57,7 +57,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     Gen.choose[BigInt](BigInt(Long.MaxValue) + 1, BigInt(Long.MaxValue) * 2)
 
   def intsSmallerThanMinValue: Gen[BigInt] =
-    arbitrary[BigInt] suchThat (x => x < Int.MinValue)
+    Gen.choose[BigInt](BigInt(Int.MinValue) * 2, BigInt(Int.MinValue) - 1)
 
   def longsSmallerThanMinValue: Gen[BigInt] =
     Gen.choose[BigInt](BigInt(Long.MinValue) * 2, BigInt(Long.MinValue) - 1)
@@ -95,7 +95,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
       .suchThat(_ != "false")
 
   def nonEmptyString: Gen[String] =
-    arbitrary[String] suchThat (_.nonEmpty)
+    arbitrary[String] suchThat (_.trim.nonEmpty)
 
   def stringsWithMaxLength(maxLength: Int): Gen[String] =
     for {

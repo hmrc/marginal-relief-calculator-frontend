@@ -53,7 +53,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   ).flatMap(
     _.set(
       TaxableProfitPage,
-      70000L
+      70000
     )
   ).flatMap(
     _.set(
@@ -205,7 +205,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual 400
-        contentAsString(result) must include("Enter a valid Start date for the accounting period, like 27 3 2023");
+        contentAsString(result) must include("Enter a valid start date for the accounting period, like 27 3 2023");
       }
     }
 
@@ -312,11 +312,10 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must NOT redirect to Check your answers page if form is prefilled, not changed and in normal mode" in {
-      val answers = emptyUserAnswers.set(AccountingPeriodPage, validAnswer).get
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+      val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
 
       running(application) {
-        val form = answers.get(AccountingPeriodPage).get
+        val form = completedUserAnswers.get(AccountingPeriodPage).get
         val sDate = form.accountingPeriodStartDate
         val eDate = form.accountingPeriodEndDate.get
         val request = FakeRequest(POST, accountingPeriodRoute)
@@ -329,10 +328,19 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
             "accountingPeriodEndDate.year"    -> eDate.getYear.toString
           )
           .withSession(SessionKeys.sessionId -> "test-session-id")
+        val sessionRepository = application.injector.instanceOf[SessionRepository]
+
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result) must not be (Some(routes.CheckYourAnswersController.onPageLoad.url))
+        redirectLocation(result) must not be Some(routes.CheckYourAnswersController.onPageLoad.url)
+        sessionRepository
+          .get("test-session-id")
+          .futureValue
+          .get
+          .data must be(
+          completedUserAnswers.data
+        )
       }
     }
 

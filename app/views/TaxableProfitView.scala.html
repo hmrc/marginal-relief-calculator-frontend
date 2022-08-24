@@ -53,13 +53,14 @@
                 field = form("value"),
                 label = LabelViewModel(messages("taxableProfit.label"))
             )
-            .asNumeric()
             .withWidth(Fixed10)
             .withPrefix(PrefixOrSuffix(content = Text("£")))
             .withCssClass("govuk-input--width-5")
             .withHint(HintViewModel(messages("taxableProfit.hint")))
             .withAttribute("maxlength" -> "20")
         )
+
+        <p class="govuk-body govuk-!-margin-bottom-9"></p>
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))

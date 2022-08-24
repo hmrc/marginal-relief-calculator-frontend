@@ -25,16 +25,96 @@ import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases._
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummaryList, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils, PercentageUtils }
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+import scala.collection.immutable
 
-object ResultsPageHelper {
+object ResultsPageHelper extends ViewHelper {
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   private val govukPanel = new GovukPanel()
   private val govukTable = new GovukTable()
+  private val summaryList = new GovukSummaryList()
+
+  def displayYourDetails(
+    calculatorResult: CalculatorResult,
+    accountingPeriodForm: AccountingPeriodForm,
+    taxableProfit: Int,
+    distributions: Int,
+    associatedCompanies: Int,
+    displayCoversFinancialYears: Boolean = false
+  )(implicit messages: Messages): Html =
+    HtmlFormat.fill(
+      immutable.Seq(
+        h1(messages(messages("resultsPage.yourDetails"))),
+        Html(
+          summaryList(
+            SummaryList(
+              rows = Seq(
+                SummaryListRow(
+                  key = messages("resultsPage.accountPeriod").toKey,
+                  value = Value(
+                    displayAccountingPeriodText(
+                      calculatorResult,
+                      accountingPeriodForm,
+                      displayCoversFinancialYears,
+                      messages
+                    )
+                  )
+                ),
+                SummaryListRow(
+                  key = messages("resultsPage.companysProfit").toKey,
+                  value = Value(CurrencyUtils.format(taxableProfit).toText)
+                ),
+                SummaryListRow(
+                  key = messages("resultsPage.distributions").toKey,
+                  value = Value(CurrencyUtils.format(distributions).toText)
+                ),
+                SummaryListRow(
+                  key = messages("resultsPage.associatedCompanies").toKey,
+                  value = Value(associatedCompanies.toString.toText)
+                )
+              ),
+              classes = "govuk-summary-list--no-border"
+            )
+          ).body
+        )
+      )
+    )
+
+  private def displayAccountingPeriodText(
+    calculatorResult: CalculatorResult,
+    accountingPeriodForm: AccountingPeriodForm,
+    displayCoversFinancialYears: Boolean,
+    messages: Messages
+  ) =
+    if (displayCoversFinancialYears && calculatorResult.fold(_ => false)(_ => true)) {
+      HtmlContent(
+        HtmlFormat.fill(
+          immutable.Seq(
+            p(
+              messages(
+                "site.from.to",
+                accountingPeriodForm.accountingPeriodStartDate.formatDate,
+                accountingPeriodForm.accountingPeriodEndDate.get.formatDate
+              )
+            ),
+            calculatorResult.fold(_ => HtmlFormat.empty)(_ => p(messages("resultsPage.covers2FinancialYears")))
+          )
+        )
+      )
+    } else {
+      HtmlContent(
+        messages(
+          "site.from.to",
+          accountingPeriodForm.accountingPeriodStartDate.formatDate,
+          accountingPeriodForm.accountingPeriodEndDate.get.formatDate
+        )
+      )
+    }
 
   def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
     calculatorResult match {
@@ -59,8 +139,12 @@ object ResultsPageHelper {
     if (marginalRate.marginalRelief > 0) {
       govukPanel(
         Panel(
-          title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-          content = HtmlContent(s"${CurrencyUtils.format(marginalRate.marginalRelief)}")
+          title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+              "resultsPage.marginalReliefForAccPeriodIs"
+            )}</span>"""),
+          content = HtmlContent(
+            s"""<span class="govuk-!-font-weight-bold">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>"""
+          )
         )
       )
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
@@ -336,7 +420,7 @@ object ResultsPageHelper {
             ).filter(_.nonEmpty),
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
               )
             ),
@@ -349,7 +433,7 @@ object ResultsPageHelper {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = Text("")),
+                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
                 HeadCell(content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString))),
                 HeadCell(content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -420,7 +504,7 @@ object ResultsPageHelper {
         Table(
           head = Some(
             Seq(
-              HeadCell(content = Text("")),
+              HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
               HeadCell(content = Text(messages("site.from.to", s.details.year.toString, (s.details.year + 1).toString)))
             )
           ),
@@ -458,7 +542,7 @@ object ResultsPageHelper {
           TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
           TableRow(content = Text(d.year1.days.toString)),
           TableRow(content = Text(d.year2.days.toString)),
-          TableRow(content = Text((d.year2.days + d.year2.days).toString))
+          TableRow(content = Text((d.year1.days + d.year2.days).toString))
         )
       ) ++ ((d.year1, d.year2) match {
         case (_: FlatRate, _: FlatRate) =>
@@ -490,7 +574,7 @@ object ResultsPageHelper {
                     else if (
                       List(d.year1, d.year2)
                         .forall(_.fold(_ => false)(m => m.adjustedAugmentedProfit <= m.adjustedLowerThreshold))
-                    ) // if all rates are Marginal Rates, display "Small Profit Rate"
+                    ) // if all rates are Marginal Rates, display "Small profits rate"
                       messages("resultsPage.smallProfitRate")
                     else
                       messages("resultsPage.effectiveCorporationTax")
@@ -506,7 +590,7 @@ object ResultsPageHelper {
         Table(
           head = Some(
             Seq(
-              HeadCell(content = Text("")),
+              HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
               HeadCell(content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString))),
               HeadCell(content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString))),
               HeadCell(content = Text(messages("site.overall")))
@@ -542,13 +626,11 @@ object ResultsPageHelper {
     val fromYear2 = year2.year
     val toYear2 = fromYear2 + 1
 
-    Html(
-      "<p class='govuk-body'>" +
-        messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
-        messages("site.from.to", fromDate1.formatDate, endDate1.formatDate) + "<br/>" +
+    p(
+      messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
+        messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull) + "<br/>" +
         messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
-        messages("site.from.to", fromDate2.formatDate, endDate2.formatDate) +
-        "</p>"
+        messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
     )
   }
 }

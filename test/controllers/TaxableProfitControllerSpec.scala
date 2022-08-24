@@ -40,7 +40,7 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val validAnswer = 0L
+  val validAnswer = 0
 
   lazy val taxableProfitRoute = routes.TaxableProfitController.onPageLoad(NormalMode).url
 

@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package views.helpers
 
-import play.api.libs.json.JsPath
+import play.twirl.api.Html
 
-case object TaxableProfitPage extends QuestionPage[Int] {
+trait ViewHelper {
+  def h1(text: String): Html =
+    Html(s"""<h2 class="govuk-heading-m">$text</h2>""")
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "taxableProfit"
+  def p(text: String): Html =
+    Html(s"""<p class="govuk-body">$text</p>""")
 }

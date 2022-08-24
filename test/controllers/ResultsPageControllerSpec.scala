@@ -49,7 +49,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
                       AccountingPeriodPage,
                       AccountingPeriodForm(epoch, Some(epoch.plusDays(1)))
                     )
-            u2 <- u1.set(TaxableProfitPage, 1L)
+            u2 <- u1.set(TaxableProfitPage, 1)
             u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
             u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
           } yield u4).toOption
@@ -91,7 +91,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
 
         val application = applicationBuilder(
           userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId).set(TaxableProfitPage, 1L)
+            u1 <- UserAnswers(userAnswersId).set(TaxableProfitPage, 1)
             u2 <- u1.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
             u3 <- u2.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
           } yield u3).toOption
@@ -130,7 +130,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
                       AccountingPeriodPage,
                       AccountingPeriodForm(startDate, Some(endDate))
                     )
-            u2 <- u1.set(TaxableProfitPage, 1L)
+            u2 <- u1.set(TaxableProfitPage, 1)
             u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
             u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
           } yield u4).toOption
@@ -169,8 +169,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
 
           status(result) mustEqual OK
           requestContent mustEqual viewContent
-          requestContent.contains("2022 to 2023: 1 Jan 2023 to 31 Mar 2023") mustEqual true
-          requestContent.contains("2023 to 2024: 1 Apr 2023 to 31 Dec 2023") mustEqual true
+          requestContent.contains("2022 to 2023: 1 January 2023 to 31 March 2023") mustEqual true
+          requestContent.contains("2023 to 2024: 1 April 2023 to 31 December 2023") mustEqual true
         }
       }
     }
