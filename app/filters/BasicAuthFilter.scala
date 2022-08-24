@@ -32,15 +32,11 @@ class BasicAuthFilter @Inject() (appConfig: FrontendAppConfig, override val mat:
 
   override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
     if (appConfig.authEnabled) {
-      println("------------ filter is enabled -------------")
       rh.headers.get(HeaderNames.AUTHORIZATION) map { authHeader =>
         val (user, pass) = decodeBasicAuth(authHeader)
-        println(user + "--------" + pass)
         if (appConfig.basicAuthUser.contains(user) && appConfig.basicAuthPassword.contains(pass)) {
-          println("------------ passed -------------")
           f(rh)
         } else {
-          println("------------ failed -------------")
           Future.successful(unauthorized)
         }
       } getOrElse Future.successful(unauthorized)
@@ -49,8 +45,7 @@ class BasicAuthFilter @Inject() (appConfig: FrontendAppConfig, override val mat:
     }
   }
 
-//  private[this]
-  def decodeBasicAuth(authHeader: String): (String, String) = {
+  private[this] def decodeBasicAuth(authHeader: String): (String, String) = {
     val authBasicValue = authHeader.replaceFirst("Basic ", "")
     val decoded = Base64.getDecoder.decode(authBasicValue)
     val Array(user, password) = new String(decoded).split(":")
