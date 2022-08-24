@@ -21,8 +21,8 @@ date.day = Day
 date.month = Month
 date.year = Year
 
-timeout.title = You’re about to be signed out
-timeout.message = Your session will expire soon. For your security, we will delete your answers in
+timeout.title = Your session will expire soon
+timeout.message = For your security, we will delete your answers in
 timeout.keepAlive = Stay signed in
 timeout.signOut = Sign out
 
@@ -229,5 +229,5 @@ distributionsIncluded.emptyValue = None
 
 session.expired.title = Session expired
 session.expired.heading = Your session has ended due to inactivity
-session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information to keep it secure.
+session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information.
 session.expired.btn.restart = Start again
