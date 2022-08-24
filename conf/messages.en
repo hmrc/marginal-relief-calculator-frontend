@@ -179,6 +179,7 @@ fullResultsPage.day.singular = day
 fullResultsPage.associatedCompany.singular = associated company
 fullResultsPage.associatedCompany.plural = associated companies
 fullResultsPage.oneOriginalCompany = 1 original company
+fullResultsPage.marginalReliefNotAvailable = Marginal Relief was not available in financial year {0} to {1}
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?

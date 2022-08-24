@@ -41,7 +41,7 @@ class ResultsPageController @Inject() (
   marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
-  private def getResultPageData(implicit request:DataRequest[_]): Future[Option[ResultsPageData]] = {
+  private def getResultPageData(implicit request: DataRequest[_]): Future[Option[ResultsPageData]] = {
     val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
     val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)
     val maybeAssociatedCompanies = request.userAnswers.get(AssociatedCompaniesPage)
@@ -49,7 +49,6 @@ class ResultsPageController @Inject() (
 
     (maybeAccountingPeriodForm, maybeTaxableProfit) match {
       case (Some(accountingPeriodForm), Some(taxableProfit)) =>
-
         marginalReliefCalculatorConnector
           .calculate(
             accountingPeriodForm.accountingPeriodStartDate,
@@ -59,30 +58,42 @@ class ResultsPageController @Inject() (
               _.distributionsIncludedAmount.map(_.toDouble)
             ),
             maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount)
-          ).map(calculatorResult => Some(ResultsPageData(
-          accountingPeriodForm,
-          taxableProfit,
-          calculatorResult,
-          maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0L),
-          maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
-        )))
+          )
+          .map(calculatorResult =>
+            Some(
+              ResultsPageData(
+                accountingPeriodForm,
+                taxableProfit,
+                calculatorResult,
+                maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0L),
+                maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
+              )
+            )
+          )
       case _ => Future.successful(None)
     }
 
   }
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-
     getResultPageData.map {
-      case Some(ResultsPageData(
-      accountingPeriodForm,
-      taxableProfit,
-      calculatorResult,
-      distributionsIncludedAmount,
-      associatedCompaniesCount)) =>
+      case Some(
+            ResultsPageData(
+              accountingPeriodForm,
+              taxableProfit,
+              calculatorResult,
+              distributionsIncludedAmount,
+              associatedCompaniesCount
+            )
+          ) =>
         Ok(
-          view(calculatorResult, accountingPeriodForm, taxableProfit, distributionsIncludedAmount, associatedCompaniesCount)
+          view(
+            calculatorResult,
+            accountingPeriodForm,
+            taxableProfit,
+            distributionsIncludedAmount,
+            associatedCompaniesCount
+          )
         )
       case None =>
         val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
@@ -90,32 +101,44 @@ class ResultsPageController @Inject() (
         throw new BadRequestException(
           "One or more user parameters required for calculation are missing. This could be either because the session has expired or " +
             "the user navigated directly to the results page. Missing parameters are [" + List(
-            (AccountingPeriodPage, maybeAccountingPeriodForm),
-            (TaxableProfitPage, maybeTaxableProfit)
-          ).filter(_._2.isEmpty).map(_._1).mkString(",") + "]"
+              (AccountingPeriodPage, maybeAccountingPeriodForm),
+              (TaxableProfitPage, maybeTaxableProfit)
+            ).filter(_._2.isEmpty).map(_._1).mkString(",") + "]"
         )
     }
   }
 
-  def fullResultsOnPageLoad:Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    getResultPageData.map {
-      case Some(ResultsPageData(
-        accountingPeriodForm,
-        taxableProfit,
-        calculatorResult,
-        distributionsIncludedAmount,
-        associatedCompaniesCount)) =>
-        Ok(fullView(calculatorResult, accountingPeriodForm, taxableProfit, distributionsIncludedAmount, associatedCompaniesCount))
-      case None =>
-        val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
-        val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)
-        throw new BadRequestException(
-          "One or more user parameters required for calculation are missing. This could be either because the session has expired or " +
-            "the user navigated directly to the results page. Missing parameters are [" + List(
-            (AccountingPeriodPage, maybeAccountingPeriodForm),
-            (TaxableProfitPage, maybeTaxableProfit)
-          ).filter(_._2.isEmpty).map(_._1).mkString(",") + "]"
-        )
-    }
+  def fullResultsOnPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
+    implicit request =>
+      getResultPageData.map {
+        case Some(
+              ResultsPageData(
+                accountingPeriodForm,
+                taxableProfit,
+                calculatorResult,
+                distributionsIncludedAmount,
+                associatedCompaniesCount
+              )
+            ) =>
+          Ok(
+            fullView(
+              calculatorResult,
+              accountingPeriodForm,
+              taxableProfit,
+              distributionsIncludedAmount,
+              associatedCompaniesCount
+            )
+          )
+        case None =>
+          val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
+          val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)
+          throw new BadRequestException(
+            "One or more user parameters required for calculation are missing. This could be either because the session has expired or " +
+              "the user navigated directly to the results page. Missing parameters are [" + List(
+                (AccountingPeriodPage, maybeAccountingPeriodForm),
+                (TaxableProfitPage, maybeTaxableProfit)
+              ).filter(_._2.isEmpty).map(_._1).mkString(",") + "]"
+          )
+      }
   }
 }

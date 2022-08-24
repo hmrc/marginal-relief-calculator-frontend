@@ -100,65 +100,103 @@ object ResultsPageHelper {
       throw new UnsupportedOperationException(message)
     }
 
-  def displayFullCalculationResult(calculatorResult: CalculatorResult,
-                                   associatedCompanies:Int,
-                                   taxableProfit:Long,
-                                   distributions:Long)(implicit messages: Messages): Html = {
-    calculatorResult.fold(single => {
-      val year = single.details.year
-      Html(
-        Seq(
-          s"""<h2 class="govuk-heading-l" style="margin-bottom: 4px;">${messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, single.details.days)}</h2>""",
-          displayFullFinancialYearTable(single.details, associatedCompanies, taxableProfit, distributions)
-        ).mkString
-      )
+  def displayFullCalculationResult(
+    calculatorResult: CalculatorResult,
+    associatedCompanies: Int,
+    taxableProfit: Long,
+    distributions: Long
+  )(implicit messages: Messages): Html = {
 
-    })(dual => {
+    def nonTabDisplay(taxDetails: Seq[TaxDetails]) = {
+      val htmlString = taxDetails.map { td =>
+        val year = td.year
+        val days = td.days
+        td.fold { flat =>
+          Seq(
+            s"""<h2 class="govuk-heading-l" style="margin-bottom: 4px;">${messages(
+                "fullResultsPage.forFinancialYear",
+                year.toString,
+                (year + 1).toString,
+                days
+              )}</h2>""",
+            s"""<p class="govuk-body">${messages(
+                "fullResultsPage.marginalReliefNotAvailable",
+                year.toString,
+                (year + 1).toString
+              )}</p>"""
+          ).mkString
+        } { marginal =>
+          Seq(
+            s"""<h2 class="govuk-heading-l" style="margin-bottom: 4px;">${messages(
+                "fullResultsPage.forFinancialYear",
+                year.toString,
+                (year + 1).toString,
+                days
+              )}</h2>""",
+            displayFullFinancialYearTable(marginal, associatedCompanies, taxableProfit, distributions)
+          ).mkString
+        }
+      }.mkString
 
-      def tabBtn(year:Int) = {
+      Html(htmlString)
+    }
+
+    calculatorResult.fold(single => nonTabDisplay(Seq(single.details))) { dual =>
+      def tabBtn(year: Int) =
         s"""<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
            |      <a class="govuk-tabs__tab" href="#year$year">
            |        ${messages("site.from.to", year.toString, (year + 1).toString)}
            |      </a>
            |    </li>""".stripMargin
-      }
 
-      def tabContent(taxDetails: TaxDetails) = {
-        val year = taxDetails.year
+      def tabContent(marginalRate: MarginalRate) = {
+        val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
-           |    <h2 class="govuk-heading-m">${messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, taxDetails.days)}</h2>
-           |    ${displayFullFinancialYearTable(taxDetails, associatedCompanies, taxableProfit, distributions)}
+           |    <h2 class="govuk-heading-m">${messages(
+            "fullResultsPage.forFinancialYear",
+            year.toString,
+            (year + 1).toString,
+            marginalRate.days
+          )}</h2>
+           |    ${displayFullFinancialYearTable(marginalRate, associatedCompanies, taxableProfit, distributions)}
            |  </div>""".stripMargin
       }
 
-      val year1 = dual.year1.year
-      val year2 = dual.year2.year
-      Html(
-        s"""
-          |<div class="govuk-tabs" data-module="govuk-tabs">
-          |  <h2 class="govuk-tabs__title">
-          |    Financial year results
-          |  </h2>
-          |  <ul class="govuk-tabs__list">
-          |    ${tabBtn(year1)}
-          |    ${tabBtn(year2)}
-          |  </ul>
-          |  ${tabContent(dual.year1)}
-          |  ${tabContent(dual.year2)}
-          |</div>
-          |""".stripMargin)
-    })
+      def tabDisplay(marginalRates: Seq[MarginalRate]) =
+        Html(s"""
+                |<div class="govuk-tabs" data-module="govuk-tabs">
+                |  <h2 class="govuk-tabs__title">
+                |    Financial year results
+                |  </h2>
+                |  <ul class="govuk-tabs__list">
+                |    ${marginalRates.map(_.year).map(tabBtn).mkString}
+                |  </ul>
+                |  ${marginalRates.map(tabContent).mkString}
+                |</div>
+                |""".stripMargin)
+
+      dual.year1 -> dual.year2 match {
+        case (y1: MarginalRate, y2: MarginalRate) => tabDisplay(Seq(y1, y2))
+        case (y1: MarginalRate, y2: FlatRate)     => nonTabDisplay(Seq(y1, y2))
+        case (y1: FlatRate, y2: MarginalRate)     => nonTabDisplay(Seq(y1, y2))
+        case _                                    => throw new RuntimeException("Both financial years are flat rate")
+      }
+
+    }
   }
 
-  private def displayFullFinancialYearTable(taxDetails: TaxDetails,
-                                            associatedCompanies:Int,
-                                            taxableProfit:Long,
-                                            distributions:Long)(implicit messages: Messages): Html = {
+  private def displayFullFinancialYearTable(
+    marginalRate: MarginalRate,
+    associatedCompanies: Int,
+    taxableProfit: Long,
+    distributions: Long
+  )(implicit messages: Messages): Html = {
 
-    def boldRow(text:String) = TableRow(content = Text(text), classes = "govuk-!-font-weight-bold")
+    def boldRow(text: String) = TableRow(content = Text(text), classes = "govuk-!-font-weight-bold")
 
-    val days = taxDetails.days
+    val days = marginalRate.days
 
+    // TODO: Get upper limit from backend config
     val upperLimit = CurrencyUtils.format(250000)
 
     val dayMsg = messages("fullResultsPage.day.singular")
@@ -180,22 +218,24 @@ object ResultsPageHelper {
     val upperLimitMsg = messages("fullResultsPage.upperLimit")
 
     val pointOneCompaniesCalcText = associatedCompaniesText match {
-      case None => originalCompanyMsg
+      case None                          => originalCompanyMsg
       case Some(associatedCompaniesText) => s"($associatedCompaniesText + $originalCompanyMsg)"
     }
 
     def cur = CurrencyUtils.format _
 
+    // TODO: Get fraction from backend config
     val fraction = {
-      val f = DecimalToFractionUtils.toFraction(0.015D)
+      val f = DecimalToFractionUtils.toFraction(0.015d)
       f.numerator + " ÷ " + f.denominator
     }
 
-    //TODO: Figure out what to do with flat amount here.
-    val adjustedUpperLimit = taxDetails.fold[Number](_ => 0)(marginal => marginal.adjustedUpperThreshold)
+    // TODO: Figure out what to do with flat amount here.
+    val adjustedUpperLimit = marginalRate.adjustedUpperThreshold
 
-    //TODO: get from back-end rounding errors
-    val taxableProfitIncludingDistributions = taxDetails.adjustedProfit + ( distributions.toDouble * (days.toDouble / 365D) )
+    // TODO: get from back-end rounding errors
+    val taxableProfitIncludingDistributions =
+      marginalRate.adjustedProfit + (distributions.toDouble * (days.toDouble / 365d))
 
     govukTable(
       Table(
@@ -203,19 +243,23 @@ object ResultsPageHelper {
           Seq(
             boldRow("1"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.adjustUpperLimit"))),
-            TableRow(content = Text(s"$upperLimit $upperLimitMsg × ($daysString ÷ 365 $daysMsg) ÷ $pointOneCompaniesCalcText")),
+            TableRow(content =
+              Text(s"$upperLimit $upperLimitMsg × ($daysString ÷ 365 $daysMsg) ÷ $pointOneCompaniesCalcText")
+            ),
             TableRow(content = Text(cur(adjustedUpperLimit)))
           ),
           Seq(
             boldRow("2"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfit"))),
             TableRow(content = Text(s"${cur(taxableProfit)} × ($daysString ÷ 365 $daysMsg)")),
-            TableRow(content = Text(cur(taxDetails.adjustedProfit)))
+            TableRow(content = Text(cur(marginalRate.adjustedProfit)))
           ),
           Seq(
             boldRow("3"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfitDistributions"))),
-            TableRow(content = Text(s"${cur(taxDetails.adjustedProfit)} + ${cur(distributions)} × ($daysString ÷ 365 ${daysMsg})")),
+            TableRow(content =
+              Text(s"${cur(marginalRate.adjustedProfit)} + ${cur(distributions)} × ($daysString ÷ 365 $daysMsg)")
+            ),
             TableRow(content = Text(cur(taxableProfitIncludingDistributions)))
           ),
           Seq(
@@ -227,16 +271,22 @@ object ResultsPageHelper {
           Seq(
             boldRow("5"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.fullCalculation"))),
-            TableRow(content = Text(s"""(${cur(adjustedUpperLimit)} - ${cur(taxableProfitIncludingDistributions)}) × (${cur(taxDetails.adjustedProfit)} ÷ ${cur(taxableProfitIncludingDistributions)}) × ($fraction)""")),
-            TableRow(content = Text(CurrencyUtils.format(marginalRelief(taxDetails))))
+            TableRow(content =
+              Text(s"""(${cur(adjustedUpperLimit)} - ${cur(taxableProfitIncludingDistributions)}) × (${cur(
+                  marginalRate.adjustedProfit
+                )} ÷ ${cur(taxableProfitIncludingDistributions)}) × ($fraction)""")
+            ),
+            TableRow(content = Text(CurrencyUtils.format(marginalRelief(marginalRate))))
           )
         ),
-        head = Some(Seq(
-          HeadCell(),
-          HeadCell(),
-          HeadCell(content = Text("Calculation")),
-          HeadCell(content = Text("Result"))
-        ))
+        head = Some(
+          Seq(
+            HeadCell(),
+            HeadCell(),
+            HeadCell(content = Text("Calculation")),
+            HeadCell(content = Text("Result"))
+          )
+        )
       )
     )
   }

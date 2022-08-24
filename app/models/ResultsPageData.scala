@@ -19,8 +19,10 @@ package models
 import connectors.sharedmodel.CalculatorResult
 import forms.AccountingPeriodForm
 
-case class ResultsPageData(accountingPeriodForm: AccountingPeriodForm,
-                           taxableProfit: Long,
-                           calculatorResult: CalculatorResult,
-                           distributionsIncludedAmount: Long,
-                           associatedCompaniesCount: Int)
+case class ResultsPageData(
+  accountingPeriodForm: AccountingPeriodForm,
+  taxableProfit: Long,
+  calculatorResult: CalculatorResult,
+  distributionsIncludedAmount: Long,
+  associatedCompaniesCount: Int
+)
