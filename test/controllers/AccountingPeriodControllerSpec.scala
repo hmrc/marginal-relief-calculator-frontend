@@ -53,7 +53,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   ).flatMap(
     _.set(
       TaxableProfitPage,
-      70000L
+      70000
     )
   ).flatMap(
     _.set(

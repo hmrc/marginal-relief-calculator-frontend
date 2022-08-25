@@ -57,7 +57,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
         Map("distributionsIncluded" -> DistributionsIncluded.Yes.toString),
         nonNumericError = FormError(fieldName, "distributionsIncludedAmount.error.nonNumeric"),
         doNotUseDecimalsError = FormError(fieldName, "distributionsIncludedAmount.error.doNotUseDecimals"),
-        outOfRangeError = FormError(fieldName, "error.outOfRange", List(Long.MinValue, Long.MaxValue))
+        outOfRangeError = FormError(fieldName, "error.outOfRange", List(1, ONE_BILLION))
       )
 
       "bind to None when value empty" in {
@@ -74,7 +74,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
         )
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("distributionsIncludedAmount", "error.greaterThanOneBillion", List(ONE_BILLION))
+          FormError("distributionsIncludedAmount", "error.greaterThanOneBillion")
         )
       }
 
@@ -82,7 +82,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
         val result = form.bind(buildDataMap(DistributionsIncluded.Yes, "distributionsIncludedAmount" -> 0.toString))
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("distributionsIncludedAmount", "error.lessThanOne", List(1))
+          FormError("distributionsIncludedAmount", "error.lessThanOne")
         )
       }
     }

@@ -21,7 +21,7 @@ import models.DistributionsIncluded
 
 final case class DistributionsIncludedForm(
   distributionsIncluded: DistributionsIncluded,
-  distributionsIncludedAmount: Option[Long]
+  distributionsIncludedAmount: Option[Int]
 )
 
 object DistributionsIncludedForm {

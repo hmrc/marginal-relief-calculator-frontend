@@ -40,8 +40,8 @@ object ResultsPageHelper extends ViewHelper {
   def displayYourDetails(
     calculatorResult: CalculatorResult,
     accountingPeriodForm: AccountingPeriodForm,
-    taxableProfit: Long,
-    distributions: Long,
+    taxableProfit: Int,
+    distributions: Int,
     associatedCompanies: Int,
     displayCoversFinancialYears: Boolean = false
   )(implicit messages: Messages): Html =

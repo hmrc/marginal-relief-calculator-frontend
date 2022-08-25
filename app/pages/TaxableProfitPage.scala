@@ -18,7 +18,7 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object TaxableProfitPage extends QuestionPage[Long] {
+case object TaxableProfitPage extends QuestionPage[Int] {
 
   override def path: JsPath = JsPath \ toString
 
