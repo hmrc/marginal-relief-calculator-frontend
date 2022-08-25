@@ -81,13 +81,16 @@ class BasicAuthFilterSpec
       header(HeaderNames.WWW_AUTHENTICATE, result) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
     }
 
-    "request WWW-authentication if incorrect username or password sent in authorization header" in {
+    "request WWW-authentication if incorrect username sent in authorization header" in {
       val Some(wrongUsrResult) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectUsernameAuthHeader))
-      val Some(wrongPassResult) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectPasswordAuthHeader))
 
       status(wrongUsrResult) shouldBe Status.UNAUTHORIZED
-      status(wrongPassResult) shouldBe Status.UNAUTHORIZED
       header(HeaderNames.WWW_AUTHENTICATE, wrongUsrResult) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
+    }
+    "request WWW-authentication if incorrect password sent in authorization header" in {
+      val Some(wrongPassResult) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectPasswordAuthHeader))
+
+      status(wrongPassResult) shouldBe Status.UNAUTHORIZED
       header(HeaderNames.WWW_AUTHENTICATE, wrongPassResult) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
     }
 
