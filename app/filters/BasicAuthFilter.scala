@@ -28,7 +28,7 @@ import scala.concurrent.Future
 class BasicAuthFilter @Inject() (appConfig: FrontendAppConfig, override val mat: Materializer) extends Filter {
 
   private val unauthorized: Result =
-    Results.Unauthorized.withHeaders(HeaderNames.WWW_AUTHENTICATE -> s"""Basic realm="${appConfig.basicAuthRealm}"""")
+    Results.Unauthorized.withHeaders(HeaderNames.WWW_AUTHENTICATE -> s"""Basic realm="${appConfig.basicAuthRealm.getOrElse("")}"""")
 
   override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
     if (appConfig.authEnabled) {
