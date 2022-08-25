@@ -13,13 +13,13 @@ import java.util.UUID
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import com.typesafe.config.ConfigFactory
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
-import play.api.http.{DefaultHttpFilters, HeaderNames, HttpFilters, Status}
+import play.api.http.{ DefaultHttpFilters, HeaderNames, HttpFilters, Status }
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc._
-import play.api.test.Helpers.{GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty}
-import play.api.{Application, Configuration}
+import play.api.test.Helpers.{ GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty }
+import play.api.{ Application, Configuration }
 import java.util.Base64
 import com.google.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -31,27 +31,27 @@ object BasicAuthFilterSpec {
   lazy val config: Configuration = Configuration(
     ConfigFactory
       .parseString("""
-                      |auth {
-                      |   enabled = true
-                      |   basic {
-                      |      realm = "Marginal Relief Calculator Test"
-                      |      username = "test-user"
-                      |      password = "test-password"
-                      |   }
-                      |}
-                      |""".stripMargin)
+                     |auth {
+                     |   enabled = true
+                     |   basic {
+                     |      realm = "Marginal Relief Calculator Test"
+                     |      username = "test-user"
+                     |      password = "test-password"
+                     |   }
+                     |}
+                     |""".stripMargin)
       .withFallback(ConfigFactory.load())
   )
   lazy val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
   class TestBasicAuthFilter @Inject() (
-                                      override val mat: Materializer,
-                                      ec: ExecutionContext,
-                                      scb: SessionCookieBaker
-                                       ) extends BasicAuthFilter(frontendAppConfig, mat)
+    override val mat: Materializer,
+    ec: ExecutionContext,
+    scb: SessionCookieBaker
+  ) extends BasicAuthFilter(frontendAppConfig, mat)
 }
 
 class BasicAuthFilterSpec
-  extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience with GuiceOneAppPerSuite {
+    extends AnyFreeSpec with Matchers with ScalaFutures with IntegrationPatience with GuiceOneAppPerSuite {
 
   import BasicAuthFilterSpec._
 
@@ -82,16 +82,22 @@ class BasicAuthFilterSpec
     }
 
     "request WWW-authentication if incorrect username sent in authorization header" in {
-      val Some(wrongUsrResult) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectUsernameAuthHeader))
+      val Some(wrongUsrResult) =
+        route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectUsernameAuthHeader))
 
       status(wrongUsrResult) shouldBe Status.UNAUTHORIZED
-      header(HeaderNames.WWW_AUTHENTICATE, wrongUsrResult) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
+      header(HeaderNames.WWW_AUTHENTICATE, wrongUsrResult) shouldBe Some(
+        s"""Basic realm="Marginal Relief Calculator Test""""
+      )
     }
     "request WWW-authentication if incorrect password sent in authorization header" in {
-      val Some(wrongPassResult) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectPasswordAuthHeader))
+      val Some(wrongPassResult) =
+        route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectPasswordAuthHeader))
 
       status(wrongPassResult) shouldBe Status.UNAUTHORIZED
-      header(HeaderNames.WWW_AUTHENTICATE, wrongPassResult) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
+      header(HeaderNames.WWW_AUTHENTICATE, wrongPassResult) shouldBe Some(
+        s"""Basic realm="Marginal Relief Calculator Test""""
+      )
     }
 
     "continue to Future(Result) if username and password are correct in authorization header" in {
@@ -100,6 +106,5 @@ class BasicAuthFilterSpec
       status(result) shouldBe Status.NOT_FOUND
     }
   }
-
 
 }
