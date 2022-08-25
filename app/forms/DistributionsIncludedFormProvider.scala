@@ -31,15 +31,16 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
           "distributionsIncluded.error.required",
           "distributionsIncluded.error.invalid"
         ),
-        "distributionsIncludedAmount" -> conditional[Long, DistributionsIncluded](
+        "distributionsIncludedAmount" -> conditional[Int, DistributionsIncluded](
           wholeAmount(
             "distributionsIncludedAmount.error.required",
             "error.outOfRange",
             "distributionsIncludedAmount.error.doNotUseDecimals",
-            "distributionsIncludedAmount.error.nonNumeric"
-          ).verifying(
-            minimumValue(1L, "error.lessThanOne"),
-            maximumValue(ONE_BILLION.toLong, "error.greaterThanOneBillion")
+            "distributionsIncludedAmount.error.nonNumeric",
+            "error.lessThanOne",
+            "error.greaterThanOneBillion",
+            1,
+            ONE_BILLION
           ).withPrefix("distributionsIncludedAmount"),
           enumerable[DistributionsIncluded]().withPrefix("distributionsIncluded"),
           _ == DistributionsIncluded.Yes

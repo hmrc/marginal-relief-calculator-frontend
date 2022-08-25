@@ -17,23 +17,24 @@
 package forms
 
 import forms.mappings.Mappings
-
-import javax.inject.Inject
 import play.api.data.Form
 import utils.ConstraintsUtils.ONE_BILLION
 
+import javax.inject.Inject
+
 class TaxableProfitFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Long] =
+  def apply(): Form[Int] =
     Form(
       "value" -> wholeAmount(
         "taxableProfit.error.required",
         "error.outOfRange",
         "taxableProfit.error.doNotUseDecimals",
-        "taxableProfit.error.nonNumeric"
-      ).verifying(
-        minimumValue(1L, "error.lessThanOne"),
-        maximumValue(ONE_BILLION.toLong, "error.greaterThanOneBillion")
+        "taxableProfit.error.nonNumeric",
+        "error.lessThanOne",
+        "error.greaterThanOneBillion",
+        1,
+        ONE_BILLION
       )
     )
 }
