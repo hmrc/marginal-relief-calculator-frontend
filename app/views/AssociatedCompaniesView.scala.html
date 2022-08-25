@@ -32,15 +32,40 @@
 
 @(form: Form[_], associatedCompaniesParameter: AskAssociatedCompaniesParameter,mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@yesHtml(formParam: String) = {
-    @govukInput(
-        InputViewModel(
-            field = form(formParam),
-            label = Label(content = Text(messages("associatedCompanies.countLabel")))
+@yesHtml(a: AskAssociatedCompaniesParameter) = {
+    @a match {
+     case AskFull | AskOnePart(_) => {
+        @govukInput(
+            InputViewModel(
+                field = form("associatedCompaniesCount"),
+                label = Label(content = Text(messages("associatedCompanies.countLabel")))
+            )
+            .withCssClass("govuk-!-width-one-third")
+            .withAttribute("maxlength" -> "2")
         )
-        .withCssClass("govuk-!-width-one-third")
-        .withAttribute("maxlength" -> "2")
-    )
+     }
+     case AskBothParts(period1, period2) => {
+            @HtmlFormat.fill(scala.collection.immutable.Seq(
+                govukInput(
+                    InputViewModel(
+                        field = form("associatedCompaniesFY1Count"),
+                        label = Label(content = Text(messages("associatedCompanies.countLabelBetween", period1.start.formatDate, period1.end.formatDate)))
+                    )
+                    .withCssClass("govuk-!-width-one-third")
+                    .withAttribute("maxlength" -> "2")
+                    ),
+                govukInput(
+                    InputViewModel(
+                        field = form("associatedCompaniesFY2Count"),
+                        label = Label(content = Text(messages("associatedCompanies.countLabelBetween", period2.start.formatDate, period2.end.formatDate)))
+                    )
+                    .withCssClass("govuk-!-width-one-third")
+                    .withAttribute("maxlength" -> "2")
+                )
+            ))
+    }
+  }
+
 }
 
 @formContent(p: AskAssociatedCompaniesParameter) = {
@@ -52,8 +77,8 @@
 			   case AskOnePart(Period(start, end)) => {
                     @messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
                }
-               case AskBothParts(Period(start, end), _) => {
-           			@messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
+               case AskBothParts(_, _) => {
+                    @messages("associatedCompanies.heading")
                }
 		   }
        </h1>
@@ -76,19 +101,7 @@
                    RadioItem(
                        content = Text(messages("site.yes")),
                        value = Some("yes"),
-                       conditionalHtml = Some(
-                           yesHtml(p match {
-                               case AskFull => {
-                                    "associatedCompaniesCount"
-                               }
-                               case AskOnePart(_) => {
-                                    "associatedCompaniesCount"
-                               }
-                               case AskBothParts(_, _) => {
-                                    "associatedCompaniesFY1Count"
-                               }
-                           })
-                       )
+                       conditionalHtml = Some(yesHtml(p))
                    ),
                    RadioItem(
                        content = Text(messages("site.no")),
