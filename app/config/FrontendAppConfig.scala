@@ -46,4 +46,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
 
   val cacheTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
+
+  val authEnabled: Boolean = configuration.get[Boolean]("auth.enabled")
+  val basicAuthRealm: Option[String] = configuration.getOptional[String]("auth.basic.realm")
+  val basicAuthUser: Option[String] = configuration.getOptional[String]("auth.basic.username")
+  val basicAuthPassword: Option[String] = configuration.getOptional[String]("auth.basic.password")
 }
