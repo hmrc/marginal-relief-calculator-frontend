@@ -23,8 +23,8 @@ date.year = Year
 
 timeout.title = Your session will expire soon
 timeout.message = For your security, we will delete your answers in
-timeout.keepAlive = Stay signed in
-timeout.signOut = Sign out
+timeout.keepAlive = Continue
+timeout.signOut = Start again
 
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer
