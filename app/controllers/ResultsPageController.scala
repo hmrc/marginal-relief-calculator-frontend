@@ -57,7 +57,9 @@ class ResultsPageController @Inject() (
                                       maybeDistributionsIncludedForm.flatMap(
                                         _.distributionsIncludedAmount.map(_.toDouble)
                                       ),
-                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount)
+                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount),
+                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
+                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
                                     )
         } yield Ok(
           view(
