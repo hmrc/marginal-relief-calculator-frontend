@@ -21,7 +21,7 @@ lazy val root = (project in file("."))
   .settings(majorVersion := 0)
   .settings(useSuperShell in ThisBuild := false)
   .settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.13.8",
     PlayKeys.playDefaultPort := 7101,
     name := appName,
     RoutesKeys.routesImport ++= Seq(
