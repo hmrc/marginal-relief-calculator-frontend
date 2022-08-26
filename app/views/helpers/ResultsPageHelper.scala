@@ -17,11 +17,9 @@
 package views.helpers
 
 import connectors.sharedmodel._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm }
+import forms.AccountingPeriodForm
 import forms.DateUtils.DateOps
-import models.UserAnswers
 import org.slf4j.{ Logger, LoggerFactory }
-import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases._
@@ -305,19 +303,15 @@ object ResultsPageHelper extends ViewHelper {
     }
 
     val associatedCompaniesText = associatedCompanies match {
-      case 0 => None
-      case 1 => Some(1 + " " + messages("fullResultsPage.associatedCompany.singular"))
-      case x => Some(x + " " + messages("fullResultsPage.associatedCompany.plural"))
+      case 1 => 1 + " " + messages("fullResultsPage.associatedCompany.singular")
+      case x => x + " " + messages("fullResultsPage.associatedCompany.plural")
     }
 
     val originalCompanyMsg = messages("fullResultsPage.oneOriginalCompany")
 
     val upperLimitMsg = messages("fullResultsPage.upperLimit")
 
-    val pointOneCompaniesCalcText = associatedCompaniesText match {
-      case None                          => originalCompanyMsg
-      case Some(associatedCompaniesText) => s"($associatedCompaniesText + $originalCompanyMsg)"
-    }
+    val pointOneCompaniesCalcText = s"($associatedCompaniesText + $originalCompanyMsg)"
 
     def cur = CurrencyUtils.format _
 
