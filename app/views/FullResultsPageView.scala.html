@@ -51,11 +51,9 @@
     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
-    @Html(calculatorResult.toString)
-
     @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions)
 
-    <h3 class="govuk-heading-s">@messages("fullResultsPage.marginalReliefFormula")</h3>
+    <h3 class="govuk-heading-s" style="margin-bottom: 4px;">@messages("fullResultsPage.marginalReliefFormula")</h3>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefFormula.description")</p>
 
     @govukDetails(Details(
