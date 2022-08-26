@@ -187,13 +187,13 @@ fullResultsPage.whatToDoNext = What to do next
 fullResultsPage.completeYourCorporationTaxReturn = Complete your Corporation Tax return
 fullResultsPage.payYourCorporationTaxBy = Pay your Corporation Tax by
 fullResultsPage.details.standardFraction = The standard fraction is the difference between the main rate and the marginal rate expressed as a fraction.
-fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of {0} compared with the main rate {1} is {2} = {3}
+fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.5% compared with the main rate 25% is 1.5% = 3 ÷ 200
 fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
-fullResultsPage.details.smallProfitRate = Where the small profits rate is {0} and the main rate is {1}:
-fullResultsPage.details.examples.1 = {0} (lower limit) × {1} = {2}
-fullResultsPage.details.examples.2 = {0} (upper limit) × {1} = {2}
-fullResultsPage.details.examples.3 = {1} (the difference between lower and upper limits) × X% = {2}
-fullResultsPage.details.examples.4 = {1} ÷ {2} = {3} marginal rate
+fullResultsPage.details.smallProfitRate = Where the small profits rate is 19% and the main rate is 25%:
+fullResultsPage.details.examples.1 = £50,000 (lower limit) × 19% = £9,500
+fullResultsPage.details.examples.2 = £250,000 (upper limit) × 25% = £62,500
+fullResultsPage.details.examples.3 = £200,000 (the difference between lower and upper limits) × X% = £53,000
+fullResultsPage.details.examples.4 = 53,000 ÷ 200,000 = 26.5% marginal rate
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
