@@ -18,6 +18,8 @@
 @import forms._
 @import utils.CurrencyUtils
 @import views.helpers.ResultsPageHelper._
+@import forms.DateUtils._
+@import java.time.LocalDate
 
 @this(
     layout: templates.Layout,
@@ -66,7 +68,7 @@
     <h3 class="govuk-heading-s">@messages("fullResultsPage.whatToDoNext")</h3>
     <ul class="govuk-list govuk-list--bullet">
         <li>@messages("fullResultsPage.completeYourCorporationTaxReturn")</li>
-        <li>@messages("fullResultsPage.payYourCorporationTaxBy") <b>{0}</b>.</li>
+        <li>@messages("fullResultsPage.payYourCorporationTaxBy") <b>@LocalDate.parse(calculatorResult.fold(single => single.details.year)(dual => dual.year2.year) + 1 + "-10-01").formatDateFull</b>.</li>
     </ul>
 
     @govukButton(
