@@ -50,8 +50,7 @@ class ResultsPageController @Inject() (
 
     (maybeAccountingPeriodForm, maybeTaxableProfit) match {
       case (Some(accountingPeriodForm), Some(taxableProfit)) =>
-        for {
-          marginalReliefResult <- marginalReliefCalculatorConnector
+marginalReliefCalculatorConnector
                                     .calculate(
                                       accountingPeriodForm.accountingPeriodStartDate,
                                       accountingPeriodForm.accountingPeriodEndDate.get,
@@ -62,25 +61,7 @@ class ResultsPageController @Inject() (
                                       maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount),
                                       maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
                                       maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
-                                    )
-        } yield Ok(
-          view(
-            marginalReliefResult,
-            accountingPeriodForm,
-            taxableProfit,
-            maybeDistributionsIncludedForm.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-            maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0)
-        marginalReliefCalculatorConnector
-          .calculate(
-            accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodForm.accountingPeriodEndDate.get,
-            taxableProfit.toDouble,
-            maybeDistributionsIncludedForm.flatMap(
-              _.distributionsIncludedAmount.map(_.toDouble)
-            ),
-            maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount)
-          )
-          .map(calculatorResult =>
+                                    ).map(calculatorResult =>
             Some(
               ResultsPageData(
                 accountingPeriodForm,
@@ -91,7 +72,6 @@ class ResultsPageController @Inject() (
               )
             )
           )
-      case _ => Future.successful(None)
     }
 
   }
