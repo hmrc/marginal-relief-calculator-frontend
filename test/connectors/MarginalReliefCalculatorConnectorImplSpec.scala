@@ -50,6 +50,8 @@ class MarginalReliefCalculatorConnectorImplSpec
     val profit: Double = 1
     val exemptDistributions: Option[Double] = Some(1)
     val associatedCompanies: Option[Int] = Some(1)
+    val associatedCompaniesFY1: Option[Int] = Some(2)
+    val associatedCompaniesFY2: Option[Int] = Some(3)
     val mockHttpHook: HttpHook = mock[HttpHook](withSettings.lenient)
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -87,12 +89,14 @@ class MarginalReliefCalculatorConnectorImplSpec
       wireMockServer.stubFor(
         WireMock
           .get(
-            s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
+            s"/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit${exemptDistributions
                 .map(
-                  "exemptDistributions" +
+                  "&exemptDistributions" +
                     "=" + _
                 )
-                .getOrElse("")}&${associatedCompanies.map("associatedCompanies=" + _).getOrElse("")}"
+                .getOrElse("")}${associatedCompanies.map("&associatedCompanies=" + _).getOrElse("")}${associatedCompaniesFY1
+                .map("&associatedCompaniesFY1=" + _)
+                .getOrElse("")}${associatedCompaniesFY2.map("&associatedCompaniesFY2=" + _).getOrElse("")}"
           )
           .willReturn(response)
       )
@@ -115,7 +119,9 @@ class MarginalReliefCalculatorConnectorImplSpec
             accountingPeriodEnd,
             profit,
             exemptDistributions,
-            associatedCompanies
+            associatedCompanies,
+            associatedCompaniesFY1,
+            associatedCompaniesFY2
           )
           .failed
           .futureValue
@@ -135,7 +141,9 @@ class MarginalReliefCalculatorConnectorImplSpec
             accountingPeriodEnd,
             profit,
             exemptDistributions,
-            associatedCompanies
+            associatedCompanies,
+            associatedCompaniesFY1,
+            associatedCompaniesFY2
           )
           .failed
           .futureValue
@@ -154,14 +162,16 @@ class MarginalReliefCalculatorConnectorImplSpec
             accountingPeriodEnd,
             profit,
             exemptDistributions,
-            associatedCompanies
+            associatedCompanies,
+            associatedCompaniesFY1,
+            associatedCompaniesFY2
           )
           .failed
           .futureValue
         result shouldBe a[UpstreamErrorResponse]
         result
           .asInstanceOf[UpstreamErrorResponse]
-          .getMessage shouldBe "GET of 'http://localhost:6001/calculate?accountingPeriodStart=1970-01-01&accountingPeriodEnd=1970-01-01&profit=1.0&exemptDistributions=1.0&associatedCompanies=1' returned 503. Response body: 'Service is unavailable'"
+          .getMessage shouldBe "GET of 'http://localhost:6001/calculate?accountingPeriodStart=1970-01-01&accountingPeriodEnd=1970-01-01&profit=1.0&exemptDistributions=1.0&associatedCompanies=1&associatedCompaniesFY1=2&associatedCompaniesFY2=3' returned 503. Response body: 'Service is unavailable'"
         result.asInstanceOf[UpstreamErrorResponse].statusCode shouldBe StatusCodes.ServiceUnavailable.intValue
       }
     }
@@ -193,7 +203,9 @@ class MarginalReliefCalculatorConnectorImplSpec
               accountingPeriodEnd,
               profit,
               exemptDistributions,
-              associatedCompanies
+              associatedCompanies,
+              associatedCompaniesFY1,
+              associatedCompaniesFY2
             )
             .futureValue
 

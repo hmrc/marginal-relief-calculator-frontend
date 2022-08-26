@@ -61,7 +61,9 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           accountingPeriodEnd = epoch.plusDays(1),
           1.0,
           Some(1),
-          Some(1)
+          Some(1),
+          None,
+          None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -103,7 +105,9 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           accountingPeriodEnd = epoch.plusDays(1),
           1.0,
           Some(1),
-          Some(1)
+          Some(1),
+          None,
+          None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -131,7 +135,10 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
                       AccountingPeriodForm(startDate, Some(endDate))
                     )
             u2 <- u1.set(TaxableProfitPage, 1)
-            u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
+            u3 <- u2.set(
+                    AssociatedCompaniesPage,
+                    AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), Some(2), Some(3))
+                  )
             u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
           } yield u4).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
@@ -144,7 +151,9 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           accountingPeriodEnd = endDate,
           1.0,
           Some(1),
-          Some(1)
+          Some(1),
+          Some(2),
+          Some(3)
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {

@@ -33,7 +33,9 @@ trait MarginalReliefCalculatorConnector {
     accountingPeriodEnd: LocalDate,
     profit: Double,
     exemptDistributions: Option[Double],
-    associatedCompanies: Option[Int]
+    associatedCompanies: Option[Int],
+    associatedCompaniesFY1: Option[Int],
+    associatedCompaniesFY2: Option[Int]
   )(implicit hc: HeaderCarrier): Future[CalculatorResult]
 
   def associatedCompaniesParameters(
@@ -55,12 +57,14 @@ class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, f
     accountingPeriodEnd: LocalDate,
     profit: Double,
     exemptDistributions: Option[Double],
-    associatedCompanies: Option[Int]
+    associatedCompanies: Option[Int],
+    associatedCompaniesFY1: Option[Int],
+    associatedCompaniesFY2: Option[Int]
   )(implicit hc: HeaderCarrier): Future[CalculatorResult] = {
     logger.info("Calling marginal relief backend - /calculate")
     httpClient
       .GET[CalculatorResult](
-        url"${frontendAppConfig.marginalReliefCalculatorUrl}/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptDistributions=$exemptDistributions&associatedCompanies=$associatedCompanies"
+        url"${frontendAppConfig.marginalReliefCalculatorUrl}/calculate?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&exemptDistributions=$exemptDistributions&associatedCompanies=$associatedCompanies&associatedCompaniesFY1=$associatedCompaniesFY1&associatedCompaniesFY2=$associatedCompaniesFY2"
       )
   }
 

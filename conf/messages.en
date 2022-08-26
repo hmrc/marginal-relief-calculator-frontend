@@ -21,10 +21,10 @@ date.day = Day
 date.month = Month
 date.year = Year
 
-timeout.title = You’re about to be signed out
-timeout.message = Your session will expire soon. For your security, we will delete your answers in
-timeout.keepAlive = Stay signed in
-timeout.signOut = Sign out
+timeout.title = Your session will expire soon
+timeout.message = For your security, we will delete your answers in
+timeout.keepAlive = Continue
+timeout.signOut = Start again
 
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer
@@ -40,10 +40,10 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
-error.greaterThanOneBillion = Enter an amount lower than or equal to 1000000000
+error.greaterThanOneBillion = Enter an amount lower than or equal to 1,000,000,000
 error.greaterThan99 = Enter a number lower than or equal to 99
 error.lessThanOne = Enter an amount greater than 0
-error.outOfRange = Enter an amount that is between {0} and {1}
+error.outOfRange = Enter an amount between {0} and {1}
 
 index.title = marginal-relief-calculator-frontend
 index.heading = Calculate Marginal Relief for Corporation Tax
@@ -202,6 +202,7 @@ associatedCompanies.warning = Do not include the company you''re currently calcu
 associatedCompanies.detailsTitle = What are associated companies?
 associatedCompanies.detailsHtml = <p>A company is considered associated to another if:</p><ul class="govuk-list govuk-list--bullet"><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link" target="_blank">control (opens in new tab)</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = Enter only additional associated companies
+associatedCompanies.countLabelBetween = Enter additional associated companies between {0} and {1}
 associatedCompanies.checkYourAnswersLabel = Number of associated companies
 associatedCompanies.error.required = Select whether you have associated companies or not
 associatedCompanies.error.invalid = Select whether you have associated companies or not
@@ -217,7 +218,6 @@ taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits
 taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, 70000
 taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, 70000
-taxableProfit.error.outOfRange = Enter a taxable profit amount between {0} and {1}
 taxableProfit.change.hidden = TaxableProfit
 taxableProfit.chargeableProfitsOnCTR = These are the chargeable profits for Corporation Tax on your Company Tax Return.
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
@@ -259,11 +259,10 @@ distributionsIncluded.error.invalid = Select whether you received distributions 
 distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, 70000
 distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, 70000
 distributionsIncludedAmount.error.required = Enter an amount for your received distributions
-distributionsIncludedAmount.error.outOfRange = Enter an amount that is between 1 and 1000000000
 distributionsIncluded.change.hidden = DistributionsIncluded
 distributionsIncluded.emptyValue = None
 
 session.expired.title = Session expired
 session.expired.heading = Your session has ended due to inactivity
-session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information to keep it secure.
+session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information.
 session.expired.btn.restart = Start again
