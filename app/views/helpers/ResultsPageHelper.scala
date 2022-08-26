@@ -326,13 +326,9 @@ object ResultsPageHelper extends ViewHelper {
       val f = DecimalToFractionUtils.toFraction(0.015d)
       f.numerator + " ÷ " + f.denominator
     }
-
-    // TODO: Figure out what to do with flat amount here.
     val adjustedUpperLimit = marginalRate.adjustedUpperThreshold
 
-    // TODO: get from back-end rounding errors
-    val taxableProfitIncludingDistributions =
-      marginalRate.adjustedProfit + (distributions.toDouble * (days.toDouble / 365d))
+    val taxableProfitIncludingDistributions = marginalRate.adjustedAugmentedProfit
 
     govukTable(
       Table(
