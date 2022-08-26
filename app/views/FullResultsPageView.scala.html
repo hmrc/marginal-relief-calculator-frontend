@@ -28,7 +28,7 @@
     govukButton: GovukButton
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
 
 
 @detailsContent = {
@@ -53,7 +53,7 @@
     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
-    @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions)
+    @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)
 
     <h3 class="govuk-heading-s" style="margin-bottom: 4px;">@messages("fullResultsPage.marginalReliefFormula")</h3>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefFormula.description")</p>
