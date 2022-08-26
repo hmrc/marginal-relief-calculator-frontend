@@ -48,4 +48,28 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
 
     }
   }
+
+  "Error handler 500" in {
+    val application = applicationBuilder(None).build()
+    running(application) {
+
+      val errorHandler = application.injector.instanceOf[ErrorHandler]
+      val request = FakeRequest(GET, "/fake")
+      val statusCode = StatusCodes.InternalServerError
+      val message = "Try again later."
+
+      val result = errorHandler.onClientError(request, statusCode.intValue, message)
+
+      status(result) mustEqual 500
+
+      val view = application.injector.instanceOf[ErrorTemplate]
+
+      contentAsString(result).filterAndTrim mustEqual
+        view("Sorry, there is a problem with the service", "Sorry, there is a problem with the service", message)(
+          request,
+          messages(application)
+        ).toString.filterAndTrim
+
+    }
+  }
 }
