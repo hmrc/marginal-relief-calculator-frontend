@@ -116,10 +116,14 @@ class BasicAuthFilterSpec
       )
     }
 
-    "continue to Future(Result) if username and password are correct in authorization header" in {
+    "continue if username and password are correct in authorization header" in {
       val Some(result) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> correctAuthHeader))
-
       status(result) shouldBe Status.NOT_FOUND
+    }
+
+    "continue if path is /ping/ping" in {
+      val Some(result) = route(app, FakeRequest(GET, "/ping/ping"))
+      status(result) shouldBe Status.OK
     }
   }
 
