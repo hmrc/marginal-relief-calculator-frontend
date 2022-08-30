@@ -202,7 +202,7 @@ object ResultsPageHelper extends ViewHelper {
     associatedCompanies: Int,
     taxableProfit: Long,
     distributions: Long,
-    config:Map[Int,FYConfig]
+    config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
     def nonTabDisplay(taxDetails: Seq[TaxDetails]) = {
@@ -288,12 +288,12 @@ object ResultsPageHelper extends ViewHelper {
     associatedCompanies: Int,
     taxableProfit: Long,
     distributions: Long,
-    config:Map[Int,FYConfig]
+    config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
     val yearConfig = config(marginalRate.year) match {
-      case x:FlatRateConfig => throw new RuntimeException("Configuration is flat where it should be marginal")
-      case x:MarginalReliefConfig => x
+      case x: FlatRateConfig       => throw new RuntimeException("Configuration is flat where it should be marginal")
+      case x: MarginalReliefConfig => x
     }
 
     def boldRow(text: String) = TableRow(content = Text(text), classes = "govuk-!-font-weight-bold")
@@ -354,7 +354,9 @@ object ResultsPageHelper extends ViewHelper {
             boldRow("3"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfitDistributions"))),
             TableRow(content =
-              Text(s"${cur(marginalRate.adjustedProfit)} + ${cur(distributions)} × ($daysString ÷ $daysInYear $daysMsg)")
+              Text(
+                s"${cur(marginalRate.adjustedProfit)} + ${cur(distributions)} × ($daysString ÷ $daysInYear $daysMsg)"
+              )
             ),
             TableRow(content = Text(cur(taxableProfitIncludingDistributions)))
           ),

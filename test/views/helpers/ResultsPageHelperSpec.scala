@@ -73,7 +73,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
     }
 
-    "when accounting period spans multiple years and displayCoversFinancialYears is false" - {
+    "when accounting period spans multiple years and displayCoversFinancialYears is false" in {
       val calculatorResult =
         DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
       displayYourDetails(
@@ -111,7 +111,7 @@ class ResultsPageHelperSpec extends SpecBase {
           |</dl>""".stripMargin.trimNewLines
     }
 
-    "when accounting period spans multiple years and displayCoversFinancialYears is true" - {
+    "when accounting period spans multiple years and displayCoversFinancialYears is true" in {
       val calculatorResult =
         DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
       displayYourDetails(
