@@ -55,10 +55,9 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
 
       val errorHandler = application.injector.instanceOf[ErrorHandler]
       val request = FakeRequest(GET, "/fake")
-      val statusCode = StatusCodes.InternalServerError
-      val message = "Try again later."
+      val message = "Try again later.<br/><br/>We have not saved any of your answers. When the service is available, you will have to start again."
 
-      val result = errorHandler.onClientError(request, statusCode.intValue, message)
+      val result = errorHandler.onServerError(request, new Exception)
 
       status(result) mustEqual 500
 
