@@ -19,9 +19,9 @@ package filters
 import akka.stream.Materializer
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{ Logger, LoggerFactory }
 import play.api.http.HeaderNames
-import play.api.mvc.{Filter, RequestHeader, Result, Results}
+import play.api.mvc.{ Filter, RequestHeader, Result, Results }
 
 import java.util.Base64
 import scala.concurrent.Future
