@@ -33,8 +33,8 @@ object FullResultsPageHelper extends ViewHelper {
   def displayFullCalculationResult(
     calculatorResult: CalculatorResult,
     associatedCompanies: Int,
-    taxableProfit: Long,
-    distributions: Long,
+    taxableProfit: Int,
+    distributions: Int,
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
@@ -131,8 +131,8 @@ object FullResultsPageHelper extends ViewHelper {
   private def displayFullFinancialYearTable(
     marginalRate: MarginalRate,
     associatedCompanies: Int,
-    taxableProfit: Long,
-    distributions: Long,
+    taxableProfit: Int,
+    distributions: Int,
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
