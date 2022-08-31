@@ -383,8 +383,6 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
     }
     "Full results page" - {
 
-      "properly renders MF results" in {}
-
       "shows tabs when 2 marginal years are selected" in {
         fullResultPageSetup(userAnswersMM, calcResultMM) { (app, result, view) =>
           val requestContent = contentAsString(result).filterAndTrim
