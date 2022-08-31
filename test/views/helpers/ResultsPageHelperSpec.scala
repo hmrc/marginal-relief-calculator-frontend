@@ -18,134 +18,19 @@ package views.helpers
 
 import base.SpecBase
 import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult }
-import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
-
-import java.time.LocalDate
+import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable }
 
 class ResultsPageHelperSpec extends SpecBase {
 
   private implicit val messages: Messages = Helpers.stubMessages()
   private val govukTable = new GovukTable()
   private val govukPanel = new GovukPanel()
-  private val epoch = LocalDate.ofEpochDay(0)
-
-  "displayYourDetails" - {
-    "when accounting period falls in a single year" - {
-      "should return valid summary" in {
-        val calculatorResult = SingleResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
-        displayYourDetails(
-          calculatorResult,
-          AccountingPeriodForm(
-            epoch,
-            Some(epoch.plusDays(1))
-          ),
-          1,
-          11,
-          111,
-          true
-        ).body.trimNewLines mustBe
-          """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
-            |<dl class="govuk-summary-list govuk-summary-list--no-border">
-            | <div class="govuk-summary-list__row">
-            |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
-            |   <dd class="govuk-summary-list__value">site.from.to</dd>
-            | </div>
-            | <div class="govuk-summary-list__row">
-            |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-            |   <dd class="govuk-summary-list__value">£1</dd>
-            | </div>
-            | <div class="govuk-summary-list__row">
-            |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-            |   <dd class="govuk-summary-list__value">£11</dd>
-            | </div>
-            | <div class="govuk-summary-list__row">
-            |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
-            |   <dd class="govuk-summary-list__value">111</dd>
-            | </div>
-            |</dl>""".stripMargin.trimNewLines
-      }
-    }
-
-    "when accounting period spans multiple years and displayCoversFinancialYears is false" - {
-      val calculatorResult =
-        DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
-      displayYourDetails(
-        calculatorResult,
-        AccountingPeriodForm(
-          epoch,
-          Some(epoch.plusDays(1))
-        ),
-        1,
-        11,
-        111,
-        true
-      ).body.trimNewLines mustBe
-        """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
-          |<dl class="govuk-summary-list govuk-summary-list--no-border">
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
-          |   <dd class="govuk-summary-list__value">
-          |     <p class="govuk-body">site.from.to</p>
-          |     <p class="govuk-body">resultsPage.covers2FinancialYears</p>
-          |   </dd>
-          | </div>
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |   <dd class="govuk-summary-list__value">£1</dd>
-          | </div>
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |   <dd class="govuk-summary-list__value">£11</dd>
-          | </div>
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
-          |   <dd class="govuk-summary-list__value">111</dd>
-          | </div>
-          |</dl>""".stripMargin.trimNewLines
-    }
-
-    "when accounting period spans multiple years and displayCoversFinancialYears is true" - {
-      val calculatorResult =
-        DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
-      displayYourDetails(
-        calculatorResult,
-        AccountingPeriodForm(
-          epoch,
-          Some(epoch.plusDays(1))
-        ),
-        1,
-        11,
-        111,
-        false
-      ).body.trimNewLines mustBe
-        """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
-          |<dl class="govuk-summary-list govuk-summary-list--no-border">
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
-          |   <dd class="govuk-summary-list__value">site.from.to</dd>
-          | </div>
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |   <dd class="govuk-summary-list__value">£1</dd>
-          | </div>
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |   <dd class="govuk-summary-list__value">£11</dd>
-          | </div>
-          | <div class="govuk-summary-list__row">
-          |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
-          |   <dd class="govuk-summary-list__value">111</dd>
-          | </div>
-          |</dl>""".stripMargin.trimNewLines
-    }
-  }
 
   "displayBanner" - {
     "when accounting period falls in a single year" - {

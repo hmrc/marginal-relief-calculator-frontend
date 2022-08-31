@@ -23,10 +23,9 @@
 @import java.time.LocalDate
 @import views.helpers.ResultsPageHelper._
 
+
 @this(
         layout: templates.Layout,
-        govukPanel : GovukPanel,
-        govukTable : GovukTable,
         govukButton: GovukButton
 )
 
@@ -37,13 +36,6 @@
     @displayBanner(calculatorResult)
 
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
-
-    @calculatorResult.fold(single => Html("")){ dual =>
-        <div class="govuk-heading-s">@messages("resultsPage.2years.period.heading")</div>
-        @yearDescription(accountingPeriodForm, dual)
-    }
-
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
 
@@ -64,6 +56,10 @@
     }
 
     @{displayEffectiveTaxTable(calculatorResult)}
+
+    <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>
+    <p class="govuk-body">@messages("resultsPage.howWeCalculated.body")</p>
+    <p class="govuk-body"><a href="@routes.FullResultsPageController.onPageLoad().url" class="govuk-link">@messages("resultsPage.howWeCalculated.link")</a></p>
 
     @govukButton(
         Button(

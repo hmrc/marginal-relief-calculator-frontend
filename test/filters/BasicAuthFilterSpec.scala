@@ -17,16 +17,10 @@
 package filters
 
 import akka.stream.Materializer
-import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import filters.BasicAuthFilter
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.routing.Router
-import uk.gov.hmrc.play.bootstrap.frontend.filters.SessionIdFilter
-import java.util.UUID
-import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import com.typesafe.config.ConfigFactory
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
@@ -36,11 +30,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc._
 import play.api.test.Helpers.{ GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty }
 import play.api.{ Application, Configuration }
-import java.util.Base64
-import com.google.inject.Inject
 import scala.concurrent.ExecutionContext
-
-import scala.concurrent.Future
 
 object BasicAuthFilterSpec {
   class Filters @Inject() (basicAuthFilter: BasicAuthFilter) extends DefaultHttpFilters(basicAuthFilter)
