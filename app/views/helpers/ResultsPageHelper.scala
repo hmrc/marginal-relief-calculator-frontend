@@ -175,6 +175,10 @@ object ResultsPageHelper extends ViewHelper {
   )(implicit messages: Messages): Html = {
 
     def nonTabDisplay(taxDetails: Seq[TaxDetails]) = {
+      taxDetails match {
+        case Seq(taxDetails: FlatRate) => throw new RuntimeException("Only flat rate year is available")
+        case _                         => ()
+      }
       val htmlString = taxDetails.map { td =>
         val year = td.year
         val days = td.days

@@ -33,6 +33,7 @@ import views.html.{ FullResultsPageView, ResultsPageView }
 
 import java.time.LocalDate
 import scala.concurrent.Future
+import scala.util.Try
 
 class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
@@ -67,6 +68,14 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           )
   } yield u4).get
 
+  private val calcResultF = ResultsPageData(
+    AccountingPeriodForm(LocalDate.parse("2024-01-01"), Some(LocalDate.parse("2024-02-01"))),
+    70000,
+    SingleResult(FlatRate(2022, 3279.45, 19.0, 17260.27, 90)),
+    6000,
+    1
+  )
+
   private val userAnswersM = userAnswersF
     .set(
       AccountingPeriodPage,
@@ -76,6 +85,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       )
     )
     .get
+
   private val calcResultM = ResultsPageData(
     AccountingPeriodForm(LocalDate.parse("2024-01-01"), Some(LocalDate.parse("2024-02-01"))),
     70000,
@@ -93,6 +103,18 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       )
     )
     .get
+
+  private val calcResultFF = ResultsPageData(
+    AccountingPeriodForm(LocalDate.parse("2023-01-01"), Some(LocalDate.parse("2023-12-31"))),
+    70000,
+    DualResult(
+      FlatRate(2022, 3279.45, 19.0, 17260.27, 90),
+      FlatRate(2023, 3279.45, 19.0, 17260.27, 90)
+    ),
+    6000,
+    1
+  )
+
   private val userAnswersMM = userAnswersF
     .set(
       AccountingPeriodPage,
@@ -394,6 +416,19 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           }
         }
 
+      }
+
+      "throw error when no marginal year is available" in {
+        val noMarginalYears = Seq(
+          (userAnswersFF, calcResultFF),
+          (userAnswersF, calcResultF)
+        )
+
+        noMarginalYears.foreach { case (userAnswers, calcResult) =>
+          Try(fullResultPageSetup(userAnswers, calcResult)((app, result, view) => ())).failed.get mustBe a[
+            RuntimeException
+          ]
+        }
       }
     }
   }

@@ -50,18 +50,19 @@ class ResultsPageController @Inject() (
 
     (maybeAccountingPeriodForm, maybeTaxableProfit) match {
       case (Some(accountingPeriodForm), Some(taxableProfit)) =>
-marginalReliefCalculatorConnector
-                                    .calculate(
-                                      accountingPeriodForm.accountingPeriodStartDate,
-                                      accountingPeriodForm.accountingPeriodEndDate.get,
-                                      taxableProfit.toDouble,
-                                      maybeDistributionsIncludedForm.flatMap(
-                                        _.distributionsIncludedAmount.map(_.toDouble)
-                                      ),
-                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount),
-                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
-                                      maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
-                                    ).map(calculatorResult =>
+        marginalReliefCalculatorConnector
+          .calculate(
+            accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodForm.accountingPeriodEndDate.get,
+            taxableProfit.toDouble,
+            maybeDistributionsIncludedForm.flatMap(
+              _.distributionsIncludedAmount.map(_.toDouble)
+            ),
+            maybeAssociatedCompanies.flatMap(_.associatedCompaniesCount),
+            maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
+            maybeAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
+          )
+          .map(calculatorResult =>
             Some(
               ResultsPageData(
                 accountingPeriodForm,
@@ -72,6 +73,7 @@ marginalReliefCalculatorConnector
               )
             )
           )
+      case _ => Future.successful(None)
     }
 
   }
@@ -111,8 +113,6 @@ marginalReliefCalculatorConnector
 
   def fullResultsOnPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-
-
       getResultPageData.flatMap {
         case Some(
               ResultsPageData(
@@ -123,7 +123,6 @@ marginalReliefCalculatorConnector
                 associatedCompaniesCount
               )
             ) =>
-
           calculatorConfigConnector.getMap.map { config =>
             Ok(
               fullView(
