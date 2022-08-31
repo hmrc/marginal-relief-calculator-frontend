@@ -48,17 +48,20 @@
             content = Text(messages("taxableProfit.youCanFindYourCompanyProfitVia"))
         ))
 
-        @govukInput(
-            InputViewModel(
-                field = form("value"),
-                label = LabelViewModel(messages("taxableProfit.label"))
-            )
-            .withWidth(Fixed10)
-            .withPrefix(PrefixOrSuffix(content = Text("£")))
-            .withCssClass("govuk-input--width-5")
-            .withHint(HintViewModel(messages("taxableProfit.hint")))
-            .withAttribute("maxlength" -> "20")
-        )
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                @govukInput(
+                    InputViewModel(
+                        field = form("value"),
+                        label = LabelViewModel(messages("taxableProfit.label"))
+                    )
+                    .withPrefix(PrefixOrSuffix(content = Text("£")))
+                    .withCssClass("govuk-!-width-one-quarter")
+                    .withHint(HintViewModel(messages("taxableProfit.hint")))
+                    .withAttribute("maxlength" -> "20")
+                )
+            </div>
+        </div>
 
         <p class="govuk-body govuk-!-margin-bottom-9"></p>
 
