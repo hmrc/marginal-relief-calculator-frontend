@@ -166,8 +166,6 @@ object FullResultsPageHelper extends ViewHelper {
 
     val pointOneCompaniesCalcText = s"($associatedCompaniesText + $originalCompanyMsg)"
 
-    def cur = CurrencyUtils.format _
-
     val fraction = {
       val f = DecimalToFractionUtils.toFraction(yearConfig.marginalReliefFraction)
       f.numerator + " ÷ " + f.denominator
@@ -187,23 +185,24 @@ object FullResultsPageHelper extends ViewHelper {
             TableRow(content =
               Text(s"$upperLimit $upperLimitMsg × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText")
             ),
-            TableRow(content = Text(cur(adjustedUpperLimit)))
+            TableRow(content = Text(CurrencyUtils.format(adjustedUpperLimit)))
           ),
           Seq(
             boldRow("2"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfit"))),
-            TableRow(content = Text(s"${cur(taxableProfit)} × ($daysString ÷ $daysInYear $daysMsg)")),
-            TableRow(content = Text(cur(marginalRate.adjustedProfit)))
+            TableRow(content = Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInYear $daysMsg)")),
+            TableRow(content = Text(CurrencyUtils.format(marginalRate.adjustedProfit)))
           ),
           Seq(
             boldRow("3"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfitDistributions"))),
             TableRow(content =
               Text(
-                s"${cur(marginalRate.adjustedProfit)} + ${cur(distributions)} × ($daysString ÷ $daysInYear $daysMsg)"
+                s"${CurrencyUtils.format(marginalRate.adjustedProfit)} + ${CurrencyUtils
+                    .format(distributions)} × ($daysString ÷ $daysInYear $daysMsg)"
               )
             ),
-            TableRow(content = Text(cur(taxableProfitIncludingDistributions)))
+            TableRow(content = Text(CurrencyUtils.format(taxableProfitIncludingDistributions)))
           ),
           Seq(
             boldRow("4"),
@@ -214,11 +213,11 @@ object FullResultsPageHelper extends ViewHelper {
           Seq(
             boldRow("5"),
             TableRow(content = Text(messages("fullResultsPage.financialYear.fullCalculation"))),
-            TableRow(content =
-              Text(s"""(${cur(adjustedUpperLimit)} - ${cur(taxableProfitIncludingDistributions)}) × (${cur(
-                  marginalRate.adjustedProfit
-                )} ÷ ${cur(taxableProfitIncludingDistributions)}) × ($fraction)""")
-            ),
+            TableRow(content = Text(s"""(${CurrencyUtils.format(adjustedUpperLimit)} - ${CurrencyUtils.format(
+                taxableProfitIncludingDistributions
+              )}) × (${CurrencyUtils.format(
+                marginalRate.adjustedProfit
+              )} ÷ ${CurrencyUtils.format(taxableProfitIncludingDistributions)}) × ($fraction)""")),
             TableRow(content = Text(CurrencyUtils.format(ResultsPageHelper.marginalRelief(marginalRate))))
           )
         ),
