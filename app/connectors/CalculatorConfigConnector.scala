@@ -29,11 +29,11 @@ import scala.concurrent.{ ExecutionContext, Future }
 @ImplementedBy(classOf[CalculatorConfigConnectorImpl])
 trait CalculatorConfigConnector {
   def get(implicit hc: HeaderCarrier): Future[CalculatorConfig]
-  def getMap(implicit hc: HeaderCarrier): Future[Map[Int,FYConfig]]
+  def getMap(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]]
 }
 
-class CalculatorConfigConnectorImpl @Inject() (httpClient: HttpClient, frontendAppConfig: FrontendAppConfig)(
-  implicit ec: ExecutionContext
+class CalculatorConfigConnectorImpl @Inject() (httpClient: HttpClient, frontendAppConfig: FrontendAppConfig)(implicit
+  ec: ExecutionContext
 ) extends CalculatorConfigConnector {
 
   private val logger = LoggerFactory.getLogger(getClass)
@@ -46,9 +46,8 @@ class CalculatorConfigConnectorImpl @Inject() (httpClient: HttpClient, frontendA
       )
   }
 
-  override def getMap(implicit hc: HeaderCarrier): Future[Map[Int,FYConfig]] = {
+  override def getMap(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
     get.map { config =>
       config.fyConfigs.map(config => config.year -> config).toMap
     }
-  }
 }
