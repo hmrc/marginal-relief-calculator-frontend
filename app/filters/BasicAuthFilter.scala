@@ -19,6 +19,7 @@ package filters
 import akka.stream.Materializer
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import org.slf4j.{ Logger, LoggerFactory }
 import play.api.http.HeaderNames
 import play.api.mvc.{ Filter, RequestHeader, Result, Results }
 
@@ -27,15 +28,20 @@ import scala.concurrent.Future
 
 class BasicAuthFilter @Inject() (appConfig: FrontendAppConfig, override val mat: Materializer) extends Filter {
 
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
   private val unauthorized: Result =
     Results.Unauthorized.withHeaders(
       HeaderNames.WWW_AUTHENTICATE -> s"""Basic realm="${appConfig.basicAuthRealm.getOrElse("")}""""
     )
 
-  override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] =
-    if (appConfig.authEnabled) {
+  override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
+    logger.debug(s"AuthEnabled: ${appConfig.authEnabled}")
+    logger.debug(s"UserCredentials: username - ${appConfig.basicAuthUser}, password - ${appConfig.basicAuthPassword}")
+    if (!rh.path.contains("/ping/ping") && appConfig.authEnabled) {
       rh.headers.get(HeaderNames.AUTHORIZATION) map { authHeader =>
         val (user, pass) = decodeBasicAuth(authHeader)
+        logger.debug(s"submitted username: $user")
+        logger.debug(s"submitted password: $pass")
         if (appConfig.basicAuthUser.contains(user) && appConfig.basicAuthPassword.contains(pass)) {
           f(rh)
         } else {
@@ -45,6 +51,7 @@ class BasicAuthFilter @Inject() (appConfig: FrontendAppConfig, override val mat:
     } else {
       f(rh)
     }
+  }
 
   private[this] def decodeBasicAuth(authHeader: String): (String, String) = {
     val authBasicValue = authHeader.replaceFirst("Basic ", "")
