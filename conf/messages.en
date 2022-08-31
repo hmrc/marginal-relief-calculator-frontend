@@ -172,6 +172,7 @@ fullResultsPage.financialYear.taxableProfitDistributions = Taxable profit includ
 fullResultsPage.financialYear.marginalReliefFraction = Marginal Relief fraction
 fullResultsPage.financialYear.marginalReliefFraction.description = The set fraction used by HMRC to provide a gradual increase in rate
 fullResultsPage.financialYear.fullCalculation = Full calculation
+fullResultsPage.financialYearResults = Financial year results
 fullResultsPage.upperLimit = upper limit
 fullResultsPage.day.plural = days
 fullResultsPage.day.singular = day
@@ -190,6 +191,8 @@ fullResultsPage.details.examples.1 = £50,000 (lower limit) × 19% = £9,500
 fullResultsPage.details.examples.2 = £250,000 (upper limit) × 25% = £62,500
 fullResultsPage.details.examples.3 = £200,000 (the difference between lower and upper limits) × X% = £53,000
 fullResultsPage.details.examples.4 = 53,000 ÷ 200,000 = 26.5% marginal rate
+fullResultsPage.calculation = Calculation
+fullResultsPage.result = Result
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?

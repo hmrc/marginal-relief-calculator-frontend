@@ -245,7 +245,7 @@ object ResultsPageHelper extends ViewHelper {
         Html(s"""
                 |<div class="govuk-tabs" data-module="govuk-tabs">
                 |  <h2 class="govuk-tabs__title">
-                |    Financial year results
+                |    ${messages("fullResultsPage.financialYearResults")}
                 |  </h2>
                 |  <ul class="govuk-tabs__list">
                 |    ${marginalRates.map(_.year).map(tabBtn).mkString}
@@ -362,8 +362,8 @@ object ResultsPageHelper extends ViewHelper {
           Seq(
             HeadCell(),
             HeadCell(),
-            HeadCell(content = Text("Calculation")),
-            HeadCell(content = Text("Result"))
+            HeadCell(content = Text(messages("fullResultsPage.calculation"))),
+            HeadCell(content = Text(messages("fullResultsPage.result")))
           )
         )
       )
