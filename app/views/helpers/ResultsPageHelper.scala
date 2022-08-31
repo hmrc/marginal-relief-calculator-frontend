@@ -184,26 +184,32 @@ object ResultsPageHelper extends ViewHelper {
         val days = td.days
         td.fold { flat =>
           Seq(
-            s"""<h3 class="govuk-heading-m" style="margin-bottom: 4px;">${messages(
+            h3(
+              messages(
                 "fullResultsPage.forFinancialYear",
                 year.toString,
                 (year + 1).toString,
                 days
-              )}</h2>""",
-            s"""<p class="govuk-body">${messages(
+              )
+            ),
+            p(
+              messages(
                 "fullResultsPage.marginalReliefNotAvailable",
                 year.toString,
                 (year + 1).toString
-              )}</p>"""
+              )
+            )
           ).mkString
         } { marginal =>
           Seq(
-            s"""<h3 class="govuk-heading-m" style="margin-bottom: 4px;">${messages(
+            h3(
+              messages(
                 "fullResultsPage.forFinancialYear",
                 year.toString,
                 (year + 1).toString,
                 days
-              )}</h2>""",
+              )
+            ),
             displayFullFinancialYearTable(marginal, associatedCompanies, taxableProfit, distributions, config)
           ).mkString
         }
@@ -223,12 +229,14 @@ object ResultsPageHelper extends ViewHelper {
       def tabContent(marginalRate: MarginalRate) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
-           |    <h2 class="govuk-heading-m">${messages(
-            "fullResultsPage.forFinancialYear",
-            year.toString,
-            (year + 1).toString,
-            marginalRate.days
-          )}</h2>
+           |    ${h2(
+            messages(
+              "fullResultsPage.forFinancialYear",
+              year.toString,
+              (year + 1).toString,
+              marginalRate.days
+            )
+          )}
            |    ${displayFullFinancialYearTable(marginalRate, associatedCompanies, taxableProfit, distributions, config)}
            |  </div>""".stripMargin
       }
