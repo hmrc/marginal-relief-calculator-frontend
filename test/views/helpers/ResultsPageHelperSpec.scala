@@ -18,23 +18,19 @@ package views.helpers
 
 import base.SpecBase
 import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult }
-import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
-
-import java.time.LocalDate
+import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable }
 
 class ResultsPageHelperSpec extends SpecBase {
 
   private implicit val messages: Messages = Helpers.stubMessages()
   private val govukTable = new GovukTable()
   private val govukPanel = new GovukPanel()
-  private val epoch = LocalDate.ofEpochDay(0)
 
   "displayBanner" - {
     "when accounting period falls in a single year" - {
