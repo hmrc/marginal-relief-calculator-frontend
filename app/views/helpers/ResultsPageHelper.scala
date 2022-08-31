@@ -58,11 +58,12 @@ object ResultsPageHelper extends ViewHelper {
                   SummaryListRow(
                     key = messages("resultsPage.accountPeriod").toKey,
                     value = Value(
-                      displayAccountingPeriodText(
-                        calculatorResult,
-                        accountingPeriodForm,
-                        displayCoversFinancialYears,
-                        messages
+                      HtmlContent(
+                        messages(
+                          "site.from.to",
+                          accountingPeriodForm.accountingPeriodStartDate.formatDate,
+                          accountingPeriodForm.accountingPeriodEndDate.get.formatDate
+                        )
                       )
                     )
                   ),
@@ -97,37 +98,6 @@ object ResultsPageHelper extends ViewHelper {
         )
       )
     )
-
-  private def displayAccountingPeriodText(
-    calculatorResult: CalculatorResult,
-    accountingPeriodForm: AccountingPeriodForm,
-    displayCoversFinancialYears: Boolean,
-    messages: Messages
-  ) =
-    if (displayCoversFinancialYears && calculatorResult.fold(_ => false)(_ => true)) {
-      HtmlContent(
-        HtmlFormat.fill(
-          immutable.Seq(
-            p(
-              messages(
-                "site.from.to",
-                accountingPeriodForm.accountingPeriodStartDate.formatDate,
-                accountingPeriodForm.accountingPeriodEndDate.get.formatDate
-              )
-            ),
-            calculatorResult.fold(_ => HtmlFormat.empty)(_ => p(messages("resultsPage.covers2FinancialYears")))
-          )
-        )
-      )
-    } else {
-      HtmlContent(
-        messages(
-          "site.from.to",
-          accountingPeriodForm.accountingPeriodStartDate.formatDate,
-          accountingPeriodForm.accountingPeriodEndDate.get.formatDate
-        )
-      )
-    }
 
   def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
     calculatorResult match {
