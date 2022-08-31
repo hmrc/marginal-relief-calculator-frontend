@@ -24,6 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ GET, contentAsString, running, status }
 import views.html.ErrorTemplate
+import views.html.ErrorInternalView
 
 class ErrorHandlerSpec extends SpecBase with MockitoSugar {
   "Error handler renders view" in {
@@ -55,16 +56,14 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
 
       val errorHandler = application.injector.instanceOf[ErrorHandler]
       val request = FakeRequest(GET, "/fake")
-      val message = "Try again later.<br/><br/>We have not saved any of your answers. When the service is available, you will have to start again."
-
       val result = errorHandler.onServerError(request, new Exception)
 
       status(result) mustEqual 500
 
-      val view = application.injector.instanceOf[ErrorTemplate]
+      val view = application.injector.instanceOf[ErrorInternalView]
 
       contentAsString(result).filterAndTrim mustEqual
-        view("Sorry, there is a problem with the service", "Sorry, there is a problem with the service", message)(
+        view()(
           request,
           messages(application)
         ).toString.filterAndTrim

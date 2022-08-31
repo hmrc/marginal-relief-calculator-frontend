@@ -22,11 +22,13 @@ import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
+import views.html.ErrorInternalView
 
 @Singleton
 class ErrorHandler @Inject() (
   val messagesApi: MessagesApi,
-  view: ErrorTemplate
+  view: ErrorTemplate,
+  errorInternal: ErrorInternalView
 ) extends FrontendErrorHandler with I18nSupport {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
@@ -35,5 +37,5 @@ class ErrorHandler @Inject() (
     view(pageTitle, heading, message)
 
   override def internalServerErrorTemplate(implicit request: Request[_]): Html =
-    view(Messages("page.error.500.heading"), Messages("page.error.500.heading"), Messages("page.error.500.message"))
+    errorInternal()
 }
