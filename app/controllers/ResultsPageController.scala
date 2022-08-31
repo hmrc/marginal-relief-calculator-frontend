@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.{ CalculatorConfigConnector, MarginalReliefCalculatorConnector }
+import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
 import models.ResultsPageData
 import models.requests.DataRequest
@@ -38,8 +38,7 @@ class ResultsPageController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: ResultsPageView,
   fullView: FullResultsPageView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector,
-  calculatorConfigConnector: CalculatorConfigConnector
+  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
   private def getResultPageData(implicit request: DataRequest[_]): Future[Option[ResultsPageData]] = {
@@ -123,18 +122,22 @@ class ResultsPageController @Inject() (
                 associatedCompaniesCount
               )
             ) =>
-          calculatorConfigConnector.getMap.map { config =>
-            Ok(
-              fullView(
-                calculatorResult,
-                accountingPeriodForm,
-                taxableProfit,
-                distributionsIncludedAmount,
-                associatedCompaniesCount,
-                config
+          marginalReliefCalculatorConnector.config
+            .map { config =>
+              config.fyConfigs.map(config => config.year -> config).toMap
+            }
+            .map { config =>
+              Ok(
+                fullView(
+                  calculatorResult,
+                  accountingPeriodForm,
+                  taxableProfit,
+                  distributionsIncludedAmount,
+                  associatedCompaniesCount,
+                  config
+                )
               )
-            )
-          }
+            }
         case None =>
           val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
           val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)

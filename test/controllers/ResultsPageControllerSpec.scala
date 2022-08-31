@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ DualResult, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel.{ CalculatorConfig, DualResult, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, ResultsPageData, UserAnswers }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -219,6 +219,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       *, // None,
       * // None
     )(*) returns Future.successful(calculatorResult)
+
+    mockMarginalReliefCalculatorConnector.config(*) returns Future.successful(CalculatorConfig(config.values.toSeq))
 
     val viewContent = view(
       calculatorResult,
