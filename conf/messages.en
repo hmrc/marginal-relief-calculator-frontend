@@ -182,9 +182,6 @@ fullResultsPage.marginalReliefNotAvailable = Marginal Relief was not available i
 fullResultsPage.marginalReliefFormula = Marginal Relief formula is:
 fullResultsPage.marginalReliefFormula.description = (Adjusted upper limit - taxable profit including distributions) × (taxable profit ÷ taxable profit including distributions) × (Marginal Relief fraction)
 fullResultsPage.whatIsMarginalRateFraction = What is the marginal rate fraction?
-fullResultsPage.whatToDoNext = What to do next
-fullResultsPage.completeYourCorporationTaxReturn = Complete your Corporation Tax return
-fullResultsPage.payYourCorporationTaxBy = Pay your Corporation Tax by
 fullResultsPage.details.standardFraction = The standard fraction is the difference between the main rate and the marginal rate expressed as a fraction.
 fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.5% compared with the main rate 25% is 1.5% = 3 ÷ 200
 fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
