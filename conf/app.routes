@@ -14,7 +14,7 @@ GET         /there-is-a-problem                 controllers.JourneyRecoveryContr
 GET         /check-your-answers                 controllers.CheckYourAnswersController.onPageLoad
 
 GET        /results-page                        controllers.ResultsPageController.onPageLoad()
-GET        /full-results-page                   controllers.ResultsPageController.fullResultsOnPageLoad()
+GET        /full-results-page                   controllers.FullResultsPageController.onPageLoad()
 
 GET        /associated-companies                controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
 POST       /associated-companies                controllers.AssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)

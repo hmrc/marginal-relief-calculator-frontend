@@ -17,31 +17,31 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import controllers.actions._
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
 import models.ResultsPageData
 import pages.{ AccountingPeriodPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ResultsPageView
+import views.html.FullResultsPageView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class ResultsPageController @Inject() (
+class FullResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: ResultsPageView,
+  view: FullResultsPageView,
   marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    ResultsPageData(marginalReliefCalculatorConnector).map {
+    ResultsPageData(marginalReliefCalculatorConnector).flatMap {
       case Some(
             ResultsPageData(
               accountingPeriodForm,
@@ -51,15 +51,22 @@ class ResultsPageController @Inject() (
               associatedCompaniesCount
             )
           ) =>
-        Ok(
-          view(
-            calculatorResult,
-            accountingPeriodForm,
-            taxableProfit,
-            distributionsIncludedAmount,
-            associatedCompaniesCount
-          )
-        )
+        marginalReliefCalculatorConnector.config
+          .map { config =>
+            config.fyConfigs.map(config => config.year -> config).toMap
+          }
+          .map { config =>
+            Ok(
+              view(
+                calculatorResult,
+                accountingPeriodForm,
+                taxableProfit,
+                distributionsIncludedAmount,
+                associatedCompaniesCount,
+                config
+              )
+            )
+          }
       case None =>
         val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
         val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)
