@@ -44,8 +44,7 @@ object ResultsPageHelper extends ViewHelper {
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
     distributions: Int,
-    associatedCompanies: Int,
-    displayCoversFinancialYears: Boolean = false
+    associatedCompanies: Int
   )(implicit messages: Messages): Html =
     HtmlFormat.fill(
       immutable.Seq(
