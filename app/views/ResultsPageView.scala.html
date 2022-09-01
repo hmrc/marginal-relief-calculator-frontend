@@ -53,7 +53,7 @@
         <p class="govuk-body">@messages("resultsPage.corporationTaxReducedFrom", CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR), CurrencyUtils.format(calculatorResult.totalMarginalRelief))</p>
     }
 
-    <div style="overflow-x:auto;">
+    <div class="app-table">
         @{displayCorporationTaxTable(calculatorResult)}
     </div>
 
@@ -65,7 +65,7 @@
         <p class="govuk-body">@messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))</p>
     }
 
-    <div style="overflow-x:auto;">
+    <div class="app-table">
         @{displayEffectiveTaxTable(calculatorResult)}
     </div>
 

@@ -8,3 +8,11 @@
 .app-related-items .govuk-list > li {
   margin-bottom: govuk-spacing(2);
 }
+
+.app-table {
+    overflow-x: auto;
+}
+
+.app-table .govuk-table__cell {
+   white-space: nowrap;
+}
