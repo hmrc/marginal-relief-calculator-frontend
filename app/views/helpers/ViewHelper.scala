@@ -31,7 +31,5 @@ trait ViewHelper {
 
   def headingS(text: String): Html = Html(s"""<p class="govuk-heading-s">$text</p>""")
 
-  def hr: Html = Html(
-    """<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"/>""".stripMargin
-  )
+  def hr: Html = Html("""<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"/>""")
 }

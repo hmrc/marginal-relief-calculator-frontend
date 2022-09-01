@@ -18,6 +18,7 @@
 @import forms._
 @import utils.CurrencyUtils
 @import views.helpers.ResultsPageHelper._
+@import views.helpers.FullResultsPageHelper._
 @import forms.DateUtils._
 @import java.time.LocalDate
 
@@ -47,7 +48,7 @@
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
-    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies)
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>

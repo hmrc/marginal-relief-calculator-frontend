@@ -157,6 +157,7 @@ resultsPage.effectiveCorporationTaxAfterMarginalRelief = Effective Corporation T
 resultsPage.effectiveCorporationTax = Effective Corporation Tax rate
 resultsPage.reducedFromAfterMR = Reduced from {0} after Marginal Relief
 resultsPage.2years.period.heading = Your accounting period covers 2 HMRC financial years
+resultsPage.covers2FinancialYears = Covers 2 HMRC financial years
 resultsPage.howWeCalculated.heading = How we calculated your Marginal Relief
 resultsPage.howWeCalculated.body = Check the calculation in detail to see how we calculated your Marginal Relief.
 resultsPage.howWeCalculated.link = Check Marginal Relief calculation in detail
