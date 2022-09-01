@@ -22,15 +22,20 @@ import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
+import views.html.InternalServerErrorTemplate
 
 @Singleton
 class ErrorHandler @Inject() (
   val messagesApi: MessagesApi,
-  view: ErrorTemplate
+  view: ErrorTemplate,
+  errorInternal: InternalServerErrorTemplate
 ) extends FrontendErrorHandler with I18nSupport {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
     rh: Request[_]
   ): Html =
     view(pageTitle, heading, message)
+
+  override def internalServerErrorTemplate(implicit request: Request[_]): Html =
+    errorInternal()
 }
