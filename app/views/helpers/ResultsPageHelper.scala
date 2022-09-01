@@ -59,8 +59,8 @@ object ResultsPageHelper extends ViewHelper {
                       HtmlContent(
                         messages(
                           "site.from.to",
-                          accountingPeriodForm.accountingPeriodStartDate.formatDate,
-                          accountingPeriodForm.accountingPeriodEndDate.get.formatDate
+                          accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
+                          accountingPeriodForm.accountingPeriodEndDate.get.formatDateFull
                         )
                       )
                     )
