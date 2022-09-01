@@ -43,7 +43,8 @@ object ResultsPageHelper extends ViewHelper {
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
     distributions: Int,
-    associatedCompanies: Int
+    associatedCompanies: Int,
+    displayCoversFinancialYears: Boolean = false
   )(implicit messages: Messages): Html =
     HtmlFormat.fill(
       immutable.Seq(
@@ -56,12 +57,11 @@ object ResultsPageHelper extends ViewHelper {
                   SummaryListRow(
                     key = messages("resultsPage.accountPeriod").toKey,
                     value = Value(
-                      HtmlContent(
-                        messages(
-                          "site.from.to",
-                          accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
-                          accountingPeriodForm.accountingPeriodEndDate.get.formatDateFull
-                        )
+                      displayAccountingPeriodText(
+                        calculatorResult,
+                        accountingPeriodForm,
+                        displayCoversFinancialYears,
+                        messages
                       )
                     )
                   ),
@@ -81,21 +81,54 @@ object ResultsPageHelper extends ViewHelper {
                 classes = "govuk-summary-list--no-border"
               )
             ).body,
-            calculatorResult
-              .fold(single => Html("")) { dual =>
-                Html(
-                  Seq(
-                    headingS(messages("resultsPage.2years.period.heading")).body,
-                    yearDescription(accountingPeriodForm, dual).body
-                  ).mkString
-                )
-              }
-              .body,
+            if (!displayCoversFinancialYears)
+              calculatorResult
+                .fold(single => Html("")) { dual =>
+                  Html(
+                    Seq(
+                      headingS(messages("resultsPage.2years.period.heading")).body,
+                      yearDescription(accountingPeriodForm, dual).body
+                    ).mkString
+                  )
+                }
+                .body
+            else "",
             hr.body
           ).mkString
         )
       )
     )
+
+  private def displayAccountingPeriodText(
+    calculatorResult: CalculatorResult,
+    accountingPeriodForm: AccountingPeriodForm,
+    displayCoversFinancialYears: Boolean,
+    messages: Messages
+  ) =
+    if (displayCoversFinancialYears && calculatorResult.fold(_ => false)(_ => true)) {
+      HtmlContent(
+        HtmlFormat.fill(
+          immutable.Seq(
+            p(
+              messages(
+                "site.from.to",
+                accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
+                accountingPeriodForm.accountingPeriodEndDate.get.formatDateFull
+              )
+            ),
+            calculatorResult.fold(_ => HtmlFormat.empty)(_ => p(messages("resultsPage.covers2FinancialYears")))
+          )
+        )
+      )
+    } else {
+      HtmlContent(
+        messages(
+          "site.from.to",
+          accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
+          accountingPeriodForm.accountingPeriodEndDate.get.formatDateFull
+        )
+      )
+    }
 
   def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
     calculatorResult match {
