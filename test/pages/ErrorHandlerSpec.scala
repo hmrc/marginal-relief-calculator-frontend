@@ -24,7 +24,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ GET, contentAsString, running, status }
 import views.html.ErrorTemplate
-import views.html.ErrorInternalView
+import views.html.InternalServerErrorTemplate
 
 class ErrorHandlerSpec extends SpecBase with MockitoSugar {
   "Error handler renders view" in {
@@ -60,7 +60,7 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual 500
 
-      val view = application.injector.instanceOf[ErrorInternalView]
+      val view = application.injector.instanceOf[InternalServerErrorTemplate]
 
       contentAsString(result).filterAndTrim mustEqual
         view()(
