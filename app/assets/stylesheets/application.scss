@@ -16,3 +16,9 @@
 .app-table .govuk-table__cell {
    white-space: nowrap;
 }
+
+.app-taxableprofit-input {
+    @media (max-width: 40.0624em) {
+        max-width: none;
+    }
+}
