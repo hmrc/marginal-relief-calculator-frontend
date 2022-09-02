@@ -108,10 +108,10 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AccountingPeriodView]
 
         status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
-          getRequest,
-          messages(application)
-        ).toString.filterAndTrim
+        contentAsString(result).filterAndTrim mustEqual view
+          .render(form, NormalMode, getRequest, messages(application))
+          .toString
+          .filterAndTrim
       }
     }
 
@@ -353,10 +353,13 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result).filterAndTrim mustEqual view()(
-          request,
-          messages(application)
-        ).toString.filterAndTrim
+        contentAsString(result).filterAndTrim mustEqual view
+          .render(
+            request,
+            messages(application)
+          )
+          .toString
+          .filterAndTrim
       }
     }
 
