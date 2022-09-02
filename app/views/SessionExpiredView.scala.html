@@ -24,7 +24,7 @@
 
 @(timeoutSeconds:Long)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("session.expired.title"), timeout = false) {
+@layout(pageTitle = messages("session.expired.title"), timeout = false, showBackLink = false) {
  <h1 class="govuk-heading-xl">@messages("session.expired.heading")</h1>
 
  <p class="govuk-body">@messages("session.expired.body", Math.round(timeoutSeconds / 60))</p>

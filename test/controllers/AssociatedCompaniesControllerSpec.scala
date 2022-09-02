@@ -18,13 +18,13 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider }
-import models.{ AssociatedCompanies, NormalMode, UserAnswers }
+import connectors.sharedmodel._
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode }
 import org.mockito.Mockito.when
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import org.scalatest.prop.TableDrivenPropertyChecks
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TaxableProfitPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -41,6 +41,14 @@ class AssociatedCompaniesControllerSpec
   private lazy val associatedCompaniesRoute = routes.AssociatedCompaniesController.onPageLoad(NormalMode).url
   private val form = new AssociatedCompaniesFormProvider()()
 
+  private val requiredAnswers = emptyUserAnswers
+    .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+    .get
+    .set(TaxableProfitPage, 1)
+    .get
+    .set(DistributionPage, Distribution.No)
+    .get
+
   "AssociatedCompanies Controller" - {
 
     "GET page" - {
@@ -50,20 +58,60 @@ class AssociatedCompaniesControllerSpec
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]
 
-        val application = applicationBuilder(
-          userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId)
-                    .set(
-                      AccountingPeriodPage,
-                      AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                    )
-            u2 <- u1.set(TaxableProfitPage, 1)
-          } yield u2).toOption
-        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        val application = applicationBuilder(Some(requiredAnswers))
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1),
+          1.0,
+          None
+        )(*) returns Future.successful(AskFull)
+
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[AssociatedCompaniesView]
+
+          status(result) mustEqual OK
+          contentAsString(result).filterAndTrim mustEqual view(form, AskFull, NormalMode)(
+            request,
+            messages(application)
+          ).toString.filterAndTrim
+        }
+      }
+
+      "must return OK when distributions is yes and distributions included is non-empty" in {
+
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        val application = applicationBuilder(
+          Some(
+            emptyUserAnswers
+              .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+              .get
+              .set(TaxableProfitPage, 1)
+              .get
+              .set(DistributionPage, Distribution.Yes)
+              .get
+              .set(
+                DistributionsIncludedPage,
+                DistributionsIncludedForm(
+                  DistributionsIncluded.Yes,
+                  Some(1)
+                )
+              )
+              .get
+          )
+        )
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1),
           1.0,
           None
         )(*) returns Future.successful(AskFull)
@@ -89,12 +137,7 @@ class AssociatedCompaniesControllerSpec
 
         val application = applicationBuilder(
           userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId)
-                    .set(
-                      AccountingPeriodPage,
-                      AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                    )
-            u2 <- u1.set(TaxableProfitPage, 1)
+            u2 <- requiredAnswers.set(TaxableProfitPage, 1)
             u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
           } yield u3).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
@@ -134,6 +177,23 @@ class AssociatedCompaniesControllerSpec
         }
       }
 
+      "must redirect to Journey Recovery for a GET if required params are not found in user answers" in {
+        val application = applicationBuilder(userAnswers =
+          Some(
+            emptyUserAnswers
+              .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+              .get
+          )
+        ).build()
+        running(application) {
+          val request = FakeRequest(GET, associatedCompaniesRoute)
+
+          val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
       "must redirect to CheckYourAnswers page, if AssociatedCompanies parameter is DontAsk" in {
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]
@@ -144,14 +204,7 @@ class AssociatedCompaniesControllerSpec
           None
         )(*) returns Future.successful(DontAsk)
 
-        val application = applicationBuilder(userAnswers = (for {
-          u1 <- UserAnswers(userAnswersId)
-                  .set(
-                    AccountingPeriodPage,
-                    AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                  )
-          u2 <- u1.set(TaxableProfitPage, 1)
-        } yield u2).toOption)
+        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
 
@@ -160,16 +213,6 @@ class AssociatedCompaniesControllerSpec
           val result = route(application, request).value
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
-        }
-      }
-
-      "must throw RuntimeException if existing UserAnswer does not have AccountingPeriodPage and TaxableProfitPage values" in {
-        val application = applicationBuilder(userAnswers = Some(UserAnswers(userAnswersId))).build()
-        running(application) {
-          val request = FakeRequest(GET, associatedCompaniesRoute)
-          val result = route(application, request).value.failed.futureValue
-          result mustBe a[RuntimeException]
-          result.getMessage mustBe "Missing values for AccountingPeriodPage and(or) TaxableProfitPage"
         }
       }
 
@@ -183,14 +226,7 @@ class AssociatedCompaniesControllerSpec
           None
         )(*) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
 
-        val application = applicationBuilder(userAnswers = (for {
-          u1 <- UserAnswers(userAnswersId)
-                  .set(
-                    AccountingPeriodPage,
-                    AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                  )
-          u2 <- u1.set(TaxableProfitPage, 1)
-        } yield u2).toOption)
+        val application = applicationBuilder(Some(requiredAnswers))
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
 
@@ -220,16 +256,8 @@ class AssociatedCompaniesControllerSpec
         )(*) returns Future.successful(AskFull)
 
         val application =
-          applicationBuilder(
-            userAnswers = (for {
-              u1 <- UserAnswers(userAnswersId)
-                      .set(
-                        AccountingPeriodPage,
-                        AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                      )
-              u2 <- u1.set(TaxableProfitPage, 1)
-            } yield u2).toOption
-          ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          applicationBuilder(userAnswers = Some(requiredAnswers))
+            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
             .build()
 
         running(application) {
@@ -249,16 +277,8 @@ class AssociatedCompaniesControllerSpec
           mock[MarginalReliefCalculatorConnector]
 
         val application =
-          applicationBuilder(
-            userAnswers = (for {
-              u1 <- UserAnswers(userAnswersId)
-                      .set(
-                        AccountingPeriodPage,
-                        AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(0).plusDays(1)))
-                      )
-              u2 <- u1.set(TaxableProfitPage, 1)
-            } yield u2).toOption
-          ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          applicationBuilder(Some(requiredAnswers))
+            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
             .build()
 
         running(application) {
@@ -326,6 +346,29 @@ class AssociatedCompaniesControllerSpec
       "redirect to Journey Recovery for a POST if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(("associatedCompanies", "yes"), ("associatedCompaniesCount", "1"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "redirect to Journey Recovery for a POST if required parameters are missing in user answers" in {
+
+        val application = applicationBuilder(userAnswers =
+          Some(
+            emptyUserAnswers
+              .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+              .get
+          )
+        ).build()
 
         running(application) {
           val request =

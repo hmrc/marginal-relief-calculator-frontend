@@ -16,14 +16,15 @@
 
 package controllers
 
+import com.google.inject.Inject
 import controllers.actions._
-import forms.TaxableProfitFormProvider
-import javax.inject.Inject
-import models.Mode
+import forms.{ AccountingPeriodForm, TaxableProfitFormProvider }
+import models.requests.DataRequest
+import models.{ Mode, UserAnswers }
 import navigation.Navigator
-import pages.TaxableProfitPage
+import pages.{ AccountingPeriodPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TaxableProfitView
@@ -43,19 +44,36 @@ class TaxableProfitController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(TaxableProfitPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-
-    Ok(view(preparedForm, mode))
+  private val form = formProvider()
+  case class TaxableProfitRequiredParams[A](
+    accountingPeriod: AccountingPeriodForm,
+    request: Request[A],
+    userId: String,
+    userAnswers: UserAnswers
+  ) extends WrappedRequest[A](request)
+  private val requireDomainData = new ActionRefiner[DataRequest, TaxableProfitRequiredParams] {
+    override protected def refine[A](request: DataRequest[A]): Future[Either[Result, TaxableProfitRequiredParams[A]]] =
+      Future.successful {
+        request.userAnswers.get(AccountingPeriodPage) match {
+          case None        => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+          case Some(value) => Right(TaxableProfitRequiredParams(value, request, request.userId, request.userAnswers))
+        }
+      }
+    override protected def executionContext: ExecutionContext = ec
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData) { implicit request =>
+      val preparedForm = request.userAnswers.get(TaxableProfitPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, mode))
+    }
+
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       form
         .bindFromRequest()
         .fold(
@@ -66,5 +84,5 @@ class TaxableProfitController @Inject() (
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(TaxableProfitPage, mode, updatedAnswers))
         )
-  }
+    }
 }
