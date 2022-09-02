@@ -18,12 +18,17 @@ package controllers
 
 import com.google.inject.Inject
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import models.Distribution
+import models.requests.DataRequest
+import pages._
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionSummary, TaxableProfitSummary }
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
+
+import scala.concurrent.{ ExecutionContext, Future }
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -32,15 +37,38 @@ class CheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView
-) extends FrontendBaseController with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val list = SummaryListViewModel(
-      AccountingPeriodSummary.row(request.userAnswers) ++
-        TaxableProfitSummary.row(request.userAnswers) ++
-        DistributionSummary.row(request.userAnswers) ++
-        AssociatedCompaniesSummary.row(request.userAnswers)
-    )
-    Ok(view(list, routes.ResultsPageController.onPageLoad().url))
+  private val mandatoryParamsCheck = new ActionFilter[DataRequest] {
+    override protected def filter[A](
+      request: DataRequest[A]
+    ): Future[Option[Result]] =
+      Future.successful {
+        (
+          request.userAnswers.get(AccountingPeriodPage),
+          request.userAnswers.get(TaxableProfitPage),
+          request.userAnswers.get(DistributionPage),
+          request.userAnswers.get(DistributionsIncludedPage),
+          request.userAnswers.get(AssociatedCompaniesPage)
+        ) match {
+          case (Some(_), Some(_), Some(distribution), maybeDistributionsIncluded, Some(_))
+              if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
+            None
+          case _ => Some(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+        }
+      }
+    override protected def executionContext: ExecutionContext = ec
+  }
+
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen mandatoryParamsCheck) {
+    implicit request =>
+      val list = SummaryListViewModel(
+        AccountingPeriodSummary.row(request.userAnswers) ++
+          TaxableProfitSummary.row(request.userAnswers) ++
+          DistributionSummary.row(request.userAnswers) ++
+          AssociatedCompaniesSummary.row(request.userAnswers)
+      )
+      Ok(view(list, routes.ResultsPageController.onPageLoad().url))
   }
 }

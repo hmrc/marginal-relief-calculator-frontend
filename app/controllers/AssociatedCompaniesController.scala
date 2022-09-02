@@ -19,15 +19,15 @@ package controllers
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
 import models.requests.DataRequest
-import models.{ AssociatedCompanies, Mode }
+import models.{ AssociatedCompanies, Distribution, Mode, UserAnswers }
 import navigation.Navigator
 import org.slf4j.{ Logger, LoggerFactory }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TaxableProfitPage }
+import pages._
 import play.api.data.Form
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, Result }
+import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AssociatedCompaniesView
@@ -52,16 +52,53 @@ class AssociatedCompaniesController @Inject() (
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   private val form = formProvider()
+  case class AssociatedCompaniesRequiredParams[A](
+    accountingPeriod: AccountingPeriodForm,
+    taxableProfit: Int,
+    distribution: Distribution,
+    distributionsIncluded: Option[DistributionsIncludedForm],
+    request: Request[A],
+    userId: String,
+    userAnswers: UserAnswers
+  ) extends WrappedRequest[A](request)
+  private val requireDomainData = new ActionRefiner[DataRequest, AssociatedCompaniesRequiredParams] {
+    override protected def refine[A](
+      request: DataRequest[A]
+    ): Future[Either[Result, AssociatedCompaniesRequiredParams[A]]] =
+      Future.successful {
+        (
+          request.userAnswers.get(AccountingPeriodPage),
+          request.userAnswers.get(TaxableProfitPage),
+          request.userAnswers.get(DistributionPage),
+          request.userAnswers.get(DistributionsIncludedPage)
+        ) match {
+          case (Some(accPeriod), Some(taxableProfit), Some(distribution), maybeDistributionsIncluded)
+              if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
+            Right(
+              AssociatedCompaniesRequiredParams(
+                accPeriod,
+                taxableProfit,
+                distribution,
+                maybeDistributionsIncluded,
+                request,
+                request.userId,
+                request.userAnswers
+              )
+            )
+          case _ => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+        }
+      }
+    override protected def executionContext: ExecutionContext = ec
+  }
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        userParameters <- getUserParameters
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
-                                            userParameters.accountingPeriodForm.accountingPeriodStartDate,
-                                            userParameters.accountingPeriodForm.accountingPeriodEndDate.get,
-                                            userParameters.taxableProfit,
+                                            request.accountingPeriod.accountingPeriodStartDate,
+                                            request.accountingPeriod.accountingPeriodEndDate.get,
+                                            request.taxableProfit,
                                             None
                                           )
         result <- ifAskAssociatedCompaniesThen(
@@ -78,18 +115,17 @@ class AssociatedCompaniesController @Inject() (
                       )
                   )
       } yield result
-  }
+    }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       val boundedForm = form.bindFromRequest()
       for {
-        userParameters <- getUserParameters
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
-                                            userParameters.accountingPeriodForm.accountingPeriodStartDate,
-                                            userParameters.accountingPeriodForm.accountingPeriodEndDate.get,
-                                            userParameters.taxableProfit,
+                                            request.accountingPeriod.accountingPeriodStartDate,
+                                            request.accountingPeriod.accountingPeriodEndDate.get,
+                                            request.taxableProfit,
                                             None
                                           )
         result <- boundedForm
@@ -104,21 +140,21 @@ class AssociatedCompaniesController @Inject() (
                           case Some(errorKey) =>
                             ifAskAssociatedCompaniesThen(
                               associatedCompaniesParameter,
-                              badRequestWithError(boundedForm, _, errorKey, mode)
+                              badRequestWithError(boundedForm, _, errorKey, mode)(request.request)
                             )
                           case None =>
-                            updateAndRedirect(value, mode)
+                            updateAndRedirect(value, mode)(request.userAnswers)
                         }
                     )
       } yield result
-  }
+    }
 
   private def badRequestWithError(
     form: Form[AssociatedCompaniesForm],
     a: AskAssociatedCompaniesParameter,
     errorKey: String,
     mode: Mode
-  )(implicit request: DataRequest[AnyContent]) =
+  )(implicit request: Request[AnyContent]) =
     Future.successful(
       BadRequest(
         view(
@@ -130,7 +166,7 @@ class AssociatedCompaniesController @Inject() (
     )
 
   private def updateAndRedirect(value: AssociatedCompaniesForm, mode: Mode)(implicit
-    request: DataRequest[AnyContent]
+    userAnswers: UserAnswers
   ) = {
     val valueUpdated = value.associatedCompanies match {
       case AssociatedCompanies.Yes => value
@@ -142,22 +178,9 @@ class AssociatedCompaniesController @Inject() (
         )
     }
     for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(AssociatedCompaniesPage, valueUpdated))
+      updatedAnswers <- Future.fromTry(userAnswers.set(AssociatedCompaniesPage, valueUpdated))
       _              <- sessionRepository.set(updatedAnswers)
     } yield Redirect(navigator.nextPage(AssociatedCompaniesPage, mode, updatedAnswers))
-  }
-
-  case class AccountingPeriodTaxableProfit(accountingPeriodForm: AccountingPeriodForm, taxableProfit: Long)
-  private def getUserParameters()(implicit
-    request: DataRequest[AnyContent]
-  ): Future[AccountingPeriodTaxableProfit] = {
-    val userAnswers = request.userAnswers
-    (userAnswers.get(AccountingPeriodPage), userAnswers.get(TaxableProfitPage)) match {
-      case (Some(accountingPeriodForm), Some(taxableProfit)) =>
-        Future.successful(AccountingPeriodTaxableProfit(accountingPeriodForm, taxableProfit))
-      case _ =>
-        Future.failed(new RuntimeException("Missing values for AccountingPeriodPage and(or) TaxableProfitPage"))
-    }
   }
 
   private def validateRequiredFields(

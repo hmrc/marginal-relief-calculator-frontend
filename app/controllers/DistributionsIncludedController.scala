@@ -17,19 +17,19 @@
 package controllers
 
 import controllers.actions._
-import forms.DistributionsIncludedFormProvider
-import javax.inject.Inject
-import models.Mode
+import forms.{ AccountingPeriodForm, DistributionsIncludedFormProvider }
+import models.requests.DataRequest
+import models.{ Distribution, Mode, UserAnswers }
 import navigation.Navigator
-import pages.DistributionsIncludedPage
+import pages.{ AccountingPeriodPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.DistributionsIncludedView
 
+import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
-
 class DistributionsIncludedController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
@@ -43,19 +43,54 @@ class DistributionsIncludedController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
-
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) { implicit request =>
-    val preparedForm = request.userAnswers.get(DistributionsIncludedPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-
-    Ok(view(preparedForm, mode))
+  private val form = formProvider()
+  case class DistributionsIncludedRequiredParams[A](
+    accountingPeriod: AccountingPeriodForm,
+    taxableProfit: Int,
+    distribution: Distribution,
+    request: Request[A],
+    userId: String,
+    userAnswers: UserAnswers
+  ) extends WrappedRequest[A](request)
+  private val requireDomainData = new ActionRefiner[DataRequest, DistributionsIncludedRequiredParams] {
+    override protected def refine[A](
+      request: DataRequest[A]
+    ): Future[Either[Result, DistributionsIncludedRequiredParams[A]]] =
+      Future.successful {
+        (
+          request.userAnswers.get(AccountingPeriodPage),
+          request.userAnswers.get(TaxableProfitPage),
+          request.userAnswers.get(DistributionPage)
+        ) match {
+          case (Some(accPeriod), Some(taxableProfit), Some(distribution)) =>
+            Right(
+              DistributionsIncludedRequiredParams(
+                accPeriod,
+                taxableProfit,
+                distribution,
+                request,
+                request.userId,
+                request.userAnswers
+              )
+            )
+          case _ => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+        }
+      }
+    override protected def executionContext: ExecutionContext = ec
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
-    implicit request =>
+  def onPageLoad(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData) { implicit request =>
+      val preparedForm = request.userAnswers.get(DistributionsIncludedPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, mode))
+    }
+
+  def onSubmit(mode: Mode): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       form
         .bindFromRequest()
         .fold(
@@ -66,5 +101,5 @@ class DistributionsIncludedController @Inject() (
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(DistributionsIncludedPage, mode, updatedAnswers))
         )
-  }
+    }
 }

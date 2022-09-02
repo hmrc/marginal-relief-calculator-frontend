@@ -50,30 +50,30 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       LocalDate.parse("2023-03-23"),
       Some(LocalDate.parse("2024-02-23"))
     )
-  ).flatMap(
-    _.set(
+  ).get
+    .set(
       TaxableProfitPage,
       70000
     )
-  ).flatMap(
-    _.set(
+    .get
+    .set(
       DistributionPage,
       Distribution.Yes
     )
-  ).flatMap(
-    _.set(
+    .get
+    .set(
       DistributionsIncludedPage,
       DistributionsIncludedForm(
         DistributionsIncluded.No,
         None
       )
     )
-  ).flatMap(
-    _.set(
+    .get
+    .set(
       AssociatedCompaniesPage,
       AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
     )
-  ).get
+    .get
 
   def onwardRoute = Call("GET", "/foo")
 
@@ -81,8 +81,6 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val accountingPeriodRoute = routes.AccountingPeriodController.onPageLoad(NormalMode).url
   lazy val accountingPeriodRouteCheckMode = routes.AccountingPeriodController.onPageLoad(CheckMode).url
-
-  override val emptyUserAnswers = UserAnswers(userAnswersId)
 
   def getRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, accountingPeriodRoute)

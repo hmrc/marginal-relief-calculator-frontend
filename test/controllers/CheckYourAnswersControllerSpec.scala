@@ -17,19 +17,48 @@
 package controllers
 
 import base.SpecBase
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.IdiomaticMockito
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
+import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionSummary, TaxableProfitSummary }
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 
+import java.time.LocalDate
+
 class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency with IdiomaticMockito {
+
+  private val requiredAnswers = emptyUserAnswers
+    .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+    .get
+    .set(TaxableProfitPage, 1)
+    .get
+    .set(DistributionPage, Distribution.Yes)
+    .get
+    .set(
+      DistributionsIncludedPage,
+      DistributionsIncludedForm(
+        DistributionsIncluded.No,
+        None
+      )
+    )
+    .get
+    .set(
+      AssociatedCompaniesPage,
+      AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+    )
+    .get
 
   "Check Your Answers Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
+      implicit val msgs: Messages = messages(application)
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
@@ -37,7 +66,12 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[CheckYourAnswersView]
-        val list = SummaryListViewModel(Seq.empty)
+        val list = SummaryListViewModel(
+          AccountingPeriodSummary.row(requiredAnswers) ++
+            TaxableProfitSummary.row(requiredAnswers) ++
+            DistributionSummary.row(requiredAnswers) ++
+            AssociatedCompaniesSummary.row(requiredAnswers)
+        )
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(list, routes.ResultsPageController.onPageLoad().url)(
@@ -50,6 +84,26 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+      }
+    }
+
+    "must redirect to Journey Recovery for a GET if required params is missing in user answers" in {
+
+      val application = applicationBuilder(userAnswers =
+        Some(
+          emptyUserAnswers
+            .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+            .get
+        )
+      ).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)

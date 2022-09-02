@@ -17,38 +17,46 @@
 package controllers
 
 import controllers.actions.IdentifierAction
+import models.requests.IdentifierRequest
 import org.slf4j.LoggerFactory
 import play.api.i18n.I18nSupport
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl._
 import uk.gov.hmrc.play.bootstrap.binders._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{ JourneyRecoveryContinueView, JourneyRecoveryStartAgainView }
 
 import javax.inject.Inject
+import scala.concurrent.{ ExecutionContext, Future }
 
 class JourneyRecoveryController @Inject() (
   val controllerComponents: MessagesControllerComponents,
+  sessionRepository: SessionRepository,
   identify: IdentifierAction,
   continueView: JourneyRecoveryContinueView,
   startAgainView: JourneyRecoveryStartAgainView
-) extends FrontendBaseController with I18nSupport {
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  def onPageLoad(continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = identify { implicit request =>
-    val safeUrl: Option[String] = continueUrl.flatMap { unsafeUrl =>
-      unsafeUrl.getEither(OnlyRelative) match {
-        case Right(safeUrl) =>
-          Some(safeUrl.url)
-        case Left(message) =>
-          logger.info(message)
-          None
-      }
+  def onPageLoad(continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = identify.async { implicit request =>
+    continueUrl match {
+      case Some(unsafeUrl) =>
+        unsafeUrl.getEither(OnlyRelative) match {
+          case Right(safeUrl) =>
+            Future.successful(Ok(continueView(safeUrl.url)))
+          case Left(message) =>
+            logger.info(message)
+            clearSessionAndStartView()
+        }
+      case None =>
+        clearSessionAndStartView()
     }
-
-    safeUrl
-      .map(url => Ok(continueView(url)))
-      .getOrElse(Ok(startAgainView()))
   }
+
+  private def clearSessionAndStartView()(implicit request: IdentifierRequest[AnyContent]) = for {
+    _ <- sessionRepository.clear(request.userId)
+  } yield Ok(startAgainView())
 }

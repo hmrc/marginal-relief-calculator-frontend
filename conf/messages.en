@@ -67,12 +67,12 @@ checkYourAnswers.title = Check your answers
 checkYourAnswers.heading = Check your answers
 checkYourAnswers.continue = Calculate Marginal Relief
 
-journeyRecovery.continue.title = Sorry, there is a problem with the service
-journeyRecovery.continue.heading = Sorry, there is a problem with the service
-journeyRecovery.continue.guidance = [Add content to explain how to proceed.]
-journeyRecovery.startAgain.title = Sorry, there is a problem with the service
-journeyRecovery.startAgain.heading = Sorry, there is a problem with the service
-journeyRecovery.startAgain.guidance = [Add content to explain why the user needs to start again.]
+journeyRecovery.continue.title = Something has gone wrong
+journeyRecovery.continue.heading = Something has gone wrong
+journeyRecovery.continue.guidance = We had to clear all the data you entered. You will need to start your calculation again.
+journeyRecovery.startAgain.title = Something has gone wrong
+journeyRecovery.startAgain.heading = Something has gone wrong
+journeyRecovery.startAgain.guidance = We had to clear all the data you entered. You will need to start your calculation again.
 
 signedOut.title = For your security, we signed you out
 signedOut.heading = For your security, we signed you out

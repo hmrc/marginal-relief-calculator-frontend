@@ -256,5 +256,31 @@ class MarginalReliefCalculatorConnectorImplSpec
         }
       }
     }
+
+    "config" - {
+      "should return successful response" in new Fixture {
+        wireMockServer.stubFor(
+          WireMock
+            .get(
+              "/config"
+            )
+            .willReturn(
+              aResponse().withBody(
+                Json
+                  .toJson(
+                    CalculatorConfig(Seq(FlatRateConfig(1, 1), MarginalReliefConfig(2, 22, 222, 2222, 22222, 222222)))
+                  )
+                  .toString
+              )
+            )
+        )
+
+        val result: CalculatorConfig = marginalReliefCalculatorConnector.config.futureValue
+
+        result shouldEqual CalculatorConfig(
+          Seq(FlatRateConfig(1, 1), MarginalReliefConfig(2, 22, 222, 2222, 22222, 222222))
+        )
+      }
+    }
   }
 }
