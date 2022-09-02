@@ -15,29 +15,36 @@
  *@
 
 @import controllers.routes
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
 
 @this(
     layout: templates.Layout,
     govukInsetText : GovukInsetText,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukBreadcrumbs : GovukBreadcrumbs
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @breadCrumbs = {
-    <div class="govuk-breadcrumbs">
-        <ol class="govuk-breadcrumbs__list">
-            <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="https://www.gov.uk">@messages("site.home")</a>
-            </li>
-            <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="https://www.gov.uk/topic/business-tax/corporation-tax">@messages("site.corporationTax")</a>
-            </li>
-            <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="https://www.gov.uk/guidance/corporation-tax-marginal-relief">@messages("site.marginalReliefForCorporationTax")</a>
-            </li>
-        </ol>
-    </div>
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("site.home")),
+                href = Some("https://www.gov.uk")
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("site.corporationTax")),
+                href = Some("https://www.gov.uk/topic/business-tax/corporation-tax")
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("site.marginalReliefForCorporationTax")),
+                href = Some("https://www.gov.uk/guidance/corporation-tax-marginal-relief")
+            )
+        ),
+        collapseOnMobile = true
+    ))
 }
 
 @layout(
