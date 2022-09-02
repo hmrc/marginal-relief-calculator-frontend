@@ -207,7 +207,11 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
       userAnswers.get(AssociatedCompaniesPage).get.associatedCompaniesFY2Count
     )(*) returns Future.successful(calculatorResult)
 
-    mockMarginalReliefCalculatorConnector.config(*) returns Future.successful(CalculatorConfig(config.values.toSeq))
+    mockMarginalReliefCalculatorConnector.config(2022)(*) returns Future.successful(config(2022))
+    mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+    mockMarginalReliefCalculatorConnector.config(2024)(*) returns Future.successful(config(2024))
+    mockMarginalReliefCalculatorConnector.config(2025)(*) returns Future.successful(config(2025))
+    mockMarginalReliefCalculatorConnector.config(2026)(*) returns Future.successful(config(2025))
 
     val application = applicationBuilder(Some(userAnswers))
       .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))

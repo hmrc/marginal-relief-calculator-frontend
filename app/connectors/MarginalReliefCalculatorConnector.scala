@@ -18,7 +18,7 @@ package connectors
 
 import com.google.inject.{ ImplementedBy, Inject }
 import config.FrontendAppConfig
-import connectors.sharedmodel.{ AssociatedCompaniesParameter, CalculatorConfig, CalculatorResult }
+import connectors.sharedmodel.{ AssociatedCompaniesParameter, CalculatorResult, FYConfig }
 import org.slf4j.LoggerFactory
 import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 import uk.gov.hmrc.http.{ HeaderCarrier, HttpClient, StringContextOps }
@@ -45,7 +45,7 @@ trait MarginalReliefCalculatorConnector {
     exemptDistributions: Option[Double]
   )(implicit hc: HeaderCarrier): Future[AssociatedCompaniesParameter]
 
-  def config(implicit hc: HeaderCarrier): Future[CalculatorConfig]
+  def config(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig]
 }
 
 class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, frontendAppConfig: FrontendAppConfig)(
@@ -83,11 +83,11 @@ class MarginalReliefCalculatorConnectorImpl @Inject() (httpClient: HttpClient, f
       )
   }
 
-  override def config(implicit hc: HeaderCarrier): Future[CalculatorConfig] = {
+  override def config(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig] = {
     logger.info("Calling marginal relief backend - /config")
     httpClient
-      .GET[CalculatorConfig](
-        url"${frontendAppConfig.marginalReliefCalculatorUrl}/config"
+      .GET[FYConfig](
+        url"${frontendAppConfig.marginalReliefCalculatorUrl}/config/$year"
       )
   }
 }
