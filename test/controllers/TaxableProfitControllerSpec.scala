@@ -17,13 +17,13 @@
 package controllers
 
 import base.SpecBase
-import forms.TaxableProfitFormProvider
-import models.{ NormalMode, UserAnswers }
+import forms.{ AccountingPeriodForm, TaxableProfitFormProvider }
+import models.NormalMode
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TaxableProfitPage
+import pages.{ AccountingPeriodPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -31,6 +31,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.TaxableProfitView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
@@ -44,11 +45,15 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val taxableProfitRoute = routes.TaxableProfitController.onPageLoad(NormalMode).url
 
+  private val requiredAnswers = emptyUserAnswers
+    .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+    .get
+
   "TaxableProfit Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, taxableProfitRoute)
@@ -67,7 +72,7 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(TaxableProfitPage, validAnswer).success.value
+      val userAnswers = requiredAnswers.set(TaxableProfitPage, validAnswer).get
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -93,7 +98,7 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -114,7 +119,7 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
       running(application) {
         val request =
@@ -146,9 +151,40 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to Journey Recovery for a GET if required params is missing in user answers" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, taxableProfitRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+      }
+    }
+
     "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, taxableProfitRoute)
+            .withFormUrlEncodedBody(("value", validAnswer.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+      }
+    }
+
+    "must redirect to Journey Recovery for a POST if required params is missing in user answers" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
         val request =

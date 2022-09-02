@@ -18,16 +18,17 @@ package controllers
 
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import models.ResultsPageData
-import pages.{ AccountingPeriodPage, TaxableProfitPage }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.requests.DataRequest
+import models.{ Distribution, UserAnswers }
+import pages._
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
-import uk.gov.hmrc.http.BadRequestException
+import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ ExecutionContext, Future }
 
 class FullResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
@@ -40,43 +41,79 @@ class FullResultsPageController @Inject() (
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    ResultsPageData(marginalReliefCalculatorConnector).flatMap {
-      case Some(
-            ResultsPageData(
-              accountingPeriodForm,
-              taxableProfit,
-              calculatorResult,
-              distributionsIncludedAmount,
-              associatedCompaniesCount
-            )
-          ) =>
-        marginalReliefCalculatorConnector.config
-          .map { config =>
-            config.fyConfigs.map(config => config.year -> config).toMap
-          }
-          .map { config =>
-            Ok(
-              view(
-                calculatorResult,
-                accountingPeriodForm,
+  case class FullResultsPageRequiredParams[A](
+    accountingPeriod: AccountingPeriodForm,
+    taxableProfit: Int,
+    distribution: Distribution,
+    distributionsIncluded: Option[DistributionsIncludedForm],
+    associatedCompanies: AssociatedCompaniesForm,
+    request: Request[A],
+    userId: String,
+    userAnswers: UserAnswers
+  ) extends WrappedRequest[A](request)
+  private val requireDomainData = new ActionRefiner[DataRequest, FullResultsPageRequiredParams] {
+    override protected def refine[A](
+      request: DataRequest[A]
+    ): Future[Either[Result, FullResultsPageRequiredParams[A]]] =
+      Future.successful {
+        (
+          request.userAnswers.get(AccountingPeriodPage),
+          request.userAnswers.get(TaxableProfitPage),
+          request.userAnswers.get(DistributionPage),
+          request.userAnswers.get(DistributionsIncludedPage),
+          request.userAnswers.get(AssociatedCompaniesPage)
+        ) match {
+          case (
+                Some(accPeriod),
+                Some(taxableProfit),
+                Some(distribution),
+                maybeDistributionsIncluded,
+                Some(associatedCompanies)
+              ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
+            Right(
+              FullResultsPageRequiredParams(
+                accPeriod,
                 taxableProfit,
-                distributionsIncludedAmount,
-                associatedCompaniesCount,
-                config
+                distribution,
+                maybeDistributionsIncluded,
+                associatedCompanies,
+                request,
+                request.userId,
+                request.userAnswers
               )
             )
-          }
-      case None =>
-        val maybeAccountingPeriodForm = request.userAnswers.get(AccountingPeriodPage)
-        val maybeTaxableProfit = request.userAnswers.get(TaxableProfitPage)
-        throw new BadRequestException(
-          "One or more user parameters required for calculation are missing. This could be either because the session has expired or " +
-            "the user navigated directly to the results page. Missing parameters are [" + List(
-              (AccountingPeriodPage, maybeAccountingPeriodForm),
-              (TaxableProfitPage, maybeTaxableProfit)
-            ).filter(_._2.isEmpty).map(_._1).mkString(",") + "]"
+          case _ => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+        }
+      }
+    override protected def executionContext: ExecutionContext = ec
+  }
+
+  def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
+    implicit request =>
+      for {
+        calculatorResult <- marginalReliefCalculatorConnector
+                              .calculate(
+                                request.accountingPeriod.accountingPeriodStartDate,
+                                request.accountingPeriod.accountingPeriodEndDate.get,
+                                request.taxableProfit.toDouble,
+                                request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
+                                request.associatedCompanies.associatedCompaniesCount,
+                                request.associatedCompanies.associatedCompaniesFY1Count,
+                                request.associatedCompanies.associatedCompaniesFY2Count
+                              )
+        config <- marginalReliefCalculatorConnector.config
+                    .map { config =>
+                      config.fyConfigs.map(config => config.year -> config).toMap
+                    }
+      } yield Ok(
+        view(
+          calculatorResult,
+          request.accountingPeriod,
+          request.taxableProfit,
+          request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
+          request.associatedCompanies.associatedCompaniesCount.getOrElse(0),
+          config
         )
-    }
+      )
   }
 }

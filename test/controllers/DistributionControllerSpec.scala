@@ -17,13 +17,13 @@
 package controllers
 
 import base.SpecBase
-import forms.DistributionFormProvider
-import models.{ Distribution, NormalMode, UserAnswers }
+import forms.{ AccountingPeriodForm, DistributionFormProvider }
+import models.{ Distribution, NormalMode }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.DistributionPage
+import pages.{ AccountingPeriodPage, DistributionPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -31,6 +31,7 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.DistributionView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class DistributionControllerSpec extends SpecBase with MockitoSugar {
@@ -39,14 +40,19 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
   lazy val distributionRoute = routes.DistributionController.onPageLoad(NormalMode).url
 
-  val formProvider = new DistributionFormProvider()
-  val form = formProvider()
+  private val formProvider = new DistributionFormProvider()
+  private val form = formProvider()
+  private val requiredAnswers = emptyUserAnswers
+    .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+    .get
+    .set(TaxableProfitPage, 1)
+    .get
 
   "Distribution Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, distributionRoute)
@@ -65,7 +71,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(DistributionPage, Distribution.values.head).success.value
+      val userAnswers = requiredAnswers.set(DistributionPage, Distribution.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -91,7 +97,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -117,7 +123,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
@@ -138,7 +144,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
       running(application) {
         val request =
@@ -173,9 +179,52 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to Journey Recovery for a GET if request parameters are missing in user answers" in {
+
+      val application = applicationBuilder(userAnswers =
+        Some(
+          emptyUserAnswers
+            .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+            .get
+        )
+      ).build()
+
+      running(application) {
+        val request = FakeRequest(GET, distributionRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+      }
+    }
+
     "redirect to Journey Recovery for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, distributionRoute)
+            .withFormUrlEncodedBody(("value", Distribution.values.head.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+      }
+    }
+
+    "redirect to Journey Recovery for a POST if required parameters are missing in user answers" in {
+
+      val application = applicationBuilder(userAnswers =
+        Some(
+          emptyUserAnswers
+            .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+            .get
+        )
+      ).build()
 
       running(application) {
         val request =

@@ -20,13 +20,12 @@ import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
-import models.{ AssociatedCompanies, DistributionsIncluded, UserAnswers }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionsIncludedPage, TaxableProfitPage }
+import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsString, route, running, status, _ }
-import uk.gov.hmrc.http.BadRequestException
+import play.api.test.Helpers._
 import views.html.ResultsPageView
 
 import java.time.LocalDate
@@ -36,24 +35,35 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
   private lazy val resultsPageRoute = routes.ResultsPageController.onPageLoad().url
 
+  private val requiredAnswers = emptyUserAnswers
+    .set(AccountingPeriodPage, AccountingPeriodForm(epoch, Some(epoch.plusDays(1))))
+    .get
+    .set(TaxableProfitPage, 1)
+    .get
+    .set(DistributionPage, Distribution.Yes)
+    .get
+    .set(
+      DistributionsIncludedPage,
+      DistributionsIncludedForm(
+        DistributionsIncluded.Yes,
+        Some(1)
+      )
+    )
+    .get
+    .set(
+      AssociatedCompaniesPage,
+      AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None)
+    )
+    .get
+
   "ResultsPageController" - {
     "GET page" - {
       "must render results when all required data is available in user answers" in {
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]
 
-        val application = applicationBuilder(
-          userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId)
-                    .set(
-                      AccountingPeriodPage,
-                      AccountingPeriodForm(epoch, Some(epoch.plusDays(1)))
-                    )
-            u2 <- u1.set(TaxableProfitPage, 1)
-            u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
-            u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
-          } yield u4).toOption
-        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         mockMarginalReliefCalculatorConnector.calculate(
@@ -87,16 +97,16 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
         }
       }
 
-      "must throw error if any of the required attributes are missing - AccountingPeriodPage" in {
+      "must redirect to Journey recovery if required params are missing in user answers" in {
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]
 
         val application = applicationBuilder(
-          userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId).set(TaxableProfitPage, 1)
-            u2 <- u1.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
-            u3 <- u2.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
-          } yield u3).toOption
+          userAnswers = Some(
+            emptyUserAnswers
+              .set(AccountingPeriodPage, AccountingPeriodForm(epoch, Some(epoch.plusDays(1))))
+              .get
+          )
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
@@ -112,11 +122,9 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
-          val result = route(application, request).value.failed.futureValue
-          result mustBe a[BadRequestException]
-          result.getMessage mustBe "One or more user parameters required for calculation are missing. " +
-            "This could be either because the session has expired or the user navigated directly to the results page. " +
-            "Missing parameters are [accountingPeriod]"
+          val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
         }
       }
 
@@ -129,18 +137,19 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
 
         val application = applicationBuilder(
           userAnswers = (for {
-            u1 <- UserAnswers(userAnswersId)
+            u1 <- emptyUserAnswers
                     .set(
                       AccountingPeriodPage,
                       AccountingPeriodForm(startDate, Some(endDate))
                     )
             u2 <- u1.set(TaxableProfitPage, 1)
-            u3 <- u2.set(
+            u3 <- u2.set(DistributionPage, Distribution.Yes)
+            u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
+            u5 <- u4.set(
                     AssociatedCompaniesPage,
                     AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), Some(2), Some(3))
                   )
-            u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
-          } yield u4).toOption
+          } yield u5).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
 

@@ -163,5 +163,24 @@ class DistributionSummarySpec extends AnyFreeSpec with Matchers {
       val userAnswers = UserAnswers("id")
       DistributionSummary.row(userAnswers) shouldBe None
     }
+
+    "when answer Yes and Distributions included, return summary row" in {
+      val userAnswers = UserAnswers("id")
+        .set(
+          DistributionPage,
+          Distribution.Yes
+        )
+        .get
+      DistributionSummary.row(userAnswers) shouldBe Some(
+        SummaryListRowViewModel(
+          key = "distributionsIncluded.checkYourAnswersLabel",
+          value = ValueViewModel(messages("distributionsIncluded.emptyValue")),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.DistributionController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText("distributionsIncluded.change.hidden")
+          )
+        )
+      )
+    }
   }
 }
