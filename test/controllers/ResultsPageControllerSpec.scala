@@ -84,13 +84,12 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           val view = application.injector.instanceOf[ResultsPageView]
 
           status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(
+          contentAsString(result).filterAndTrim mustEqual view.render(
             calculatorResult,
             AccountingPeriodForm(epoch, Some(epoch.plusDays(1))),
             1,
             1,
-            1
-          )(
+            1,
             request,
             messages(application)
           ).toString.filterAndTrim

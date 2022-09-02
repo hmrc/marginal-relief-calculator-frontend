@@ -262,24 +262,40 @@ class MarginalReliefCalculatorConnectorImplSpec
         wireMockServer.stubFor(
           WireMock
             .get(
-              "/config"
+              "/config/2023"
             )
             .willReturn(
               aResponse().withBody(
                 Json
                   .toJson(
-                    CalculatorConfig(Seq(FlatRateConfig(1, 1), MarginalReliefConfig(2, 22, 222, 2222, 22222, 222222)))
+                    MarginalReliefConfig(2, 22, 222, 2222, 22222, 222222).asInstanceOf[FYConfig]
                   )
                   .toString
               )
             )
         )
 
-        val result: CalculatorConfig = marginalReliefCalculatorConnector.config.futureValue
-
-        result shouldEqual CalculatorConfig(
-          Seq(FlatRateConfig(1, 1), MarginalReliefConfig(2, 22, 222, 2222, 22222, 222222))
+        wireMockServer.stubFor(
+          WireMock
+            .get(
+              "/config/2022"
+            )
+            .willReturn(
+              aResponse().withBody(
+                Json
+                  .toJson(
+                    FlatRateConfig(1, 1).asInstanceOf[FYConfig]
+                  )
+                  .toString
+              )
+            )
         )
+
+        val result: FYConfig = marginalReliefCalculatorConnector.config(2023).futureValue
+        val result2: FYConfig = marginalReliefCalculatorConnector.config(2022).futureValue
+
+        result shouldEqual MarginalReliefConfig(2, 22, 222, 2222, 22222, 222222).asInstanceOf[FYConfig]
+        result2 shouldEqual FlatRateConfig(1, 1)
       }
     }
   }
