@@ -178,7 +178,6 @@ object FullResultsPageHelper extends ViewHelper {
       val f = DecimalToFractionUtils.toFraction(yearConfig.marginalReliefFraction)
       f.numerator + " ÷ " + f.denominator
     }
-    val adjustedUpperLimit = marginalRate.adjustedUpperThreshold
 
     val taxableProfitIncludingDistributions = marginalRate.adjustedAugmentedProfit
 
@@ -203,7 +202,7 @@ object FullResultsPageHelper extends ViewHelper {
           )
         ),
         TableRow(content =
-          Text(CurrencyUtils.format(if (isUpperLowerLimit) adjustedUpperLimit else marginalRate.adjustedLowerThreshold))
+          Text(CurrencyUtils.format(if (isUpperLowerLimit) marginalRate.adjustedUpperThreshold else marginalRate.adjustedLowerThreshold))
         )
       ),
       Seq(
@@ -245,7 +244,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     taxableProfitIncludingDistributions match {
       case taxableProfitIncludingDistributions
-          if taxableProfitIncludingDistributions < adjustedUpperLimit && taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold =>
+          if taxableProfitIncludingDistributions < marginalRate.adjustedUpperThreshold && taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold =>
         template(
           firstThreeSteps ++
             Seq(
@@ -258,7 +257,7 @@ object FullResultsPageHelper extends ViewHelper {
               Seq(
                 boldRow("5"),
                 TableRow(content = Text(messages("fullResultsPage.financialYear.fullCalculation"))),
-                TableRow(content = Text(s"""(${CurrencyUtils.format(adjustedUpperLimit)} - ${CurrencyUtils.format(
+                TableRow(content = Text(s"""(${CurrencyUtils.format(marginalRate.adjustedUpperThreshold)} - ${CurrencyUtils.format(
                     taxableProfitIncludingDistributions
                   )}) × (${CurrencyUtils.format(
                     marginalRate.adjustedProfit
@@ -279,14 +278,14 @@ object FullResultsPageHelper extends ViewHelper {
               marginalRate.adjustedLowerThreshold
             )}</b>""")
         )
-      case taxableProfitIncludingDistributions if taxableProfitIncludingDistributions >= adjustedUpperLimit =>
+      case taxableProfitIncludingDistributions if taxableProfitIncludingDistributions >= marginalRate.adjustedUpperThreshold =>
         template(
           firstThreeSteps,
           Some(
             s"""${messages("fullResultsPage.notEligibleAboveUpperLimit.1")} <b>${CurrencyUtils.format(
                 taxableProfitIncludingDistributions
               )}</b> ${messages("fullResultsPage.notEligibleAboveUpperLimit.2")} <b>${CurrencyUtils.format(
-                adjustedUpperLimit
+                marginalRate.adjustedUpperThreshold
               )}</b>"""
           )
         )
