@@ -198,13 +198,15 @@ object FullResultsPageHelper extends ViewHelper {
         ),
         TableRow(content =
           Text(
-            s"${if (isProfitsAboveLowerThreshold) upperThresholdText else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
+            s"${if (isProfitsAboveLowerThreshold) upperThresholdText
+              else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
           )
         ),
         TableRow(content =
           Text(
             CurrencyUtils.format(
-              if (isProfitsAboveLowerThreshold) marginalRate.adjustedUpperThreshold else marginalRate.adjustedLowerThreshold
+              if (isProfitsAboveLowerThreshold) marginalRate.adjustedUpperThreshold
+              else marginalRate.adjustedLowerThreshold
             )
           )
         )
