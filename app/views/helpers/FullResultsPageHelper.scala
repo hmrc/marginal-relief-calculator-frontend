@@ -183,7 +183,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     val daysInYear = Year.of(marginalRate.year).length()
 
-    val isUpperLowerLimit = taxableProfitIncludingDistributions >= marginalRate.adjustedLowerThreshold
+    val isProfitsAboveLowerThreshold = taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold
 
     val firstThreeSteps = Seq(
       Seq(
@@ -191,20 +191,20 @@ object FullResultsPageHelper extends ViewHelper {
         TableRow(content =
           Text(
             messages(
-              if (isUpperLowerLimit) "fullResultsPage.financialYear.adjustedUpperLimit"
+              if (isProfitsAboveLowerThreshold) "fullResultsPage.financialYear.adjustedUpperLimit"
               else "fullResultsPage.financialYear.adjustedLowerLimit"
             )
           )
         ),
         TableRow(content =
           Text(
-            s"${if (isUpperLowerLimit) upperThresholdText else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
+            s"${if (isProfitsAboveLowerThreshold) upperThresholdText else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
           )
         ),
         TableRow(content =
           Text(
             CurrencyUtils.format(
-              if (isUpperLowerLimit) marginalRate.adjustedUpperThreshold else marginalRate.adjustedLowerThreshold
+              if (isProfitsAboveLowerThreshold) marginalRate.adjustedUpperThreshold else marginalRate.adjustedLowerThreshold
             )
           )
         )
@@ -248,7 +248,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     taxableProfitIncludingDistributions match {
       case taxableProfitIncludingDistributions
-          if taxableProfitIncludingDistributions < marginalRate.adjustedUpperThreshold && taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold =>
+          if taxableProfitIncludingDistributions <= marginalRate.adjustedUpperThreshold && taxableProfitIncludingDistributions >= marginalRate.adjustedLowerThreshold =>
         template(
           firstThreeSteps ++
             Seq(
@@ -274,7 +274,7 @@ object FullResultsPageHelper extends ViewHelper {
           None
         )
       case taxableProfitIncludingDistributions
-          if taxableProfitIncludingDistributions <= marginalRate.adjustedLowerThreshold =>
+          if taxableProfitIncludingDistributions < marginalRate.adjustedLowerThreshold =>
         template(
           firstThreeSteps,
           Some(s"""
@@ -285,7 +285,7 @@ object FullResultsPageHelper extends ViewHelper {
             )}</b>""")
         )
       case taxableProfitIncludingDistributions
-          if taxableProfitIncludingDistributions >= marginalRate.adjustedUpperThreshold =>
+          if taxableProfitIncludingDistributions > marginalRate.adjustedUpperThreshold =>
         template(
           firstThreeSteps,
           Some(
