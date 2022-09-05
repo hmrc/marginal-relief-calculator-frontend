@@ -39,9 +39,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
   "FlatRate" - {
     "adjustedAugmentedProfit" - {
       "should return sum of adjustedProfit" in {
-        flatRate.adjustedAugmentedProfit shouldBe roundUp(
-          roundUp(BigDecimal(flatRate.adjustedProfit))
-        )
+        flatRate.adjustedAugmentedProfit shouldBe roundUp(BigDecimal(flatRate.adjustedProfit))
       }
     }
   }
