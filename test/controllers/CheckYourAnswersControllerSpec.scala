@@ -74,10 +74,9 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
         )
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list, routes.ResultsPageController.onPageLoad().url)(
-          request,
-          messages(application)
-        ).toString
+        contentAsString(result) mustEqual view
+          .render(list, routes.ResultsPageController.onPageLoad().url, request, messages(application))
+          .toString
       }
     }
 

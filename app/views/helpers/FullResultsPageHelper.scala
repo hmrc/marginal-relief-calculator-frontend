@@ -19,7 +19,7 @@ package views.helpers
 import connectors.sharedmodel._
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.Aliases.{ HeadCell, _ }
 import uk.gov.hmrc.govukfrontend.views.html.components.GovukTable
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
@@ -145,7 +145,17 @@ object FullResultsPageHelper extends ViewHelper {
 
     val days = marginalRate.days
 
-    val upperLimit = CurrencyUtils.format(yearConfig.upperThreshold)
+    val upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)
+
+    val upperThresholdMsg = messages("fullResultsPage.upperLimit")
+
+    val upperThresholdText = upperThreshold + " " + upperThresholdMsg
+
+    val lowerThreshold = CurrencyUtils.format(yearConfig.lowerThreshold)
+
+    val lowerThresholdMsg = messages("fullResultsPage.lowerLimit")
+
+    val lowerThresholdText = lowerThreshold + " " + lowerThresholdMsg
 
     val dayMsg = messages("fullResultsPage.day.singular")
     val daysMsg = messages("fullResultsPage.day.plural")
@@ -162,65 +172,67 @@ object FullResultsPageHelper extends ViewHelper {
 
     val originalCompanyMsg = messages("fullResultsPage.oneOriginalCompany")
 
-    val upperLimitMsg = messages("fullResultsPage.upperLimit")
-
     val pointOneCompaniesCalcText = s"($associatedCompaniesText + $originalCompanyMsg)"
 
     val fraction = {
       val f = DecimalToFractionUtils.toFraction(yearConfig.marginalReliefFraction)
       f.numerator + " ÷ " + f.denominator
     }
-    val adjustedUpperLimit = marginalRate.adjustedUpperThreshold
 
     val taxableProfitIncludingDistributions = marginalRate.adjustedAugmentedProfit
 
     val daysInYear = Year.of(marginalRate.year).length()
 
-    govukTable(
-      Table(
-        rows = Seq(
-          Seq(
-            boldRow("1"),
-            TableRow(content = Text(messages("fullResultsPage.financialYear.adjustUpperLimit"))),
-            TableRow(content =
-              Text(s"$upperLimit $upperLimitMsg × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText")
-            ),
-            TableRow(content = Text(CurrencyUtils.format(adjustedUpperLimit)))
-          ),
-          Seq(
-            boldRow("2"),
-            TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfit"))),
-            TableRow(content = Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInYear $daysMsg)")),
-            TableRow(content = Text(CurrencyUtils.format(marginalRate.adjustedProfit)))
-          ),
-          Seq(
-            boldRow("3"),
-            TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfitDistributions"))),
-            TableRow(content =
-              Text(
-                s"${CurrencyUtils.format(marginalRate.adjustedProfit)} + ${CurrencyUtils
-                    .format(distributions)} × ($daysString ÷ $daysInYear $daysMsg)"
-              )
-            ),
-            TableRow(content = Text(CurrencyUtils.format(taxableProfitIncludingDistributions)))
-          ),
-          Seq(
-            boldRow("4"),
-            TableRow(content = Text(messages("fullResultsPage.financialYear.marginalReliefFraction"))),
-            TableRow(content = Text(messages("fullResultsPage.financialYear.marginalReliefFraction.description"))),
-            TableRow(content = Text(fraction))
-          ),
-          Seq(
-            boldRow("5"),
-            TableRow(content = Text(messages("fullResultsPage.financialYear.fullCalculation"))),
-            TableRow(content = Text(s"""(${CurrencyUtils.format(adjustedUpperLimit)} - ${CurrencyUtils.format(
-                taxableProfitIncludingDistributions
-              )}) × (${CurrencyUtils.format(
-                marginalRate.adjustedProfit
-              )} ÷ ${CurrencyUtils.format(taxableProfitIncludingDistributions)}) × ($fraction)""")),
-            TableRow(content = Text(CurrencyUtils.format(ResultsPageHelper.marginalRelief(marginalRate))))
+    val isProfitsAboveLowerThreshold = taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold
+
+    val firstThreeSteps = Seq(
+      Seq(
+        boldRow("1"),
+        TableRow(content =
+          Text(
+            messages(
+              if (isProfitsAboveLowerThreshold) "fullResultsPage.financialYear.adjustedUpperLimit"
+              else "fullResultsPage.financialYear.adjustedLowerLimit"
+            )
           )
         ),
+        TableRow(content =
+          Text(
+            s"${if (isProfitsAboveLowerThreshold) upperThresholdText
+              else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
+          )
+        ),
+        TableRow(content =
+          Text(
+            CurrencyUtils.format(
+              if (isProfitsAboveLowerThreshold) marginalRate.adjustedUpperThreshold
+              else marginalRate.adjustedLowerThreshold
+            )
+          )
+        )
+      ),
+      Seq(
+        boldRow("2"),
+        TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfit"))),
+        TableRow(content = Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInYear $daysMsg)")),
+        TableRow(content = Text(CurrencyUtils.format(marginalRate.adjustedProfit)))
+      ),
+      Seq(
+        boldRow("3"),
+        TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfitDistributions"))),
+        TableRow(content =
+          Text(
+            s"${CurrencyUtils.format(marginalRate.adjustedProfit)} + ${CurrencyUtils
+                .format(distributions)} × ($daysString ÷ $daysInYear $daysMsg)"
+          )
+        ),
+        TableRow(content = Text(CurrencyUtils.format(taxableProfitIncludingDistributions)))
+      )
+    )
+
+    def template(rows: Seq[Seq[TableRow]], description: Option[String]) = {
+      val table = Table(
+        rows = rows,
         head = Some(
           Seq(
             HeadCell(),
@@ -230,6 +242,63 @@ object FullResultsPageHelper extends ViewHelper {
           )
         )
       )
-    )
+      description match {
+        case Some(text) => Html(Seq(p(text), govukTable(table).body).mkString)
+        case _          => govukTable(table)
+      }
+    }
+
+    taxableProfitIncludingDistributions match {
+      case taxableProfitIncludingDistributions
+          if taxableProfitIncludingDistributions <= marginalRate.adjustedUpperThreshold && taxableProfitIncludingDistributions >= marginalRate.adjustedLowerThreshold =>
+        template(
+          firstThreeSteps ++
+            Seq(
+              Seq(
+                boldRow("4"),
+                TableRow(content = Text(messages("fullResultsPage.financialYear.marginalReliefFraction"))),
+                TableRow(content = Text(messages("fullResultsPage.financialYear.marginalReliefFraction.description"))),
+                TableRow(content = Text(fraction))
+              ),
+              Seq(
+                boldRow("5"),
+                TableRow(content = Text(messages("fullResultsPage.financialYear.fullCalculation"))),
+                TableRow(content =
+                  Text(s"""(${CurrencyUtils.format(marginalRate.adjustedUpperThreshold)} - ${CurrencyUtils.format(
+                      taxableProfitIncludingDistributions
+                    )}) × (${CurrencyUtils.format(
+                      marginalRate.adjustedProfit
+                    )} ÷ ${CurrencyUtils.format(taxableProfitIncludingDistributions)}) × ($fraction)""")
+                ),
+                TableRow(content = Text(CurrencyUtils.format(ResultsPageHelper.marginalRelief(marginalRate))))
+              )
+            ),
+          None
+        )
+      case taxableProfitIncludingDistributions
+          if taxableProfitIncludingDistributions < marginalRate.adjustedLowerThreshold =>
+        template(
+          firstThreeSteps,
+          Some(s"""
+            ${messages("fullResultsPage.notEligibleBelowLowerLimit.1")} <b>${CurrencyUtils.format(
+              taxableProfitIncludingDistributions
+            )}</b> ${messages("fullResultsPage.notEligibleBelowLowerLimit.2")} <b>${CurrencyUtils.format(
+              marginalRate.adjustedLowerThreshold
+            )}</b>""")
+        )
+      case taxableProfitIncludingDistributions
+          if taxableProfitIncludingDistributions > marginalRate.adjustedUpperThreshold =>
+        template(
+          firstThreeSteps,
+          Some(
+            s"""${messages("fullResultsPage.notEligibleAboveUpperLimit.1")} <b>${CurrencyUtils.format(
+                taxableProfitIncludingDistributions
+              )}</b> ${messages("fullResultsPage.notEligibleAboveUpperLimit.2")} <b>${CurrencyUtils.format(
+                marginalRate.adjustedUpperThreshold
+              )}</b>"""
+          )
+        )
+    }
+
   }
 }

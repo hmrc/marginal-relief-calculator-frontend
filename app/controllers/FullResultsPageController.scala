@@ -17,6 +17,7 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
+import connectors.sharedmodel.{ CalculatorResult, FYConfig }
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.requests.DataRequest
@@ -24,6 +25,7 @@ import models.{ Distribution, UserAnswers }
 import pages._
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 
@@ -40,6 +42,18 @@ class FullResultsPageController @Inject() (
   marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
+
+  private def getConfig(calculatorResult: CalculatorResult)(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
+    calculatorResult.fold(single =>
+      marginalReliefCalculatorConnector
+        .config(single.details.year)
+        .map(config => Map(single.details.year -> config))
+    )(dual =>
+      for {
+        y1 <- marginalReliefCalculatorConnector.config(dual.year1.year)
+        y2 <- marginalReliefCalculatorConnector.config(dual.year2.year)
+      } yield Map(dual.year1.year -> y1, dual.year2.year -> y2)
+    )
 
   case class FullResultsPageRequiredParams[A](
     accountingPeriod: AccountingPeriodForm,
@@ -101,10 +115,7 @@ class FullResultsPageController @Inject() (
                                 request.associatedCompanies.associatedCompaniesFY1Count,
                                 request.associatedCompanies.associatedCompaniesFY2Count
                               )
-        config <- marginalReliefCalculatorConnector.config
-                    .map { config =>
-                      config.fyConfigs.map(config => config.year -> config).toMap
-                    }
+        config <- getConfig(calculatorResult)
       } yield Ok(
         view(
           calculatorResult,

@@ -76,7 +76,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
-        mockMarginalReliefCalculatorConnector.config(*) returns Future.successful(CalculatorConfig(config.values.toSeq))
+        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
@@ -132,7 +133,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
-        mockMarginalReliefCalculatorConnector.config(*) returns Future.successful(CalculatorConfig(config.values.toSeq))
+        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
@@ -188,7 +190,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
-        mockMarginalReliefCalculatorConnector.config(*) returns Future.successful(CalculatorConfig(config.values.toSeq))
+        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
@@ -235,7 +238,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
-        mockMarginalReliefCalculatorConnector.config(*) returns Future.successful(CalculatorConfig(config.values.toSeq))
+        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,

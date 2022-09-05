@@ -50,7 +50,7 @@
 @layout(
     pageTitle    = titleNoForm(messages("index.title")),
     showBackLink = false,
-    mainContentLayout = Some(new templates.FullMainContent()(_)),
+    mainContentLayout = Some(new templates.FullMainContent().render(_)),
     breadCrumbs = Some(breadCrumbs),
     timeout = false
 ) {

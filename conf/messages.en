@@ -167,7 +167,8 @@ fullResultsPage.howItsCalculated = How it''s calculated
 fullResultsPage.marginalReliefForAccountingPeriod = Marginal Relief for your accounting period
 fullResultsPage.forFinancialYear = For financial year {0} to {1} ({2} days)
 fullResultsPage.forFinancialYearNotAvailable = Marginal Relief was not available in financial year {0} to {1}
-fullResultsPage.financialYear.adjustUpperLimit = Adjusted upper limit
+fullResultsPage.financialYear.adjustedUpperLimit = Adjusted upper limit
+fullResultsPage.financialYear.adjustedLowerLimit = Adjusted lower limit
 fullResultsPage.financialYear.taxableProfit = Taxable profit
 fullResultsPage.financialYear.taxableProfitDistributions = Taxable profit including distributions
 fullResultsPage.financialYear.marginalReliefFraction = Marginal Relief fraction
@@ -175,6 +176,7 @@ fullResultsPage.financialYear.marginalReliefFraction.description = The set fract
 fullResultsPage.financialYear.fullCalculation = Full calculation
 fullResultsPage.financialYearResults = Financial year results
 fullResultsPage.upperLimit = upper limit
+fullResultsPage.lowerLimit = lower limit
 fullResultsPage.day.plural = days
 fullResultsPage.day.singular = day
 fullResultsPage.associatedCompany.singular = associated company
@@ -194,6 +196,11 @@ fullResultsPage.details.examples.3 = £200,000 (the difference between lower and
 fullResultsPage.details.examples.4 = 53,000 ÷ 200,000 = 26.5% marginal rate
 fullResultsPage.calculation = Calculation
 fullResultsPage.result = Result
+fullResultsPage.notEligibleAboveUpperLimit.1 = You''re not eligible for Marginal Relief because your Taxable profit including distributions of
+fullResultsPage.notEligibleAboveUpperLimit.2 = is above the adjusted upper limit of
+fullResultsPage.notEligibleBelowLowerLimit.1 = You''re not eligible for Marginal Relief because your Taxable profit including distributions of
+fullResultsPage.notEligibleBelowLowerLimit.2 = is below the adjusted lower limit of
+
 
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
