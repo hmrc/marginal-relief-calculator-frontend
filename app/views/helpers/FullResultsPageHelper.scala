@@ -145,17 +145,17 @@ object FullResultsPageHelper extends ViewHelper {
 
     val days = marginalRate.days
 
-    def upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)
+    val upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)
 
-    def upperThresholdMsg = messages("fullResultsPage.upperLimit")
+    val upperThresholdMsg = messages("fullResultsPage.upperLimit")
 
-    def upperThresholdText = upperThreshold + " " + upperThresholdMsg
+    val upperThresholdText = upperThreshold + " " + upperThresholdMsg
 
-    def lowerThreshold = CurrencyUtils.format(yearConfig.lowerThreshold)
+    val lowerThreshold = CurrencyUtils.format(yearConfig.lowerThreshold)
 
-    def lowerThresholdMsg = messages("fullResultsPage.lowerLimit")
+    val lowerThresholdMsg = messages("fullResultsPage.lowerLimit")
 
-    def lowerThresholdText = lowerThreshold + " " + lowerThresholdMsg
+    val lowerThresholdText = lowerThreshold + " " + lowerThresholdMsg
 
     val dayMsg = messages("fullResultsPage.day.singular")
     val daysMsg = messages("fullResultsPage.day.plural")
