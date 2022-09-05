@@ -145,17 +145,17 @@ object FullResultsPageHelper extends ViewHelper {
 
     val days = marginalRate.days
 
-    def upperLimit = CurrencyUtils.format(yearConfig.upperThreshold)
+    def upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)
 
-    def upperLimitMsg = messages("fullResultsPage.upperLimit")
+    def upperThresholdMsg = messages("fullResultsPage.upperLimit")
 
-    def upperLimitText = upperLimit + " " + upperLimitMsg
+    def upperThresholdText = upperThreshold + " " + upperThresholdMsg
 
-    def lowerLimit = CurrencyUtils.format(yearConfig.lowerThreshold)
+    def lowerThreshold = CurrencyUtils.format(yearConfig.lowerThreshold)
 
-    def lowerLimitMsg = messages("fullResultsPage.lowerLimit")
+    def lowerThresholdMsg = messages("fullResultsPage.lowerLimit")
 
-    def lowerLimitText = lowerLimit + " " + lowerLimitMsg
+    def lowerThresholdText = lowerThreshold + " " + lowerThresholdMsg
 
     val dayMsg = messages("fullResultsPage.day.singular")
     val daysMsg = messages("fullResultsPage.day.plural")
@@ -198,11 +198,15 @@ object FullResultsPageHelper extends ViewHelper {
         ),
         TableRow(content =
           Text(
-            s"${if (isUpperLowerLimit) upperLimitText else lowerLimitText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
+            s"${if (isUpperLowerLimit) upperThresholdText else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
           )
         ),
         TableRow(content =
-          Text(CurrencyUtils.format(if (isUpperLowerLimit) marginalRate.adjustedUpperThreshold else marginalRate.adjustedLowerThreshold))
+          Text(
+            CurrencyUtils.format(
+              if (isUpperLowerLimit) marginalRate.adjustedUpperThreshold else marginalRate.adjustedLowerThreshold
+            )
+          )
         )
       ),
       Seq(
@@ -257,11 +261,13 @@ object FullResultsPageHelper extends ViewHelper {
               Seq(
                 boldRow("5"),
                 TableRow(content = Text(messages("fullResultsPage.financialYear.fullCalculation"))),
-                TableRow(content = Text(s"""(${CurrencyUtils.format(marginalRate.adjustedUpperThreshold)} - ${CurrencyUtils.format(
-                    taxableProfitIncludingDistributions
-                  )}) × (${CurrencyUtils.format(
-                    marginalRate.adjustedProfit
-                  )} ÷ ${CurrencyUtils.format(taxableProfitIncludingDistributions)}) × ($fraction)""")),
+                TableRow(content =
+                  Text(s"""(${CurrencyUtils.format(marginalRate.adjustedUpperThreshold)} - ${CurrencyUtils.format(
+                      taxableProfitIncludingDistributions
+                    )}) × (${CurrencyUtils.format(
+                      marginalRate.adjustedProfit
+                    )} ÷ ${CurrencyUtils.format(taxableProfitIncludingDistributions)}) × ($fraction)""")
+                ),
                 TableRow(content = Text(CurrencyUtils.format(ResultsPageHelper.marginalRelief(marginalRate))))
               )
             ),
@@ -278,7 +284,8 @@ object FullResultsPageHelper extends ViewHelper {
               marginalRate.adjustedLowerThreshold
             )}</b>""")
         )
-      case taxableProfitIncludingDistributions if taxableProfitIncludingDistributions >= marginalRate.adjustedUpperThreshold =>
+      case taxableProfitIncludingDistributions
+          if taxableProfitIncludingDistributions >= marginalRate.adjustedUpperThreshold =>
         template(
           firstThreeSteps,
           Some(
