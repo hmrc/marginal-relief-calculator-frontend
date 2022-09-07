@@ -151,15 +151,19 @@ object ResultsPageHelper extends ViewHelper {
 
   private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): Html =
     if (marginalRate.marginalRelief > 0) {
-      govukPanel(
-        Panel(
-          title = HtmlContent(s"""<span class="govuk-panel__body">${messages(
-              "resultsPage.marginalReliefForAccPeriodIs"
-            )}</span>"""),
-          content = HtmlContent(
-            s"""<span class="govuk-panel__title">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>"""
-          )
-        )
+      Html(
+        Seq(Html(s""""<div class="app-banner-currency">"""),
+          govukPanel(
+            Panel(
+              title = HtmlContent(s"""<span class="govuk-panel__body">${messages(
+                  "resultsPage.marginalReliefForAccPeriodIs"
+                )}</span>"""),
+              content = HtmlContent(
+                s"""<span class="govuk-panel__title">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>"""
+              )
+            )
+          ),
+        Html("</div>")).mkString
       )
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
       govukPanel(
