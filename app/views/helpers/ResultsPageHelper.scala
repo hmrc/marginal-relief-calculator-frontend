@@ -157,9 +157,9 @@ object ResultsPageHelper extends ViewHelper {
       BannerPanel(
         Panel(
           title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-          content = Text(CurrencyUtils.format(marginalRate.marginalRelief)
+          content = Text(CurrencyUtils.format(marginalRate.marginalRelief))
         )
-      ))
+      )
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
       govukPanel(
         Panel(

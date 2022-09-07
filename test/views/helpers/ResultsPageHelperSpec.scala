@@ -26,6 +26,7 @@ import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
+import views.html.templates.BannerPanel
 
 import java.time.LocalDate
 
@@ -34,6 +35,7 @@ class ResultsPageHelperSpec extends SpecBase {
   private implicit val messages: Messages = Helpers.stubMessages()
   private val govukTable = new GovukTable()
   private val govukPanel = new GovukPanel()
+  private val bannerPanel = new BannerPanel()
   private val epoch = LocalDate.ofEpochDay(0)
 
   "displayYourDetails" - {
@@ -169,14 +171,10 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 365))
-        displayBanner(calculatorResult) mustBe govukPanel(
+        displayBanner(calculatorResult) mustBe bannerPanel(
           Panel(
-            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-                "resultsPage.marginalReliefForAccPeriodIs"
-              )}</span>"""),
-            content = HtmlContent(
-              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
-            )
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = Text("£50")
           )
         )
       }
@@ -277,14 +275,10 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100)
         )
-        displayBanner(calculatorResult) mustBe govukPanel(
+        displayBanner(calculatorResult) mustBe bannerPanel(
           Panel(
-            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-                "resultsPage.marginalReliefForAccPeriodIs"
-              )}</span>"""),
-            content = HtmlContent(
-              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
-            )
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = Text("£50")
           )
         )
       }
@@ -294,14 +288,10 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100),
           FlatRate(1970, 190, 19, 1000, 100)
         )
-        displayBanner(calculatorResult) mustBe govukPanel(
+        displayBanner(calculatorResult) mustBe bannerPanel(
           Panel(
-            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-                "resultsPage.marginalReliefForAccPeriodIs"
-              )}</span>"""),
-            content = HtmlContent(
-              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
-            )
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = Text("£50")
           )
         )
       }
