@@ -309,14 +309,10 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100)
         )
-        displayBanner(calculatorResult) mustBe govukPanel(
+        displayBanner(calculatorResult) mustBe bannerPanel(
           Panel(
-            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-                "resultsPage.marginalReliefForAccPeriodIs"
-              )}</span>"""),
-            content = HtmlContent(
-              s"""<span class="govuk-!-font-weight-bold">£100</span>"""
-            )
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = Text("£100")
           )
         )
       }
@@ -378,14 +374,10 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100)
         )
-        displayBanner(calculatorResult) mustBe govukPanel(
+        displayBanner(calculatorResult) mustBe bannerPanel(
           Panel(
-            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-                "resultsPage.marginalReliefForAccPeriodIs"
-              )}</span>"""),
-            content = HtmlContent(
-              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
-            )
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = Text("£50")
           )
         )
       }
@@ -395,14 +387,10 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100),
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100)
         )
-        displayBanner(calculatorResult) mustBe govukPanel(
+        displayBanner(calculatorResult) mustBe bannerPanel(
           Panel(
-            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-                "resultsPage.marginalReliefForAccPeriodIs"
-              )}</span>"""),
-            content = HtmlContent(
-              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
-            )
+            title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+            content = Text("£50")
           )
         )
       }
