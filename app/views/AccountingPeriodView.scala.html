@@ -42,21 +42,18 @@
         <p class="govuk-body">
             @messages("accountingPeriod.accountingPeriodCannotBeLongerThan12M")
         </p>
-        <div id="passport-issued-hint" class="govuk-hint">
-            <!-- &#8203; adds a hidden character so ios doesn't recognise the data and prevents making it a links -->
-            @messages("accountingPeriod.forExample")&#8203;
-        </div>
 
         @govukDetails(Details(
             summary = Text(messages("accountingPeriod.whereCanIFindMyAccPeriodDates")),
             content = Text(messages("accountingPeriod.yourAccPeriodDatesFoundOnForm"))
         ))
 
+        <!-- &#8203; adds a hidden character so ios doesn't recognise the data and prevents making it a links -->
         @govukDateInput(
             DateViewModel(
                 field  = form("accountingPeriodStartDate"),
                 legend = LegendViewModel(messages("accountingPeriodStartDate.heading")).withCssClass("govuk-fieldset__legend--s")
-            )
+            ).withHint(HintViewModel(HtmlContent(s"${messages("""accountingPeriod.forExample""")}&#8203;")))
         )
 
         @govukDateInput(
