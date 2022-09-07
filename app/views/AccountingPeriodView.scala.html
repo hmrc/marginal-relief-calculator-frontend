@@ -48,11 +48,12 @@
             content = Text(messages("accountingPeriod.yourAccPeriodDatesFoundOnForm"))
         ))
 
+        <!-- &#8203; adds a hidden character so ios doesn't recognise the data and prevents making it a links -->
         @govukDateInput(
             DateViewModel(
                 field  = form("accountingPeriodStartDate"),
                 legend = LegendViewModel(messages("accountingPeriodStartDate.heading")).withCssClass("govuk-fieldset__legend--s")
-            ).withHint(HintViewModel(HtmlContent(messages("accountingPeriod.forExample"))))
+            ).withHint(HintViewModel(HtmlContent(s"${messages("""accountingPeriod.forExample""")}&#8203;")))
         )
 
         @govukDateInput(
