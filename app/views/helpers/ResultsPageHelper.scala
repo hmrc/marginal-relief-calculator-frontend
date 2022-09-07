@@ -27,6 +27,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummaryList, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, PercentageUtils }
+import views.html.templates.BannerPanel
 
 import scala.collection.immutable
 
@@ -37,6 +38,8 @@ object ResultsPageHelper extends ViewHelper {
   private val govukPanel = new GovukPanel()
   private val govukTable = new GovukTable()
   private val summaryList = new GovukSummaryList()
+
+  private val BannerPanel = new BannerPanel()
 
   def displayYourDetails(
     calculatorResult: CalculatorResult,
@@ -151,20 +154,12 @@ object ResultsPageHelper extends ViewHelper {
 
   private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): Html =
     if (marginalRate.marginalRelief > 0) {
-      Html(
-        Seq(Html(s""""<div class="app-banner-currency">"""),
-          govukPanel(
-            Panel(
-              title = HtmlContent(s"""<span class="govuk-panel__body">${messages(
-                  "resultsPage.marginalReliefForAccPeriodIs"
-                )}</span>"""),
-              content = HtmlContent(
-                s"""<span class="govuk-panel__title">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>"""
-              )
-            )
-          ),
-        Html("</div>")).mkString
-      )
+      BannerPanel(
+        Panel(
+          title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+          content = Text(CurrencyUtils.format(marginalRate.marginalRelief)
+        )
+      ))
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
       govukPanel(
         Panel(
