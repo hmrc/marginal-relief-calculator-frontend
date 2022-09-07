@@ -260,6 +260,14 @@ class ResultsPageHelperSpec extends SpecBase {
           )
         )
       }
+
+      "when marginal rate is 0, but profits are between threshold" in {
+        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1000, 1500, 365))
+        val result = intercept[UnsupportedOperationException] {
+          displayBanner(calculatorResult)
+        }
+        result.getMessage mustBe "Marginal relief was 0, but augmented profit was neither <= lower-threshold or >= upper-threshold. Probably a rounding issue!"
+      }
     }
 
     "when accounting period spans 2 years" - {
@@ -306,12 +314,118 @@ class ResultsPageHelperSpec extends SpecBase {
         )
       }
 
-      "when marginal rate for both years" in {
+      "when marginal rate for 2 years and MR for both years are positive" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100)
         )
-        displayBanner(calculatorResult) mustBe HtmlFormat.empty
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£100</span>"""
+            )
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, both years have 0 MR as adjusted profits are below lower limits (no distributions)" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1500, 100),
+          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1500, 100)
+        )
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = Text(messages("resultsPage.marginalReliefNotEligible")),
+            content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, both years have 0 MR as adjusted profits are below lower limits (with distributions)" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1100, 1500, 100),
+          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1100, 1500, 100)
+        )
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = Text(messages("resultsPage.marginalReliefNotEligible")),
+            content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, both years have 0 MR as adjusted profits are above upper limits (no distributions)" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100),
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100)
+        )
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = Text(messages("resultsPage.marginalReliefNotEligible")),
+            content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, both years have 0 MR as adjusted profits are above upper limits (with distributions)" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100),
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100)
+        )
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = Text(messages("resultsPage.marginalReliefNotEligible")),
+            content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, year 1 has positive MR and year 2 has 0 MR" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100),
+          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100)
+        )
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, year 1 has 0 MR and year 2 has positive MR" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100),
+          MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100)
+        )
+        displayBanner(calculatorResult) mustBe govukPanel(
+          Panel(
+            title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+                "resultsPage.marginalReliefForAccPeriodIs"
+              )}</span>"""),
+            content = HtmlContent(
+              s"""<span class="govuk-!-font-weight-bold">£50</span>"""
+            )
+          )
+        )
+      }
+
+      "when marginal rate for 2 years, year 1 has 0 MR as adjusted profits below lower threshold and year 2 has 0 MR as adjusted profits above upper threshold" in {
+        val calculatorResult = DualResult(
+          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100),
+          MarginalRate(1971, 300, 30, 200, 30, 0, 1000, 10, 100, 500, 100)
+        )
+        val result = intercept[UnsupportedOperationException] {
+          displayBanner(calculatorResult)
+        }
+        result.getMessage mustBe "Marginal relief was 0, however adjusted profits for one year was below lower threshold and the other year was above upper threshold"
       }
     }
   }
