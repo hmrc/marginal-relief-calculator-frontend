@@ -153,11 +153,11 @@ object ResultsPageHelper extends ViewHelper {
     if (marginalRate.marginalRelief > 0) {
       govukPanel(
         Panel(
-          title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
+          title = HtmlContent(s"""<span class="gov-panel_body">${messages(
               "resultsPage.marginalReliefForAccPeriodIs"
             )}</span>"""),
           content = HtmlContent(
-            s"""<span class="govuk-!-font-weight-bold">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>"""
+            s"""<span class="gov-panel_title">${CurrencyUtils.format(marginalRate.marginalRelief)}</span>"""
           )
         )
       )
