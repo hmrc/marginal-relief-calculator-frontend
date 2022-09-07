@@ -74,7 +74,7 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) = {
+      override def bind(key: String, data: Map[String, String]) =
         baseFormatter
           .bind(key, data)
           .right
@@ -89,7 +89,6 @@ trait Formatters {
                 .left
                 .map(_ => Seq(FormError(key, nonNumericKey, args)))
           }
-      }
 
       override def unbind(key: String, value: Int) =
         baseFormatter.unbind(key, value.toString)

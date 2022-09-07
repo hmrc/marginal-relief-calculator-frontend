@@ -58,10 +58,13 @@ private[mappings] class LocalDateFormatter(
     } yield date
   }
 
+  private def trimField(field: String): String =
+    field.replaceAll("\n", "").replaceAll("\r", "").trim()
+
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
     val fields = fieldKeys.map { field =>
-      field -> data.get(s"$key.$field").filter(_.nonEmpty)
+      field -> data.get(s"$key.$field").filter(_.nonEmpty).map(trimField(_))
     }.toMap
 
     lazy val missingFields = fields
