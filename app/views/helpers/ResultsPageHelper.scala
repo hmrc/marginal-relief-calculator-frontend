@@ -26,7 +26,9 @@ import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummaryList, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
+import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
+import views.helpers.ResultsPageHelper.marginalRelief
 import views.html.templates.BannerPanel
 
 import scala.collection.immutable
@@ -148,54 +150,81 @@ object ResultsPageHelper extends ViewHelper {
         marginalReliefBanner(m)
       case DualResult(m: MarginalRate, _: FlatRate) =>
         marginalReliefBanner(m)
-      case DualResult(_: MarginalRate, _: MarginalRate) =>
-        HtmlFormat.empty
+      case DualResult(m1: MarginalRate, m2: MarginalRate) =>
+        marginalReliefBannerDual(m1, m2)
+    }
+
+  private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit messages: Messages): Html =
+    if (m1.marginalRelief > 0 || m2.marginalRelief > 0) {
+      positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))
+    } else if (
+      m1.adjustedAugmentedProfit >= m1.adjustedUpperThreshold && m2.adjustedAugmentedProfit >= m2.adjustedUpperThreshold
+    ) {
+      adjustedProfitAboveUpperThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
+    } else if (
+      m1.adjustedAugmentedProfit <= m1.adjustedLowerThreshold && m2.adjustedAugmentedProfit <= m2.adjustedLowerThreshold
+    ) {
+      adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
+    } else {
+      val message =
+        "Marginal relief was 0, however adjusted profits for one year was below lower threshold and the other year was above upper threshold"
+      logger.error(message)
+      throw new UnsupportedOperationException(message)
     }
 
   private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): Html =
     if (marginalRate.marginalRelief > 0) {
-      BannerPanel(
-        Panel(
-          title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-          content = Text(CurrencyUtils.format(marginalRate.marginalRelief))
-        )
-      )
+      positiveMarginalReliefBanner(marginalRate.marginalRelief)
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
-      govukPanel(
-        Panel(
-          title = Text(messages("resultsPage.marginalReliefNotEligible")),
-          content = Text(
-            messages(
-              if (marginalRate.adjustedDistributions == 0) {
-                "resultsPage.yourProfitsAboveMarginalReliefLimit"
-              } else {
-                "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"
-              }
-            )
-          )
-        )
-      )
+      adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions)
     } else if (marginalRate.adjustedAugmentedProfit <= marginalRate.adjustedLowerThreshold) {
-      govukPanel(
-        Panel(
-          title = Text(messages("resultsPage.marginalReliefNotEligible")),
-          content = Text(
-            messages(
-              if (marginalRate.adjustedDistributions == 0) {
-                "resultsPage.yourProfitsBelowMarginalReliefLimit"
-              } else {
-                "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"
-              }
-            )
-          )
-        )
-      )
+      adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions)
     } else {
       val message =
         "Marginal relief was 0, but augmented profit was neither <= lower-threshold or >= upper-threshold. Probably a rounding issue!"
       logger.error(message)
       throw new UnsupportedOperationException(message)
     }
+
+  private def adjustedProfitBelowLowerThresholdBanner(adjustedDistributions: Double)(implicit messages: Messages) =
+    govukPanel(
+      Panel(
+        title = Text(messages("resultsPage.marginalReliefNotEligible")),
+        content = Text(
+          messages(
+            if (adjustedDistributions == 0) {
+              "resultsPage.yourProfitsBelowMarginalReliefLimit"
+            } else {
+              "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"
+            }
+          )
+        )
+      )
+    )
+
+  private def adjustedProfitAboveUpperThresholdBanner(adjustedDistributions: Double)(implicit messages: Messages) =
+    govukPanel(
+      Panel(
+        title = Text(messages("resultsPage.marginalReliefNotEligible")),
+        content = Text(
+          messages(
+            if (adjustedDistributions == 0) {
+              "resultsPage.yourProfitsAboveMarginalReliefLimit"
+            } else {
+              "resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"
+            }
+          )
+        )
+      )
+    )
+
+  private def positiveMarginalReliefBanner(marginalRelief: Double)(implicit messages: Messages): Html =
+    BannerPanel(
+      Panel(
+        title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+        content = Text(CurrencyUtils.format(marginalRelief))
+      )
+    )
 
   def displayCorporationTaxTable(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
     calculatorResult match {
