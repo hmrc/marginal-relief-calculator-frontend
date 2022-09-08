@@ -28,7 +28,6 @@ import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummar
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
-import views.helpers.ResultsPageHelper.marginalRelief
 import views.html.templates.BannerPanel
 
 import scala.collection.immutable
