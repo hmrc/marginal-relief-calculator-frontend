@@ -62,6 +62,19 @@ class DateMappingsSpec
     }
   }
 
+  "must bind valid data ignoring white spaces and carriage returns" in {
+
+    val trimmedDate = LocalDate.of(2025, 3, 18)
+    val data = Map(
+      "value.day"   -> "   18 ",
+      "value.month" -> " \n 3  \r",
+      "value.year"  -> "\r 2025"
+    )
+    val result = form.bind(data)
+
+    result.value.value mustEqual trimmedDate
+  }
+
   "must fail to bind an empty date" in {
 
     val result = form.bind(Map.empty[String, String])

@@ -131,6 +131,11 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.get mustEqual 1
     }
 
+    "must bind a valid integer ignoring white spaces and carriage returns" in {
+      val result = testForm.bind(Map("value" -> " \n1  \r"))
+      result.get mustEqual 1
+    }
+
     "must not bind an empty value" in {
       val result = testForm.bind(Map("value" -> ""))
       result.errors must contain(FormError("value", "error.required"))
@@ -228,7 +233,12 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.get mustEqual 1
     }
 
-    "must remove valid commas in input" in {
+    "must bind a valid positive whole amount ignoring white spaces and carriage returns" in {
+      val result = testForm.bind(Map("value" -> " \n1  \r"))
+      result.get mustEqual 1
+    }
+
+      "must remove valid commas in input" in {
       val result = testForm.bind(Map("value" -> "1,111"))
       result.get mustEqual 1111
     }
