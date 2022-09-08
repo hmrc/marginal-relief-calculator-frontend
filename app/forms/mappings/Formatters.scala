@@ -18,6 +18,7 @@ package forms.mappings
 
 import cats.syntax.either._
 import models.Enumerable
+import utils.StringUtils._
 import play.api.data.format.Formatter
 import play.api.data.{ FormError, Mapping }
 
@@ -78,7 +79,7 @@ trait Formatters {
         baseFormatter
           .bind(key, data)
           .right
-          .map(_.replaceAll("\n", "").replaceAll("\r", "").trim().replace(",", ""))
+          .map(trimDataEntry(_).replace(",", ""))
           .right
           .flatMap {
             case s if s.matches(decimalRegexp) =>
@@ -124,8 +125,7 @@ trait Formatters {
                                  case s if s.matches(AmountWithCommas) => s.replace(",", "")
                                  case other                            => other
                                }).asRight[Seq[FormError]]
-        resultWithoutCarriageReturns = resultWithoutCommas.replaceAll("\n", "").replaceAll("\r", "")
-        resultWithoutSpaces = resultWithoutCarriageReturns.trim()
+        resultWithoutSpaces = trimDataEntry(resultWithoutCommas)
         finalResult <- resultWithoutSpaces match {
                          case s if s.matches(DecimalRegexp) =>
                            Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
