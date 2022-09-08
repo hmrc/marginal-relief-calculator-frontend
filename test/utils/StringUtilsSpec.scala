@@ -3,21 +3,22 @@ package utils
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import utils.StringUtils.trimDataEntry
+import utils.CurrencyUtils.format
+import utils.StringUtils.removeSpaceLineBreaks
 
 class StringUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
 
-  "trimDataEntry" - {
+  "removeSpaceLineBreaks" - {
     "should remove leading and/or trailing spaces and carriage returns" in {
-      val trimmedString = "test"
-      val untrimmedString = Seq[String](
-        " test",
-        "test  ",
-        "    test ",
-        " \n test ",
-        "test\r "
+      val table = Table[String, String](
+        ("input", "expected"),
+        (" test  ", "test"),
+        (" te\nst", "test"),
+        (" t \n es\rt ", "test")
       )
-      untrimmedString.forall(trimDataEntry(_) equals trimmedString)
+      forAll(table) { (input, expected) =>
+        removeSpaceLineBreaks(input) shouldBe expected
+      }
     }
   }
 }

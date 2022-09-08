@@ -79,7 +79,7 @@ trait Formatters {
         baseFormatter
           .bind(key, data)
           .right
-          .map(trimDataEntry(_).replace(",", ""))
+          .map(removeSpaceLineBreaks(_).replace(",", ""))
           .right
           .flatMap {
             case s if s.matches(decimalRegexp) =>
@@ -125,7 +125,7 @@ trait Formatters {
                                  case s if s.matches(AmountWithCommas) => s.replace(",", "")
                                  case other                            => other
                                }).asRight[Seq[FormError]]
-        resultWithoutSpaces = trimDataEntry(resultWithoutCommas)
+        resultWithoutSpaces = removeSpaceLineBreaks(resultWithoutCommas)
         finalResult <- resultWithoutSpaces match {
                          case s if s.matches(DecimalRegexp) =>
                            Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
