@@ -45,7 +45,7 @@ error.greaterThan99 = Enter a number lower than or equal to 99
 error.lessThanOne = Enter an amount greater than 0
 error.outOfRange = Enter an amount between {0} and {1}
 
-index.title = marginal-relief-calculator-frontend
+index.title = Calculate Marginal Relief for Corporation Tax
 index.heading = Calculate Marginal Relief for Corporation Tax
 index.guidance.useThisServiceTo = Use this service to:
 index.guidance.check.item1 = check your company''s eligibility for Marginal Relief

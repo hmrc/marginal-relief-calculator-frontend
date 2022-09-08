@@ -275,7 +275,8 @@ object ResultsPageHelper extends ViewHelper {
                 HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
               )
             ),
-            caption = None,
+            caption = Some("Corporation Tax liability breakdown for your accounting period"),
+            captionClasses = "govuk-!-display-none",
             firstCellIsHeader = true
           )
         )
@@ -383,7 +384,8 @@ object ResultsPageHelper extends ViewHelper {
               TableRow(content = Text(PercentageUtils.format(s.details.taxRate)))
             )
           ).filter(_.nonEmpty),
-          caption = None,
+          caption = Some("Effective tax rate breakdown for your accounting period"),
+          captionClasses = "govuk-!-display-none",
           firstCellIsHeader = true
         )
       )
