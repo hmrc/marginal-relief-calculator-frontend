@@ -17,14 +17,13 @@
 package views.helpers
 
 import connectors.sharedmodel._
+import forms.DateUtils.daysInFY
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
-
-import java.time.Year
 
 object FullResultsPageHelper extends ViewHelper {
 
@@ -234,7 +233,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     val taxableProfitIncludingDistributions = marginalRate.adjustedAugmentedProfit
 
-    val daysInYear = Year.of(marginalRate.year).length()
+    val daysInYear = daysInFY(marginalRate.year)
 
     val isProfitsAboveLowerThreshold = taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold
 
