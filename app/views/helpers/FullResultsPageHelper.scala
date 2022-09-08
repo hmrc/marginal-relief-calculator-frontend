@@ -275,8 +275,8 @@ object FullResultsPageHelper extends ViewHelper {
         TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfitDistributions"))),
         TableRow(content =
           Text(
-            s"${CurrencyUtils.format(marginalRate.adjustedProfit)} + ${CurrencyUtils
-                .format(distributions)} × ($daysString ÷ $daysInYear $daysMsg)"
+            s"(${CurrencyUtils.format(taxableProfit)} + ${CurrencyUtils
+                .format(distributions)}) × ($daysString ÷ $daysInYear $daysMsg)"
           )
         ),
         TableRow(content = Text(CurrencyUtils.format(taxableProfitIncludingDistributions)))

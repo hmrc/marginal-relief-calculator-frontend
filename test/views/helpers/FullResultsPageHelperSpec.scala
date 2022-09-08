@@ -83,7 +83,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |       <tr class="govuk-table__row">
             |         <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |         <td class="govuk-table__cell">£6 + £111 × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |         <td class="govuk-table__cell">(£11 + £111) × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
             |         <td class="govuk-table__cell">£13</td>
             |       </tr>
             |     </tbody>
@@ -153,7 +153,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |        <td class="govuk-table__cell">£6 + £111 × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |        <td class="govuk-table__cell">(£11 + £111) × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
             |        <td class="govuk-table__cell">£13</td>
             |      </tr>
             |    </tbody>
@@ -187,7 +187,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |        <td class="govuk-table__cell">£66 + £111 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |        <td class="govuk-table__cell">(£11 + £111) × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
             |        <td class="govuk-table__cell">£143</td>
             |      </tr>
             |    </tbody>
@@ -236,7 +236,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |      <td class="govuk-table__cell">£66 + £111 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |      <td class="govuk-table__cell">(£11 + £111) × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
             |      <td class="govuk-table__cell">£143</td>
             |    </tr>
             |  </tbody>
@@ -281,7 +281,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |      <td class="govuk-table__cell">£66 + £111 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |      <td class="govuk-table__cell">(£11 + £111) × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
             |      <td class="govuk-table__cell">£143</td>
             |    </tr>
             |  </tbody>
