@@ -64,11 +64,11 @@ class DateMappingsSpec
 
   "must bind valid data ignoring white spaces and carriage returns" in {
 
-    val trimmedDate = LocalDate.of(2025, 3, 18)
+    val trimmedDate = LocalDate.ofEpochDay(0)
     val data = Map(
-      "value.day"   -> "   18 ",
-      "value.month" -> " \n 3  \r",
-      "value.year"  -> "\r 2025"
+      "value.day"   -> "   1 ",
+      "value.month" -> " \n 1  \r",
+      "value.year"  -> "\r 1970"
     )
     val result = form.bind(data)
 
