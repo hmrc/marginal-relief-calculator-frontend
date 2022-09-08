@@ -40,7 +40,7 @@ object ResultsPageHelper extends ViewHelper {
   private val govukTable = new GovukTable()
   private val summaryList = new GovukSummaryList()
 
-  private val BannerPanel = new BannerPanel()
+  private val bannerPanel = new BannerPanel()
 
   def displayYourDetails(
     calculatorResult: CalculatorResult,
@@ -218,7 +218,7 @@ object ResultsPageHelper extends ViewHelper {
     )
 
   private def positiveMarginalReliefBanner(marginalRelief: Double)(implicit messages: Messages): Html =
-    BannerPanel(
+    bannerPanel(
       Panel(
         title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
         content = Text(CurrencyUtils.format(marginalRelief))
