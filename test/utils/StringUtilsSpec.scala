@@ -17,7 +17,7 @@ class StringUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenProperty
         " \n test ",
         "test\r "
       )
-      untrimmedString.forall(trimDataEntry(_) equals trimmedString )
+      untrimmedString.forall(trimDataEntry(_) equals trimmedString)
     }
   }
 }

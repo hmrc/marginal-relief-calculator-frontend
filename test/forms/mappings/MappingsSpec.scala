@@ -238,7 +238,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
       result.get mustEqual 1
     }
 
-      "must remove valid commas in input" in {
+    "must remove valid commas in input" in {
       val result = testForm.bind(Map("value" -> "1,111"))
       result.get mustEqual 1111
     }
