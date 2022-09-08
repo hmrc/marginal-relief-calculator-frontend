@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import forms.DateUtils._
-import models.{ CheckMode, UserAnswers }
+import models.{ CheckMode, NormalMode, UserAnswers }
 import pages.AccountingPeriodPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
