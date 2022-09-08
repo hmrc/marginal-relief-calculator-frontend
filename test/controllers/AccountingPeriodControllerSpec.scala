@@ -241,7 +241,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page if user changed existing accounting period dates and session is not cleared" in {
+    "must redirect to change page if user changed existing accounting period dates" in {
       val application = applicationBuilder(userAnswers = Some(completedUserAnswers)).build()
 
       running(application) {
@@ -258,29 +258,11 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
             "accountingPeriodEndDate.year"    -> eDate.getYear.toString
           )
           .withSession(SessionKeys.sessionId -> "test-session-id")
-        val sessionRepository = application.injector.instanceOf[SessionRepository]
 
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
-        sessionRepository
-          .get("test-session-id")
-          .futureValue
-          .get
-          .data must be(
-          completedUserAnswers
-            .set(
-              AccountingPeriodPage,
-              AccountingPeriodForm(
-                accountingPeriodStartDate = sDate,
-                accountingPeriodEndDate = Some(eDate)
-              )
-            )
-            .success
-            .value
-            .data
-        )
+        redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad.url))
       }
     }
 
