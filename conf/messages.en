@@ -207,7 +207,7 @@ associatedCompanies.heading = Did your company have any active associated compan
 associatedCompanies.heading.between = Did your company have any active associated companies between {0} and {1}?
 associatedCompanies.warning = Do not include the company you''re currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect result.
 associatedCompanies.detailsTitle = What are associated companies?
-associatedCompanies.detailsHtml = <p>A company is considered associated to another if:</p><ul class="govuk-list govuk-list--bullet"><li>one of the companies has <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link" target="_blank">control (opens in new tab)</a> of the other</li><li>both companies are controlled by the same companies or people</li></ul>
+associatedCompanies.detailsHtml = <p>A company is considered associated to another if:</p><ul class="govuk-list govuk-list--bullet"><li>one of the companies has of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = How many additional associated companies?
 associatedCompanies.countLabelBetween = Enter additional associated companies between {0} and {1}
 associatedCompanies.checkYourAnswersLabel = Number of associated companies
@@ -216,7 +216,7 @@ associatedCompanies.error.invalid = Select whether you have associated companies
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1
 associatedCompaniesCount.error.nonNumeric = Enter your Number of associated companies using numbers
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1
-associatedCompanies.change.hidden = AssociatedCompanies
+associatedCompanies.change.hidden = Number of associated companies
 
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
@@ -225,7 +225,7 @@ taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits
 taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, 70000
 taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, 70000
-taxableProfit.change.hidden = TaxableProfit
+taxableProfit.change.hidden = Company''s profit
 taxableProfit.chargeableProfitsOnCTR = These are the chargeable profits for Corporation Tax on your Company Tax Return.
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
 taxableProfit.youCanFindYourCompanyProfitVia = You can find your company's profit via your accountant or accounting software
@@ -266,7 +266,7 @@ distributionsIncluded.error.invalid = Select whether you received distributions 
 distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, 70000
 distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, 70000
 distributionsIncludedAmount.error.required = Enter an amount for your received distributions
-distributionsIncluded.change.hidden = DistributionsIncluded
+distributionsIncluded.change.hidden = Distributions included
 distributionsIncluded.emptyValue = None
 
 session.expired.title = Session expired
