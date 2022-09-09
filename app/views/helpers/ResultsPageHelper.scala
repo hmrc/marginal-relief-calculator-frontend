@@ -28,6 +28,7 @@ import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummar
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
+import views.html.templates.BannerPanel
 
 import scala.collection.immutable
 
@@ -38,6 +39,8 @@ object ResultsPageHelper extends ViewHelper {
   private val govukPanel = new GovukPanel()
   private val govukTable = new GovukTable()
   private val summaryList = new GovukSummaryList()
+
+  private val bannerPanel = new BannerPanel()
 
   def displayYourDetails(
     calculatorResult: CalculatorResult,
@@ -215,14 +218,10 @@ object ResultsPageHelper extends ViewHelper {
     )
 
   private def positiveMarginalReliefBanner(marginalRelief: Double)(implicit messages: Messages): Html =
-    govukPanel(
+    bannerPanel(
       Panel(
-        title = HtmlContent(s"""<span class="govuk-!-font-weight-regular">${messages(
-            "resultsPage.marginalReliefForAccPeriodIs"
-          )}</span>"""),
-        content = HtmlContent(
-          s"""<span class="govuk-!-font-weight-bold">${CurrencyUtils.format(marginalRelief)}</span>"""
-        )
+        title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+        content = Text(CurrencyUtils.format(marginalRelief))
       )
     )
 
