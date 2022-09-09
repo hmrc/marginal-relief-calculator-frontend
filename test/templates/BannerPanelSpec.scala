@@ -16,19 +16,24 @@
 
 package templates
 import base.SpecBase
-import play.api.test.Helpers.{ contentAsString, defaultAwaitTimeout, running }
+import play.api.test.Helpers.{ contentAsString, defaultAwaitTimeout }
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.html.components.Panel
 import views.html.templates.BannerPanel
 
 class BannerPanelSpec extends SpecBase {
 
-  "BannerPanel renders view" in {
-    val application = applicationBuilder(None).build()
-
-    running(application) {
+  "Banner Panel render" - {
+    "Should render when content not empty" in {
       val bannerPanel = new BannerPanel()
-      val panel = new Panel(title = Text("Marginal Relief for your accounting period is"), content = Text("£2000"));
+      val panel = s"""<div class="govuk-panel govuk-panel--confirmation">
+                            <h1 class="govuk-panel__body govuk-!-static-margin-bottom-3">
+                             Marginal Relief for your accounting period is
+                            </h1>
+                            <div class="govuk-panel__title govuk-!-margin-0">
+                              £2000
+                            </div>
+                        </div>"""
 
       val result = bannerPanel(
         Panel(
@@ -37,12 +42,23 @@ class BannerPanelSpec extends SpecBase {
         )
       )
 
-      val view = application.injector.instanceOf[BannerPanel]
+      contentAsString(result).filterAndTrim mustEqual panel.filterAndTrim
+    }
+    "Should render when content empty" in {
+      val bannerPanel = new BannerPanel()
+      val panel = s"""<div class="govuk-panel govuk-panel--confirmation">
+                            <h1 class="govuk-panel__body govuk-!-static-margin-bottom-3">
+                             Marginal Relief for your accounting period is
+                            </h1>
+                        </div>"""
 
-      contentAsString(result).filterAndTrim mustEqual view
-        .render(panel)
-        .toString
-        .filterAndTrim
+      val result = bannerPanel(
+        Panel(
+          title = Text("Marginal Relief for your accounting period is")
+        )
+      )
+
+      contentAsString(result).filterAndTrim mustEqual panel.filterAndTrim
     }
   }
 }
