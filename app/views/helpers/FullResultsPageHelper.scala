@@ -17,7 +17,6 @@
 package views.helpers
 
 import connectors.sharedmodel._
-import forms.DateUtils.daysInFY
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases._
@@ -39,7 +38,7 @@ object FullResultsPageHelper extends ViewHelper {
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
-    def nonTabDisplay(taxDetails: Seq[TaxDetails]) = {
+    def nonTabDisplay(taxDetails: Seq[TaxDetails], daysInAccountingPeriod: Int) = {
       taxDetails match {
         case Seq(_: FlatRate) => throw new RuntimeException("Only flat rate year is available")
         case _                => ()
@@ -75,7 +74,14 @@ object FullResultsPageHelper extends ViewHelper {
                 days
               )
             ),
-            displayFullFinancialYearTable(marginal, associatedCompanies, taxableProfit, distributions, config)
+            displayFullFinancialYearTable(
+              marginal,
+              associatedCompanies,
+              taxableProfit,
+              distributions,
+              config,
+              daysInAccountingPeriod
+            )
           )
         }
       }
@@ -91,7 +97,7 @@ object FullResultsPageHelper extends ViewHelper {
            |      </a>
            |    </li>""".stripMargin
 
-      def tabContent(marginalRate: MarginalRate) = {
+      def tabContent(marginalRate: MarginalRate, daysInAccountingPeriod: Int) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
@@ -102,11 +108,18 @@ object FullResultsPageHelper extends ViewHelper {
               marginalRate.days
             )
           )}
-           |    ${displayFullFinancialYearTable(marginalRate, associatedCompanies, taxableProfit, distributions, config)}
+           |    ${displayFullFinancialYearTable(
+            marginalRate,
+            associatedCompanies,
+            taxableProfit,
+            distributions,
+            config,
+            daysInAccountingPeriod
+          )}
            |  </div>""".stripMargin
       }
 
-      def tabDisplay(marginalRates: Seq[MarginalRate]) =
+      def tabDisplay(marginalRates: Seq[MarginalRate], daysInAccountingPeriod: Int) =
         Html(s"""
                 |<div class="govuk-tabs" data-module="govuk-tabs">
                 |  <h2 class="govuk-tabs__title">
@@ -115,19 +128,22 @@ object FullResultsPageHelper extends ViewHelper {
                 |  <ul class="govuk-tabs__list">
                 |    ${marginalRates.map(_.year).map(tabBtn).mkString}
                 |  </ul>
-                |  ${marginalRates.map(tabContent).mkString}
+                |  ${marginalRates.map(rate => tabContent(rate, daysInAccountingPeriod)).mkString}
                 |</div>
                 |""".stripMargin)
 
+      val daysInAccountingPeriod = dual.year1.days + dual.year2.days
+
       dual.year1 -> dual.year2 match {
-        case (y1: MarginalRate, y2: MarginalRate) => tabDisplay(Seq(y1, y2))
-        case (y1: MarginalRate, y2: FlatRate)     => nonTabDisplay(Seq(y1, y2))
-        case (y1: FlatRate, y2: MarginalRate)     => nonTabDisplay(Seq(y1, y2))
+        case (y1: MarginalRate, y2: MarginalRate) => tabDisplay(Seq(y1, y2), daysInAccountingPeriod)
+        case (y1: MarginalRate, y2: FlatRate)     => nonTabDisplay(Seq(y1, y2), daysInAccountingPeriod)
+        case (y1: FlatRate, y2: MarginalRate)     => nonTabDisplay(Seq(y1, y2), daysInAccountingPeriod)
         case _                                    => throw new RuntimeException("Both financial years are flat rate")
       }
     }
 
-    val financialYearTables = calculatorResult.fold(single => nonTabDisplay(Seq(single.details)))(dualResultTable)
+    val financialYearTables =
+      calculatorResult.fold(single => nonTabDisplay(Seq(single.details), single.details.days))(dualResultTable)
 
     HtmlFormat.fill(
       Seq(
@@ -140,9 +156,9 @@ object FullResultsPageHelper extends ViewHelper {
 
   private def marginalReliefFormula(implicit messages: Messages): Html =
     Html(s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">${messages(
-        "fullResultsPage.marginalReliefFormula"
-      )}</h3>
-       |<p class="govuk-body">${messages("fullResultsPage.marginalReliefFormula.description")}</p>""".stripMargin)
+             "fullResultsPage.marginalReliefFormula"
+           )}</h3>
+            |<p class="govuk-body">${messages("fullResultsPage.marginalReliefFormula.description")}</p>""".stripMargin)
 
   private def whatIsMarginalRate(calculatorResult: CalculatorResult)(implicit messages: Messages) = {
 
@@ -178,15 +194,15 @@ object FullResultsPageHelper extends ViewHelper {
     } else { HtmlFormat.empty }
   }
 
-  private def isFiveStepMarginalRate(marginalRate: MarginalRate) =
-    marginalRate.adjustedAugmentedProfit <= marginalRate.adjustedUpperThreshold && marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedLowerThreshold
+  private def isFiveStepMarginalRate(marginalRate: MarginalRate) = marginalRate.marginalRelief > 0
 
   private def displayFullFinancialYearTable(
     marginalRate: MarginalRate,
     associatedCompanies: Int,
     taxableProfit: Int,
     distributions: Int,
-    config: Map[Int, FYConfig]
+    config: Map[Int, FYConfig],
+    daysInAccountingPeriod: Int
   )(implicit messages: Messages): Html = {
 
     val yearConfig = config(marginalRate.year) match {
@@ -234,8 +250,6 @@ object FullResultsPageHelper extends ViewHelper {
 
     val taxableProfitIncludingDistributions = marginalRate.adjustedAugmentedProfit
 
-    val daysInYear = daysInFY(marginalRate.year)
-
     val isProfitsAboveLowerThreshold = taxableProfitIncludingDistributions > marginalRate.adjustedLowerThreshold
 
     val firstThreeSteps = Seq(
@@ -252,7 +266,7 @@ object FullResultsPageHelper extends ViewHelper {
         TableRow(content =
           Text(
             s"${if (isProfitsAboveLowerThreshold) upperThresholdText
-              else lowerThresholdText} × ($daysString ÷ $daysInYear $daysMsg) ÷ $pointOneCompaniesCalcText"
+              else lowerThresholdText} × ($daysString ÷ $daysInAccountingPeriod $daysMsg) ÷ $pointOneCompaniesCalcText"
           )
         ),
         TableRow(content =
@@ -267,7 +281,9 @@ object FullResultsPageHelper extends ViewHelper {
       Seq(
         boldRow("2"),
         TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfit"))),
-        TableRow(content = Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInYear $daysMsg)")),
+        TableRow(content =
+          Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInAccountingPeriod $daysMsg)")
+        ),
         TableRow(content = Text(CurrencyUtils.format(marginalRate.adjustedProfit)))
       ),
       Seq(
@@ -276,7 +292,7 @@ object FullResultsPageHelper extends ViewHelper {
         TableRow(content =
           Text(
             s"(${CurrencyUtils.format(taxableProfit)} + ${CurrencyUtils
-                .format(distributions)}) × ($daysString ÷ $daysInYear $daysMsg)"
+                .format(distributions)}) × ($daysString ÷ $daysInAccountingPeriod $daysMsg)"
           )
         ),
         TableRow(content = Text(CurrencyUtils.format(taxableProfitIncludingDistributions)))
@@ -326,7 +342,7 @@ object FullResultsPageHelper extends ViewHelper {
           ),
         None
       )
-    } else if (taxableProfitIncludingDistributions < marginalRate.adjustedLowerThreshold) {
+    } else if (taxableProfitIncludingDistributions <= marginalRate.adjustedLowerThreshold) {
       template(
         firstThreeSteps,
         Some(s"""

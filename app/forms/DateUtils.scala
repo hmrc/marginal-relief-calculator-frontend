@@ -18,7 +18,6 @@ package forms
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 object DateUtils {
 
@@ -32,13 +31,5 @@ object DateUtils {
     def formatDate: String = FORMAT.format(date)
 
     def formatDateFull: String = FORMAT_FULL.format(date)
-  }
-
-  def daysBetweenInclusive(start: LocalDate, end: LocalDate): Int =
-    (start.until(end, ChronoUnit.DAYS) + 1).toInt
-
-  def daysInFY(year: Int): Int = {
-    val start = LocalDate.of(year, 4, 1)
-    daysBetweenInclusive(start, start.plusYears(1).withMonth(3).withDayOfMonth(31))
   }
 }
