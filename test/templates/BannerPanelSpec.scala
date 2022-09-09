@@ -25,14 +25,15 @@ class BannerPanelSpec extends SpecBase {
 
   "BannerPanel renders view" in {
     val application = applicationBuilder(None).build()
+
     running(application) {
       val bannerPanel = new BannerPanel()
-      val panel = new Panel(title = Text("test"), content = Text("test"));
+      val panel = new Panel(title = Text("Marginal Relief for your accounting period is"), content = Text("£2000"));
 
       val result = bannerPanel(
         Panel(
-          title = Text("test"),
-          content = Text("test")
+          title = Text("Marginal Relief for your accounting period is"),
+          content = Text("£2000")
         )
       )
 
