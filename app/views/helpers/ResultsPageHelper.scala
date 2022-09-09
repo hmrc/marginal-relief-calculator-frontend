@@ -341,7 +341,8 @@ object ResultsPageHelper extends ViewHelper {
                 Seq.empty
               }
             ).filter(_.nonEmpty),
-            caption = None,
+            caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+            captionClasses = "govuk-!-display-none",
             firstCellIsHeader = true
           )
         )
@@ -449,7 +450,8 @@ object ResultsPageHelper extends ViewHelper {
             )
           ),
           rows = dataRows,
-          caption = None,
+          caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+          captionClasses = "govuk-!-display-none",
           firstCellIsHeader = true
         )
       )
