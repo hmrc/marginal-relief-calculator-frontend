@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
 import models.requests.OptionalDataRequest
-import models.{ CheckMode, Mode, NormalMode, UserAnswers }
+import models.{ Mode, UserAnswers }
 import navigation.Navigator
 import org.slf4j.{ Logger, LoggerFactory }
 import pages.AccountingPeriodPage
@@ -60,30 +60,14 @@ class AccountingPeriodController @Inject() (
     Ok(view(preparedForm, mode))
   }
 
-  private def updatedAnswersAndMode(request: OptionalDataRequest[AnyContent], form: AccountingPeriodForm, mode: Mode) =
+  private def updatedAnswers(request: OptionalDataRequest[AnyContent], form: AccountingPeriodForm) =
     Future.fromTry(request.userAnswers match {
-      case Some(answers) if mode == CheckMode =>
-        answers
-          .set(AccountingPeriodPage, form)
-          .map(_ -> {
-            answers
-              .get(AccountingPeriodPage)
-              .collect {
-                case prevAnswer if prevAnswer == form =>
-                  CheckMode
-                case _ =>
-                  NormalMode
-              }
-              .getOrElse(mode)
-          })
       case Some(answers) =>
         answers
           .set(AccountingPeriodPage, form)
-          .map(_ -> mode)
       case None =>
         UserAnswers(request.userId)
           .set(AccountingPeriodPage, form)
-          .map(_ -> mode)
     })
 
   private def accountingPeriodIsIrrelevant(form: AccountingPeriodForm) =
@@ -113,8 +97,8 @@ class AccountingPeriodController @Inject() (
               )
             } else {
               for {
-                (updatedAnswers, mode) <- updatedAnswersAndMode(request, formWithAccountingPeriodEnd, mode)
-                _                      <- sessionRepository.set(updatedAnswers)
+                updatedAnswers <- updatedAnswers(request, formWithAccountingPeriodEnd)
+                _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
               )
