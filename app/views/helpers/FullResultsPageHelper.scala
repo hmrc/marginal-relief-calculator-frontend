@@ -19,11 +19,12 @@ package views.helpers
 import connectors.sharedmodel._
 import forms.DateUtils.daysInFY
 import play.api.i18n.Messages
-import play.twirl.api.Html
+import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
+import scala.collection.immutable.Seq
 
 object FullResultsPageHelper extends ViewHelper {
 
@@ -43,7 +44,7 @@ object FullResultsPageHelper extends ViewHelper {
         case Seq(_: FlatRate) => throw new RuntimeException("Only flat rate year is available")
         case _                => ()
       }
-      val htmlString = taxDetails.map { td =>
+      val html = taxDetails.flatMap { td =>
         val year = td.year
         val days = td.days
         td.fold { _ =>
@@ -63,7 +64,7 @@ object FullResultsPageHelper extends ViewHelper {
                 (year + 1).toString
               )
             )
-          ).mkString
+          )
         } { marginal =>
           Seq(
             h3(
@@ -75,11 +76,11 @@ object FullResultsPageHelper extends ViewHelper {
               )
             ),
             displayFullFinancialYearTable(marginal, associatedCompanies, taxableProfit, distributions, config)
-          ).mkString
+          )
         }
-      }.mkString
+      }
 
-      Html(htmlString)
+      HtmlFormat.fill(html)
     }
 
     def dualResultTable(dual: DualResult) = {
@@ -128,20 +129,20 @@ object FullResultsPageHelper extends ViewHelper {
 
     val financialYearTables = calculatorResult.fold(single => nonTabDisplay(Seq(single.details)))(dualResultTable)
 
-    Html(
+    HtmlFormat.fill(
       Seq(
-        financialYearTables.body,
+        financialYearTables,
         whatIsMarginalRate(calculatorResult)
-      ).mkString
+      )
     )
 
   }
 
-  private def marginalReliefFormula(implicit messages: Messages): String =
-    s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">${messages(
+  private def marginalReliefFormula(implicit messages: Messages): Html =
+    Html(s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">${messages(
         "fullResultsPage.marginalReliefFormula"
       )}</h3>
-       |<p class="govuk-body">${messages("fullResultsPage.marginalReliefFormula.description")}</p>""".stripMargin
+       |<p class="govuk-body">${messages("fullResultsPage.marginalReliefFormula.description")}</p>""".stripMargin)
 
   private def whatIsMarginalRate(calculatorResult: CalculatorResult)(implicit messages: Messages) = {
 
@@ -151,7 +152,7 @@ object FullResultsPageHelper extends ViewHelper {
     }
 
     if (show) {
-      Html(
+      HtmlFormat.fill(
         Seq(
           marginalReliefFormula,
           govukDetails(
@@ -170,11 +171,11 @@ object FullResultsPageHelper extends ViewHelper {
                    |    </p>""".stripMargin
               )
             )
-          ).body,
-          hr.body
-        ).mkString
+          ),
+          hr
+        )
       )
-    } else { Html("") }
+    } else { HtmlFormat.empty }
   }
 
   private def isFiveStepMarginalRate(marginalRate: MarginalRate) =
@@ -295,7 +296,7 @@ object FullResultsPageHelper extends ViewHelper {
         )
       )
       description match {
-        case Some(text) => Html(Seq(p(text), govukTable(table).body).mkString)
+        case Some(text) => HtmlFormat.fill(Seq(p(text), govukTable(table)))
         case _          => govukTable(table)
       }
     }
