@@ -246,6 +246,7 @@ distribution.checkYourAnswersLabel = Did your company receive any distributions?
 distribution.error.required = Select whether you received distributions or not
 distribution.error.invalid = Select whether you received distributions or not
 distribution.change.hidden = Distribution
+distribution.errorsummary = There is a problem
 
 distributionsIncluded.title = Do any distributions need to be included with your profits?
 distributionsIncluded.heading = Do any distributions need to be included with your profits?

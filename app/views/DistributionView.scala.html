@@ -29,7 +29,17 @@
     @formHelper(action = routes.DistributionController.onSubmit(mode), 'autoComplete -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
+            @govukErrorSummary(
+                ErrorSummary(
+                    errorList = Seq(
+                        ErrorLink(
+                            href = Some("#value_0"),
+                            content = Text(messages("distribution.error.required"))
+                        )
+                    ),
+                    title = Text(messages("distribution.errorsummary")),
+                )
+            )
         }
 
         <h1 class="govuk-fieldset__legend--l">
