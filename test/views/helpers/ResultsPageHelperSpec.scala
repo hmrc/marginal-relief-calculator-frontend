@@ -21,7 +21,6 @@ import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow

@@ -47,7 +47,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
       "when MarginalRate, should display full results table" in {
         val calculatorResult = SingleResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 8, 9, 10)
         )
 
         FullResultsPageHelper
@@ -71,19 +71,19 @@ class FullResultsPageHelperSpec extends SpecBase {
             |       <tr class="govuk-table__row">
             |         <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
             |         <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
-            |         <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
+            |         <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
             |         <td class="govuk-table__cell">£9</td>
             |       </tr>
             |       <tr class="govuk-table__row">
             |         <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
             |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
-            |         <td class="govuk-table__cell">£11 × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |         <td class="govuk-table__cell">£11 × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural)</td>
             |         <td class="govuk-table__cell">£6</td>
             |       </tr>
             |       <tr class="govuk-table__row">
             |         <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |         <td class="govuk-table__cell">£6 + £111 × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |         <td class="govuk-table__cell">(£11 + £111) × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural)</td>
             |         <td class="govuk-table__cell">£13</td>
             |       </tr>
             |     </tbody>
@@ -106,8 +106,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate only, should display results table" in {
         val calculatorResult = DualResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 55, 66, 77, 88, 99, 1010)
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 8, 9, 10),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 88, 99, 1010)
         )
 
         FullResultsPageHelper
@@ -141,19 +141,19 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
-            |        <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
+            |        <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (10 fullResultsPage.day.plural ÷ 1020 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
             |        <td class="govuk-table__cell">£9</td>
             |      </tr>
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
-            |        <td class="govuk-table__cell">£11 × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |        <td class="govuk-table__cell">£11 × (10 fullResultsPage.day.plural ÷ 1020 fullResultsPage.day.plural)</td>
             |        <td class="govuk-table__cell">£6</td>
             |      </tr>
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |        <td class="govuk-table__cell">£6 + £111 × (10 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |        <td class="govuk-table__cell">(£11 + £111) × (10 fullResultsPage.day.plural ÷ 1020 fullResultsPage.day.plural)</td>
             |        <td class="govuk-table__cell">£13</td>
             |      </tr>
             |    </tbody>
@@ -175,19 +175,19 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
-            |        <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
+            |        <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (1010 fullResultsPage.day.plural ÷ 1020 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
             |        <td class="govuk-table__cell">£99</td>
             |      </tr>
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
-            |        <td class="govuk-table__cell">£11 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |        <td class="govuk-table__cell">£11 × (1010 fullResultsPage.day.plural ÷ 1020 fullResultsPage.day.plural)</td>
             |        <td class="govuk-table__cell">£66</td>
             |      </tr>
             |      <tr class="govuk-table__row">
             |        <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |        <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |        <td class="govuk-table__cell">£66 + £111 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |        <td class="govuk-table__cell">(£11 + £111) × (1010 fullResultsPage.day.plural ÷ 1020 fullResultsPage.day.plural)</td>
             |        <td class="govuk-table__cell">£143</td>
             |      </tr>
             |    </tbody>
@@ -199,7 +199,7 @@ class FullResultsPageHelperSpec extends SpecBase {
       "when flat rate for year 1 and marginal rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
           FlatRate(epoch.getYear, 1, 2, 3, 4),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 55, 66, 77, 88, 99, 1010)
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, -10, 0, 1010)
         )
 
         FullResultsPageHelper
@@ -210,7 +210,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-            |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£99</b></p>
+            |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
             |<table class="govuk-table">
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
@@ -224,19 +224,19 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
-            |      <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
-            |      <td class="govuk-table__cell">£99</td>
+            |      <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (1010 fullResultsPage.day.plural ÷ 1014 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
+            |      <td class="govuk-table__cell">£0</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
-            |      <td class="govuk-table__cell">£11 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |      <td class="govuk-table__cell">£11 × (1010 fullResultsPage.day.plural ÷ 1014 fullResultsPage.day.plural)</td>
             |      <td class="govuk-table__cell">£66</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |      <td class="govuk-table__cell">£66 + £111 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |      <td class="govuk-table__cell">(£11 + £111) × (1010 fullResultsPage.day.plural ÷ 1014 fullResultsPage.day.plural)</td>
             |      <td class="govuk-table__cell">£143</td>
             |    </tr>
             |  </tbody>
@@ -245,7 +245,7 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate for year 1 and flat rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 55, 66, 77, 88, 99, 1010),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, -10, 0, 1010),
           FlatRate(epoch.getYear, 1, 2, 3, 4)
         )
 
@@ -255,7 +255,7 @@ class FullResultsPageHelperSpec extends SpecBase {
           .trimNewLines mustBe
           """
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-            |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£99</b></p>
+            |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
             |<table class="govuk-table">
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
@@ -269,19 +269,19 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
-            |      <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
-            |      <td class="govuk-table__cell">£99</td>
+            |      <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (1010 fullResultsPage.day.plural ÷ 1014 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
+            |      <td class="govuk-table__cell">£0</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
-            |      <td class="govuk-table__cell">£11 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |      <td class="govuk-table__cell">£11 × (1010 fullResultsPage.day.plural ÷ 1014 fullResultsPage.day.plural)</td>
             |      <td class="govuk-table__cell">£66</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
             |      <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |      <td class="govuk-table__cell">£66 + £111 × (1010 fullResultsPage.day.plural ÷ 365 fullResultsPage.day.plural)</td>
+            |      <td class="govuk-table__cell">(£11 + £111) × (1010 fullResultsPage.day.plural ÷ 1014 fullResultsPage.day.plural)</td>
             |      <td class="govuk-table__cell">£143</td>
             |    </tr>
             |  </tbody>
@@ -290,7 +290,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
             |""".stripMargin.trimNewLines
       }
-      "when taxable profit with distributions < adjusted upper threshold and > adjusted  lower threshold should show correct template" in {
+      "when marginal relief > 0 show correct template" in {
         val calculatorResult = SingleResult(
           MarginalRate(
             year = epoch.getYear,
@@ -315,7 +315,19 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when taxable profit with distributions <=  adjusted  lower threshold should show correct template" in {
         val calculatorResult = SingleResult(
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 55, 66, 77, 100000, 1000000, 1010)
+          MarginalRate(
+            year = epoch.getYear,
+            corporationTaxBeforeMR = 11,
+            taxRateBeforeMR = 22,
+            corporationTax = 33,
+            taxRate = 44,
+            marginalRelief = 0,
+            adjustedProfit = 66,
+            adjustedDistributions = 77,
+            adjustedLowerThreshold = 100000,
+            adjustedUpperThreshold = 1000000,
+            days = 1010
+          )
         )
 
         FullResultsPageHelper

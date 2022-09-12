@@ -96,14 +96,10 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           val view = application.injector.instanceOf[FullResultsPageView]
 
           status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(
-            calculatorResult,
-            accountingPeriodForm,
-            1,
-            1,
-            1,
-            config
-          )(request, messages(application)).toString.filterAndTrim
+          contentAsString(result).filterAndTrim mustEqual view
+            .render(calculatorResult, accountingPeriodForm, 1, 1, 1, config, request, messages(application))
+            .toString
+            .filterAndTrim
         }
       }
 
