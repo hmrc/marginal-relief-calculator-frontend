@@ -22,27 +22,9 @@ import utils.NumberUtils.roundUp
 
 class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
-  private val flatRate = FlatRate(1, 11, 111, 1111, 1111)
+  private val flatRate = FlatRate(1, 11, 111, 1111, 11111, 111111, 1111111)
 
-  private val marginalRate = MarginalRate(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
-
-  "MarginalRate" - {
-    "adjustedAugmentedProfit" - {
-      "should return sum of adjustedProfit and adjustedDistributions" in {
-        marginalRate.adjustedAugmentedProfit shouldBe roundUp(
-          BigDecimal(marginalRate.adjustedProfit) + BigDecimal(marginalRate.adjustedDistributions)
-        )
-      }
-    }
-  }
-
-  "FlatRate" - {
-    "adjustedAugmentedProfit" - {
-      "should return sum of adjustedProfit" in {
-        flatRate.adjustedAugmentedProfit shouldBe roundUp(BigDecimal(flatRate.adjustedProfit))
-      }
-    }
-  }
+  private val marginalRate = MarginalRate(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 
   private val singleResult = SingleResult(marginalRate)
 

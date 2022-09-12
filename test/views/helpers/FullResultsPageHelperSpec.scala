@@ -36,7 +36,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
       "when only FlatRate, should throw exception" in {
         val calculatorResult = SingleResult(
-          FlatRate(epoch.getYear, 1, 2, 3, 4)
+          FlatRate(epoch.getYear, 1, 2, 3, 4, 5, 6)
         )
         val caught =
           intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
@@ -47,7 +47,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
       "when MarginalRate, should display full results table" in {
         val calculatorResult = SingleResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 8, 9, 10)
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10)
         )
 
         FullResultsPageHelper
@@ -95,8 +95,8 @@ class FullResultsPageHelperSpec extends SpecBase {
     "dual result" - {
       "when flat rates only, should throw exception" in {
         val calculatorResult = DualResult(
-          FlatRate(epoch.getYear, 1, 2, 3, 4),
-          FlatRate(epoch.getYear + 1, 11, 22, 33, 44)
+          FlatRate(epoch.getYear, 1, 2, 3, 4, 5, 6),
+          FlatRate(epoch.getYear + 1, 11, 22, 33, 44, 55, 66)
         )
         val caught =
           intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
@@ -106,8 +106,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate only, should display results table" in {
         val calculatorResult = DualResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 8, 9, 10),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 88, 99, 1010)
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, 88, 99, 1010)
         )
 
         FullResultsPageHelper
@@ -198,8 +198,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when flat rate for year 1 and marginal rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
-          FlatRate(epoch.getYear, 1, 2, 3, 4),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, -10, 0, 1010)
+          FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010)
         )
 
         FullResultsPageHelper
@@ -262,22 +262,22 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.04</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£10.96</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£66.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£11.00</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit.distributions</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.44</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£110.56</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£77.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell"><p class="govuk-body">fullResultsPage.taxableProfit.profitAndDistributions</p></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.48</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£121.52</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£143.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£122.00</td>
             |    </tr>
             |  </tbody>
@@ -286,8 +286,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate for year 1 and flat rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, -10, 0, 1010),
-          FlatRate(epoch.getYear, 1, 2, 3, 4)
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010),
+          FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4)
         )
 
         FullResultsPageHelper
@@ -350,22 +350,22 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£10.96</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.04</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£66.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£11.00</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit.distributions</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£110.56</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.44</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£77.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell"><p class="govuk-body">fullResultsPage.taxableProfit.profitAndDistributions</p></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£121.52</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.48</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£143.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£122.00</td>
             |    </tr>
             |  </tbody>
@@ -383,6 +383,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             marginalRelief = 55,
             adjustedProfit = 66,
             adjustedDistributions = 77,
+            adjustedAugmentedProfit = 88,
             adjustedLowerThreshold = -100000,
             adjustedUpperThreshold = 100000,
             days = 1010
@@ -406,6 +407,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             marginalRelief = 0,
             adjustedProfit = 66,
             adjustedDistributions = 77,
+            adjustedAugmentedProfit = 88,
             adjustedLowerThreshold = 100000,
             adjustedUpperThreshold = 1000000,
             days = 1010

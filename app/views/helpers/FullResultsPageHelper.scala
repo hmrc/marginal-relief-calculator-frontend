@@ -387,11 +387,11 @@ object FullResultsPageHelper extends ViewHelper {
             Seq(
               TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit")))),
               TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(taxableProfit) / totalDays * d1.days)),
+                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedProfit)),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(taxableProfit) / totalDays * d2.days)),
+                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(d2.adjustedProfit))),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
@@ -402,11 +402,11 @@ object FullResultsPageHelper extends ViewHelper {
             Seq(
               TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.distributions")))),
               TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(distributions) / totalDays * d1.days)),
+                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedDistributions)),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(distributions) / totalDays * d2.days)),
+                content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedDistributions)),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
@@ -417,13 +417,11 @@ object FullResultsPageHelper extends ViewHelper {
             Seq(
               TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.profitAndDistributions")))),
               TableRow(
-                content =
-                  HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(taxProfitDistributions) / totalDays * d1.days)),
+                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedAugmentedProfit)),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content =
-                  HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(taxProfitDistributions) / totalDays * d2.days)),
+                content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedAugmentedProfit)),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(

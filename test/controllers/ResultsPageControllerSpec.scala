@@ -65,7 +65,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
@@ -111,7 +111,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           )
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
@@ -156,7 +156,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           .build()
 
         val calculatorResult =
-          DualResult(MarginalRate(2022, 1, 1, 1, 1, 1, 1, 1, 1, 1, 90), FlatRate(2023, 1, 1, 1, 275))
+          DualResult(MarginalRate(2022, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 90), FlatRate(2023, 1, 1, 1, 1, 1, 275))
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = startDate,
           accountingPeriodEnd = endDate,
