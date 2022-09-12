@@ -19,7 +19,7 @@ package utils
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import utils.CurrencyUtils.format
+import utils.CurrencyUtils.{ decimalFormat, format }
 import utils.NumberUtils.roundUp
 
 class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
@@ -61,6 +61,27 @@ class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenProper
       )
       forAll(table) { (input, expected) =>
         format(input) shouldBe expected
+      }
+    }
+  }
+  "decimalFormat" - {
+    "should format the given number in GBP currency" in {
+      val table = Table[Double, String](
+        ("input", "expected"),
+        (0, "£0.00"),
+        (0.01, "£0.01"),
+        (0.1, "£0.10"),
+        (1, "£1.00"),
+        (100, "£100.00"),
+        (1000, "£1,000.00"),
+        (1000.01, "£1,000.01"),
+        (1000.1, "£1,000.10"),
+        (10000, "£10,000.00"),
+        (100000, "£100,000.00"),
+        (1000000, "£1,000,000.00")
+      )
+      forAll(table) { (input, expected) =>
+        decimalFormat(input) shouldBe expected
       }
     }
   }
