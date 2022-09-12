@@ -200,6 +200,11 @@ fullResultsPage.notEligibleAboveUpperLimit.1 = You''re not eligible for Marginal
 fullResultsPage.notEligibleAboveUpperLimit.2 = is above the adjusted upper limit of
 fullResultsPage.notEligibleBelowLowerLimit.1 = You''re not eligible for Marginal Relief because your Taxable profit including distributions of
 fullResultsPage.notEligibleBelowLowerLimit.2 = is below the adjusted lower limit of
+fullResultsPage.total = Total
+fullResultsPage.taxableProfit = Taxable Profit
+fullResultsPage.taxableProfit.daysAllocated = Days allocated to each financial year
+fullResultsPage.taxableProfit.distributions = Distributions
+fullResultsPage.taxableProfit.profitAndDistributions = Taxable profit including distributions
 
 
 associatedCompanies.title = Number of associated companies
