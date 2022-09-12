@@ -49,7 +49,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
     .get
     .set(
       AssociatedCompaniesPage,
-      AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+      AssociatedCompaniesForm(AssociatedCompanies.No, None)
     )
     .get
 

@@ -37,4 +37,16 @@ class DateUtilsSpec extends AnyFreeSpec with Matchers {
       epoch.formatDateFull shouldBe "1 January 1970"
     }
   }
+
+  "financialYear" - {
+
+    "should return previous year when month is between January and March" in {
+      financialYear(epoch) shouldBe epoch.getYear - 1
+    }
+
+    "should return current year when month is between April and December" in {
+      financialYear(epoch.plusMonths(3)) shouldBe epoch.getYear
+    }
+
+  }
 }

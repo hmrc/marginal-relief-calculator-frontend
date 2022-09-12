@@ -52,7 +52,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
     .get
     .set(
       AssociatedCompaniesPage,
-      AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None)
+      AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
     )
     .get
 
@@ -149,7 +149,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
             u4 <- u3.set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
             u5 <- u4.set(
                     AssociatedCompaniesPage,
-                    AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), Some(2), Some(3))
+                    AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
                   )
           } yield u5).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
@@ -163,8 +163,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           1.0,
           Some(1),
           Some(1),
-          Some(2),
-          Some(3)
+          None,
+          None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {

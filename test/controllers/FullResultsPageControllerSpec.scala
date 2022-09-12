@@ -44,7 +44,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
     DistributionsIncluded.Yes,
     Some(1)
   )
-  private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None)
+  private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, accountingPeriodForm)
     .get
@@ -175,7 +175,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
               .get
               .set(
                 AssociatedCompaniesPage,
-                AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+                AssociatedCompaniesForm(AssociatedCompanies.No, None)
               )
               .get
           )

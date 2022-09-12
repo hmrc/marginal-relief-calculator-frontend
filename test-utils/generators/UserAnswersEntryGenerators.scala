@@ -17,15 +17,24 @@
 package generators
 
 import models._
-import forms.AssociatedCompaniesForm
+import forms.{ AssociatedCompaniesForm, TwoAssociatedCompaniesForm }
 import models.AssociatedCompanies
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.libs.json.{ JsValue, Json }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryTwoAssociatedCompaniesUserAnswersEntry
+    : Arbitrary[(TwoAssociatedCompaniesPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TwoAssociatedCompaniesPage.type]
+        value <- arbitrary[Int].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryDistributionsIncludedUserAnswersEntry
     : Arbitrary[(DistributionsIncludedPage.type, JsValue)] =
@@ -46,13 +55,20 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
   implicit lazy val arbitraryAssociatedCompaniesForm: Arbitrary[AssociatedCompaniesForm] = Arbitrary {
     for {
-      associatedCompany           <- arbitrary[AssociatedCompanies]
-      associatedCompaniesCount    <- arbitrary[Option[Int]]
-      associatedCompaniesFY1Count <- arbitrary[Option[Int]]
-      associatedCompaniesFY2Count <- arbitrary[Option[Int]]
+      associatedCompany        <- arbitrary[AssociatedCompanies]
+      associatedCompaniesCount <- arbitrary[Option[Int]]
     } yield AssociatedCompaniesForm(
       associatedCompany,
-      associatedCompaniesCount,
+      associatedCompaniesCount
+    )
+  }
+
+  implicit lazy val arbitraryTwoAssociatedCompaniesForm: Arbitrary[TwoAssociatedCompaniesForm] = Arbitrary {
+    for {
+      associatedCompany           <- arbitrary[AssociatedCompanies]
+      associatedCompaniesFY1Count <- arbitrary[Int]
+      associatedCompaniesFY2Count <- arbitrary[Int]
+    } yield TwoAssociatedCompaniesForm(
       associatedCompaniesFY1Count,
       associatedCompaniesFY2Count
     )

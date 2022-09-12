@@ -79,7 +79,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
       .choose[BigDecimal](0, Double.MaxValue)
       .suchThat(v => v.toString.matches("""^(\d*\.[1-9]\d*)$"""))
 
-  def intsBelowValue(value: Int): Gen[BigInt] =
+  def intsBelowValue(value: Int): Gen[Int] =
     Gen.choose(Int.MinValue, value)
 
   def intsAboveValue(value: Int): Gen[Int] =

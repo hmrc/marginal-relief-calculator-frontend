@@ -112,8 +112,8 @@ class FullResultsPageController @Inject() (
                                 request.taxableProfit.toDouble,
                                 request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
                                 request.associatedCompanies.associatedCompaniesCount,
-                                request.associatedCompanies.associatedCompaniesFY1Count,
-                                request.associatedCompanies.associatedCompaniesFY2Count
+                                None,
+                                None
                               )
         config <- getConfig(calculatorResult)
       } yield Ok(
