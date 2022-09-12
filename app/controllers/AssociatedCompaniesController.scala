@@ -175,24 +175,28 @@ class AssociatedCompaniesController @Inject() (
     mode: Mode
   )(implicit
     userAnswers: UserAnswers
-  ) = {
-    val valueUpdated = value.associatedCompanies match {
-      case AssociatedCompanies.Yes => value
-      case AssociatedCompanies.No =>
-        value.copy(
-          associatedCompaniesCount = None
-        )
-    }
+  ) =
     for {
-      updatedAnswers <- Future.fromTry(userAnswers.set(AssociatedCompaniesPage, valueUpdated))
-      _              <- sessionRepository.set(updatedAnswers)
+      updated <- Future.fromTry(value.associatedCompanies match {
+                   case AssociatedCompanies.Yes => userAnswers.set(AssociatedCompaniesPage, value)
+                   case AssociatedCompanies.No =>
+                     userAnswers
+                       .set(
+                         AssociatedCompaniesPage,
+                         value.copy(
+                           associatedCompaniesCount = None
+                         )
+                       )
+                       .flatMap(_.remove(TwoAssociatedCompaniesPage))
+
+                 })
+      _ <- sessionRepository.set(updated)
     } yield Redirect(associatedCompaniesParameter match {
-      case DontAsk | AskFull | AskOnePart(_) =>
-        navigator.nextPage(AssociatedCompaniesPage, mode, updatedAnswers)
-      case AskBothParts(_, _) =>
+      case AskBothParts(_, _) if value.associatedCompanies == AssociatedCompanies.Yes =>
         routes.TwoAssociatedCompaniesController.onPageLoad(mode)
+      case _ =>
+        navigator.nextPage(AssociatedCompaniesPage, mode, updated)
     })
-  }
 
   private def validateRequiredFields(
     associatedCompaniesForm: AssociatedCompaniesForm,
