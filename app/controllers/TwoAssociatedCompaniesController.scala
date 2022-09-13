@@ -132,9 +132,14 @@ class TwoAssociatedCompaniesController @Inject() (
     ) {
       Some("twoAssociatedCompanies.error.enterAtLeastOneAnswer")
     } else if (
-      twoAssociatedCompaniesForm.associatedCompaniesFY1Count.contains(
+      (twoAssociatedCompaniesForm.associatedCompaniesFY1Count.contains(
         0
-      ) && twoAssociatedCompaniesForm.associatedCompaniesFY2Count.contains(0)
+      ) && twoAssociatedCompaniesForm.associatedCompaniesFY2Count.contains(0)) ||
+      (twoAssociatedCompaniesForm.associatedCompaniesFY1Count.isEmpty && twoAssociatedCompaniesForm.associatedCompaniesFY2Count
+        .contains(0)) ||
+      (twoAssociatedCompaniesForm.associatedCompaniesFY1Count.contains(
+        0
+      ) && twoAssociatedCompaniesForm.associatedCompaniesFY2Count.isEmpty)
     ) {
       Some("twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
     } else {

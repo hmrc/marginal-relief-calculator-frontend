@@ -23,7 +23,9 @@ import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompa
 import models.{ AssociatedCompanies, Distribution, NormalMode }
 import org.mockito.Mockito.when
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import org.scalatest.prop.TableDrivenPropertyChecks
 import pages._
+import play.api.data.FormError
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -33,7 +35,8 @@ import views.html.TwoAssociatedCompaniesView
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
+class TwoAssociatedCompaniesControllerSpec
+    extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar with TableDrivenPropertyChecks {
 
   private val formProvider = new TwoAssociatedCompaniesFormProvider()
   private val form = formProvider()
@@ -126,6 +129,20 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockit
             )
             .toString
             .filterAndTrim
+        }
+      }
+
+      "must redirect to Journey Recovery if no existing data is found" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
         }
       }
     }
@@ -221,7 +238,7 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockit
         }
       }
 
-      "must return a Bad Request when both associated companies are 0" in {
+      "must return a Bad Request when form data fails validation" in {
 
         val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1)))
         val askParameter = AskBothParts(
@@ -249,106 +266,62 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockit
           .build()
 
         running(application) {
-          val request =
-            FakeRequest(POST, twoAssociatedCompaniesRoute)
-              .withFormUrlEncodedBody(
-                "associatedCompaniesFY1Count" -> "0",
-                "associatedCompaniesFY2Count" -> "0"
+
+          val table = Table(
+            ("scenario", "formInput", "errors"),
+            (
+              "Both counts a 0",
+              Map("associatedCompaniesFY1Count" -> "0", "associatedCompaniesFY2Count" -> "0"),
+              List("twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
+            ),
+            (
+              "Both counts are empty",
+              Map.empty[String, String],
+              List("twoAssociatedCompanies.error.enterAtLeastOneAnswer")
+            ),
+            (
+              "associatedCompaniesFY1Count is 0 and associatedCompaniesFY2Count is empty",
+              Map("associatedCompaniesFY1Count" -> "0"),
+              List("twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
+            ),
+            (
+              "associatedCompaniesFY1Count is empty and associatedCompaniesFY2Count is 0",
+              Map("associatedCompaniesFY2Count" -> "0"),
+              List("twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
+            )
+          )
+          forAll(table) { (_, formInput, errors) =>
+            val request =
+              FakeRequest(POST, twoAssociatedCompaniesRoute)
+                .withFormUrlEncodedBody(
+                  formInput.toList: _*
+                )
+
+            val boundForm = form
+              .bind(formInput)
+              .copy(errors = errors.map(e => FormError("associatedCompaniesFY1Count", e)))
+
+            val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
+
+            val result = route(application, request).value
+
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result).filterAndTrim mustEqual view
+              .render(
+                boundForm,
+                accountingPeriodForm,
+                askParameter,
+                NormalMode,
+                request,
+                messages(application)
               )
-
-          val boundForm = form
-            .bind(
-              Map("associatedCompaniesFY1Count" -> "0", "associatedCompaniesFY2Count" -> "0")
-            )
-            .withError("associatedCompaniesFY1Count", "twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
-
-          val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
-
-          val result = route(application, request).value
-
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result).filterAndTrim mustEqual view
-            .render(
-              boundForm,
-              accountingPeriodForm,
-              askParameter,
-              NormalMode,
-              request,
-              messages(application)
-            )
-            .toString
-            .filterAndTrim
+              .toString
+              .filterAndTrim
+          }
         }
       }
 
-      "must return a Bad Request when both associated companies are empty" in {
-
-        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1)))
-        val askParameter = AskBothParts(
-          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
-          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
-        )
-
-        val mockSessionRepository = mock[SessionRepository]
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
-
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          None
-        )(*) returns Future.successful(askParameter)
-        when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
-
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository),
-            bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
-          )
-          .build()
-
-        running(application) {
-          val request =
-            FakeRequest(POST, twoAssociatedCompaniesRoute)
-
-          val boundForm = form
-            .withError("associatedCompaniesFY1Count", "twoAssociatedCompanies.error.enterAtLeastOneAnswer")
-
-          val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
-
-          val result = route(application, request).value
-
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result).filterAndTrim mustEqual view
-            .render(
-              boundForm,
-              accountingPeriodForm,
-              askParameter,
-              NormalMode,
-              request,
-              messages(application)
-            )
-            .toString
-            .filterAndTrim
-        }
-      }
-
-      "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
-        }
-      }
-
-      "must redirect to Journey Recovery for a POST if no existing data is found" in {
+      "must redirect to Journey Recovery if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 

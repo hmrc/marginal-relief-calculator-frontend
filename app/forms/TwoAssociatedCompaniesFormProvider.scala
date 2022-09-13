@@ -30,17 +30,17 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
         "associatedCompaniesFY1Count" ->
           optional(
             int(
-              "associatedCompaniesCount.error.required",
-              "associatedCompaniesCount.error.wholeNumber",
-              "associatedCompaniesCount.error.nonNumeric"
+              "twoAssociatedCompanies.error.required",
+              "twoAssociatedCompanies.error.wholeNumber",
+              "twoAssociatedCompanies.error.nonNumeric"
             ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
           ),
         "associatedCompaniesFY2Count" ->
           optional(
             int(
-              "associatedCompaniesCount.error.required",
-              "associatedCompaniesCount.error.wholeNumber",
-              "associatedCompaniesCount.error.nonNumeric"
+              "twoAssociatedCompanies.error.required",
+              "twoAssociatedCompanies.error.wholeNumber",
+              "twoAssociatedCompanies.error.nonNumeric"
             ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
           )
       )(TwoAssociatedCompaniesForm.apply)(TwoAssociatedCompaniesForm.unapply)
