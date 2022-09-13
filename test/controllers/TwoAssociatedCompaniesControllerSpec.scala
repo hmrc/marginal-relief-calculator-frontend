@@ -87,7 +87,7 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockit
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val valid = TwoAssociatedCompaniesForm(1, 1)
+        val valid = TwoAssociatedCompaniesForm(Some(1), Some(1))
         val userAnswers = requiredAnswers.set(TwoAssociatedCompaniesPage, valid).success.value
         val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1)))
         val askParameter = AskBothParts(
@@ -221,7 +221,7 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockit
         }
       }
 
-      "must return a Bad Request and errors when both associated companies are 0" in {
+      "must return a Bad Request when both associated companies are 0" in {
 
         val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1)))
         val askParameter = AskBothParts(
@@ -260,7 +260,60 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with IdiomaticMockit
             .bind(
               Map("associatedCompaniesFY1Count" -> "0", "associatedCompaniesFY2Count" -> "0")
             )
-            .withError("associatedCompaniesFY1Count", "twoAssociatedCompanies.error.enterAtLeastOneValue")
+            .withError("associatedCompaniesFY1Count", "twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
+
+          val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result).filterAndTrim mustEqual view
+            .render(
+              boundForm,
+              accountingPeriodForm,
+              askParameter,
+              NormalMode,
+              request,
+              messages(application)
+            )
+            .toString
+            .filterAndTrim
+        }
+      }
+
+      "must return a Bad Request when both associated companies are empty" in {
+
+        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1)))
+        val askParameter = AskBothParts(
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
+        )
+
+        val mockSessionRepository = mock[SessionRepository]
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1),
+          1.0,
+          None
+        )(*) returns Future.successful(askParameter)
+        when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
+
+        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
+          .overrides(
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
+          )
+          .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, twoAssociatedCompaniesRoute)
+
+          val boundForm = form
+            .withError("associatedCompaniesFY1Count", "twoAssociatedCompanies.error.enterAtLeastOneAnswer")
 
           val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
 

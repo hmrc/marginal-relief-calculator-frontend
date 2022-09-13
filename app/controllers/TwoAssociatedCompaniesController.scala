@@ -128,9 +128,15 @@ class TwoAssociatedCompaniesController @Inject() (
     twoAssociatedCompaniesForm: TwoAssociatedCompaniesForm
   ): Option[String] =
     if (
-      twoAssociatedCompaniesForm.associatedCompaniesFY1Count == 0 && twoAssociatedCompaniesForm.associatedCompaniesFY2Count == 0
+      twoAssociatedCompaniesForm.associatedCompaniesFY1Count.isEmpty && twoAssociatedCompaniesForm.associatedCompaniesFY2Count.isEmpty
     ) {
-      Some("associatedCompaniesFY1Count")
+      Some("twoAssociatedCompanies.error.enterAtLeastOneAnswer")
+    } else if (
+      twoAssociatedCompaniesForm.associatedCompaniesFY1Count.contains(
+        0
+      ) && twoAssociatedCompaniesForm.associatedCompaniesFY2Count.contains(0)
+    ) {
+      Some("twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0")
     } else {
       None
     }
@@ -205,13 +211,13 @@ class TwoAssociatedCompaniesController @Inject() (
     accountingPeriod: AccountingPeriodForm,
     form: Form[TwoAssociatedCompaniesForm],
     askBothParts: AskBothParts,
-    errorKey: String,
+    errorMessage: String,
     mode: Mode
   )(implicit request: Request[AnyContent]) =
     Future.successful(
       BadRequest(
         view(
-          form.withError(errorKey, "twoAssociatedCompanies.error.enterAtLeastOneValue"),
+          form.withError("associatedCompaniesFY1Count", errorMessage),
           accountingPeriod,
           askBothParts,
           mode

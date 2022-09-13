@@ -28,24 +28,33 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
 
   "TwoAssociatedCompaniesFormProvider" - {
 
-    val minimum = 0
+    val minimum = 1
     val maximum = 99
 
     val validDataGenerator = intsInRangeWithCommas(minimum, maximum)
 
-    "bind valid values" in {
+    "not bind valid values when not provided" in {
+      val result =
+        form.bind(
+          Map.empty[String, String]
+        )
+      result.hasErrors mustBe false
+      result.value.value mustBe TwoAssociatedCompaniesForm(None, None)
+    }
+
+    "bind valid values when valid" in {
       forAll(validDataGenerator -> "validValues") { integer =>
         val result =
           form.bind(
             Map("associatedCompaniesFY1Count" -> integer, "associatedCompaniesFY2Count" -> integer)
           )
         result.hasErrors mustBe false
-        result.value.value mustBe TwoAssociatedCompaniesForm(integer.toInt, integer.toInt)
+        result.value.value mustBe TwoAssociatedCompaniesForm(Some(integer.toInt), Some(integer.toInt))
       }
     }
 
-    "return lessThanZero error when values are below 0" in {
-      forAll(intsBelowValue(-1) -> "belowMinValid") { integer =>
+    "return lessThanOne error when values are below 1" in {
+      forAll(intsBelowValue(0) -> "belowMinValid") { integer =>
         val result =
           form.bind(
             Map("associatedCompaniesFY1Count" -> integer.toString, "associatedCompaniesFY2Count" -> integer.toString)
@@ -73,7 +82,7 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
       }
     }
 
-    "return error when values decimals" in {
+    "return error when values are decimals" in {
       forAll(decimals -> "decimals") { value =>
         val result =
           form.bind(Map("associatedCompaniesFY1Count" -> value, "associatedCompaniesFY2Count" -> value))

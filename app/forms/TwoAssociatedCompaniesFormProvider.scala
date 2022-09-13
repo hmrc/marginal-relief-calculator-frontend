@@ -18,7 +18,7 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms.mapping
+import play.api.data.Forms.{ mapping, optional }
 
 import javax.inject.Inject
 
@@ -28,17 +28,21 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
     Form(
       mapping(
         "associatedCompaniesFY1Count" ->
-          int(
-            "associatedCompaniesCount.error.required",
-            "associatedCompaniesCount.error.wholeNumber",
-            "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99")),
+          optional(
+            int(
+              "associatedCompaniesCount.error.required",
+              "associatedCompaniesCount.error.wholeNumber",
+              "associatedCompaniesCount.error.nonNumeric"
+            ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
+          ),
         "associatedCompaniesFY2Count" ->
-          int(
-            "associatedCompaniesCount.error.required",
-            "associatedCompaniesCount.error.wholeNumber",
-            "associatedCompaniesCount.error.nonNumeric"
-          ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
+          optional(
+            int(
+              "associatedCompaniesCount.error.required",
+              "associatedCompaniesCount.error.wholeNumber",
+              "associatedCompaniesCount.error.nonNumeric"
+            ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
+          )
       )(TwoAssociatedCompaniesForm.apply)(TwoAssociatedCompaniesForm.unapply)
     )
 }

@@ -101,8 +101,8 @@ class ResultsPageController @Inject() (
           request.taxableProfit.toDouble,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
           request.associatedCompanies.associatedCompaniesCount,
-          request.twoAssociatedCompanies.map(_.associatedCompaniesFY1Count),
-          request.twoAssociatedCompanies.map(_.associatedCompaniesFY2Count)
+          request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
+          request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
         )
         .map(calculatorResult =>
           Ok(

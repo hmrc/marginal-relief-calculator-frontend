@@ -18,7 +18,10 @@ package forms
 
 import play.api.libs.json.{ Format, Json }
 
-case class TwoAssociatedCompaniesForm(associatedCompaniesFY1Count: Int, associatedCompaniesFY2Count: Int)
+case class TwoAssociatedCompaniesForm(
+  associatedCompaniesFY1Count: Option[Int],
+  associatedCompaniesFY2Count: Option[Int]
+)
 
 object TwoAssociatedCompaniesForm {
   implicit val format: Format[TwoAssociatedCompaniesForm] = Json.format[TwoAssociatedCompaniesForm]
