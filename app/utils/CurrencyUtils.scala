@@ -32,4 +32,8 @@ object CurrencyUtils {
       .format(value)
       .replace("GBP", "£")
       .replace(".00", "")
+
+  def decimalFormat(value: Number): String = currencyFormatter
+    .format(value)
+    .replace("GBP", "£")
 }

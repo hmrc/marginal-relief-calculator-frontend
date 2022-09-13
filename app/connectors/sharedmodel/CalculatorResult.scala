@@ -25,6 +25,7 @@ sealed trait TaxDetails {
   def days: Int
   def corporationTax: Double
   def adjustedProfit: Double
+  def adjustedDistributions: Double
   def taxRate: Double
   def adjustedAugmentedProfit: Double
 
@@ -34,10 +35,15 @@ sealed trait TaxDetails {
       case x: MarginalRate => g(x)
     }
 }
-case class FlatRate(year: Int, corporationTax: Double, taxRate: Double, adjustedProfit: Double, days: Int)
-    extends TaxDetails {
-  override def adjustedAugmentedProfit: Double = adjustedProfit
-}
+case class FlatRate(
+  year: Int,
+  corporationTax: Double,
+  taxRate: Double,
+  adjustedProfit: Double,
+  adjustedDistributions: Double,
+  adjustedAugmentedProfit: Double,
+  days: Int
+) extends TaxDetails
 case class MarginalRate(
   year: Int,
   corporationTaxBeforeMR: Double,
@@ -47,12 +53,11 @@ case class MarginalRate(
   marginalRelief: Double,
   adjustedProfit: Double,
   adjustedDistributions: Double,
+  adjustedAugmentedProfit: Double,
   adjustedLowerThreshold: Double,
   adjustedUpperThreshold: Double,
   days: Int
-) extends TaxDetails {
-  override def adjustedAugmentedProfit: Double = roundUp(BigDecimal(adjustedProfit) + BigDecimal(adjustedDistributions))
-}
+) extends TaxDetails
 
 object TaxDetails {
   implicit val format: OFormat[TaxDetails] =
