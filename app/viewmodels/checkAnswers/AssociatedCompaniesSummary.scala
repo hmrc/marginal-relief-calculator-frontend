@@ -17,25 +17,80 @@
 package viewmodels.checkAnswers
 
 import controllers.routes
+import forms.{ AccountingPeriodForm, DateUtils }
 import models.{ CheckMode, UserAnswers }
-import pages.AssociatedCompaniesPage
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, TwoAssociatedCompaniesPage }
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ Key, SummaryListRow }
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
 object AssociatedCompaniesSummary {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AssociatedCompaniesPage).map { answer =>
-      val count = answer.associatedCompaniesCount.getOrElse(0)
-      SummaryListRowViewModel(
-        key = "associatedCompanies.checkYourAnswersLabel",
-        value = ValueViewModel(count.toString),
-        actions = Seq(
-          ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
+  def row(answers: UserAnswers)(implicit messages: Messages): List[SummaryListRow] = {
+    val maybeRows: Option[List[SummaryListRow]] =
+      answers.get(TwoAssociatedCompaniesPage).map[List[SummaryListRow]] { answer =>
+        val accountPeriodForm: AccountingPeriodForm = answers.get(AccountingPeriodPage).get
+        val associatedCompaniesFY1Count = answer.associatedCompaniesFY1Count.getOrElse(0)
+        val associatedCompaniesFY2Count = answer.associatedCompaniesFY2Count.getOrElse(0)
+        List(
+          SummaryListRowViewModel(
+            key = "twoAssociatedCompanies.associatedCompanies",
+            value = ValueViewModel(messages("site.yes")),
+            actions = Seq(
+              ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
+            )
+          ),
+          SummaryListRowViewModel(
+            key = Key(content =
+              Text(
+                messages(
+                  "twoAssociatedCompanies.checkYourAnswersLabel",
+                  DateUtils.financialYear(accountPeriodForm.accountingPeriodStartDate).toString,
+                  (DateUtils.financialYear(accountPeriodForm.accountingPeriodStartDate) + 1).toString
+                )
+              )
+            ),
+            value = ValueViewModel(associatedCompaniesFY1Count.toString),
+            actions = Seq(
+              ActionItemViewModel("site.change", routes.TwoAssociatedCompaniesController.onPageLoad(CheckMode).url)
+                .withVisuallyHiddenText(messages("twoAssociatedCompanies.change.hidden"))
+            )
+          ),
+          SummaryListRowViewModel(
+            key = Key(content =
+              Text(
+                messages(
+                  "twoAssociatedCompanies.checkYourAnswersLabel",
+                  DateUtils.financialYear(accountPeriodForm.accountingPeriodEndDate.get).toString,
+                  (DateUtils.financialYear(accountPeriodForm.accountingPeriodEndDate.get) + 1).toString
+                )
+              )
+            ),
+            value = ValueViewModel(associatedCompaniesFY2Count.toString),
+            actions = Seq(
+              ActionItemViewModel("site.change", routes.TwoAssociatedCompaniesController.onPageLoad(CheckMode).url)
+                .withVisuallyHiddenText(messages("twoAssociatedCompanies.change.hidden"))
+            )
+          )
         )
-      )
-    }
+      } orElse {
+        answers.get(AssociatedCompaniesPage).map[List[SummaryListRow]] { answer =>
+          val count = answer.associatedCompaniesCount.getOrElse(0)
+          List(
+            SummaryListRowViewModel(
+              key = "associatedCompanies.checkYourAnswersLabel",
+              value = ValueViewModel(count.toString),
+              actions = Seq(
+                ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                  .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
+              )
+            )
+          )
+        }
+      }
+    maybeRows.getOrElse(List.empty[SummaryListRow])
+  }
 }
