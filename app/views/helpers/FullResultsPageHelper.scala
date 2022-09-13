@@ -433,9 +433,15 @@ object FullResultsPageHelper extends ViewHelper {
           head = Some(
             Seq(
               HeadCell(),
-              HeadCell(content = Text(messages("site.from.to", d1.year.toString, (d1.year + 1).toString))),
-              HeadCell(content = Text(messages("site.from.to", d2.year.toString, (d2.year + 1).toString))),
-              HeadCell(content = Text(messages("fullResultsPage.total")))
+              HeadCell(
+                content = Text(messages("site.from.to", d1.year.toString, (d1.year + 1).toString)),
+                classes = "govuk-table__header--numeric"
+              ),
+              HeadCell(
+                content = Text(messages("site.from.to", d2.year.toString, (d2.year + 1).toString)),
+                classes = "govuk-table__header--numeric"
+              ),
+              HeadCell(content = Text(messages("fullResultsPage.total")), classes = "govuk-table__header--numeric")
             )
           ),
           caption = Some(messages("fullResultsPage.taxableProfit")),

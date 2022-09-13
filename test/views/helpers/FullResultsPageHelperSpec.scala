@@ -245,9 +245,9 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <caption class="govuk-table__caption govuk-table__caption--m">fullResultsPage.taxableProfit</caption>
             |  <thead class="govuk-table__head"><tr class="govuk-table__row">
             |    <th scope="col" class="govuk-table__header"></th>
-            |    <th scope="col" class="govuk-table__header">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header">fullResultsPage.total</th>
+            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
+            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
+            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">fullResultsPage.total</th>
             |  </tr></thead>
             |  <tbody class="govuk-table__body">
             |    <tr class="govuk-table__row">
@@ -333,9 +333,9 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <caption class="govuk-table__caption govuk-table__caption--m">fullResultsPage.taxableProfit</caption>
             |  <thead class="govuk-table__head"><tr class="govuk-table__row">
             |    <th scope="col" class="govuk-table__header"></th>
-            |    <th scope="col" class="govuk-table__header">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header">fullResultsPage.total</th>
+            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
+            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
+            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">fullResultsPage.total</th>
             |  </tr></thead>
             |  <tbody class="govuk-table__body">
             |    <tr class="govuk-table__row">
