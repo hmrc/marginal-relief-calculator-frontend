@@ -17,14 +17,16 @@
 package controllers
 
 import com.google.inject.Inject
+import connectors.MarginalReliefCalculatorConnector
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import models.Distribution
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
+import models.{ Distribution, UserAnswers }
 import pages._
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionSummary, TaxableProfitSummary }
+import viewmodels.checkAnswers._
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
 
@@ -36,39 +38,79 @@ class CheckYourAnswersController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourAnswersView
+  view: CheckYourAnswersView,
+  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  private val mandatoryParamsCheck = new ActionFilter[DataRequest] {
-    override protected def filter[A](
+  case class CheckYourAnswersRequiredParams[A](
+    accountingPeriod: AccountingPeriodForm,
+    taxableProfit: Int,
+    distribution: Distribution,
+    distributionsIncluded: Option[DistributionsIncludedForm],
+    associatedCompanies: AssociatedCompaniesForm,
+    twoAssociatedCompaniesForm: Option[TwoAssociatedCompaniesForm],
+    userAnswers: UserAnswers,
+    request: Request[A]
+  ) extends WrappedRequest[A](request)
+
+  private val requireDomainData = new ActionRefiner[DataRequest, CheckYourAnswersRequiredParams] {
+    override protected def refine[A](
       request: DataRequest[A]
-    ): Future[Option[Result]] =
+    ): Future[Either[Result, CheckYourAnswersRequiredParams[A]]] =
       Future.successful {
         (
           request.userAnswers.get(AccountingPeriodPage),
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage),
+          request.userAnswers.get(TwoAssociatedCompaniesPage)
         ) match {
-          case (Some(_), Some(_), Some(distribution), maybeDistributionsIncluded, Some(_))
-              if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
-            None
-          case _ => Some(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+          case (
+                Some(accPeriod),
+                Some(taxableProfit),
+                Some(distribution),
+                maybeDistributionsIncluded,
+                Some(associatedCompanies),
+                twoAssociatedCompanies
+              ) =>
+            Right(
+              CheckYourAnswersRequiredParams(
+                accPeriod,
+                taxableProfit,
+                distribution,
+                maybeDistributionsIncluded,
+                associatedCompanies,
+                twoAssociatedCompanies,
+                request.userAnswers,
+                request
+              )
+            )
+          case _ => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
         }
       }
     override protected def executionContext: ExecutionContext = ec
   }
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen mandatoryParamsCheck) {
-    implicit request =>
-      val list = SummaryListViewModel(
-        AccountingPeriodSummary.row(request.userAnswers) ++
-          TaxableProfitSummary.row(request.userAnswers) ++
-          DistributionSummary.row(request.userAnswers) ++
-          AssociatedCompaniesSummary.row(request.userAnswers)
-      )
-      Ok(view(list, routes.ResultsPageController.onPageLoad().url))
-  }
+  def onPageLoad(): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
+      for {
+        askAssociatedParameter <- marginalReliefCalculatorConnector.associatedCompaniesParameters(
+                                    request.accountingPeriod.accountingPeriodStartDate,
+                                    request.accountingPeriod.accountingPeriodEndDate.get,
+                                    request.taxableProfit,
+                                    request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble)
+                                  )
+      } yield {
+        val list = SummaryListViewModel(
+          AccountingPeriodSummary.row(request.userAnswers) ++
+            TaxableProfitSummary.row(request.userAnswers) ++
+            DistributionSummary.row(request.userAnswers) ++
+            AssociatedCompaniesSummary.row(request.userAnswers, askAssociatedParameter) ++
+            TwoAssociatedCompaniesSummary.row(request.userAnswers, askAssociatedParameter)
+        )
+        Ok(view(list, routes.ResultsPageController.onPageLoad().url))
+      }
+    }
 }
