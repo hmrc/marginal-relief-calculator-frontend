@@ -235,8 +235,8 @@ object FullResultsPageHelper extends ViewHelper {
         rows = rows,
         head = Some(
           Seq(
-            HeadCell(),
-            HeadCell(),
+            HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""), classes = "not-header"),
+            HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""), classes = "not-header"),
             HeadCell(content = Text(messages("fullResultsPage.calculation"))),
             HeadCell(content = Text(messages("fullResultsPage.result")))
           )
