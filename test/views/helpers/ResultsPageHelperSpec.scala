@@ -62,7 +62,7 @@ class ResultsPageHelperSpec extends SpecBase {
           .html shouldMatchTo
           Jsoup
             .parse(
-              """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
+              """<h2 class="govuk-heading-m" style="margin-bottom: 4px">resultsPage.yourDetails</h2>
                 | <dl class="govuk-summary-list govuk-summary-list--no-border">
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
@@ -110,7 +110,7 @@ class ResultsPageHelperSpec extends SpecBase {
         .html shouldMatchTo
         Jsoup
           .parse(
-            """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
+            """<h2 class="govuk-heading-m" style="margin-bottom: 4px">resultsPage.yourDetails</h2>
               |<dl class="govuk-summary-list govuk-summary-list--no-border">
               | <div class="govuk-summary-list__row">
               |   <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
@@ -160,7 +160,7 @@ class ResultsPageHelperSpec extends SpecBase {
         .html shouldMatchTo
         Jsoup
           .parse(
-            """<h2 class="govuk-heading-m">resultsPage.yourDetails</h2>
+            """<h2 class="govuk-heading-m" style="margin-bottom: 4px">resultsPage.yourDetails</h2>
               |<dl class="govuk-summary-list govuk-summary-list--no-border">
               |  <div class="govuk-summary-list__row">
               |    <dt class="govuk-summary-list__key">resultsPage.accountPeriod</dt>
