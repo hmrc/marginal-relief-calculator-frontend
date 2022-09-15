@@ -19,7 +19,7 @@ package controllers
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ CalculatorResult, FYConfig }
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
 import models.{ Distribution, UserAnswers }
 import pages._
@@ -61,6 +61,7 @@ class FullResultsPageController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: AssociatedCompaniesForm,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
     userAnswers: UserAnswers
@@ -75,14 +76,16 @@ class FullResultsPageController @Inject() (
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage),
+          request.userAnswers.get(TwoAssociatedCompaniesPage)
         ) match {
           case (
                 Some(accPeriod),
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                Some(associatedCompanies)
+                Some(associatedCompanies),
+                maybeTwoAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               FullResultsPageRequiredParams(
@@ -91,6 +94,7 @@ class FullResultsPageController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 associatedCompanies,
+                maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
                 request.userAnswers
@@ -112,8 +116,8 @@ class FullResultsPageController @Inject() (
                                 request.taxableProfit.toDouble,
                                 request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
                                 request.associatedCompanies.associatedCompaniesCount,
-                                None,
-                                None
+                                request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
+                                request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
                               )
         config <- getConfig(calculatorResult)
       } yield Ok(
