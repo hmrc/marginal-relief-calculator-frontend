@@ -43,6 +43,7 @@ error.summary.title = There is a problem
 error.greaterThanOneBillion = Enter an amount lower than or equal to 1,000,000,000
 error.greaterThan99 = Enter a number lower than or equal to 99
 error.lessThanOne = Enter an amount greater than 0
+error.lessThanZero = Enter an amount greater than or equal to 0
 error.outOfRange = Enter an amount between {0} and {1}
 
 index.title = marginal-relief-calculator-frontend
@@ -81,13 +82,6 @@ signedOut.guidance = We did not save your answers.
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-inputScreen.title = inputScreen
-inputScreen.heading = inputScreen
-inputScreen.checkYourAnswersLabel = inputScreen
-inputScreen.error.required = Enter inputScreen
-inputScreen.error.length = InputScreen must be 100 characters or less
-inputScreen.change.hidden = InputScreen
-
 accountingPeriod.title = What are your accounting period dates?
 accountingPeriod.heading = What are your accounting period dates?
 accountingPeriod.hint = For example, 27 3 2023
@@ -97,7 +91,7 @@ accountingPeriod.error.required.all = Enter the accountingPeriod
 accountingPeriod.error.required.two = The accountingPeriod must include {0} and {1}
 accountingPeriod.error.required = The accountingPeriod must include {0}
 accountingPeriod.error.invalid = Enter a real AccountingPeriod
-accountingPeriod.change.hidden = AccountingPeriod
+accountingPeriod.change.hidden = Accounting Period
 accountingPeriod.forExample=For example, 27 3 2023
 accountingPeriod.accountingPeriodCannotBeLongerThan12M=Your accounting period cannot be longer than a full year and is normally the same as the financial year covered by your company''s annual accounts.
 accountingPeriod.whereCanIFindMyAccPeriodDates=Where can I find my accounting period dates?
@@ -201,6 +195,11 @@ fullResultsPage.notEligibleAboveUpperLimit.1 = You''re not eligible for Marginal
 fullResultsPage.notEligibleAboveUpperLimit.2 = is above the adjusted upper limit of
 fullResultsPage.notEligibleBelowLowerLimit.1 = You''re not eligible for Marginal Relief because your Taxable profit including distributions of
 fullResultsPage.notEligibleBelowLowerLimit.2 = is below the adjusted lower limit of
+fullResultsPage.total = Total
+fullResultsPage.taxableProfit = Taxable Profit
+fullResultsPage.taxableProfit.daysAllocated = Days allocated to each financial year
+fullResultsPage.taxableProfit.distributions = Distributions
+fullResultsPage.taxableProfit.profitAndDistributions = Taxable profit including distributions
 
 
 associatedCompanies.title = Number of associated companies
@@ -217,7 +216,7 @@ associatedCompanies.error.invalid = Select whether you have associated companies
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1
 associatedCompaniesCount.error.nonNumeric = Enter your Number of associated companies using numbers
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1
-associatedCompanies.change.hidden = AssociatedCompanies
+associatedCompanies.change.hidden = Associated Companies
 
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
@@ -226,7 +225,7 @@ taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits
 taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, 70000
 taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, 70000
-taxableProfit.change.hidden = TaxableProfit
+taxableProfit.change.hidden = Taxable Profit
 taxableProfit.chargeableProfitsOnCTR = These are the chargeable profits for Corporation Tax on your Company Tax Return.
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
 taxableProfit.youCanFindYourCompanyProfitVia = You can find your company's profit via your accountant or accounting software
@@ -267,7 +266,7 @@ distributionsIncluded.error.invalid = Select whether you received distributions 
 distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, 70000
 distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, 70000
 distributionsIncludedAmount.error.required = Enter an amount for your received distributions
-distributionsIncluded.change.hidden = DistributionsIncluded
+distributionsIncluded.change.hidden = Distributions Amount
 distributionsIncluded.emptyValue = None
 
 session.expired.title = Session expired
@@ -279,3 +278,16 @@ errorInternal.title = Sorry, there is a problem with the service
 errorInternal.heading = Sorry, there is a problem with the service
 errorInternal.message1 = Try again later.
 errorInternal.message2 = We have not saved any of your answers. When the service is available, you will have to start again.
+
+twoAssociatedCompanies.checkYourAnswersLabel = TwoAssociatedCompanies
+twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Enter a number greater than 0 in at least one of your answers
+twoAssociatedCompanies.error.enterAtLeastOneAnswer = Enter a number for at least one of your answers
+twoAssociatedCompanies.error.nonNumeric = Enter a valid number for your associated companies. For example, 1
+twoAssociatedCompanies.error.required = Enter a valid number for your associated companies. For example, 1
+twoAssociatedCompanies.error.wholeNumber = Enter a valid number for your associated companies. For example, 1
+twoAssociatedCompanies.error.outOfRange = Enter a number between 1 and 99
+twoAssociatedCompanies.change.hidden = Two Associated Companies
+twoAssociatedCompanies.financialYearFromTo = Financial year {0} to {1}
+twoAssociatedCompanies.numberOfAssociatedCompaniesBetween = Number of associated companies between {0} to {1}
+twoAssociatedCompanies.accountingPeriodCovers2Years = Your accounting period covers 2 financial years with different sets of Marginal Relief limits.
+twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave = How many active associated companies did you have?

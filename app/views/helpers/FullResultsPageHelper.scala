@@ -101,12 +101,13 @@ object FullResultsPageHelper extends ViewHelper {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
-            messages(
+            text = messages(
               "fullResultsPage.forFinancialYear",
               year.toString,
               (year + 1).toString,
               marginalRate.days
-            )
+            ),
+            styles = "margin-bottom: 4px;"
           )}
            |    ${displayFullFinancialYearTable(
             marginalRate,
@@ -148,7 +149,8 @@ object FullResultsPageHelper extends ViewHelper {
     HtmlFormat.fill(
       Seq(
         financialYearTables,
-        whatIsMarginalRate(calculatorResult)
+        whatIsMarginalRate(calculatorResult),
+        taxableProfitTable(calculatorResult, taxableProfit, distributions)
       )
     )
 
@@ -365,5 +367,96 @@ object FullResultsPageHelper extends ViewHelper {
       )
     }
 
+  }
+
+  private def taxableProfitTable(calculatorResult: CalculatorResult, taxableProfit: Int, distributions: Int)(implicit
+    messages: Messages
+  ): Html = {
+
+    def table(d1: TaxDetails, d2: TaxDetails) = {
+      val totalDays = d1.days + d2.days
+      val taxProfitDistributions = taxableProfit + distributions
+      govukTable(
+        Table(
+          rows = Seq(
+            Seq(
+              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.daysAllocated")))),
+              TableRow(content = HtmlContent(d1.days.toString), classes = "govuk-table__cell--numeric"),
+              TableRow(content = HtmlContent(d2.days.toString), classes = "govuk-table__cell--numeric"),
+              TableRow(content = HtmlContent(totalDays.toString), classes = "govuk-table__cell--numeric")
+            ),
+            Seq(
+              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit")))),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedProfit)),
+                classes = "govuk-table__cell--numeric"
+              ),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(d2.adjustedProfit))),
+                classes = "govuk-table__cell--numeric"
+              ),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(taxableProfit)),
+                classes = "govuk-table__cell--numeric"
+              )
+            ),
+            Seq(
+              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.distributions")))),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedDistributions)),
+                classes = "govuk-table__cell--numeric"
+              ),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedDistributions)),
+                classes = "govuk-table__cell--numeric"
+              ),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(distributions)),
+                classes = "govuk-table__cell--numeric"
+              )
+            ),
+            Seq(
+              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.profitAndDistributions")))),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedAugmentedProfit)),
+                classes = "govuk-table__cell--numeric"
+              ),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedAugmentedProfit)),
+                classes = "govuk-table__cell--numeric"
+              ),
+              TableRow(
+                content = HtmlContent(CurrencyUtils.decimalFormat(taxProfitDistributions)),
+                classes = "govuk-table__cell--numeric"
+              )
+            )
+          ),
+          head = Some(
+            Seq(
+              HeadCell(),
+              HeadCell(
+                content = Text(messages("site.from.to", d1.year.toString, (d1.year + 1).toString)),
+                classes = "govuk-table__header--numeric"
+              ),
+              HeadCell(
+                content = Text(messages("site.from.to", d2.year.toString, (d2.year + 1).toString)),
+                classes = "govuk-table__header--numeric"
+              ),
+              HeadCell(content = Text(messages("fullResultsPage.total")), classes = "govuk-table__header--numeric")
+            )
+          ),
+          caption = Some(messages("fullResultsPage.taxableProfit")),
+          captionClasses = "govuk-table__caption--m"
+        )
+      )
+    }
+
+    calculatorResult.fold(single => HtmlFormat.empty)(dual =>
+      dual.year1 -> dual.year2 match {
+        case (d1: FlatRate, d2: MarginalRate) => table(d1, d2)
+        case (d1: MarginalRate, d2: FlatRate) => table(d1, d2)
+        case _                                => HtmlFormat.empty
+      }
+    )
   }
 }

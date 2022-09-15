@@ -52,7 +52,7 @@ object ResultsPageHelper extends ViewHelper {
   )(implicit messages: Messages): Html =
     HtmlFormat.fill(
       immutable.Seq(
-        h1(messages(messages("resultsPage.yourDetails"))),
+        h2(text = messages("resultsPage.yourDetails"), styles = "margin-bottom: 4px"),
         Html(
           Seq(
             summaryList(

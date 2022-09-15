@@ -14,26 +14,19 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-import java.text.NumberFormat
-import java.util.{ Currency, Locale }
+import forms.TwoAssociatedCompaniesForm
+import pages.behaviours.PageBehaviours
 
-object CurrencyUtils {
+class TwoAssociatedCompaniesPageSpec extends PageBehaviours {
 
-  private val currencyFormatter = {
-    val f = NumberFormat.getCurrencyInstance
-    f.setCurrency(Currency.getInstance(Locale.UK))
-    f
+  "TwoAssociatedCompaniesPage" - {
+
+    beRetrievable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+
+    beSettable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+
+    beRemovable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
   }
-
-  def format(value: Number): String =
-    currencyFormatter
-      .format(value)
-      .replace("GBP", "£")
-      .replace(".00", "")
-
-  def decimalFormat(value: Number): String = currencyFormatter
-    .format(value)
-    .replace("GBP", "£")
 }

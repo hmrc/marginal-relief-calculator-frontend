@@ -19,7 +19,7 @@ package viewmodels.checkAnswers
 import controllers.routes
 import forms.AccountingPeriodForm
 import forms.DateUtils._
-import models.{ CheckMode, NormalMode, UserAnswers }
+import models.{ CheckMode, UserAnswers }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import pages.AccountingPeriodPage

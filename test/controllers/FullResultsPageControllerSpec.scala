@@ -44,7 +44,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
     DistributionsIncluded.Yes,
     Some(1)
   )
-  private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None)
+  private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, accountingPeriodForm)
     .get
@@ -73,7 +73,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
@@ -126,7 +126,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
@@ -175,7 +175,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
               .get
               .set(
                 AssociatedCompaniesPage,
-                AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+                AssociatedCompaniesForm(AssociatedCompanies.No, None)
               )
               .get
           )
@@ -183,7 +183,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
@@ -231,7 +231,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))

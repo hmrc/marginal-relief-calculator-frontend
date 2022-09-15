@@ -52,6 +52,7 @@ trait Constraints {
       }
     }
 
+  // $COVERAGE-OFF$
   protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
     Constraint { input =>
       import ev._
@@ -62,6 +63,7 @@ trait Constraints {
         Invalid(errorKey, minimum, maximum)
       }
     }
+  // $COVERAGE-ON$
 
   protected def regexp(regex: String, errorKey: String): Constraint[String] =
     Constraint {

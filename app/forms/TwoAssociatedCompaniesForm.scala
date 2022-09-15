@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import java.text.NumberFormat
-import java.util.{ Currency, Locale }
+import play.api.libs.json.{ Format, Json }
 
-object CurrencyUtils {
+case class TwoAssociatedCompaniesForm(
+  associatedCompaniesFY1Count: Option[Int],
+  associatedCompaniesFY2Count: Option[Int]
+)
 
-  private val currencyFormatter = {
-    val f = NumberFormat.getCurrencyInstance
-    f.setCurrency(Currency.getInstance(Locale.UK))
-    f
-  }
-
-  def format(value: Number): String =
-    currencyFormatter
-      .format(value)
-      .replace("GBP", "£")
-      .replace(".00", "")
-
-  def decimalFormat(value: Number): String = currencyFormatter
-    .format(value)
-    .replace("GBP", "£")
+object TwoAssociatedCompaniesForm {
+  implicit val format: Format[TwoAssociatedCompaniesForm] = Json.format[TwoAssociatedCompaniesForm]
 }
