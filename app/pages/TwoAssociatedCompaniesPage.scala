@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-import java.text.NumberFormat
-import java.util.{ Currency, Locale }
+import forms.TwoAssociatedCompaniesForm
+import play.api.libs.json.JsPath
 
-object CurrencyUtils {
+case object TwoAssociatedCompaniesPage extends QuestionPage[TwoAssociatedCompaniesForm] {
 
-  private val currencyFormatter = {
-    val f = NumberFormat.getCurrencyInstance
-    f.setCurrency(Currency.getInstance(Locale.UK))
-    f
-  }
+  override def path: JsPath = JsPath \ toString
 
-  def format(value: Number): String =
-    currencyFormatter
-      .format(value)
-      .replace("GBP", "£")
-      .replace(".00", "")
-
-  def decimalFormat(value: Number): String = currencyFormatter
-    .format(value)
-    .replace("GBP", "£")
+  override def toString: String = "twoAssociatedCompanies"
 }

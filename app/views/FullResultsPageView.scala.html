@@ -31,20 +31,6 @@
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
 
-
-@detailsContent = {
-    <p>@messages("fullResultsPage.details.standardFraction")</p>
-    <p>@messages("fullResultsPage.details.standardFractionExample")</p>
-    <p><b>@messages("fullResultsPage.details.whatIsMarginalRate")</b></p>
-    <p>@messages("fullResultsPage.details.smallProfitRate")</p>
-    <p>
-        @messages("fullResultsPage.details.examples.1")<br/>
-        @messages("fullResultsPage.details.examples.2")<br/>
-        @messages("fullResultsPage.details.examples.3")<br/>
-        @messages("fullResultsPage.details.examples.4")<br/>
-    </p>
-}
-
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
@@ -55,16 +41,6 @@
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
     @replaceTableHeader(displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config))
-
-    <h3 class="govuk-heading-s" style="margin-bottom: 4px;">@messages("fullResultsPage.marginalReliefFormula")</h3>
-    <p class="govuk-body">@messages("fullResultsPage.marginalReliefFormula.description")</p>
-
-    @govukDetails(Details(
-        summary = Text(messages("fullResultsPage.whatIsMarginalRateFraction")),
-        content = HtmlContent(detailsContent)
-    ))
-
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
     @govukButton(
         Button(

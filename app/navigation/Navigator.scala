@@ -16,12 +16,11 @@
 
 package navigation
 
-import javax.inject.{ Inject, Singleton }
-import models.{ Mode, UserAnswers }
-import play.api.mvc.Call
+import com.google.inject.{ Inject, Singleton }
 import controllers.routes
+import models.{ Mode, UserAnswers, _ }
 import pages._
-import models._
+import play.api.mvc.Call
 
 @Singleton
 class Navigator @Inject() () {
@@ -39,6 +38,9 @@ class Navigator @Inject() () {
       _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
 
     case AssociatedCompaniesPage =>
+      _ => routes.CheckYourAnswersController.onPageLoad
+
+    case TwoAssociatedCompaniesPage =>
       _ => routes.CheckYourAnswersController.onPageLoad
 
     case _ =>

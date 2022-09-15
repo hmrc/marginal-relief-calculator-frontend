@@ -31,8 +31,8 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(
                 ErrorSummaryViewModel(
-                form,
-                errorLinkOverrides = form.errors.map(e => e.key -> s"${e.key}${e.args.headOption.map("." + _).getOrElse(".day")}").toMap
+                  form,
+                  errorLinkOverrides = form.errors.map(e => e.key -> s"${e.key}${e.args.headOption.map("." + _).getOrElse(".day")}").toMap
                 )
             )
         }

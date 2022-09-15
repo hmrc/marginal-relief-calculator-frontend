@@ -42,35 +42,20 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
       behave like associatedCompaniesCountBehaviours("associatedCompaniesCount")
     }
 
-    "associatedCompaniesFY1Count" - {
-      behave like associatedCompaniesCountBehaviours("associatedCompaniesFY1Count")
-    }
-
-    "associatedCompaniesFY2Count" - {
-      behave like associatedCompaniesCountBehaviours("associatedCompaniesFY2Count")
-    }
-
     def associatedCompaniesCountBehaviours(associatedCompaniesCountKey: String): Unit = {
       "bind valid values" in {
         forAll(integerBetween(1, 99) -> "validValues") { integer =>
           val result =
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe false
-          result.value.value mustBe (associatedCompaniesCountKey match {
-            case "associatedCompaniesCount" =>
-              AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(integer), None, None)
-            case "associatedCompaniesFY1Count" =>
-              AssociatedCompaniesForm(AssociatedCompanies.Yes, None, Some(integer), None)
-            case "associatedCompaniesFY2Count" =>
-              AssociatedCompaniesForm(AssociatedCompanies.Yes, None, None, Some(integer))
-          })
+          result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(integer))
         }
       }
 
       "bind to None when value empty" in {
         val result = form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> ""))
         result.hasErrors mustBe false
-        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, None, None, None)
+        result.value.value mustBe AssociatedCompaniesForm(AssociatedCompanies.Yes, None)
       }
 
       "return lessThanOne error when values are below 1" in {

@@ -16,8 +16,8 @@
 
 package forms
 
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.{ LocalDate, Month }
 
 object DateUtils {
 
@@ -32,4 +32,11 @@ object DateUtils {
 
     def formatDateFull: String = FORMAT_FULL.format(date)
   }
+
+  def financialYear(date: LocalDate): Int =
+    if (date.getMonth.getValue >= Month.JANUARY.getValue && date.getMonth.getValue <= Month.MARCH.getValue) {
+      date.getYear - 1
+    } else {
+      date.getYear
+    }
 }
