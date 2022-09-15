@@ -103,12 +103,13 @@ object FullResultsPageHelper extends ViewHelper {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
-            messages(
+            text = messages(
               "fullResultsPage.forFinancialYear",
               year.toString,
               (year + 1).toString,
               marginalRate.days
-            )
+            ),
+            styles = "margin-bottom: 4px;"
           )}
            |    ${displayFullFinancialYearTable(
             marginalRate,

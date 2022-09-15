@@ -71,7 +71,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
     .get
     .set(
       AssociatedCompaniesPage,
-      AssociatedCompaniesForm(AssociatedCompanies.No, None, None, None)
+      AssociatedCompaniesForm(AssociatedCompanies.No, None)
     )
     .get
 

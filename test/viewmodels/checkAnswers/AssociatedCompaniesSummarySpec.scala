@@ -38,9 +38,7 @@ class AssociatedCompaniesSummarySpec extends AnyFreeSpec with Matchers {
           AssociatedCompaniesPage,
           AssociatedCompaniesForm(
             AssociatedCompanies.Yes,
-            Some(1),
-            None,
-            None
+            Some(1)
           )
         )
         .get

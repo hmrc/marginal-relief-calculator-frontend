@@ -99,7 +99,9 @@ class AssociatedCompaniesController @Inject() (
                                             request.accountingPeriod.accountingPeriodStartDate,
                                             request.accountingPeriod.accountingPeriodEndDate.get,
                                             request.taxableProfit,
-                                            None
+                                            request.distributionsIncluded
+                                              .flatMap(_.distributionsIncludedAmount)
+                                              .map(_.toDouble)
                                           )
         result <- ifAskAssociatedCompaniesThen(
                     associatedCompaniesParameter,
@@ -126,7 +128,9 @@ class AssociatedCompaniesController @Inject() (
                                             request.accountingPeriod.accountingPeriodStartDate,
                                             request.accountingPeriod.accountingPeriodEndDate.get,
                                             request.taxableProfit,
-                                            None
+                                            request.distributionsIncluded
+                                              .flatMap(_.distributionsIncludedAmount)
+                                              .map(_.toDouble)
                                           )
         result <- boundedForm
                     .fold(
@@ -143,7 +147,7 @@ class AssociatedCompaniesController @Inject() (
                               badRequestWithError(boundedForm, _, errorKey, mode)(request.request)
                             )
                           case None =>
-                            updateAndRedirect(value, mode)(request.userAnswers)
+                            updateAndRedirect(value, associatedCompaniesParameter, mode)(request.userAnswers)
                         }
                     )
       } yield result
@@ -165,23 +169,34 @@ class AssociatedCompaniesController @Inject() (
       )
     )
 
-  private def updateAndRedirect(value: AssociatedCompaniesForm, mode: Mode)(implicit
+  private def updateAndRedirect(
+    value: AssociatedCompaniesForm,
+    associatedCompaniesParameter: AssociatedCompaniesParameter,
+    mode: Mode
+  )(implicit
     userAnswers: UserAnswers
-  ) = {
-    val valueUpdated = value.associatedCompanies match {
-      case AssociatedCompanies.Yes => value
-      case AssociatedCompanies.No =>
-        value.copy(
-          associatedCompaniesCount = None,
-          associatedCompaniesFY1Count = None,
-          associatedCompaniesFY2Count = None
-        )
-    }
+  ) =
     for {
-      updatedAnswers <- Future.fromTry(userAnswers.set(AssociatedCompaniesPage, valueUpdated))
-      _              <- sessionRepository.set(updatedAnswers)
-    } yield Redirect(navigator.nextPage(AssociatedCompaniesPage, mode, updatedAnswers))
-  }
+      updated <- Future.fromTry(value.associatedCompanies match {
+                   case AssociatedCompanies.Yes => userAnswers.set(AssociatedCompaniesPage, value)
+                   case AssociatedCompanies.No =>
+                     userAnswers
+                       .set(
+                         AssociatedCompaniesPage,
+                         value.copy(
+                           associatedCompaniesCount = None
+                         )
+                       )
+                       .flatMap(_.remove(TwoAssociatedCompaniesPage))
+
+                 })
+      _ <- sessionRepository.set(updated)
+    } yield Redirect(associatedCompaniesParameter match {
+      case AskBothParts(_, _) if value.associatedCompanies == AssociatedCompanies.Yes =>
+        routes.TwoAssociatedCompaniesController.onPageLoad(mode)
+      case _ =>
+        navigator.nextPage(AssociatedCompaniesPage, mode, updated)
+    })
 
   private def validateRequiredFields(
     associatedCompaniesForm: AssociatedCompaniesForm,
@@ -191,12 +206,6 @@ class AssociatedCompaniesController @Inject() (
       case AskFull | AskOnePart(_)
           if associatedCompaniesForm.associatedCompanies == AssociatedCompanies.Yes && associatedCompaniesForm.associatedCompaniesCount.isEmpty =>
         Some("associatedCompaniesCount")
-      case AskBothParts(_, _)
-          if associatedCompaniesForm.associatedCompanies == AssociatedCompanies.Yes && associatedCompaniesForm.associatedCompaniesFY1Count.isEmpty =>
-        Some("associatedCompaniesFY1Count")
-      case AskBothParts(_, _)
-          if associatedCompaniesForm.associatedCompanies == AssociatedCompanies.Yes && associatedCompaniesForm.associatedCompaniesFY2Count.isEmpty =>
-        Some("associatedCompaniesFY2Count")
       case _ =>
         None
     }

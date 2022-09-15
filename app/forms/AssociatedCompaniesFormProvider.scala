@@ -43,38 +43,9 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
               "associatedCompaniesCount.error.nonNumeric"
             ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
           )
-        ),
-        "associatedCompaniesFY1Count" -> mandatoryIfEqual(
-          "associatedCompanies",
-          "yes",
-          optional(
-            int(
-              "associatedCompaniesCount.error.required",
-              "associatedCompaniesCount.error.wholeNumber",
-              "associatedCompaniesCount.error.nonNumeric"
-            ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
-          )
-        ),
-        "associatedCompaniesFY2Count" -> mandatoryIfEqual(
-          "associatedCompanies",
-          "yes",
-          optional(
-            int(
-              "associatedCompaniesCount.error.required",
-              "associatedCompaniesCount.error.wholeNumber",
-              "associatedCompaniesCount.error.nonNumeric"
-            ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
-          )
         )
-      )((v1, v2, v3, v4) => AssociatedCompaniesForm.apply(v1, v2.flatten, v3.flatten, v4.flatten))(form =>
-        Some(
-          (
-            form.associatedCompanies,
-            Some(form.associatedCompaniesCount),
-            Some(form.associatedCompaniesFY1Count),
-            Some(form.associatedCompaniesFY2Count)
-          )
-        )
+      )((v1, v2) => AssociatedCompaniesForm(v1, v2.flatten))(form =>
+        Some((form.associatedCompanies, Some(form.associatedCompaniesCount)))
       )
     }
 }
