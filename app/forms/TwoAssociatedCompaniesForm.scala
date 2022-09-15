@@ -16,15 +16,13 @@
 
 package forms
 
-import play.api.libs.json.{ Format, _ }
-import models.AssociatedCompanies
+import play.api.libs.json.{ Format, Json }
 
-final case class AssociatedCompaniesForm(
-  associatedCompanies: AssociatedCompanies,
-  associatedCompaniesCount: Option[Int]
+case class TwoAssociatedCompaniesForm(
+  associatedCompaniesFY1Count: Option[Int],
+  associatedCompaniesFY2Count: Option[Int]
 )
 
-object AssociatedCompaniesForm {
-  implicit val format: Format[AssociatedCompaniesForm] =
-    Json.format[AssociatedCompaniesForm]
+object TwoAssociatedCompaniesForm {
+  implicit val format: Format[TwoAssociatedCompaniesForm] = Json.format[TwoAssociatedCompaniesForm]
 }

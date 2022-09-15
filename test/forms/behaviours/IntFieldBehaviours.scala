@@ -58,7 +58,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
   def intFieldWithMinimum(form: Form[_], fieldName: String, minimum: Int, expectedError: FormError): Unit =
     s"not bind integers below $minimum" in {
 
-      forAll(intsBelowValue(minimum) -> "intBelowMin") { number: BigInt =>
+      forAll(intsBelowValue(minimum) -> "intBelowMin") { number: Int =>
         val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
         result.errors must contain only expectedError
       }

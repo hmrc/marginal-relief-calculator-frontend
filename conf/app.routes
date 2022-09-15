@@ -1,45 +1,50 @@
 # microservice specific routes
 
-->          /hmrc-frontend                      hmrcfrontend.Routes
+->          /hmrc-frontend                        hmrcfrontend.Routes
 
-GET         /                                   controllers.IndexController.onPageLoad
-GET         /start                              controllers.IndexController.onStart
+GET         /                                     controllers.IndexController.onPageLoad
+GET         /start                                controllers.IndexController.onStart
 
-GET         /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                         controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /refresh-session                    controllers.KeepAliveController.keepAlive
+GET         /refresh-session                      controllers.KeepAliveController.keepAlive
 
-GET         /there-is-a-problem                 controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
+GET         /there-is-a-problem                   controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
 
-GET         /check-your-answers                 controllers.CheckYourAnswersController.onPageLoad
+GET         /check-your-answers                   controllers.CheckYourAnswersController.onPageLoad
 
-GET        /results-page                        controllers.ResultsPageController.onPageLoad()
-GET        /full-results-page                   controllers.FullResultsPageController.onPageLoad()
+GET        /results-page                          controllers.ResultsPageController.onPageLoad()
+GET        /full-results-page                     controllers.FullResultsPageController.onPageLoad()
 
-GET        /associated-companies                controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
-POST       /associated-companies                controllers.AssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
-GET        /change-associated-companies         controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-associated-companies         controllers.AssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
+GET        /associated-companies                  controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
+POST       /associated-companies                  controllers.AssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
+GET        /change-associated-companies           controllers.AssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-associated-companies           controllers.AssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
 
-GET        /accounting-period                   controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
-POST       /accounting-period                   controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
-GET        /irrelevant-accounting-period        controllers.AccountingPeriodController.irrelevantPeriodPage()
-GET        /change-accounting-period            controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-accounting-period            controllers.AccountingPeriodController.onSubmit(mode: Mode = CheckMode)
+GET        /accounting-period                     controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
+POST       /accounting-period                     controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
+GET        /irrelevant-accounting-period          controllers.AccountingPeriodController.irrelevantPeriodPage()
+GET        /change-accounting-period              controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-accounting-period              controllers.AccountingPeriodController.onSubmit(mode: Mode = CheckMode)
 
-GET        /taxable-profit                      controllers.TaxableProfitController.onPageLoad(mode: Mode = NormalMode)
-POST       /taxable-profit                      controllers.TaxableProfitController.onSubmit(mode: Mode = NormalMode)
-GET        /change-taxable-profit               controllers.TaxableProfitController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-taxable-profit               controllers.TaxableProfitController.onSubmit(mode: Mode = CheckMode)
+GET        /taxable-profit                        controllers.TaxableProfitController.onPageLoad(mode: Mode = NormalMode)
+POST       /taxable-profit                        controllers.TaxableProfitController.onSubmit(mode: Mode = NormalMode)
+GET        /change-taxable-profit                 controllers.TaxableProfitController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-taxable-profit                 controllers.TaxableProfitController.onSubmit(mode: Mode = CheckMode)
 
-GET        /distribution                        controllers.DistributionController.onPageLoad(mode: Mode = NormalMode)
-POST       /distribution                        controllers.DistributionController.onSubmit(mode: Mode = NormalMode)
-GET        /change-distribution                 controllers.DistributionController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-distribution                 controllers.DistributionController.onSubmit(mode: Mode = CheckMode)
+GET        /distribution                          controllers.DistributionController.onPageLoad(mode: Mode = NormalMode)
+POST       /distribution                          controllers.DistributionController.onSubmit(mode: Mode = NormalMode)
+GET        /change-distribution                   controllers.DistributionController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-distribution                   controllers.DistributionController.onSubmit(mode: Mode = CheckMode)
 
-GET        /distributions-included              controllers.DistributionsIncludedController.onPageLoad(mode: Mode = NormalMode)
-POST       /distributions-included              controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
-GET        /change-distributions-included       controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-distributions-included       controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
+GET        /distributions-included                controllers.DistributionsIncludedController.onPageLoad(mode: Mode = NormalMode)
+POST       /distributions-included                controllers.DistributionsIncludedController.onSubmit(mode: Mode = NormalMode)
+GET        /change-distributions-included         controllers.DistributionsIncludedController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-distributions-included         controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
 
-GET        /session-expired                     controllers.SessionExpiredController.onPageLoad()
+GET        /session-expired                       controllers.SessionExpiredController.onPageLoad()
+
+GET        /two-associated-companies              controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
+POST       /two-associated-companies              controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
+GET        /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
+POST       /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)

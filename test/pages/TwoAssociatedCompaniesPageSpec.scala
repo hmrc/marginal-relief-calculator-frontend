@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import play.api.libs.json.{ Format, _ }
-import models.AssociatedCompanies
+import forms.TwoAssociatedCompaniesForm
+import pages.behaviours.PageBehaviours
 
-final case class AssociatedCompaniesForm(
-  associatedCompanies: AssociatedCompanies,
-  associatedCompaniesCount: Option[Int]
-)
+class TwoAssociatedCompaniesPageSpec extends PageBehaviours {
 
-object AssociatedCompaniesForm {
-  implicit val format: Format[AssociatedCompaniesForm] =
-    Json.format[AssociatedCompaniesForm]
+  "TwoAssociatedCompaniesPage" - {
+
+    beRetrievable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+
+    beSettable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+
+    beRemovable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+  }
 }

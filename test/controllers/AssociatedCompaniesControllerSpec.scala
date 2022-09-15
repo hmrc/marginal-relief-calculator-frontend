@@ -29,7 +29,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import uk.gov.hmrc.http.UpstreamErrorResponse
+import uk.gov.hmrc.http.{ SessionKeys, UpstreamErrorResponse }
 import views.html.AssociatedCompaniesView
 
 import java.time.LocalDate
@@ -46,7 +46,9 @@ class AssociatedCompaniesControllerSpec
     .get
     .set(TaxableProfitPage, 1)
     .get
-    .set(DistributionPage, Distribution.No)
+    .set(DistributionPage, Distribution.Yes)
+    .get
+    .set(DistributionsIncludedPage, DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1)))
     .get
 
   "AssociatedCompanies Controller" - {
@@ -65,7 +67,7 @@ class AssociatedCompaniesControllerSpec
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1),
           1.0,
-          None
+          Some(1)
         )(*) returns Future.successful(AskFull)
 
         running(application) {
@@ -113,7 +115,7 @@ class AssociatedCompaniesControllerSpec
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1),
           1.0,
-          None
+          Some(1)
         )(*) returns Future.successful(AskFull)
 
         running(application) {
@@ -138,7 +140,7 @@ class AssociatedCompaniesControllerSpec
         val application = applicationBuilder(
           userAnswers = (for {
             u2 <- requiredAnswers.set(TaxableProfitPage, 1)
-            u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None))
+            u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           } yield u3).toOption
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
@@ -147,7 +149,7 @@ class AssociatedCompaniesControllerSpec
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
           1.0,
-          None
+          Some(1)
         )(*) returns Future.successful(AskFull)
 
         running(application) {
@@ -159,7 +161,7 @@ class AssociatedCompaniesControllerSpec
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view(
-            form.fill(AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1), None, None)),
+            form.fill(AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))),
             AskFull,
             NormalMode
           )(request, messages(application)).toString.filterAndTrim
@@ -201,7 +203,7 @@ class AssociatedCompaniesControllerSpec
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
           1.0,
-          None
+          Some(1)
         )(*) returns Future.successful(DontAsk)
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -223,7 +225,7 @@ class AssociatedCompaniesControllerSpec
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
           1.0,
-          None
+          Some(1)
         )(*) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
 
         val application = applicationBuilder(Some(requiredAnswers))
@@ -241,7 +243,7 @@ class AssociatedCompaniesControllerSpec
 
     "POST page" - {
 
-      "must redirect to the next page when valid data is submitted" in {
+      "must redirect to CheckYourAnswersController page when valid data is submitted" in {
 
         val mockSessionRepository = mock[SessionRepository]
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
@@ -252,7 +254,7 @@ class AssociatedCompaniesControllerSpec
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
           1.0,
-          None
+          Some(1)
         )(*) returns Future.successful(AskFull)
 
         val application =
@@ -272,7 +274,93 @@ class AssociatedCompaniesControllerSpec
         }
       }
 
-      "must return a Bad Request and errors when form parameters are invalid" in {
+      "must clear associated companies count when associatedCompanies is No" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        when(
+          mockSessionRepository.set(
+            requiredAnswers
+              .set(
+                AssociatedCompaniesPage,
+                AssociatedCompaniesForm(
+                  AssociatedCompanies.No,
+                  None
+                )
+              )
+              .get
+          )
+        ) thenReturn Future.successful(true)
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          Some(1)
+        )(*) returns Future.successful(AskFull)
+
+        val application =
+          applicationBuilder(userAnswers =
+            Some(
+              requiredAnswers
+                .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
+                .get
+            )
+          )
+            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(("associatedCompanies", "no"))
+              .withSession(SessionKeys.sessionId -> "test-session-id")
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
+        }
+      }
+
+      "must redirect to the TwoAssociatedCompanies page when valid data is submitted and ask associated companies parameter is AskBothParts" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1),
+          1.0,
+          Some(1)
+        )(*) returns Future.successful(
+          AskBothParts(
+            Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
+            Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
+          )
+        )
+
+        val application =
+          applicationBuilder(userAnswers = Some(requiredAnswers))
+            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(("associatedCompanies", "yes"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).url
+        }
+      }
+
+      "must return a Bad Request when associated companies requirement is AskFull or AskOnePart, but associatedCompaniesCount is empty" in {
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]
 
@@ -284,38 +372,20 @@ class AssociatedCompaniesControllerSpec
         running(application) {
 
           val table = Table(
-            ("requestParams", "errorKey", "associatedCompaniesParameter"),
-            (Map("associatedCompanies" -> "invalid"), "associatedCompanies", AskFull),
-            (Map("associatedCompanies" -> "yes"), "associatedCompaniesCount", AskFull),
+            ("requestParams", "associatedCompaniesParameter"),
+            (Map("associatedCompanies" -> "yes"), AskFull),
             (
               Map("associatedCompanies" -> "yes"),
-              "associatedCompaniesCount",
               AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)))
-            ),
-            (
-              Map("associatedCompanies" -> "yes"),
-              "associatedCompaniesFY1Count",
-              AskBothParts(
-                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
-                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
-              )
-            ),
-            (
-              Map("associatedCompanies" -> "yes", "associatedCompaniesFY1Count" -> "1"),
-              "associatedCompaniesFY2Count",
-              AskBothParts(
-                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
-                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
-              )
             )
           )
 
-          forAll(table) { (requestParams, errorKey, associatedCompaniesParameter) =>
+          forAll(table) { (requestParams, associatedCompaniesParameter) =>
             mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
               accountingPeriodStart = LocalDate.ofEpochDay(0),
               accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
               1.0,
-              None
+              Some(1)
             )(*) returns Future.successful(associatedCompaniesParameter)
 
             val request =
@@ -325,10 +395,7 @@ class AssociatedCompaniesControllerSpec
                 )
 
             val boundForm =
-              if (errorKey == "associatedCompanies")
-                form.bind(requestParams)
-              else
-                form.bind(requestParams).withError(errorKey, "associatedCompaniesCount.error.required")
+              form.bind(requestParams).withError("associatedCompaniesCount", "associatedCompaniesCount.error.required")
 
             val view = application.injector.instanceOf[AssociatedCompaniesView]
 
@@ -340,6 +407,44 @@ class AssociatedCompaniesControllerSpec
               messages(application)
             ).toString
           }
+        }
+      }
+
+      "must return a Bad Request when associatedCompanies parameter is invalid" in {
+
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
+          1.0,
+          Some(1)
+        )(*) returns Future.successful(AskFull)
+        val application =
+          applicationBuilder(Some(requiredAnswers))
+            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .build()
+
+        running(application) {
+
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(
+                "associatedCompanies" -> "invalid"
+              )
+
+          val boundForm = form
+            .withError("associatedCompanies", "associatedCompanies.error.invalid")
+
+          val view = application.injector.instanceOf[AssociatedCompaniesView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(boundForm, AskFull, NormalMode)(
+            request,
+            messages(application)
+          ).toString
         }
       }
 

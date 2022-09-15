@@ -32,7 +32,7 @@
             @govukErrorSummary(
                 ErrorSummaryViewModel(
                     form,
-                    errorLinkOverrides = Map(form.errors.head.key -> s"${form.errors.head.key}.day")
+                    errorLinkOverrides = form.errors.map(e => e.key -> s"${e.key}${e.args.headOption.map("." + _).getOrElse(".day")}").toMap
                 )
             )
         }

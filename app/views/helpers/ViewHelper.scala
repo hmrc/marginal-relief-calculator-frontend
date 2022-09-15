@@ -19,10 +19,12 @@ package views.helpers
 import play.twirl.api.Html
 
 trait ViewHelper {
-  def h1(text: String): Html =
-    Html(s"""<h2 class="govuk-heading-m">$text</h2>""")
+  def h1(text: String, classes: String = "govuk-heading-m", styles: String = ""): Html =
+    Html(s"""<h1 class="$classes" ${if (styles.trim == "") "" else s"""style="$styles""""}>$text</h2>""")
 
-  def h2(text: String): Html = Html(s"""<h2 class="govuk-heading-m" style="margin-bottom: 4px;">$text</h2>""")
+  def h2(text: String, classes: String = "govuk-heading-m", styles: String = ""): Html = Html(
+    s"""<h2 class="$classes" ${if (styles.trim == "") "" else s"""style="$styles""""}>$text</h2>"""
+  )
 
   def h3(text: String): Html = Html(s"""<h3 class="govuk-heading-m" style="margin-bottom: 4px;">$text</h3>""")
 
