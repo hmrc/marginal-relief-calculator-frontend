@@ -97,7 +97,7 @@ class AssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDate.get,
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
                                             request.taxableProfit,
                                             None
                                           )
@@ -124,7 +124,7 @@ class AssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDate.get,
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
                                             request.taxableProfit,
                                             None
                                           )

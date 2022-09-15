@@ -18,9 +18,10 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import forms.DateUtils._
-import models.{ CheckMode, NormalMode, UserAnswers }
+import models.{ CheckMode, UserAnswers }
 import pages.AccountingPeriodPage
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
@@ -34,10 +35,17 @@ object AccountingPeriodSummary {
           SummaryListRowViewModel(
             key = "accountingPeriod.checkYourAnswersLabel",
             value = ValueViewModel(
-              messages(
-                "site.from.to",
-                answer.accountingPeriodStartDate.formatDate,
-                answer.accountingPeriodEndDate.map(_.formatDate).getOrElse("")
+              HtmlContent(
+                messages(
+                  "site.from.to",
+                  answer.accountingPeriodStartDate.formatDate,
+                  answer.accountingPeriodEndDateOrDefault.formatDate + {
+                    answer.accountingPeriodEndDate match {
+                      case None    => ".</br>" + messages("accountingPeriod.defaultedEndDateMessage")
+                      case Some(_) => ""
+                    }
+                  }
+                )
               )
             ),
             actions = Seq(

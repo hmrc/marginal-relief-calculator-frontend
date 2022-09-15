@@ -93,7 +93,7 @@ class ResultsPageController @Inject() (
       marginalReliefCalculatorConnector
         .calculate(
           request.accountingPeriod.accountingPeriodStartDate,
-          request.accountingPeriod.accountingPeriodEndDate.get,
+          request.accountingPeriod.accountingPeriodEndDateOrDefault,
           request.taxableProfit.toDouble,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
           request.associatedCompanies.associatedCompaniesCount,

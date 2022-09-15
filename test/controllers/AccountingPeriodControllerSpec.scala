@@ -91,9 +91,9 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         "accountingPeriodStartDate.day"   -> validAnswer.accountingPeriodStartDate.getDayOfMonth.toString,
         "accountingPeriodStartDate.month" -> validAnswer.accountingPeriodStartDate.getMonthValue.toString,
         "accountingPeriodStartDate.year"  -> validAnswer.accountingPeriodStartDate.getYear.toString,
-        "accountingPeriodEndDate.day"     -> validAnswer.accountingPeriodEndDate.get.getDayOfMonth.toString,
-        "accountingPeriodEndDate.month"   -> validAnswer.accountingPeriodEndDate.get.getMonthValue.toString,
-        "accountingPeriodEndDate.year"    -> validAnswer.accountingPeriodEndDate.get.getYear.toString
+        "accountingPeriodEndDate.day"     -> validAnswer.accountingPeriodEndDateOrDefault.getDayOfMonth.toString,
+        "accountingPeriodEndDate.month"   -> validAnswer.accountingPeriodEndDateOrDefault.getMonthValue.toString,
+        "accountingPeriodEndDate.year"    -> validAnswer.accountingPeriodEndDateOrDefault.getYear.toString
       )
 
   "AccountingPeriod Controller" - {
@@ -203,7 +203,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual 400
-        contentAsString(result) must include("Enter a valid start date for the accounting period, like 27 3 2023");
+        contentAsString(result) must include("Enter a valid start date for the accounting period, like 27 3 2023")
       }
     }
 
@@ -247,7 +247,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val form = completedUserAnswers.get(AccountingPeriodPage).get
         val sDate = form.accountingPeriodStartDate
-        val eDate = form.accountingPeriodEndDate.get.minusMonths(1)
+        val eDate = form.accountingPeriodEndDateOrDefault.minusMonths(1)
         val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
           .withFormUrlEncodedBody(
             "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
@@ -272,7 +272,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val form = completedUserAnswers.get(AccountingPeriodPage).get
         val sDate = form.accountingPeriodStartDate
-        val eDate = form.accountingPeriodEndDate.get
+        val eDate = form.accountingPeriodEndDateOrDefault
         val request = FakeRequest(POST, accountingPeriodRouteCheckMode)
           .withFormUrlEncodedBody(
             "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
@@ -297,7 +297,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val form = completedUserAnswers.get(AccountingPeriodPage).get
         val sDate = form.accountingPeriodStartDate
-        val eDate = form.accountingPeriodEndDate.get
+        val eDate = form.accountingPeriodEndDateOrDefault
         val request = FakeRequest(POST, accountingPeriodRoute)
           .withFormUrlEncodedBody(
             "accountingPeriodStartDate.day"   -> sDate.getDayOfMonth.toString,
