@@ -26,7 +26,9 @@ object AppDependencies {
     "org.scalacheck"         %% "scalacheck"              % "1.15.4",
     "uk.gov.hmrc.mongo"      %% "hmrc-mongo-test-play-28" % "0.71.0",
     "uk.gov.hmrc"            %% "http-verbs-test-play-28" % "14.5.0",
-    "com.vladsch.flexmark"    % "flexmark-all"            % "0.62.2"
+    "com.vladsch.flexmark"    % "flexmark-all"            % "0.62.2",
+    "com.softwaremill.diffx" %% "diffx-scalatest-should"  % "0.7.1",
+    "org.jsoup"               % "jsoup"                   % "1.15.3"
   ).map(_ % "test, it")
 
   def apply(): Seq[ModuleID] = compile ++ test

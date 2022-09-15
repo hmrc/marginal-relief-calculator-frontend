@@ -92,9 +92,11 @@ object FullResultsPageHelper extends ViewHelper {
     def dualResultTable(dual: DualResult) = {
       def tabBtn(year: Int) =
         s"""<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-           |      <a class="govuk-tabs__tab" href="#year$year">
-           |        ${messages("site.from.to", year.toString, (year + 1).toString)}
-           |      </a>
+           |      <a class="govuk-tabs__tab" href="#year$year">${messages(
+            "site.from.to",
+            year.toString,
+            (year + 1).toString
+          )}</a>
            |    </li>""".stripMargin
 
       def tabContent(marginalRate: MarginalRate, daysInAccountingPeriod: Int) = {
