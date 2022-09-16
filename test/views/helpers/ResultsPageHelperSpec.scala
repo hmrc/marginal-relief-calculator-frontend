@@ -26,7 +26,7 @@ import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
+import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, replaceTableHeader }
 import views.html.templates.BannerPanel
 import utils.FormatUtils._
 
@@ -442,89 +442,107 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("6"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                  TableRow(content = Text("£1"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("6"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
+                    TableRow(content = Text("£1"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 365))
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("365"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
-                  TableRow(content = Text("£250"))
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("365"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
+                    TableRow(content = Text("£250"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("site.marginalRelief"))),
+                    TableRow(content = Text("-£50"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
+                    TableRow(content = Text("£200"))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("site.marginalRelief"))),
-                  TableRow(content = Text("-£50"))
-                ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                  TableRow(content = Text("£200"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
 
       "when marginal rate and profits are below lower threshold" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1500, 365))
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("365"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                  TableRow(content = Text("£25"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("365"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
+                    TableRow(content = Text("£25"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -534,33 +552,39 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 0, 0, 1000, 100), FlatRate(1971, 200, 20, 0, 0, 1000, 100))
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                  TableRow(content = Text("£190")),
-                  TableRow(content = Text("£200")),
-                  TableRow(content = Text("£390"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
+                    TableRow(content = Text("£190")),
+                    TableRow(content = Text("£200")),
+                    TableRow(content = Text("£390"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -570,33 +594,39 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 0, 10, 500, 1000, 100)
         )
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                  TableRow(content = Text("£25")),
-                  TableRow(content = Text("£30")),
-                  TableRow(content = Text("£55"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
+                    TableRow(content = Text("£25")),
+                    TableRow(content = Text("£30")),
+                    TableRow(content = Text("£55"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -606,33 +636,39 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 250, 25, 0, 1000, 10, 1010, 100, 500, 100),
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1010, 100, 500, 100)
         )
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                  TableRow(content = Text("£250")),
-                  TableRow(content = Text("£300")),
-                  TableRow(content = Text("£550"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
+                    TableRow(content = Text("£250")),
+                    TableRow(content = Text("£300")),
+                    TableRow(content = Text("£550"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -642,45 +678,51 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 0, 10, 100, 1500, 100)
         )
-        displayCorporationTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
-                  TableRow(content = Text("£250")),
-                  TableRow(content = Text("£300")),
-                  TableRow(content = Text("£550"))
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
+                    TableRow(content = Text("£250")),
+                    TableRow(content = Text("£300")),
+                    TableRow(content = Text("£550"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("site.marginalRelief"))),
+                    TableRow(content = Text("-£50")),
+                    TableRow(content = Text("-£50")),
+                    TableRow(content = Text("-£100"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
+                    TableRow(content = Text("£200")),
+                    TableRow(content = Text("£250")),
+                    TableRow(content = Text("£450"))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("site.marginalRelief"))),
-                  TableRow(content = Text("-£50")),
-                  TableRow(content = Text("-£50")),
-                  TableRow(content = Text("-£100"))
-                ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                  TableRow(content = Text("£200")),
-                  TableRow(content = Text("£250")),
-                  TableRow(content = Text("£450"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -691,57 +733,69 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("6"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-                  TableRow(content = Text("2.00%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("6"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
+                    TableRow(content = Text("2.00%"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
       "when marginal rate" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365))
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("365"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                  TableRow(content = Text("25.00%"))
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("365"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
+                    TableRow(content = Text("25.00%"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
+                    TableRow(content = Text("20.00%"))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                  TableRow(content = Text("20.00%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -750,33 +804,39 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years, display corporation tax main rate row" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 1000, 0, 1000, 100), FlatRate(1971, 200, 20, 1000, 0, 1000, 100))
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-                  TableRow(content = Text("19.00%")),
-                  TableRow(content = Text("20.00%")),
-                  TableRow(content = Text("19.50%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
+                    TableRow(content = Text("19.00%")),
+                    TableRow(content = Text("20.00%")),
+                    TableRow(content = Text("19.50%"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -785,39 +845,45 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1100, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 1010, 100, 1100, 100)
         )
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("30.00%")),
-                  TableRow(content = Text("27.50%"))
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("30.00%")),
+                    TableRow(content = Text("27.50%"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
+                    TableRow(content = Text("20.00%")),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("22.50%"))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                  TableRow(content = Text("20.00%")),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("22.50%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -826,33 +892,39 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 500, 1000, 100)
         )
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("30.00%")),
-                  TableRow(content = Text("27.50%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("30.00%")),
+                    TableRow(content = Text("27.50%"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -861,33 +933,39 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 10, 50, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 10, 50, 100)
         )
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("30.00%")),
-                  TableRow(content = Text("27.50%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("30.00%")),
+                    TableRow(content = Text("27.50%"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -898,33 +976,39 @@ class ResultsPageHelperSpec extends SpecBase {
             FlatRate(1970, 19, 19, 100, 0, 100, 100),
             MarginalRate(1971, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100)
           )
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                  TableRow(content = Text("19.00%")),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("22.00%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
+                    TableRow(content = Text("19.00%")),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("22.00%"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -934,33 +1018,39 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 1010, 500, 1000, 100)
         )
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                  TableRow(content = Text("19.00%")),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("22.00%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
+                    TableRow(content = Text("19.00%")),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("22.00%"))
+                  )
+                ),
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }
@@ -970,39 +1060,45 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1500, 100)
         )
-        displayEffectiveTaxTable(calculatorResult).htmlFormat shouldMatchTo
-          govukTable(
-            Table(
-              head = Some(
-                Seq(
-                  HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>""")),
-                  HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                  HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                  HeadCell(content = Text(messages("site.overall")))
-                )
-              ),
-              rows = Seq(
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("100")),
-                  TableRow(content = Text("200"))
+        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+          replaceTableHeader(
+            govukTable(
+              Table(
+                head = Some(
+                  Seq(
+                    HeadCell(
+                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      classes = "not-header"
+                    ),
+                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
+                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
+                    HeadCell(content = Text(messages("site.overall")))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                  TableRow(content = Text("19.00%")),
-                  TableRow(content = Text("25.00%")),
-                  TableRow(content = Text("22.00%"))
+                rows = Seq(
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("100")),
+                    TableRow(content = Text("200"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
+                    TableRow(content = Text("19.00%")),
+                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("22.00%"))
+                  ),
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
+                    TableRow(content = Text("19.00%")),
+                    TableRow(content = Text("20.00%")),
+                    TableRow(content = Text("19.50%"))
+                  )
                 ),
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                  TableRow(content = Text("19.00%")),
-                  TableRow(content = Text("20.00%")),
-                  TableRow(content = Text("19.50%"))
-                )
-              ),
-              caption = None,
-              firstCellIsHeader = true
+                caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+                captionClasses = "govuk-!-display-none",
+                firstCellIsHeader = true
+              )
             )
           ).htmlFormat
       }

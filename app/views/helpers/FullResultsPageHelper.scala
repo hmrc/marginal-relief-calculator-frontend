@@ -441,7 +441,10 @@ object FullResultsPageHelper extends ViewHelper {
           ),
           head = Some(
             Seq(
-              HeadCell(),
+              HeadCell(
+                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                classes = "not-header"
+              ),
               HeadCell(
                 content = Text(messages("site.from.to", d1.year.toString, (d1.year + 1).toString)),
                 classes = "govuk-table__header--numeric"
