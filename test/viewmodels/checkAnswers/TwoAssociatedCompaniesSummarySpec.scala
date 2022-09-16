@@ -16,14 +16,14 @@
 
 package viewmodels.checkAnswers
 
-import connectors.sharedmodel.{AskBothParts, DontAsk, Period}
+import connectors.sharedmodel.{ AskBothParts, DontAsk, Period }
 import controllers.routes
-import forms.{AccountingPeriodForm, TwoAssociatedCompaniesForm}
-import models.{CheckMode, UserAnswers}
+import forms.{ AccountingPeriodForm, TwoAssociatedCompaniesForm }
+import models.{ CheckMode, UserAnswers }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import pages.{AccountingPeriodPage, TwoAssociatedCompaniesPage}
+import pages.{ AccountingPeriodPage, TwoAssociatedCompaniesPage }
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import viewmodels.govuk.summarylist._
