@@ -16,6 +16,7 @@
 
 package viewmodels.checkAnswers
 
+import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter, DontAsk }
 import controllers.routes
 import models.{ CheckMode, UserAnswers }
 import pages.AssociatedCompaniesPage
@@ -26,16 +27,23 @@ import viewmodels.implicits._
 
 object AssociatedCompaniesSummary {
 
-  def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AssociatedCompaniesPage).map { answer =>
-      val count = answer.associatedCompaniesCount.getOrElse(0)
-      SummaryListRowViewModel(
-        key = "associatedCompanies.checkYourAnswersLabel",
-        value = ValueViewModel(count.toString),
-        actions = Seq(
-          ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
-            .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
-        )
-      )
+  def row(answers: UserAnswers, associatedCompaniesParameter: AssociatedCompaniesParameter)(implicit
+    messages: Messages
+  ): Option[SummaryListRow] =
+    associatedCompaniesParameter match {
+      case DontAsk | AskBothParts(_, _) => None
+      case _ =>
+        answers.get(AssociatedCompaniesPage).map { answer =>
+          val count = answer.associatedCompaniesCount.getOrElse(0)
+          SummaryListRowViewModel(
+            key = "associatedCompanies.checkYourAnswersLabel",
+            value = ValueViewModel(count.toString),
+            actions = Seq(
+              ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                .withVisuallyHiddenText(messages("associatedCompanies.change.hidden"))
+            )
+          )
+        }
     }
+
 }

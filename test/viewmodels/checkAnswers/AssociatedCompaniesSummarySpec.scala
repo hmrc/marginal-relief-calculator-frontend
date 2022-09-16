@@ -16,47 +16,142 @@
 
 package viewmodels.checkAnswers
 
+import connectors.sharedmodel._
 import controllers.routes
 import forms.AssociatedCompaniesForm
 import models.{ AssociatedCompanies, CheckMode, UserAnswers }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
 import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
-class AssociatedCompaniesSummarySpec extends AnyFreeSpec with Matchers {
+import java.time.LocalDate
+
+class AssociatedCompaniesSummarySpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
 
   private implicit val messages: Messages = Helpers.stubMessages()
 
   "row" - {
-    "when answer available, return the summary row" in {
+    "when AskAssociatedCompaniesParameter is AskBothParts, return empty" in {
+      val askAssociatedCompaniesParameter = AskBothParts(
+        Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
+        Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
+      )
       val userAnswers = UserAnswers("id")
         .set(
           AssociatedCompaniesPage,
           AssociatedCompaniesForm(
             AssociatedCompanies.Yes,
-            Some(1)
+            None
           )
         )
         .get
-      AssociatedCompaniesSummary.row(userAnswers) shouldBe Some(
-        SummaryListRowViewModel(
-          key = "associatedCompanies.checkYourAnswersLabel",
-          value = ValueViewModel("1"),
-          actions = Seq(
-            ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
-              .withVisuallyHiddenText("associatedCompanies.change.hidden")
+      AssociatedCompaniesSummary.row(userAnswers, askAssociatedCompaniesParameter) shouldBe None
+    }
+
+    "when AskAssociatedCompaniesParameter is DontAsk, return empty" in {
+      AssociatedCompaniesSummary.row(UserAnswers("id"), DontAsk) shouldBe None
+    }
+
+    "when AssociatedCompaniesParameter is AskFul or AskOnePart, return the summary row" in {
+      val table = Table(
+        ("associatedCompaniesParameter", "userAnswers", "expected"),
+        (
+          AskFull,
+          UserAnswers("id")
+            .set(
+              AssociatedCompaniesPage,
+              AssociatedCompaniesForm(
+                AssociatedCompanies.Yes,
+                Some(1)
+              )
+            )
+            .get,
+          Some(
+            SummaryListRowViewModel(
+              key = "associatedCompanies.checkYourAnswersLabel",
+              value = ValueViewModel("1"),
+              actions = Seq(
+                ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                  .withVisuallyHiddenText("associatedCompanies.change.hidden")
+              )
+            )
+          )
+        ),
+        (
+          AskFull,
+          UserAnswers("id")
+            .set(
+              AssociatedCompaniesPage,
+              AssociatedCompaniesForm(
+                AssociatedCompanies.No,
+                None
+              )
+            )
+            .get,
+          Some(
+            SummaryListRowViewModel(
+              key = "associatedCompanies.checkYourAnswersLabel",
+              value = ValueViewModel("0"),
+              actions = Seq(
+                ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                  .withVisuallyHiddenText("associatedCompanies.change.hidden")
+              )
+            )
+          )
+        ),
+        (
+          AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0))),
+          UserAnswers("id")
+            .set(
+              AssociatedCompaniesPage,
+              AssociatedCompaniesForm(
+                AssociatedCompanies.Yes,
+                Some(1)
+              )
+            )
+            .get,
+          Some(
+            SummaryListRowViewModel(
+              key = "associatedCompanies.checkYourAnswersLabel",
+              value = ValueViewModel("1"),
+              actions = Seq(
+                ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                  .withVisuallyHiddenText("associatedCompanies.change.hidden")
+              )
+            )
+          )
+        ),
+        (
+          AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0))),
+          UserAnswers("id")
+            .set(
+              AssociatedCompaniesPage,
+              AssociatedCompaniesForm(
+                AssociatedCompanies.No,
+                None
+              )
+            )
+            .get,
+          Some(
+            SummaryListRowViewModel(
+              key = "associatedCompanies.checkYourAnswersLabel",
+              value = ValueViewModel("0"),
+              actions = Seq(
+                ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                  .withVisuallyHiddenText("associatedCompanies.change.hidden")
+              )
+            )
           )
         )
       )
-    }
-
-    "when answer unavailable, return empty" in {
-      val userAnswers = UserAnswers("id")
-      AssociatedCompaniesSummary.row(userAnswers) shouldBe None
+      forAll(table) { (associatedParameter, userAnswers, expected) =>
+        AssociatedCompaniesSummary.row(userAnswers, associatedParameter) shouldBe expected
+      }
     }
   }
 }
