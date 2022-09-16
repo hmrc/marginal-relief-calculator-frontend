@@ -156,37 +156,6 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must populate accountingPeriodEndDate when not provided i.e accountingPeriodEndDate = accountingPeriodStartDate + 1y -1d" in {
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request = FakeRequest(POST, accountingPeriodRoute)
-          .withFormUrlEncodedBody(
-            "accountingPeriodStartDate.day"   -> validAnswer.accountingPeriodStartDate.getDayOfMonth.toString,
-            "accountingPeriodStartDate.month" -> validAnswer.accountingPeriodStartDate.getMonthValue.toString,
-            "accountingPeriodStartDate.year"  -> validAnswer.accountingPeriodStartDate.getYear.toString
-          )
-          .withSession(SessionKeys.sessionId -> "test-session-id")
-
-        val sessionRepository = application.injector.instanceOf[SessionRepository]
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
-        sessionRepository
-          .get("test-session-id")
-          .futureValue
-          .get
-          .data
-          .value(AccountingPeriodPage.toString)
-          .as[AccountingPeriodForm] must be(
-          AccountingPeriodForm(
-            accountingPeriodStartDate = validAnswer.accountingPeriodStartDate,
-            accountingPeriodEndDate = Some(validAnswer.accountingPeriodStartDate.plusYears(1).minusDays(1))
-          )
-        )
-      }
-    }
     "must return BadRequest 400 when form has invalid data" in {
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -210,14 +179,17 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted, when user answers already exists" in {
 
       val application = applicationBuilder(userAnswers = Some(UserAnswers("test-session-id"))).build()
-
+      val epochEndDate = epoch.plusYears(1).minusDays(1)
       running(application) {
 
         val request = FakeRequest(POST, accountingPeriodRoute)
           .withFormUrlEncodedBody(
             "accountingPeriodStartDate.day"   -> epoch.getDayOfMonth.toString,
             "accountingPeriodStartDate.month" -> epoch.getMonth.getValue.toString,
-            "accountingPeriodStartDate.year"  -> epoch.getYear.toString
+            "accountingPeriodStartDate.year"  -> epoch.getYear.toString,
+            "accountingPeriodEndDate.day"     -> epochEndDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> epochEndDate.getMonth.getValue.toString,
+            "accountingPeriodEndDate.year"    -> epochEndDate.getYear.toString
           )
           .withSession(SessionKeys.sessionId -> "test-session-id")
 
@@ -235,7 +207,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
           .as[AccountingPeriodForm] must be(
           AccountingPeriodForm(
             accountingPeriodStartDate = epoch,
-            accountingPeriodEndDate = Some(epoch.plusYears(1).minusDays(1))
+            accountingPeriodEndDate = Some(epochEndDate)
           )
         )
       }
