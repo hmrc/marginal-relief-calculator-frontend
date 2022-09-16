@@ -16,7 +16,9 @@
 
 package views.helpers
 
+import utils.FormatUtils._
 import base.SpecBase
+import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
 import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
 import play.api.i18n.Messages
 import play.api.test.Helpers._
@@ -52,43 +54,41 @@ class FullResultsPageHelperSpec extends SpecBase {
 
         FullResultsPageHelper
           .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
-          .toString
-          .trimNewLines mustBe
-          """
-            |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">
-            |   fullResultsPage.forFinancialYear
-            |</h3>
-            |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
-            |<table class="govuk-table"><thead class="govuk-table__head">
-            |   <tr class="govuk-table__row">
-            |     <th scope="col" class="govuk-table__header"></th>
-            |     <th scope="col" class="govuk-table__header"></th>
-            |     <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
-            |     <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
-            |   </tr>
-            |   </thead>
-            |     <tbody class="govuk-table__body">
-            |       <tr class="govuk-table__row">
-            |         <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
-            |         <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
-            |         <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
-            |         <td class="govuk-table__cell">£9</td>
-            |       </tr>
-            |       <tr class="govuk-table__row">
-            |         <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
-            |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
-            |         <td class="govuk-table__cell">£11 × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural)</td>
-            |         <td class="govuk-table__cell">£6</td>
-            |       </tr>
-            |       <tr class="govuk-table__row">
-            |         <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
-            |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
-            |         <td class="govuk-table__cell">(£11 + £111) × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural)</td>
-            |         <td class="govuk-table__cell">£13</td>
-            |       </tr>
-            |     </tbody>
-            |   </table>
-            |""".stripMargin.trimNewLines
+          .htmlFormat shouldMatchTo """
+                                      |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">
+                                      |   fullResultsPage.forFinancialYear
+                                      |</h3>
+                                      |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
+                                      |<table class="govuk-table"><thead class="govuk-table__head">
+                                      |   <tr class="govuk-table__row">
+                                      |     <th scope="col" class="govuk-table__header"></th>
+                                      |     <th scope="col" class="govuk-table__header"></th>
+                                      |     <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
+                                      |     <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
+                                      |   </tr>
+                                      |   </thead>
+                                      |     <tbody class="govuk-table__body">
+                                      |       <tr class="govuk-table__row">
+                                      |         <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
+                                      |         <td class="govuk-table__cell">fullResultsPage.financialYear.adjustedUpperLimit</td>
+                                      |         <td class="govuk-table__cell">£250,000 fullResultsPage.upperLimit × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
+                                      |         <td class="govuk-table__cell">£9</td>
+                                      |       </tr>
+                                      |       <tr class="govuk-table__row">
+                                      |         <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
+                                      |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfit</td>
+                                      |         <td class="govuk-table__cell">£11 × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural)</td>
+                                      |         <td class="govuk-table__cell">£6</td>
+                                      |       </tr>
+                                      |       <tr class="govuk-table__row">
+                                      |         <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
+                                      |         <td class="govuk-table__cell">fullResultsPage.financialYear.taxableProfitDistributions</td>
+                                      |         <td class="govuk-table__cell">(£11 + £111) × (10 fullResultsPage.day.plural ÷ 10 fullResultsPage.day.plural)</td>
+                                      |         <td class="govuk-table__cell">£13</td>
+                                      |       </tr>
+                                      |     </tbody>
+                                      |   </table>
+                                      |""".stripMargin.htmlFormat
       }
     }
 
@@ -112,8 +112,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
         FullResultsPageHelper
           .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
-          .toString
-          .trimNewLines mustBe
+          .htmlFormat shouldMatchTo
           """
             |<div class="govuk-tabs" data-module="govuk-tabs">
             |  <h2 class="govuk-tabs__title">fullResultsPage.financialYearResults</h2>
@@ -194,7 +193,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  </table>
             |</div>
             |</div>
-            |""".stripMargin.trimNewLines
+            |""".stripMargin.htmlFormat
       }
       "when flat rate for year 1 and marginal rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
@@ -204,8 +203,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
         FullResultsPageHelper
           .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
-          .toString
-          .trimNewLines mustBe
+          .htmlFormat shouldMatchTo
           """
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
@@ -282,7 +280,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    </tr>
             |  </tbody>
             |</table>
-            |""".stripMargin.trimNewLines
+            |""".stripMargin.htmlFormat
       }
       "when marginal rate for year 1 and flat rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
@@ -292,8 +290,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
         FullResultsPageHelper
           .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
-          .toString
-          .trimNewLines mustBe
+          .htmlFormat shouldMatchTo
           """
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
@@ -370,7 +367,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    </tr>
             |  </tbody>
             |</table>
-            |""".stripMargin.trimNewLines
+            |""".stripMargin.htmlFormat
       }
       "when marginal relief > 0 show correct template" in {
         val calculatorResult = SingleResult(
