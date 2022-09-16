@@ -17,3 +17,12 @@
    white-space: nowrap;
 }
 
+.govuk-back-link {
+    display: none;
+}
+
+.js-enabled {
+    .govuk-back-link {
+        display: inline-block;
+    }
+}

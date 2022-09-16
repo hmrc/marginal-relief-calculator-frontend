@@ -39,26 +39,26 @@
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
 
-    <h2 class="govuk-heading-l" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalCorporationTax)}</h2>
+    <span class="govuk-heading-l" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalCorporationTax)}</span>
 
     @if(calculatorResult.totalMarginalRelief > 0) {
         <p class="govuk-body">@messages("resultsPage.corporationTaxReducedFrom", CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR), CurrencyUtils.format(calculatorResult.totalMarginalRelief))</p>
     }
 
     <div class="app-table">
-        @{displayCorporationTaxTable(calculatorResult)}
+        @{replaceTableHeader(displayCorporationTaxTable(calculatorResult))}
     </div>
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.effectiveTaxRate")</h2>
 
-    <h2 class="govuk-heading-l" style="margin-bottom: 4px;">@{PercentageUtils.format(calculatorResult.effectiveTaxRate)}</h2>
+    <span class="govuk-heading-l" style="margin-bottom: 4px;">@{PercentageUtils.format(calculatorResult.effectiveTaxRate)}</span>
 
     @if(calculatorResult.totalMarginalRelief > 0) {
         <p class="govuk-body">@messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))</p>
     }
 
     <div class="app-table">
-        @{displayEffectiveTaxTable(calculatorResult)}
+        @{replaceTableHeader(displayEffectiveTaxTable(calculatorResult))}
     </div>
 
     <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>
