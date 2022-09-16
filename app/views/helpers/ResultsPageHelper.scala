@@ -270,7 +270,10 @@ object ResultsPageHelper extends ViewHelper {
             ).filter(_.nonEmpty),
             head = Some(
               Seq(
-                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""), classes = "not-header"),
+                HeadCell(
+                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  classes = "not-header"
+                ),
                 HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
               )
             ),
@@ -284,7 +287,10 @@ object ResultsPageHelper extends ViewHelper {
           Table(
             head = Some(
               Seq(
-                HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""), classes = "not-header"),
+                HeadCell(
+                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  classes = "not-header"
+                ),
                 HeadCell(content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString))),
                 HeadCell(content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString))),
                 HeadCell(content = Text(messages("site.overall")))
@@ -352,11 +358,14 @@ object ResultsPageHelper extends ViewHelper {
     messages: Messages
   ): Html =
     calculatorResult.fold(s =>
-        govukTable(
+      govukTable(
         Table(
           head = Some(
             Seq(
-              HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""), classes = "not-header"),
+              HeadCell(
+                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                classes = "not-header"
+              ),
               HeadCell(content = Text(messages("site.from.to", s.details.year.toString, (s.details.year + 1).toString)))
             )
           ),
@@ -443,7 +452,10 @@ object ResultsPageHelper extends ViewHelper {
         Table(
           head = Some(
             Seq(
-              HeadCell(content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""), classes = "not-header"),
+              HeadCell(
+                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                classes = "not-header"
+              ),
               HeadCell(content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString))),
               HeadCell(content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString))),
               HeadCell(content = Text(messages("site.overall")))
@@ -457,15 +469,16 @@ object ResultsPageHelper extends ViewHelper {
       )
     }
 
-
-  def replaceTableHeader(tableHtml: Html): Html = {
+  def replaceTableHeader(tableHtml: Html): Html =
     Html(
-      tableHtml.toString().replaceAll("[\n\r]", "").replace(
-        "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-!-display-none\">No header</span></th>",
-        "<td scope=\"col\" class=\"govuk-table__header not-header\"><span class=\"govuk-!-display-none\">No header</span></td>"
-      )
+      tableHtml
+        .toString()
+        .replaceAll("[\n\r]", "")
+        .replace(
+          "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-!-display-none\">No header</span></th>",
+          "<td scope=\"col\" class=\"govuk-table__header not-header\"><span class=\"govuk-!-display-none\">No header</span></td>"
+        )
     )
-  }
 
   private def corporatonTaxBeforeMR(details: TaxDetails) =
     details.fold(_.corporationTax)(_.corporationTaxBeforeMR)
