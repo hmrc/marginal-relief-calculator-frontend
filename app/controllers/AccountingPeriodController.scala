@@ -53,8 +53,9 @@ class AccountingPeriodController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm =
       request.userAnswers.flatMap(_.get(AccountingPeriodPage)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+        case None => form
+        case Some(value) =>
+          form.fill(value.copy(accountingPeriodEndDate = Some(value.accountingPeriodEndDateOrDefault)))
       }
 
     Ok(view(preparedForm, mode))
@@ -80,15 +81,8 @@ class AccountingPeriodController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
-          form => {
-            // setting defaults for missing fields
-            val formWithAccountingPeriodEnd = form.copy(accountingPeriodEndDate = form.accountingPeriodEndDate.orElse {
-              val endDate = form.accountingPeriodStartDate.plusYears(1).minusDays(1)
-              logger.info(s"End date not provided, setting default end date to $endDate")
-              Some(endDate)
-            })
-
-            if (accountingPeriodIsIrrelevant(formWithAccountingPeriodEnd)) {
+          form =>
+            if (accountingPeriodIsIrrelevant(form)) {
               logger.info("Accounting period is irrelevant as it lies before the beginning of the 2023 tax year")
               Future.successful(
                 Redirect(
@@ -97,13 +91,12 @@ class AccountingPeriodController @Inject() (
               )
             } else {
               for {
-                updatedAnswers <- updatedAnswers(request, formWithAccountingPeriodEnd)
+                updatedAnswers <- updatedAnswers(request, form)
                 _              <- sessionRepository.set(updatedAnswers)
               } yield Redirect(
                 navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
               )
             }
-          }
         )
     }
 

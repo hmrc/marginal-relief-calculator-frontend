@@ -15,7 +15,6 @@
  */
 
 package viewmodels.checkAnswers
-
 import controllers.routes
 import forms.AccountingPeriodForm
 import forms.DateUtils._
@@ -25,6 +24,7 @@ import org.scalatest.matchers.should.Matchers
 import pages.AccountingPeriodPage
 import play.api.i18n.Messages
 import play.api.test.Helpers
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import viewmodels.govuk.summarylist._
 import viewmodels.implicits._
 
@@ -50,10 +50,44 @@ class AccountingPeriodSummarySpec extends AnyFreeSpec with Matchers {
         SummaryListRowViewModel(
           key = "accountingPeriod.checkYourAnswersLabel",
           value = ValueViewModel(
-            messages(
-              "site.from.to",
-              epoch.formatDate,
-              Some(epoch.plusDays(1).formatDate)
+            HtmlContent(
+              messages(
+                "site.from.to",
+                epoch.formatDate,
+                Some(epoch.plusDays(1).formatDate)
+              )
+            )
+          ),
+          actions = Seq(
+            ActionItemViewModel("site.change", routes.AccountingPeriodController.onPageLoad(CheckMode).url)
+              .withVisuallyHiddenText("accountingPeriodStartDate.change.hidden")
+          )
+        )
+      )
+    }
+
+    "when end date unavailable, return the summary row with default date and message" in {
+      val userAnswers = UserAnswers("id")
+        .set(
+          AccountingPeriodPage,
+          AccountingPeriodForm(
+            epoch,
+            None
+          )
+        )
+        .get
+      AccountingPeriodSummary.row(userAnswers) shouldBe List(
+        SummaryListRowViewModel(
+          key = "accountingPeriod.checkYourAnswersLabel",
+          value = ValueViewModel(
+            HtmlContent(
+              messages(
+                "site.from.to",
+                epoch.formatDate,
+                Some(epoch.plusDays(1).formatDate) + {
+                  ".</br>" + messages("accountingPeriod.defaultedEndDateMessage")
+                }
+              )
             )
           ),
           actions = Seq(
