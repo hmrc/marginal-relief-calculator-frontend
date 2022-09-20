@@ -458,7 +458,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("6"))
+                    TableRow(content = HtmlContent(s"""6 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -491,7 +491,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("365"))
+                    TableRow(content = HtmlContent(s"""365 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
@@ -532,7 +532,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("365"))
+                    TableRow(content = HtmlContent(s"""365 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -570,9 +570,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -612,9 +612,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -654,9 +654,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -696,9 +696,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
@@ -749,7 +749,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("6"))
+                    TableRow(content = HtmlContent(s"""6 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
@@ -781,7 +781,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("365"))
+                    TableRow(content = HtmlContent(s"""365 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
@@ -822,9 +822,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
@@ -863,9 +863,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
@@ -910,9 +910,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
@@ -951,9 +951,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
@@ -994,9 +994,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
@@ -1036,9 +1036,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
@@ -1078,9 +1078,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""100 <span class="sr-only">Days</span>""")),
+                    TableRow(content = HtmlContent(s"""200 <span class="sr-only">Days</span>"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),

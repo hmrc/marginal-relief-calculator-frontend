@@ -252,9 +252,9 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit.daysAllocated</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">4</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1010</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1014</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">4 <span class="sr-only">Days</span></td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">1010 <span class="sr-only">Days</span></td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">1014 <span class="sr-only">Days</span></td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell">
@@ -339,9 +339,9 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit.daysAllocated</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1010</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">4</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1014</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">1010 <span class="sr-only">Days</span></td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">4 <span class="sr-only">Days</span></td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">1014 <span class="sr-only">Days</span></td>
             |    </tr>
             |    <tr class="govuk-table__row">
             |      <td class="govuk-table__cell">

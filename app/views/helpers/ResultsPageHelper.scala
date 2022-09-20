@@ -233,7 +233,7 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                TableRow(content = Text(details.days.toString))
+                TableRow(content = HtmlContent(s"""${details.days.toString} <span class="sr-only">Days</span>"""))
               ),
               Seq(
                 TableRow(content =
@@ -299,9 +299,9 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                TableRow(content = Text(year1.days.toString)),
-                TableRow(content = Text(year2.days.toString)),
-                TableRow(content = Text(d.totalDays.toString))
+                TableRow(content = HtmlContent(s"""${year1.days.toString} <span class="sr-only">Days</span>""")),
+                TableRow(content = HtmlContent(s"""${year2.days.toString} <span class="sr-only">Days</span>""")),
+                TableRow(content = HtmlContent(s"""${d.totalDays.toString} <span class="sr-only">Days</span>"""))
               ),
               Seq(
                 TableRow(content =
@@ -372,7 +372,7 @@ object ResultsPageHelper extends ViewHelper {
           rows = Seq(
             Seq(
               TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-              TableRow(content = Text(s.details.days.toString))
+              TableRow(content = HtmlContent(s"""${s.details.days.toString} <span class="sr-only">Days</span>"""))
             ),
             if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
               Seq(
@@ -402,9 +402,11 @@ object ResultsPageHelper extends ViewHelper {
       val dataRows = Seq(
         Seq(
           TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-          TableRow(content = Text(d.year1.days.toString)),
-          TableRow(content = Text(d.year2.days.toString)),
-          TableRow(content = Text((d.year1.days + d.year2.days).toString))
+          TableRow(content = HtmlContent(s"""${d.year1.days.toString} <span class="sr-only">Days</span>""")),
+          TableRow(content = HtmlContent(s"""${d.year2.days.toString} <span class="sr-only">Days</span>""")),
+          TableRow(content =
+            HtmlContent(s"""${(d.year1.days + d.year2.days).toString} <span class="sr-only">Days</span>""")
+          )
         )
       ) ++ ((d.year1, d.year2) match {
         case (_: FlatRate, _: FlatRate) =>
