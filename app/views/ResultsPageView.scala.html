@@ -33,7 +33,7 @@
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
-    @displayBanner(calculatorResult)
+    @addBannerScreenReader(displayBanner(calculatorResult), calculatorResult)
 
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
 

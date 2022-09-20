@@ -30,7 +30,7 @@ import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
 import views.html.templates.BannerPanel
 
-import scala.collection.immutable
+import scala.collection.{ immutable, mutable }
 
 object ResultsPageHelper extends ViewHelper {
 
@@ -224,6 +224,35 @@ object ResultsPageHelper extends ViewHelper {
         content = Text(CurrencyUtils.format(marginalRelief))
       )
     )
+
+  def addBannerScreenReader(bannerHtml: Html, calculatorResult: CalculatorResult)(implicit messages: Messages): Html = {
+    val master = bannerHtml.toString();
+    val target = "</div>"
+    val startIndex: Int = master.lastIndexOf(target)
+    val stopIndex: Int = startIndex + target.length;
+    val replacement = s"""<span class="sr-only">
+                         |  <h2>${messages("resultsPage.corporationTaxLiability")}</h2>
+                         |  <span>${CurrencyUtils.format(calculatorResult.totalCorporationTax)}</span>
+                         |  ${if (calculatorResult.totalMarginalRelief > 0) {
+                          s"<p>${messages(
+                              "resultsPage.corporationTaxReducedFrom",
+                              CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
+                              CurrencyUtils.format(calculatorResult.totalMarginalRelief)
+                            )}</p>"
+                        }}
+                         |  <h2>${messages("resultsPage.effectiveTaxRate")}</h2>
+                         |  <span>${PercentageUtils.format(calculatorResult.effectiveTaxRate)}</span>
+                         | ${if (calculatorResult.totalMarginalRelief > 0) {
+                          s"<p>${messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))}</p>"
+                        }}
+                         |</span></div>""".stripMargin
+
+    val builder = new mutable.StringBuilder(master)
+    builder.replace(startIndex, stopIndex, replacement)
+    Html(
+      builder.toString()
+    )
+  }
 
   def displayCorporationTaxTable(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
     calculatorResult match {
