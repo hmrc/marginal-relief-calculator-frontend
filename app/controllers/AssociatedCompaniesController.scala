@@ -97,7 +97,7 @@ class AssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDate.get,
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
                                             request.taxableProfit,
                                             request.distributionsIncluded
                                               .flatMap(_.distributionsIncludedAmount)
@@ -126,7 +126,7 @@ class AssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDate.get,
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
                                             request.taxableProfit,
                                             request.distributionsIncluded
                                               .flatMap(_.distributionsIncludedAmount)
