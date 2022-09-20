@@ -442,8 +442,12 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -475,8 +479,12 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 365))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -516,8 +524,12 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are below lower threshold" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1500, 365))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -552,8 +564,12 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 0, 0, 1000, 100), FlatRate(1971, 200, 20, 0, 0, 1000, 100))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -594,8 +610,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 0, 10, 500, 1000, 100)
         )
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -636,8 +656,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 250, 25, 0, 1000, 10, 1010, 100, 500, 100),
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1010, 100, 500, 100)
         )
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -678,8 +702,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 0, 10, 100, 1500, 100)
         )
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -733,8 +761,12 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -765,8 +797,12 @@ class ResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365))
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -804,8 +840,12 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years, display corporation tax main rate row" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 1000, 0, 1000, 100), FlatRate(1971, 200, 20, 1000, 0, 1000, 100))
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -845,8 +885,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1100, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 1010, 100, 1100, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -892,8 +936,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 500, 1000, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -933,8 +981,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 10, 50, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 10, 50, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -976,8 +1028,12 @@ class ResultsPageHelperSpec extends SpecBase {
             FlatRate(1970, 19, 19, 100, 0, 100, 100),
             MarginalRate(1971, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100)
           )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -1018,8 +1074,12 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 1010, 500, 1000, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -1060,8 +1120,12 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1500, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(

@@ -471,7 +471,7 @@ object ResultsPageHelper extends ViewHelper {
       )
     }
 
-  def replaceTableHeader(tableHtml: Html): Html =
+  def replaceTableHeader(tableSummary: String, tableHtml: Html): Html =
     Html(
       tableHtml
         .toString()
@@ -479,6 +479,10 @@ object ResultsPageHelper extends ViewHelper {
         .replace(
           "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-!-display-none\">No header</span></th>",
           "<td scope=\"col\" class=\"govuk-table__header not-header\"><span class=\"govuk-!-display-none\">No header</span></td>"
+        )
+        .replace(
+          "<table",
+          s"""<table summary="$tableSummary""""
         )
     )
 

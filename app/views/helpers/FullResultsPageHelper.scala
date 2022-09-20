@@ -214,7 +214,10 @@ object FullResultsPageHelper extends ViewHelper {
       case x: MarginalReliefConfig => x
     }
 
-    def boldRow(text: String) = TableRow(content = Text(text), classes = "govuk-!-font-weight-bold")
+    def boldRow(text: String) = TableRow(
+      content = HtmlContent(s"""<span class="sr-only">Step</span> $text"""),
+      classes = "govuk-!-font-weight-bold"
+    )
 
     val days = marginalRate.days
 

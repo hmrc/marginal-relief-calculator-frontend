@@ -46,7 +46,7 @@
     }
 
     <div class="app-table">
-        @{replaceTableHeader(displayCorporationTaxTable(calculatorResult))}
+        @{replaceTableHeader(messages("resultsPage.corporationTaxTableSummary"),displayCorporationTaxTable(calculatorResult))}
     </div>
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.effectiveTaxRate")</h2>
@@ -58,7 +58,7 @@
     }
 
     <div class="app-table">
-        @{replaceTableHeader(displayEffectiveTaxTable(calculatorResult))}
+        @{replaceTableHeader(messages("resultsPage.effectiveTaxTableSummary"),displayEffectiveTaxTable(calculatorResult))}
     </div>
 
     <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>

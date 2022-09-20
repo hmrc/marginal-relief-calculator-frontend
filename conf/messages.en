@@ -136,6 +136,7 @@ resultsPage.companysProfit = Company''s Profit
 resultsPage.associatedCompanies = Associated companies
 resultsPage.distributions = Distributions
 resultsPage.yourDetails = Your details
+resultsPage.corporationTaxTableSummary = This is a table describing your Corporation Tax liability for your accounting period.
 resultsPage.corporationTaxLiability = Corporation Tax liability
 resultsPage.corporationTaxReducedFrom = Reduced from {0} after {1} Marginal Relief
 resultsPage.daysAllocatedToFinancialYear = Days allocated to financial year
@@ -143,6 +144,7 @@ resultsPage.corporationTaxLiabilityBeforeMarginalRelief = Corporation Tax liabil
 resultsPage.corporationTaxLiabilityAfterMarginalRelief = Corporation Tax liability after Marginal Relief
 resultsPage.daysAllocatedToEachFinancialYear = Days allocated to each financial year
 resultsPage.runAnotherCalculation = Run another calculation
+resultsPage.effectiveTaxTableSummary = This is a table describing your Corporation Tax effective tax rate for your accounting period.
 resultsPage.effectiveTaxRate = Effective tax rate
 resultsPage.effectiveTaxRateTableCaption = Effective tax rate breakdown for your accounting period
 resultsPage.corporationTaxMainRateBeforeMarginalRelief = Corporation Tax main rate before Marginal Relief
@@ -201,6 +203,8 @@ fullResultsPage.taxableProfit = Taxable Profit
 fullResultsPage.taxableProfit.daysAllocated = Days allocated to each financial year
 fullResultsPage.taxableProfit.distributions = Distributions
 fullResultsPage.taxableProfit.profitAndDistributions = Taxable profit including distributions
+fullResultsPage.calculationTableSummary = This is a table describing your Marginal Relief calculation in detail.
+fullResultsPage.tableSummary = This is a table describing your taxable profit calculation in detail.
 
 
 associatedCompanies.title = Number of associated companies
