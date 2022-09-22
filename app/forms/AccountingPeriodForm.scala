@@ -23,7 +23,10 @@ import java.time.LocalDate
 final case class AccountingPeriodForm(
   accountingPeriodStartDate: LocalDate,
   accountingPeriodEndDate: Option[LocalDate]
-)
+) {
+  def accountingPeriodEndDateOrDefault: LocalDate =
+    accountingPeriodEndDate.getOrElse(accountingPeriodStartDate.plusYears(1).minusDays(1))
+}
 
 object AccountingPeriodForm {
   implicit val format: Format[AccountingPeriodForm] = Json.format[AccountingPeriodForm]

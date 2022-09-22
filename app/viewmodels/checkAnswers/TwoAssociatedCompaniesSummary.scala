@@ -69,8 +69,8 @@ object TwoAssociatedCompaniesSummary {
                   Text(
                     messages(
                       "twoAssociatedCompanies.checkYourAnswersLabel",
-                      DateUtils.financialYear(accountPeriodForm.accountingPeriodEndDate.get).toString,
-                      (DateUtils.financialYear(accountPeriodForm.accountingPeriodEndDate.get) + 1).toString
+                      DateUtils.financialYear(accountPeriodForm.accountingPeriodEndDateOrDefault).toString,
+                      (DateUtils.financialYear(accountPeriodForm.accountingPeriodEndDateOrDefault) + 1).toString
                     )
                   )
                 ),

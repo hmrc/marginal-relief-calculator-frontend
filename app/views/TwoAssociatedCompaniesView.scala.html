@@ -63,7 +63,7 @@
         @govukInput(
             InputViewModel(
                 field = form("associatedCompaniesFY2Count"),
-                label = Label(content = Text(messages("twoAssociatedCompanies.financialYearFromTo", financialYear(accountingPeriodForm.accountingPeriodEndDate.get).toString, (financialYear(accountingPeriodForm.accountingPeriodEndDate.get) + 1).toString))).withCssClass("govuk-label--s")
+                label = Label(content = Text(messages("twoAssociatedCompanies.financialYearFromTo", financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault).toString, (financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault) + 1).toString))).withCssClass("govuk-label--s")
             )
             .withCssClass("govuk-!-width-one-third")
             .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period2.start.formatDateFull, askBothParts.period2.end.formatDateFull)))

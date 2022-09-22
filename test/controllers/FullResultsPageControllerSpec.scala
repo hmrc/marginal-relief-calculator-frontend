@@ -80,7 +80,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
 
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
+          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           Some(1),
           Some(1),
@@ -133,7 +133,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
 
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
+          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           None,
           Some(1),
@@ -190,7 +190,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
 
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
+          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           None,
           None,
@@ -238,7 +238,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
 
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDate.get,
+          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           None,
           None,

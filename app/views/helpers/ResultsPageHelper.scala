@@ -117,7 +117,7 @@ object ResultsPageHelper extends ViewHelper {
               messages(
                 "site.from.to",
                 accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
-                accountingPeriodForm.accountingPeriodEndDate.get.formatDateFull
+                accountingPeriodForm.accountingPeriodEndDateOrDefault.formatDateFull
               )
             ),
             calculatorResult.fold(_ => HtmlFormat.empty)(_ => p(messages("resultsPage.covers2FinancialYears")))
@@ -129,7 +129,7 @@ object ResultsPageHelper extends ViewHelper {
         messages(
           "site.from.to",
           accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
-          accountingPeriodForm.accountingPeriodEndDate.get.formatDateFull
+          accountingPeriodForm.accountingPeriodEndDateOrDefault.formatDateFull
         )
       )
     }
@@ -532,9 +532,7 @@ object ResultsPageHelper extends ViewHelper {
 
     val year2 = dualResult.year2
     val fromDate2 = endDate1.plusDays(1)
-    val endDate2 = accountingPeriodForm.accountingPeriodEndDate.getOrElse(
-      accountingPeriodForm.accountingPeriodStartDate.plusMonths(12)
-    )
+    val endDate2 = accountingPeriodForm.accountingPeriodEndDateOrDefault
     val fromYear2 = year2.year
     val toYear2 = fromYear2 + 1
 

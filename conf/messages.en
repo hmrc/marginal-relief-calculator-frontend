@@ -86,6 +86,7 @@ accountingPeriod.title = What are your accounting period dates?
 accountingPeriod.heading = What are your accounting period dates?
 accountingPeriod.hint = For example, 27 3 2023
 accountingPeriod.checkYourAnswersLabel = Accounting period dates
+accountingPeriod.defaultedEndDateMessage = End date defaulted to a full year from the start date.
 accountingPeriod.error.required.all = Enter the accountingPeriod
 accountingPeriod.error.required.two = The accountingPeriod must include {0} and {1}
 accountingPeriod.error.required = The accountingPeriod must include {0}
