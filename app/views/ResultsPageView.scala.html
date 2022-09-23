@@ -33,7 +33,7 @@
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
-    @addBannerScreenReader(displayBanner(calculatorResult), calculatorResult)
+    @displayBanner(calculatorResult)
 
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
 
@@ -45,8 +45,8 @@
         <p class="govuk-body">@messages("resultsPage.corporationTaxReducedFrom", CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR), CurrencyUtils.format(calculatorResult.totalMarginalRelief))</p>
     }
 
-    <div class="app-table">
-        @{replaceTableHeader(messages("resultsPage.corporationTaxTableSummary"),displayCorporationTaxTable(calculatorResult))}
+    <div class="app-table" role="region" aria-label='@{messages("resultsPage.corporationTaxTableScrollableLabel")}' tabindex="0">
+        @displayCorporationTaxTable(calculatorResult)
     </div>
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.effectiveTaxRate")</h2>
@@ -57,8 +57,8 @@
         <p class="govuk-body">@messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))</p>
     }
 
-    <div class="app-table">
-        @{replaceTableHeader(messages("resultsPage.effectiveTaxTableSummary"),displayEffectiveTaxTable(calculatorResult))}
+    <div class="app-table" role="region" aria-label='@messages("resultsPage.effectiveTaxTableScrollableLabel")' tabindex="0">
+        @displayEffectiveTaxTable(calculatorResult)
     </div>
 
     <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>

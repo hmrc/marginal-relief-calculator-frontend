@@ -393,15 +393,15 @@ object FullResultsPageHelper extends ViewHelper {
             Seq(
               TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.daysAllocated")))),
               TableRow(
-                content = HtmlContent(s"""${d1.days.toString} <span class="sr-only">Days</span>"""),
+                content = HtmlContent(s"""${d1.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content = HtmlContent(s"""${d2.days.toString} <span class="sr-only">Days</span>"""),
+                content = HtmlContent(s"""${d2.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content = HtmlContent(s"""${totalDays.toString} <span class="sr-only">Days</span>"""),
+                content = HtmlContent(s"""${totalDays.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""),
                 classes = "govuk-table__cell--numeric"
               )
             ),

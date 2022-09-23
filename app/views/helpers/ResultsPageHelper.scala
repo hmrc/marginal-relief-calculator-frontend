@@ -135,7 +135,8 @@ object ResultsPageHelper extends ViewHelper {
     }
 
   def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
-    calculatorResult match {
+    addBannerScreenReader(calculatorResult,
+      calculatorResult match {
       case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
         govukPanel(
           Panel(
@@ -152,6 +153,7 @@ object ResultsPageHelper extends ViewHelper {
       case DualResult(m1: MarginalRate, m2: MarginalRate) =>
         marginalReliefBannerDual(m1, m2)
     }
+    )
 
   private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit messages: Messages): Html =
     if (m1.marginalRelief > 0 || m2.marginalRelief > 0) {
@@ -225,7 +227,7 @@ object ResultsPageHelper extends ViewHelper {
       )
     )
 
-  def addBannerScreenReader(bannerHtml: Html, calculatorResult: CalculatorResult)(implicit messages: Messages): Html = {
+  def addBannerScreenReader(calculatorResult: CalculatorResult, bannerHtml: Html)(implicit messages: Messages): Html = {
     val master = bannerHtml.toString();
     val target = "</div>"
     val startIndex: Int = master.lastIndexOf(target)
@@ -255,6 +257,7 @@ object ResultsPageHelper extends ViewHelper {
   }
 
   def displayCorporationTaxTable(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
+    replaceTableHeader(messages("resultsPage.corporationTaxTableScreenReaderSummary"),
     calculatorResult match {
       case SingleResult(details: TaxDetails) =>
         govukTable(
@@ -262,7 +265,7 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                TableRow(content = HtmlContent(s"""${details.days.toString} <span class="sr-only">Days</span>"""))
+                TableRow(content = HtmlContent(s"""${details.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""))
               ),
               Seq(
                 TableRow(content =
@@ -328,9 +331,9 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                TableRow(content = HtmlContent(s"""${year1.days.toString} <span class="sr-only">Days</span>""")),
-                TableRow(content = HtmlContent(s"""${year2.days.toString} <span class="sr-only">Days</span>""")),
-                TableRow(content = HtmlContent(s"""${d.totalDays.toString} <span class="sr-only">Days</span>"""))
+                TableRow(content = HtmlContent(s"""${year1.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
+                TableRow(content = HtmlContent(s"""${year2.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
+                TableRow(content = HtmlContent(s"""${d.totalDays.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""))
               ),
               Seq(
                 TableRow(content =
@@ -382,10 +385,12 @@ object ResultsPageHelper extends ViewHelper {
           )
         )
     }
+    )
 
   def displayEffectiveTaxTable(calculatorResult: CalculatorResult)(implicit
     messages: Messages
   ): Html =
+    replaceTableHeader(messages("resultsPage.effectiveTaxTableScreenReaderSummary"),
     calculatorResult.fold(s =>
       govukTable(
         Table(
@@ -401,7 +406,7 @@ object ResultsPageHelper extends ViewHelper {
           rows = Seq(
             Seq(
               TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-              TableRow(content = HtmlContent(s"""${s.details.days.toString} <span class="sr-only">Days</span>"""))
+              TableRow(content = HtmlContent(s"""${s.details.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""))
             ),
             if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
               Seq(
@@ -431,10 +436,10 @@ object ResultsPageHelper extends ViewHelper {
       val dataRows = Seq(
         Seq(
           TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-          TableRow(content = HtmlContent(s"""${d.year1.days.toString} <span class="sr-only">Days</span>""")),
-          TableRow(content = HtmlContent(s"""${d.year2.days.toString} <span class="sr-only">Days</span>""")),
+          TableRow(content = HtmlContent(s"""${d.year1.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
+          TableRow(content = HtmlContent(s"""${d.year2.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
           TableRow(content =
-            HtmlContent(s"""${(d.year1.days + d.year2.days).toString} <span class="sr-only">Days</span>""")
+            HtmlContent(s"""${(d.year1.days + d.year2.days).toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")
           )
         )
       ) ++ ((d.year1, d.year2) match {
@@ -498,7 +503,7 @@ object ResultsPageHelper extends ViewHelper {
           firstCellIsHeader = true
         )
       )
-    }
+    })
 
   def replaceTableHeader(tableSummary: String, tableHtml: Html): Html =
     Html(
