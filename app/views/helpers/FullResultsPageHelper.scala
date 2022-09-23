@@ -18,11 +18,13 @@ package views.helpers
 
 import connectors.sharedmodel._
 import play.api.i18n.Messages
-import play.twirl.api.{ Html, HtmlFormat }
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.Aliases._
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
+import uk.gov.hmrc.govukfrontend.views.html.components.{GovukDetails, GovukTable}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import utils.{ CurrencyUtils, DecimalToFractionUtils }
+import utils.{CurrencyUtils, DecimalToFractionUtils}
+import views.helpers.ResultsPageHelper.{replaceTableHeader, screenReaderText}
+
 import scala.collection.immutable.Seq
 
 object FullResultsPageHelper extends ViewHelper {
@@ -308,25 +310,25 @@ object FullResultsPageHelper extends ViewHelper {
 
     def template(rows: Seq[Seq[TableRow]], description: Option[String]) = {
       val table = Table(
-        rows = rows,
-        head = Some(
-          Seq(
-            HeadCell(
-              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-              classes = "not-header"
-            ),
-            HeadCell(
-              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-              classes = "not-header"
-            ),
-            HeadCell(content = Text(messages("fullResultsPage.calculation"))),
-            HeadCell(content = Text(messages("fullResultsPage.result")))
+          rows = rows,
+          head = Some(
+            Seq(
+              HeadCell(
+                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                classes = "not-header"
+              ),
+              HeadCell(
+                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                classes = "not-header"
+              ),
+              HeadCell(content = Text(messages("fullResultsPage.calculation"))),
+              HeadCell(content = Text(messages("fullResultsPage.result")))
+            )
           )
         )
-      )
       description match {
-        case Some(text) => HtmlFormat.fill(Seq(p(text), govukTable(table)))
-        case _          => govukTable(table)
+        case Some(text) => HtmlFormat.fill(Seq(p(text),  replaceTableHeader(messages("fullResultsPage.calculationTableSummary"), govukTable(table))))
+        case _          => replaceTableHeader(messages("fullResultsPage.calculationTableSummary"), govukTable(table))
       }
     }
 
@@ -387,21 +389,22 @@ object FullResultsPageHelper extends ViewHelper {
     def table(d1: TaxDetails, d2: TaxDetails) = {
       val totalDays = d1.days + d2.days
       val taxProfitDistributions = taxableProfit + distributions
-      govukTable(
+      replaceTableHeader(messages("fullResultsPage.tableSummary"),
+        govukTable(
         Table(
           rows = Seq(
             Seq(
               TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.daysAllocated")))),
               TableRow(
-                content = HtmlContent(s"""${d1.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""),
+                content = HtmlContent(s"""${d1.days.toString} ${screenReaderText}"""),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content = HtmlContent(s"""${d2.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""),
+                content = HtmlContent(s"""${d2.days.toString} ${screenReaderText}"""),
                 classes = "govuk-table__cell--numeric"
               ),
               TableRow(
-                content = HtmlContent(s"""${totalDays.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""),
+                content = HtmlContent(s"""${totalDays.toString} ${screenReaderText}"""),
                 classes = "govuk-table__cell--numeric"
               )
             ),
@@ -471,6 +474,7 @@ object FullResultsPageHelper extends ViewHelper {
           caption = Some(messages("fullResultsPage.taxableProfit")),
           captionClasses = "govuk-table__caption--m"
         )
+      )
       )
     }
 

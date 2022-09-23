@@ -265,7 +265,7 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                TableRow(content = HtmlContent(s"""${details.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""))
+                TableRow(content = HtmlContent(s"""${details.days.toString} ${screenReaderText}"""))
               ),
               Seq(
                 TableRow(content =
@@ -331,9 +331,9 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                TableRow(content = HtmlContent(s"""${year1.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
-                TableRow(content = HtmlContent(s"""${year2.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
-                TableRow(content = HtmlContent(s"""${d.totalDays.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""))
+                TableRow(content = HtmlContent(s"""${year1.days.toString} ${screenReaderText}""")),
+                TableRow(content = HtmlContent(s"""${year2.days.toString} ${screenReaderText}""")),
+                TableRow(content = HtmlContent(s"""${d.totalDays.toString} ${screenReaderText}"""))
               ),
               Seq(
                 TableRow(content =
@@ -406,7 +406,7 @@ object ResultsPageHelper extends ViewHelper {
           rows = Seq(
             Seq(
               TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-              TableRow(content = HtmlContent(s"""${s.details.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>"""))
+              TableRow(content = HtmlContent(s"""${s.details.days.toString} ${screenReaderText}"""))
             ),
             if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
               Seq(
@@ -436,10 +436,10 @@ object ResultsPageHelper extends ViewHelper {
       val dataRows = Seq(
         Seq(
           TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-          TableRow(content = HtmlContent(s"""${d.year1.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
-          TableRow(content = HtmlContent(s"""${d.year2.days.toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")),
+          TableRow(content = HtmlContent(s"""${d.year1.days.toString} ${screenReaderText}""")),
+          TableRow(content = HtmlContent(s"""${d.year2.days.toString} ${screenReaderText}""")),
           TableRow(content =
-            HtmlContent(s"""${(d.year1.days + d.year2.days).toString} <span class="sr-only">${messages("resultsPage.days")}</span>""")
+            HtmlContent(s"""${(d.year1.days + d.year2.days).toString} ${screenReaderText}""")
           )
         )
       ) ++ ((d.year1, d.year2) match {
@@ -548,4 +548,8 @@ object ResultsPageHelper extends ViewHelper {
         messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
     )
   }
+
+  def screenReaderText()(implicit messages: Messages)= Html(
+    s"""<span class="sr-only">${messages("resultsPage.s")}</span>"""
+  )
 }

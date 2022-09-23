@@ -210,6 +210,7 @@ fullResultsPage.taxableProfit.distributions = Distributions
 fullResultsPage.taxableProfit.profitAndDistributions = Taxable profit including distributions
 fullResultsPage.calculationTableSummary = This is a table describing your Marginal Relief calculation in detail.
 fullResultsPage.tableSummary = This is a table describing your taxable profit calculation in detail.
+fullResultsPage.taxableProfitTableScrollableLabel = Taxable profit table
 
 
 associatedCompanies.title = Number of associated companies

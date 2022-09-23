@@ -34,13 +34,14 @@
 @layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
-    @replaceTableHeader(messages("fullResultsPage.calculationTableSummary"),displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true))
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
-    @replaceTableHeader(messages("fullResultsPage.tableSummary"),displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config))
+    @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)
+
 
     @govukButton(
         Button(
