@@ -48,7 +48,7 @@ class CheckYourAnswersController @Inject() (
     taxableProfit: Int,
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
-    associatedCompanies: AssociatedCompaniesForm,
+    associatedCompanies: Option[AssociatedCompaniesForm],
     twoAssociatedCompaniesForm: Option[TwoAssociatedCompaniesForm],
     userAnswers: UserAnswers,
     request: Request[A]
@@ -72,7 +72,7 @@ class CheckYourAnswersController @Inject() (
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                Some(associatedCompanies),
+                maybeAssociatedCompanies,
                 twoAssociatedCompanies
               ) =>
             Right(
@@ -81,7 +81,7 @@ class CheckYourAnswersController @Inject() (
                 taxableProfit,
                 distribution,
                 maybeDistributionsIncluded,
-                associatedCompanies,
+                maybeAssociatedCompanies,
                 twoAssociatedCompanies,
                 request.userAnswers,
                 request

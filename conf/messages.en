@@ -163,6 +163,7 @@ resultsPage.covers2FinancialYears = Covers 2 HMRC financial years
 resultsPage.howWeCalculated.heading = How we calculated your Marginal Relief
 resultsPage.howWeCalculated.body = Check the calculation in detail to see how we calculated your Marginal Relief.
 resultsPage.howWeCalculated.link = Check Marginal Relief calculation in detail
+resultsPage.effectiveTaxRateTable.hidden = Effective tax rate table
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
