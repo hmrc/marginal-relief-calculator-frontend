@@ -88,6 +88,41 @@ class TwoAssociatedCompaniesControllerSpec
         }
       }
 
+      "must return OK and the correct view for a GET when accounting end date is empty" in {
+
+        val answers = requiredAnswers
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), None))
+          .get
+
+        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), None)
+        val askParameter = AskBothParts(
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)),
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))
+        )
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+        val application = applicationBuilder(userAnswers = Some(answers))
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1),
+          1.0,
+          None
+        )(*) returns Future.successful(askParameter)
+
+        running(application) {
+          val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
+          val result = route(application, request).value
+          val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
+          status(result) mustEqual OK
+          contentAsString(result).filterAndTrim mustEqual view
+            .render(form, accountingPeriodForm, askParameter, NormalMode, request, messages(application))
+            .toString
+            .filterAndTrim
+        }
+      }
+
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
         val valid = TwoAssociatedCompaniesForm(Some(1), Some(1))
@@ -106,6 +141,54 @@ class TwoAssociatedCompaniesControllerSpec
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1),
+          1.0,
+          None
+        )(*) returns Future.successful(askParameter)
+
+        running(application) {
+          val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
+
+          val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsString(result).filterAndTrim mustEqual view
+            .render(
+              form.fill(valid),
+              accountingPeriodForm,
+              askParameter,
+              NormalMode,
+              request,
+              messages(application)
+            )
+            .toString
+            .filterAndTrim
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered, and accounting end date is empty" in {
+
+        val answers = requiredAnswers
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), None))
+          .get
+
+        val valid = TwoAssociatedCompaniesForm(Some(1), Some(1))
+        val userAnswers = answers.set(TwoAssociatedCompaniesPage, valid).success.value
+        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), None)
+        val askParameter = AskBothParts(
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))
+        )
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1),
           1.0,
           None
         )(*) returns Future.successful(askParameter)
