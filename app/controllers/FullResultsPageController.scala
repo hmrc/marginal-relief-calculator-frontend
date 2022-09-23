@@ -60,7 +60,7 @@ class FullResultsPageController @Inject() (
     taxableProfit: Int,
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
-    associatedCompanies: AssociatedCompaniesForm,
+    associatedCompanies: Option[AssociatedCompaniesForm],
     twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
@@ -84,7 +84,7 @@ class FullResultsPageController @Inject() (
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                Some(associatedCompanies),
+                maybeAassociatedCompanies,
                 maybeTwoAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
@@ -93,7 +93,7 @@ class FullResultsPageController @Inject() (
                 taxableProfit,
                 distribution,
                 maybeDistributionsIncluded,
-                associatedCompanies,
+                maybeAassociatedCompanies,
                 maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
@@ -115,7 +115,7 @@ class FullResultsPageController @Inject() (
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
                                 request.taxableProfit.toDouble,
                                 request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
-                                request.associatedCompanies.associatedCompaniesCount,
+                                request.associatedCompanies.flatMap(_.associatedCompaniesCount),
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
                               )
@@ -126,7 +126,7 @@ class FullResultsPageController @Inject() (
           request.accountingPeriod,
           request.taxableProfit,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-          request.associatedCompanies.associatedCompaniesCount.getOrElse(0),
+          request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
           config
         )
       )
