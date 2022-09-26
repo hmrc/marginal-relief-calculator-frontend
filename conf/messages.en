@@ -159,7 +159,7 @@ resultsPage.howWeCalculated.heading = How we calculated your Marginal Relief
 resultsPage.howWeCalculated.body = Check the calculation in detail to see how we calculated your Marginal Relief.
 resultsPage.howWeCalculated.link = Check Marginal Relief calculation in detail
 resultsPage.effectiveTaxRateTable.hidden = Effective tax rate table
-resultsPage.corporationTaxTable.hidden = Corporation Tax liability breakdown table
+resultsPage.corporationTaxTable.hidden = Corporation tax liability breakdown table
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
@@ -204,6 +204,8 @@ fullResultsPage.taxableProfit = Taxable Profit
 fullResultsPage.taxableProfit.daysAllocated = Days allocated to each financial year
 fullResultsPage.taxableProfit.distributions = Distributions
 fullResultsPage.taxableProfit.profitAndDistributions = Taxable profit including distributions
+fullResultsPage.taxableProfitTable.hidden = Taxable profit table
+fullResultsPage.calculationTable.hidden = Calculation breakdown table
 
 
 associatedCompanies.title = Number of associated companies

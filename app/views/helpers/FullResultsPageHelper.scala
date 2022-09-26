@@ -322,8 +322,8 @@ object FullResultsPageHelper extends ViewHelper {
         )
       )
       description match {
-        case Some(text) => HtmlFormat.fill(Seq(p(text), govukTable(table)))
-        case _          => govukTable(table)
+        case Some(text) => HtmlFormat.fill(Seq(p(text), Html(s"""<div class="app-table" role="region" aria-label="${messages("fullResultsPage.calculationTable.hidden")}" tabindex="0">""" +govukTable(table) + "</div >")))
+        case _          => Html(s"""<div class="app-table" role="region" aria-label="${messages("fullResultsPage.calculationTable.hidden")}" tabindex="0">""" + govukTable(table) + "</div>")
       }
     }
 
@@ -384,6 +384,7 @@ object FullResultsPageHelper extends ViewHelper {
     def table(d1: TaxDetails, d2: TaxDetails) = {
       val totalDays = d1.days + d2.days
       val taxProfitDistributions = taxableProfit + distributions
+      Html(s"""<div class="app-table" role="region" aria-label="${messages("fullResultsPage.taxableProfitTable.hidden")}" tabindex="0">""" +
       govukTable(
         Table(
           rows = Seq(
@@ -459,7 +460,7 @@ object FullResultsPageHelper extends ViewHelper {
           caption = Some(messages("fullResultsPage.taxableProfit")),
           captionClasses = "govuk-table__caption--m"
         )
-      )
+      ) + "</div>")
     }
 
     calculatorResult.fold(single => HtmlFormat.empty)(dual =>
