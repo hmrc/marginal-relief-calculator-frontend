@@ -52,15 +52,11 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
   def heading(a: AskAssociatedCompaniesParameter)(implicit messages: Messages): Html =
     h1(
       a match {
-        case AskFull =>
+        case AskFull | AskBothParts(_, _) =>
           messages("associatedCompanies.heading")
 
         case AskOnePart(Period(start, end)) =>
           messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
-
-        case AskBothParts(_, _) =>
-          messages("associatedCompanies.heading")
-
       },
       classes = "govuk-heading-l"
     )

@@ -45,7 +45,7 @@
         <p class="govuk-body">@messages("resultsPage.corporationTaxReducedFrom", CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR), CurrencyUtils.format(calculatorResult.totalMarginalRelief))</p>
     }
 
-    <div class="app-table" role="region" aria-label="@{messages("resultsPage.effectiveTaxRateTable.hidden")}" tabindex="0">
+    <div class="app-table" role="region" aria-label="@{messages("resultsPage.corporationTaxTable.hidden")}" tabindex="0">
         @{replaceTableHeader(displayCorporationTaxTable(calculatorResult))}
     </div>
 
@@ -57,7 +57,7 @@
         <p class="govuk-body">@messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))</p>
     }
 
-    <div class="app-table">
+    <div class="app-table" role="region" aria-label="@{messages("resultsPage.effectiveTaxRateTable.hidden")}" tabindex="0">
         @{replaceTableHeader(displayEffectiveTaxTable(calculatorResult))}
     </div>
 

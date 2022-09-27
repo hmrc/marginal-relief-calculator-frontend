@@ -20,7 +20,7 @@ import play.twirl.api.Html
 
 trait ViewHelper {
   def h1(text: String, classes: String = "govuk-heading-m", styles: String = ""): Html =
-    Html(s"""<h1 class="$classes" ${if (styles.trim == "") "" else s"""style="$styles""""}>$text</h2>""")
+    Html(s"""<h1 class="$classes" ${if (styles.trim == "") "" else s"""style="$styles""""}>$text</h1>""")
 
   def h2(text: String, classes: String = "govuk-heading-m", styles: String = ""): Html = Html(
     s"""<h2 class="$classes" ${if (styles.trim == "") "" else s"""style="$styles""""}>$text</h2>"""
