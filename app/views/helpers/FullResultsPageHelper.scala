@@ -18,12 +18,12 @@ package views.helpers
 
 import connectors.sharedmodel._
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases._
-import uk.gov.hmrc.govukfrontend.views.html.components.{GovukDetails, GovukTable}
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import utils.{CurrencyUtils, DecimalToFractionUtils}
-import views.helpers.ResultsPageHelper.{replaceTableHeader, screenReaderText}
+import utils.{ CurrencyUtils, DecimalToFractionUtils }
+import views.helpers.ResultsPageHelper.{ replaceTableHeader, screenReaderText }
 
 import scala.collection.immutable.Seq
 
@@ -310,25 +310,28 @@ object FullResultsPageHelper extends ViewHelper {
 
     def template(rows: Seq[Seq[TableRow]], description: Option[String]) = {
       val table = Table(
-          rows = rows,
-          head = Some(
-            Seq(
-              HeadCell(
-                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                classes = "not-header"
-              ),
-              HeadCell(
-                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                classes = "not-header"
-              ),
-              HeadCell(content = Text(messages("fullResultsPage.calculation"))),
-              HeadCell(content = Text(messages("fullResultsPage.result")))
-            )
+        rows = rows,
+        head = Some(
+          Seq(
+            HeadCell(
+              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+              classes = "not-header"
+            ),
+            HeadCell(
+              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+              classes = "not-header"
+            ),
+            HeadCell(content = Text(messages("fullResultsPage.calculation"))),
+            HeadCell(content = Text(messages("fullResultsPage.result")))
           )
         )
+      )
       description match {
-        case Some(text) => HtmlFormat.fill(Seq(p(text),  replaceTableHeader(messages("fullResultsPage.calculationTableSummary"), govukTable(table))))
-        case _          => replaceTableHeader(messages("fullResultsPage.calculationTableSummary"), govukTable(table))
+        case Some(text) =>
+          HtmlFormat.fill(
+            Seq(p(text), replaceTableHeader(messages("fullResultsPage.calculationTableSummary"), govukTable(table)))
+          )
+        case _ => replaceTableHeader(messages("fullResultsPage.calculationTableSummary"), govukTable(table))
       }
     }
 
@@ -389,92 +392,93 @@ object FullResultsPageHelper extends ViewHelper {
     def table(d1: TaxDetails, d2: TaxDetails) = {
       val totalDays = d1.days + d2.days
       val taxProfitDistributions = taxableProfit + distributions
-      replaceTableHeader(messages("fullResultsPage.tableSummary"),
+      replaceTableHeader(
+        messages("fullResultsPage.tableSummary"),
         govukTable(
-        Table(
-          rows = Seq(
-            Seq(
-              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.daysAllocated")))),
-              TableRow(
-                content = HtmlContent(s"""${d1.days.toString} ${screenReaderText}"""),
-                classes = "govuk-table__cell--numeric"
+          Table(
+            rows = Seq(
+              Seq(
+                TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.daysAllocated")))),
+                TableRow(
+                  content = HtmlContent(s"""${d1.days.toString} $screenReaderText"""),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(s"""${d2.days.toString} $screenReaderText"""),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(s"""${totalDays.toString} $screenReaderText"""),
+                  classes = "govuk-table__cell--numeric"
+                )
               ),
-              TableRow(
-                content = HtmlContent(s"""${d2.days.toString} ${screenReaderText}"""),
-                classes = "govuk-table__cell--numeric"
+              Seq(
+                TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit")))),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedProfit)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(d2.adjustedProfit))),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(taxableProfit)),
+                  classes = "govuk-table__cell--numeric"
+                )
               ),
-              TableRow(
-                content = HtmlContent(s"""${totalDays.toString} ${screenReaderText}"""),
-                classes = "govuk-table__cell--numeric"
+              Seq(
+                TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.distributions")))),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedDistributions)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedDistributions)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(distributions)),
+                  classes = "govuk-table__cell--numeric"
+                )
+              ),
+              Seq(
+                TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.profitAndDistributions")))),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedAugmentedProfit)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedAugmentedProfit)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = HtmlContent(CurrencyUtils.decimalFormat(taxProfitDistributions)),
+                  classes = "govuk-table__cell--numeric"
+                )
               )
             ),
-            Seq(
-              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit")))),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedProfit)),
-                classes = "govuk-table__cell--numeric"
-              ),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(BigDecimal(d2.adjustedProfit))),
-                classes = "govuk-table__cell--numeric"
-              ),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(taxableProfit)),
-                classes = "govuk-table__cell--numeric"
+            head = Some(
+              Seq(
+                HeadCell(
+                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  classes = "not-header"
+                ),
+                HeadCell(
+                  content = Text(messages("site.from.to", d1.year.toString, (d1.year + 1).toString)),
+                  classes = "govuk-table__header--numeric"
+                ),
+                HeadCell(
+                  content = Text(messages("site.from.to", d2.year.toString, (d2.year + 1).toString)),
+                  classes = "govuk-table__header--numeric"
+                ),
+                HeadCell(content = Text(messages("fullResultsPage.total")), classes = "govuk-table__header--numeric")
               )
             ),
-            Seq(
-              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.distributions")))),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedDistributions)),
-                classes = "govuk-table__cell--numeric"
-              ),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedDistributions)),
-                classes = "govuk-table__cell--numeric"
-              ),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(distributions)),
-                classes = "govuk-table__cell--numeric"
-              )
-            ),
-            Seq(
-              TableRow(content = HtmlContent(p(messages("fullResultsPage.taxableProfit.profitAndDistributions")))),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(d1.adjustedAugmentedProfit)),
-                classes = "govuk-table__cell--numeric"
-              ),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(d2.adjustedAugmentedProfit)),
-                classes = "govuk-table__cell--numeric"
-              ),
-              TableRow(
-                content = HtmlContent(CurrencyUtils.decimalFormat(taxProfitDistributions)),
-                classes = "govuk-table__cell--numeric"
-              )
-            )
-          ),
-          head = Some(
-            Seq(
-              HeadCell(
-                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                classes = "not-header"
-              ),
-              HeadCell(
-                content = Text(messages("site.from.to", d1.year.toString, (d1.year + 1).toString)),
-                classes = "govuk-table__header--numeric"
-              ),
-              HeadCell(
-                content = Text(messages("site.from.to", d2.year.toString, (d2.year + 1).toString)),
-                classes = "govuk-table__header--numeric"
-              ),
-              HeadCell(content = Text(messages("fullResultsPage.total")), classes = "govuk-table__header--numeric")
-            )
-          ),
-          caption = Some(messages("fullResultsPage.taxableProfit")),
-          captionClasses = "govuk-table__caption--m"
+            caption = Some(messages("fullResultsPage.taxableProfit")),
+            captionClasses = "govuk-table__caption--m"
+          )
         )
-      )
       )
     }
 
