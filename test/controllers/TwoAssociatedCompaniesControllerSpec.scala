@@ -272,52 +272,66 @@ class TwoAssociatedCompaniesControllerSpec
       }
 
       "must return a Bad Request and errors when form data binding fails" in {
-
-        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1)))
-        val askParameter = AskBothParts(
-          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
-          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
+        val epoch = LocalDate.ofEpochDay(0)
+        val table = Table(
+          ("scenario", "accountingPeriodForm"),
+          ("Form with set end-date", AccountingPeriodForm(epoch, Some(epoch.plusYears(1).minusDays(1)))),
+          ("Form without end-date(default)", AccountingPeriodForm(epoch, None))
         )
 
-        val mockSessionRepository = mock[SessionRepository]
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
-
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          None
-        )(*) returns Future.successful(askParameter)
-        when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
-
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(
-            bind[SessionRepository].toInstance(mockSessionRepository),
-            bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
+        forAll(table) { (_, accountingPeriodForm) =>
+          val askParameter = AskBothParts(
+            Period(
+              accountingPeriodForm.accountingPeriodStartDate,
+              accountingPeriodForm.accountingPeriodStartDate.withMonth(3).withDayOfMonth(31)
+            ),
+            Period(
+              accountingPeriodForm.accountingPeriodStartDate.withMonth(4).withDayOfMonth(1),
+              accountingPeriodForm.accountingPeriodEndDateOrDefault
+            )
           )
-          .build()
 
-        running(application) {
-          val request =
-            FakeRequest(POST, twoAssociatedCompaniesRoute)
-              .withFormUrlEncodedBody(
-                "associatedCompaniesFY1Count" -> "invalid value",
-                "associatedCompaniesFY2Count" -> "invalid value"
+          val mockSessionRepository = mock[SessionRepository]
+          val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+            mock[MarginalReliefCalculatorConnector]
+
+          mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+            1.0,
+            None
+          )(*) returns Future.successful(askParameter)
+          when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
+
+          val application =
+            applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
+              .overrides(
+                bind[SessionRepository].toInstance(mockSessionRepository),
+                bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
               )
+              .build()
 
-          val boundForm = form.bind(
-            Map("associatedCompaniesFY1Count" -> "invalid value", "associatedCompaniesFY2Count" -> "invalid value")
-          )
+          running(application) {
+            val request =
+              FakeRequest(POST, twoAssociatedCompaniesRoute)
+                .withFormUrlEncodedBody(
+                  "associatedCompaniesFY1Count" -> "invalid value",
+                  "associatedCompaniesFY2Count" -> "invalid value"
+                )
 
-          val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
+            val boundForm = form.bind(
+              Map("associatedCompaniesFY1Count" -> "invalid value", "associatedCompaniesFY2Count" -> "invalid value")
+            )
 
-          val result = route(application, request).value
+            val view = application.injector.instanceOf[TwoAssociatedCompaniesView]
 
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view
-            .render(boundForm, accountingPeriodForm, askParameter, NormalMode, request, messages(application))
-            .toString
+            val result = route(application, request).value
+
+            status(result) mustEqual BAD_REQUEST
+            contentAsString(result) mustEqual view
+              .render(boundForm, accountingPeriodForm, askParameter, NormalMode, request, messages(application))
+              .toString
+          }
         }
       }
 
