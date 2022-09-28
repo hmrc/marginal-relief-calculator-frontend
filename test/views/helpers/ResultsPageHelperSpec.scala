@@ -26,7 +26,7 @@ import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, replaceTableHeader }
+import views.helpers.ResultsPageHelper.{ addBannerScreenReader, displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, replaceTableHeader, screenReaderText }
 import views.html.templates.BannerPanel
 import utils.FormatUtils._
 
@@ -169,10 +169,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+              )
             )
           ).htmlFormat
       }
@@ -180,10 +183,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 0, 100, 1500, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          bannerPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-              content = Text("£50")
+          addBannerScreenReader(
+            calculatorResult,
+            bannerPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+                content = Text("£50")
+              )
             )
           ).htmlFormat
       }
@@ -191,10 +197,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate, profits are equal to lower threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 100, 100, 1000, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -202,10 +211,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate, profits are equal to lower threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 110, 1000, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -213,10 +225,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate and profits are below lower threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 0, 200, 1000, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -224,10 +239,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate and profits are below threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 200, 1000, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -235,10 +253,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate, profits are equal to upper threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 100, 1000, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -246,10 +267,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate, profits are equal to upper threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 100, 1000, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -257,10 +281,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate and profits are above upper threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 200, 900, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -268,10 +295,13 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate and profits are above threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 200, 900, 365))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -290,10 +320,13 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 1000, 100, 0, 0), FlatRate(1971, 200, 20, 1000, 100, 0, 0))
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+              )
             )
           ).htmlFormat
       }
@@ -303,10 +336,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          bannerPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-              content = Text("£50")
+          addBannerScreenReader(
+            calculatorResult,
+            bannerPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+                content = Text("£50")
+              )
             )
           ).htmlFormat
       }
@@ -317,10 +353,13 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 100, 0, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          bannerPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-              content = Text("£50")
+          addBannerScreenReader(
+            calculatorResult,
+            bannerPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+                content = Text("£50")
+              )
             )
           ).htmlFormat
       }
@@ -331,10 +370,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          bannerPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-              content = Text("£100")
+          addBannerScreenReader(
+            calculatorResult,
+            bannerPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+                content = Text("£100")
+              )
             )
           ).htmlFormat
       }
@@ -345,10 +387,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1000, 1500, 100)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -359,10 +404,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1010, 1100, 1500, 100)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -373,10 +421,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -387,10 +438,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          govukPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
-              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
+              )
             )
           ).htmlFormat
       }
@@ -401,10 +455,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          bannerPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-              content = Text("£50")
+          addBannerScreenReader(
+            calculatorResult,
+            bannerPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+                content = Text("£50")
+              )
             )
           ).htmlFormat
       }
@@ -415,10 +472,13 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0)
         )
         displayBanner(calculatorResult).htmlFormat shouldMatchTo
-          bannerPanel(
-            Panel(
-              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-              content = Text("£50")
+          addBannerScreenReader(
+            calculatorResult,
+            bannerPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+                content = Text("£50")
+              )
             )
           ).htmlFormat
       }
@@ -442,8 +502,12 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -458,7 +522,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("6"))
+                    TableRow(content = HtmlContent(s"""6 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -475,8 +539,12 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 365))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -491,7 +559,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("365"))
+                    TableRow(content = HtmlContent(s"""365 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
@@ -516,8 +584,12 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are below lower threshold" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1500, 365))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -532,7 +604,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("365"))
+                    TableRow(content = HtmlContent(s"""365 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -552,8 +624,12 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 0, 0, 1000, 100), FlatRate(1971, 200, 20, 0, 0, 1000, 100))
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -570,9 +646,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -594,8 +670,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 0, 10, 500, 1000, 100)
         )
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -612,9 +692,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -636,8 +716,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 250, 25, 0, 1000, 10, 1010, 100, 500, 100),
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1010, 100, 500, 100)
         )
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -654,9 +738,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -678,8 +762,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 0, 10, 100, 1500, 100)
         )
-        replaceTableHeader(displayCorporationTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.corporationTaxTableSummary"),
+          displayCorporationTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -696,9 +784,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
@@ -733,8 +821,12 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -749,7 +841,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("6"))
+                    TableRow(content = HtmlContent(s"""6 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
@@ -765,8 +857,12 @@ class ResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365))
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -781,7 +877,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("365"))
+                    TableRow(content = HtmlContent(s"""365 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
@@ -804,8 +900,12 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years, display corporation tax main rate row" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 1000, 0, 1000, 100), FlatRate(1971, 200, 20, 1000, 0, 1000, 100))
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -822,9 +922,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
@@ -845,8 +945,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1100, 100),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 1010, 100, 1100, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -863,9 +967,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
@@ -892,8 +996,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 500, 1000, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -910,9 +1018,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
@@ -933,8 +1041,12 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 10, 50, 100),
           MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 10, 50, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -951,9 +1063,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
@@ -976,8 +1088,12 @@ class ResultsPageHelperSpec extends SpecBase {
             FlatRate(1970, 19, 19, 100, 0, 100, 100),
             MarginalRate(1971, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100)
           )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -994,9 +1110,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
@@ -1018,8 +1134,12 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 1010, 500, 1000, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -1036,9 +1156,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
@@ -1060,8 +1180,12 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1500, 100)
         )
-        replaceTableHeader(displayEffectiveTaxTable(calculatorResult)).htmlFormat shouldMatchTo
+        replaceTableHeader(
+          messages("resultsPage.effectiveTaxTableSummary"),
+          displayEffectiveTaxTable(calculatorResult)
+        ).htmlFormat shouldMatchTo
           replaceTableHeader(
+            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
@@ -1078,9 +1202,9 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("100")),
-                    TableRow(content = Text("200"))
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
+                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),

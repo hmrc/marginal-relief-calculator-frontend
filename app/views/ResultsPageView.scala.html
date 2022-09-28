@@ -46,7 +46,7 @@
     }
 
     <div class="app-table" role="region" aria-label="@{messages("resultsPage.corporationTaxTable.hidden")}" tabindex="0">
-        @{replaceTableHeader(displayCorporationTaxTable(calculatorResult))}
+        @displayCorporationTaxTable(calculatorResult)
     </div>
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.effectiveTaxRate")</h2>
@@ -58,7 +58,7 @@
     }
 
     <div class="app-table" role="region" aria-label="@{messages("resultsPage.effectiveTaxRateTable.hidden")}" tabindex="0">
-        @{replaceTableHeader(displayEffectiveTaxTable(calculatorResult))}
+        @displayEffectiveTaxTable(calculatorResult)
     </div>
 
     <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>
