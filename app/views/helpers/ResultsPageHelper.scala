@@ -30,7 +30,7 @@ import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
 import views.html.templates.BannerPanel
 
-import scala.collection.immutable
+import scala.collection.{ immutable, mutable }
 
 object ResultsPageHelper extends ViewHelper {
 
@@ -135,23 +135,26 @@ object ResultsPageHelper extends ViewHelper {
     }
 
   def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
-    calculatorResult match {
-      case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
-        govukPanel(
-          Panel(
-            title = Text(messages("resultsPage.marginalReliefNotEligible")),
-            content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+    addBannerScreenReader(
+      calculatorResult,
+      calculatorResult match {
+        case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+            )
           )
-        )
-      case SingleResult(m: MarginalRate) =>
-        marginalReliefBanner(m)
-      case DualResult(_: FlatRate, m: MarginalRate) =>
-        marginalReliefBanner(m)
-      case DualResult(m: MarginalRate, _: FlatRate) =>
-        marginalReliefBanner(m)
-      case DualResult(m1: MarginalRate, m2: MarginalRate) =>
-        marginalReliefBannerDual(m1, m2)
-    }
+        case SingleResult(m: MarginalRate) =>
+          marginalReliefBanner(m)
+        case DualResult(_: FlatRate, m: MarginalRate) =>
+          marginalReliefBanner(m)
+        case DualResult(m: MarginalRate, _: FlatRate) =>
+          marginalReliefBanner(m)
+        case DualResult(m1: MarginalRate, m2: MarginalRate) =>
+          marginalReliefBannerDual(m1, m2)
+      }
+    )
 
   private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit messages: Messages): Html =
     if (m1.marginalRelief > 0 || m2.marginalRelief > 0) {
@@ -225,251 +228,288 @@ object ResultsPageHelper extends ViewHelper {
       )
     )
 
+  def addBannerScreenReader(calculatorResult: CalculatorResult, bannerHtml: Html)(implicit messages: Messages): Html = {
+    val master = bannerHtml.toString();
+    val target = "</div>"
+    val startIndex: Int = master.lastIndexOf(target)
+    val stopIndex: Int = startIndex + target.length;
+    val replacement = s"""<span class="sr-only">
+                         |  <h2>${messages("resultsPage.corporationTaxLiability")}</h2>
+                         |  <span>${CurrencyUtils.format(calculatorResult.totalCorporationTax)}</span>
+                         |  ${if (calculatorResult.totalMarginalRelief > 0) {
+                          s"<p>${messages(
+                              "resultsPage.corporationTaxReducedFrom",
+                              CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
+                              CurrencyUtils.format(calculatorResult.totalMarginalRelief)
+                            )}</p>"
+                        }}
+                         |  <h2>${messages("resultsPage.effectiveTaxRate")}</h2>
+                         |  <span>${PercentageUtils.format(calculatorResult.effectiveTaxRate)}</span>
+                         | ${if (calculatorResult.totalMarginalRelief > 0) {
+                          s"<p>${messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))}</p>"
+                        }}
+                         |</span></div>""".stripMargin
+
+    val builder = new mutable.StringBuilder(master)
+    builder.replace(startIndex, stopIndex, replacement)
+    Html(
+      builder.toString()
+    )
+  }
+
   def displayCorporationTaxTable(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
-    calculatorResult match {
-      case SingleResult(details: TaxDetails) =>
-        govukTable(
-          Table(
-            rows = Seq(
-              Seq(
-                TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                TableRow(content = Text(details.days.toString))
-              ),
-              Seq(
-                TableRow(content =
-                  Text(
-                    if (marginalRelief(details) > 0)
-                      messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief")
-                    else messages("resultsPage.corporationTaxLiability")
-                  )
-                ),
-                TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(details))))
-              ),
-              if (marginalRelief(details) > 0) {
+    replaceTableHeader(
+      messages("resultsPage.corporationTaxTableScreenReaderSummary"),
+      calculatorResult match {
+        case SingleResult(details: TaxDetails) =>
+          govukTable(
+            Table(
+              rows = Seq(
                 Seq(
-                  TableRow(content = Text(messages("site.marginalRelief"))),
+                  TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                  TableRow(content = HtmlContent(s"""${details.days.toString} $screenReaderText"""))
+                ),
+                Seq(
                   TableRow(content =
                     Text(
-                      "-" + CurrencyUtils.format(
-                        marginalRelief(details)
-                      )
-                    )
-                  )
-                )
-              } else {
-                Seq.empty
-              },
-              if (marginalRelief(details) > 0) {
-                Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                  TableRow(content = Text(CurrencyUtils.format(details.corporationTax)))
-                )
-              } else {
-                Seq.empty
-              }
-            ).filter(_.nonEmpty),
-            head = Some(
-              Seq(
-                HeadCell(
-                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                  classes = "not-header"
-                ),
-                HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
-              )
-            ),
-            caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-            captionClasses = "govuk-!-display-none",
-            firstCellIsHeader = true
-          )
-        )
-      case d @ DualResult(year1: TaxDetails, year2: TaxDetails) =>
-        govukTable(
-          Table(
-            head = Some(
-              Seq(
-                HeadCell(
-                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                  classes = "not-header"
-                ),
-                HeadCell(content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString))),
-                HeadCell(content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString))),
-                HeadCell(content = Text(messages("site.overall")))
-              )
-            ),
-            rows = Seq(
-              Seq(
-                TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                TableRow(content = Text(year1.days.toString)),
-                TableRow(content = Text(year2.days.toString)),
-                TableRow(content = Text(d.totalDays.toString))
-              ),
-              Seq(
-                TableRow(content =
-                  Text(
-                    if (d.totalMarginalRelief > 0) messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief")
-                    else messages("resultsPage.corporationTaxLiability")
-                  )
-                ),
-                TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year1)))),
-                TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year2)))),
-                TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTaxBeforeMR)))
-              ),
-              if (d.totalMarginalRelief > 0) {
-                Seq(
-                  TableRow(content = Text(messages("site.marginalRelief"))),
-                  TableRow(content =
-                    Text(
-                      (if (marginalRelief(year1) > 0) "-" else "") + CurrencyUtils.format(
-                        marginalRelief(year1)
-                      )
+                      if (marginalRelief(details) > 0)
+                        messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief")
+                      else messages("resultsPage.corporationTaxLiability")
                     )
                   ),
-                  TableRow(content =
-                    Text(
-                      (if (marginalRelief(year2) > 0) "-" else "") + CurrencyUtils.format(
-                        marginalRelief(year2)
+                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(details))))
+                ),
+                if (marginalRelief(details) > 0) {
+                  Seq(
+                    TableRow(content = Text(messages("site.marginalRelief"))),
+                    TableRow(content =
+                      Text(
+                        "-" + CurrencyUtils.format(
+                          marginalRelief(details)
+                        )
                       )
                     )
-                  ),
-                  TableRow(content = Text("-" + CurrencyUtils.format(d.totalMarginalRelief)))
-                )
-              } else {
-                Seq.empty
-              },
-              if (d.totalMarginalRelief > 0) {
+                  )
+                } else {
+                  Seq.empty
+                },
+                if (marginalRelief(details) > 0) {
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
+                    TableRow(content = Text(CurrencyUtils.format(details.corporationTax)))
+                  )
+                } else {
+                  Seq.empty
+                }
+              ).filter(_.nonEmpty),
+              head = Some(
                 Seq(
-                  TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                  TableRow(content = Text(CurrencyUtils.format(year1.corporationTax))),
-                  TableRow(content = Text(CurrencyUtils.format(year2.corporationTax))),
-                  TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTax)))
+                  HeadCell(
+                    content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                    classes = "not-header"
+                  ),
+                  HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
                 )
-              } else {
-                Seq.empty
-              }
-            ).filter(_.nonEmpty),
-            caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-            captionClasses = "govuk-!-display-none",
-            firstCellIsHeader = true
+              ),
+              caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+              captionClasses = "govuk-!-display-none",
+              firstCellIsHeader = true
+            )
           )
-        )
-    }
+        case d @ DualResult(year1: TaxDetails, year2: TaxDetails) =>
+          govukTable(
+            Table(
+              head = Some(
+                Seq(
+                  HeadCell(
+                    content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                    classes = "not-header"
+                  ),
+                  HeadCell(content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString))),
+                  HeadCell(content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString))),
+                  HeadCell(content = Text(messages("site.overall")))
+                )
+              ),
+              rows = Seq(
+                Seq(
+                  TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
+                  TableRow(content = HtmlContent(s"""${year1.days.toString} $screenReaderText""")),
+                  TableRow(content = HtmlContent(s"""${year2.days.toString} $screenReaderText""")),
+                  TableRow(content = HtmlContent(s"""${d.totalDays.toString} $screenReaderText"""))
+                ),
+                Seq(
+                  TableRow(content =
+                    Text(
+                      if (d.totalMarginalRelief > 0) messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief")
+                      else messages("resultsPage.corporationTaxLiability")
+                    )
+                  ),
+                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year1)))),
+                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year2)))),
+                  TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTaxBeforeMR)))
+                ),
+                if (d.totalMarginalRelief > 0) {
+                  Seq(
+                    TableRow(content = Text(messages("site.marginalRelief"))),
+                    TableRow(content =
+                      Text(
+                        (if (marginalRelief(year1) > 0) "-" else "") + CurrencyUtils.format(
+                          marginalRelief(year1)
+                        )
+                      )
+                    ),
+                    TableRow(content =
+                      Text(
+                        (if (marginalRelief(year2) > 0) "-" else "") + CurrencyUtils.format(
+                          marginalRelief(year2)
+                        )
+                      )
+                    ),
+                    TableRow(content = Text("-" + CurrencyUtils.format(d.totalMarginalRelief)))
+                  )
+                } else {
+                  Seq.empty
+                },
+                if (d.totalMarginalRelief > 0) {
+                  Seq(
+                    TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
+                    TableRow(content = Text(CurrencyUtils.format(year1.corporationTax))),
+                    TableRow(content = Text(CurrencyUtils.format(year2.corporationTax))),
+                    TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTax)))
+                  )
+                } else {
+                  Seq.empty
+                }
+              ).filter(_.nonEmpty),
+              caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
+              captionClasses = "govuk-!-display-none",
+              firstCellIsHeader = true
+            )
+          )
+      }
+    )
 
   def displayEffectiveTaxTable(calculatorResult: CalculatorResult)(implicit
     messages: Messages
   ): Html =
-    calculatorResult.fold(s =>
-      govukTable(
-        Table(
-          head = Some(
-            Seq(
-              HeadCell(
-                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                classes = "not-header"
-              ),
-              HeadCell(content = Text(messages("site.from.to", s.details.year.toString, (s.details.year + 1).toString)))
-            )
-          ),
-          rows = Seq(
-            Seq(
-              TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-              TableRow(content = Text(s.details.days.toString))
-            ),
-            if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
+    replaceTableHeader(
+      messages("resultsPage.effectiveTaxTableScreenReaderSummary"),
+      calculatorResult.fold(s =>
+        govukTable(
+          Table(
+            head = Some(
               Seq(
-                TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                TableRow(content = Text(PercentageUtils.format(s.effectiveTaxRateBeforeMR)))
-              )
-            } else {
-              Seq.empty
-            },
-            Seq(
-              TableRow(content = Text(messages(if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
-                "resultsPage.effectiveCorporationTaxAfterMarginalRelief"
-              } else if (s.details.fold(_ => true)(m => m.adjustedAugmentedProfit > m.adjustedLowerThreshold)) {
-                "resultsPage.corporationTaxMainRate"
-              } else {
-                "resultsPage.smallProfitRate"
-              }))),
-              TableRow(content = Text(PercentageUtils.format(s.details.taxRate)))
-            )
-          ).filter(_.nonEmpty),
-          caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-          captionClasses = "govuk-!-display-none",
-          firstCellIsHeader = true
-        )
-      )
-    ) { d =>
-      val dataRows = Seq(
-        Seq(
-          TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-          TableRow(content = Text(d.year1.days.toString)),
-          TableRow(content = Text(d.year2.days.toString)),
-          TableRow(content = Text((d.year1.days + d.year2.days).toString))
-        )
-      ) ++ ((d.year1, d.year2) match {
-        case (_: FlatRate, _: FlatRate) =>
-          Seq(
-            Seq(
-              TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-              TableRow(content = Text(PercentageUtils.format(d.year1.taxRate))),
-              TableRow(content = Text(PercentageUtils.format(d.year2.taxRate))),
-              TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRate)))
-            )
-          )
-        case _ =>
-          (Seq(if (d.totalMarginalRelief > 0) {
-            Seq(
-              TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-              TableRow(content = Text(PercentageUtils.format(d.year1.fold(_.taxRate)(_.taxRateBeforeMR)))),
-              TableRow(content = Text(PercentageUtils.format(d.year2.fold(_.taxRate)(_.taxRateBeforeMR)))),
-              TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRateBeforeMR)))
-            )
-          } else {
-            Seq.empty
-          }) ++
-            Seq(
-              Seq(
-                TableRow(content =
-                  Text(
-                    if (d.totalMarginalRelief > 0)
-                      messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief")
-                    else if (
-                      List(d.year1, d.year2)
-                        .forall(_.fold(_ => false)(m => m.adjustedAugmentedProfit <= m.adjustedLowerThreshold))
-                    ) // if all rates are Marginal Rates, display "Small profits rate"
-                      messages("resultsPage.smallProfitRate")
-                    else
-                      messages("resultsPage.effectiveCorporationTax")
-                  )
+                HeadCell(
+                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  classes = "not-header"
                 ),
+                HeadCell(content =
+                  Text(messages("site.from.to", s.details.year.toString, (s.details.year + 1).toString))
+                )
+              )
+            ),
+            rows = Seq(
+              Seq(
+                TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+                TableRow(content = HtmlContent(s"""${s.details.days.toString} $screenReaderText"""))
+              ),
+              if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
+                Seq(
+                  TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
+                  TableRow(content = Text(PercentageUtils.format(s.effectiveTaxRateBeforeMR)))
+                )
+              } else {
+                Seq.empty
+              },
+              Seq(
+                TableRow(content = Text(messages(if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
+                  "resultsPage.effectiveCorporationTaxAfterMarginalRelief"
+                } else if (s.details.fold(_ => true)(m => m.adjustedAugmentedProfit > m.adjustedLowerThreshold)) {
+                  "resultsPage.corporationTaxMainRate"
+                } else {
+                  "resultsPage.smallProfitRate"
+                }))),
+                TableRow(content = Text(PercentageUtils.format(s.details.taxRate)))
+              )
+            ).filter(_.nonEmpty),
+            caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+            captionClasses = "govuk-!-display-none",
+            firstCellIsHeader = true
+          )
+        )
+      ) { d =>
+        val dataRows = Seq(
+          Seq(
+            TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
+            TableRow(content = HtmlContent(s"""${d.year1.days.toString} $screenReaderText""")),
+            TableRow(content = HtmlContent(s"""${d.year2.days.toString} $screenReaderText""")),
+            TableRow(content = HtmlContent(s"""${(d.year1.days + d.year2.days).toString} $screenReaderText"""))
+          )
+        ) ++ ((d.year1, d.year2) match {
+          case (_: FlatRate, _: FlatRate) =>
+            Seq(
+              Seq(
+                TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
                 TableRow(content = Text(PercentageUtils.format(d.year1.taxRate))),
                 TableRow(content = Text(PercentageUtils.format(d.year2.taxRate))),
                 TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRate)))
               )
-            )).filter(_.nonEmpty)
-      })
-      govukTable(
-        Table(
-          head = Some(
-            Seq(
-              HeadCell(
-                content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-                classes = "not-header"
-              ),
-              HeadCell(content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString))),
-              HeadCell(content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString))),
-              HeadCell(content = Text(messages("site.overall")))
             )
-          ),
-          rows = dataRows,
-          caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-          captionClasses = "govuk-!-display-none",
-          firstCellIsHeader = true
+          case _ =>
+            (Seq(if (d.totalMarginalRelief > 0) {
+              Seq(
+                TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
+                TableRow(content = Text(PercentageUtils.format(d.year1.fold(_.taxRate)(_.taxRateBeforeMR)))),
+                TableRow(content = Text(PercentageUtils.format(d.year2.fold(_.taxRate)(_.taxRateBeforeMR)))),
+                TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRateBeforeMR)))
+              )
+            } else {
+              Seq.empty
+            }) ++
+              Seq(
+                Seq(
+                  TableRow(content =
+                    Text(
+                      if (d.totalMarginalRelief > 0)
+                        messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief")
+                      else if (
+                        List(d.year1, d.year2)
+                          .forall(_.fold(_ => false)(m => m.adjustedAugmentedProfit <= m.adjustedLowerThreshold))
+                      ) // if all rates are Marginal Rates, display "Small profits rate"
+                        messages("resultsPage.smallProfitRate")
+                      else
+                        messages("resultsPage.effectiveCorporationTax")
+                    )
+                  ),
+                  TableRow(content = Text(PercentageUtils.format(d.year1.taxRate))),
+                  TableRow(content = Text(PercentageUtils.format(d.year2.taxRate))),
+                  TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRate)))
+                )
+              )).filter(_.nonEmpty)
+        })
+        govukTable(
+          Table(
+            head = Some(
+              Seq(
+                HeadCell(
+                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  classes = "not-header"
+                ),
+                HeadCell(content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString))),
+                HeadCell(content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString))),
+                HeadCell(content = Text(messages("site.overall")))
+              )
+            ),
+            rows = dataRows,
+            caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
+            captionClasses = "govuk-!-display-none",
+            firstCellIsHeader = true
+          )
         )
-      )
-    }
+      }
+    )
 
-  def replaceTableHeader(tableHtml: Html): Html =
+  def replaceTableHeader(tableSummary: String, tableHtml: Html): Html =
     Html(
       tableHtml
         .toString()
@@ -477,6 +517,10 @@ object ResultsPageHelper extends ViewHelper {
         .replace(
           "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-!-display-none\">No header</span></th>",
           "<td scope=\"col\" class=\"govuk-table__header not-header\"><span class=\"govuk-!-display-none\">No header</span></td>"
+        )
+        .replace(
+          "<table",
+          s"""<table summary="$tableSummary""""
         )
     )
 
@@ -508,4 +552,8 @@ object ResultsPageHelper extends ViewHelper {
         messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
     )
   }
+
+  def screenReaderText()(implicit messages: Messages) = Html(
+    s"""<span class="sr-only">${messages("resultsPage.s")}</span>"""
+  )
 }
