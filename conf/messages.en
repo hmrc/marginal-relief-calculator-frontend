@@ -164,6 +164,7 @@ resultsPage.howWeCalculated.heading = How we calculated your Marginal Relief
 resultsPage.howWeCalculated.body = Check the calculation in detail to see how we calculated your Marginal Relief.
 resultsPage.howWeCalculated.link = Check Marginal Relief calculation in detail
 resultsPage.effectiveTaxRateTable.hidden = Effective tax rate table
+resultsPage.corporationTaxTable.hidden = Corporation tax liability breakdown table
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
@@ -211,6 +212,8 @@ fullResultsPage.taxableProfit.profitAndDistributions = Taxable profit including 
 fullResultsPage.calculationTableSummary = This is a table describing your Marginal Relief calculation in detail.
 fullResultsPage.tableSummary = This is a table describing your taxable profit calculation in detail.
 fullResultsPage.taxableProfitTableScrollableLabel = Taxable profit table
+fullResultsPage.taxableProfitTable.hidden = Taxable profit table
+fullResultsPage.calculationTable.hidden = Calculation breakdown table
 
 
 associatedCompanies.title = Number of associated companies
