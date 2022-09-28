@@ -25,7 +25,9 @@ class ViewHelperSpec extends AnyFreeSpec with Matchers {
   "h1" - {
     "when style provided, should return HTML with style attribute" in {
       val viewHelper = new ViewHelper {}
-      viewHelper.h1("some-text", "some-class", "some-style") shouldBe Html(s"""<h1 class="some-class" style="some-style">some-text</h1>""")
+      viewHelper.h1("some-text", "some-class", "some-style") shouldBe Html(
+        s"""<h1 class="some-class" style="some-style">some-text</h1>"""
+      )
     }
 
     "when style not provided, should return HTML without style attribute" in {
@@ -37,7 +39,9 @@ class ViewHelperSpec extends AnyFreeSpec with Matchers {
   "h2" - {
     "when style provided, should return HTML with style attribute" in {
       val viewHelper = new ViewHelper {}
-      viewHelper.h2("some-text", "some-class", "some-style") shouldBe Html(s"""<h2 class="some-class" style="some-style">some-text</h2>""")
+      viewHelper.h2("some-text", "some-class", "some-style") shouldBe Html(
+        s"""<h2 class="some-class" style="some-style">some-text</h2>"""
+      )
     }
 
     "when style not provided, should return HTML without style attribute" in {
