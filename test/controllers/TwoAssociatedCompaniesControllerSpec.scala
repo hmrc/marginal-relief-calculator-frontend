@@ -90,11 +90,12 @@ class TwoAssociatedCompaniesControllerSpec
 
       "must return OK and the correct view for a GET when accounting end date is empty" in {
 
+        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), None)
+
         val answers = requiredAnswers
-          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), None))
+          .set(AccountingPeriodPage, accountingPeriodForm)
           .get
 
-        val accountingPeriodForm = AccountingPeriodForm(LocalDate.ofEpochDay(0), None)
         val askParameter = AskBothParts(
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))

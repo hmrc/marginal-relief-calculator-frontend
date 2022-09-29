@@ -34,12 +34,10 @@ object DistributionSummary {
       val value = if (answer == Distribution.Yes) {
         answers
           .get(DistributionsIncludedPage)
-          .map(form =>
-            if (form.distributionsIncludedAmount.exists(_ > 0)) {
-              s"£${NumberFormat.getNumberInstance(Locale.UK).format(form.distributionsIncludedAmount.get)}"
-            } else {
-              messages("distributionsIncluded.emptyValue")
-            }
+          .flatMap(
+            _.distributionsIncludedAmount
+              .filter(_ > 0)
+              .map(a => s"£${NumberFormat.getNumberInstance(Locale.UK).format(a)}")
           ) getOrElse messages("distributionsIncluded.emptyValue")
       } else {
         messages("distributionsIncluded.emptyValue")
