@@ -15,6 +15,7 @@
  */
 
 package viewmodels
+
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -23,5 +24,12 @@ class WithCssClassSpec extends AnyFreeSpec with Matchers {
   "When className matches" in {
     val impl = new WithCssClass("test-class") {}
     impl.toString shouldBe "test-class"
+  }
+
+  "toString" - {
+    "should return class name" in {
+      val impl = new WithCssClass("test-class") {}
+      impl.toString shouldBe "test-class"
+    }
   }
 }

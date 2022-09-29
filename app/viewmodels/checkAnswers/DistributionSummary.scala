@@ -36,7 +36,7 @@ object DistributionSummary {
           .get(DistributionsIncludedPage)
           .map(form =>
             if (form.distributionsIncludedAmount.exists(_ > 0)) {
-              s"£${NumberFormat.getNumberInstance(Locale.UK).format(form.distributionsIncludedAmount.getOrElse(0))}"
+              s"£${NumberFormat.getNumberInstance(Locale.UK).format(form.distributionsIncludedAmount.get)}"
             } else {
               messages("distributionsIncluded.emptyValue")
             }
