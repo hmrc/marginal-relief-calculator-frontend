@@ -324,7 +324,8 @@ object FullResultsPageHelper extends ViewHelper {
             HeadCell(content = Text(messages("fullResultsPage.calculation"))),
             HeadCell(content = Text(messages("fullResultsPage.result")))
           )
-        )
+        ),
+        firstCellIsHeader = true
       )
       description match {
         case Some(text) =>
@@ -503,7 +504,8 @@ object FullResultsPageHelper extends ViewHelper {
                   )
                 ),
                 caption = Some(messages("fullResultsPage.taxableProfit")),
-                captionClasses = "govuk-table__caption--m"
+                captionClasses = "govuk-table__caption--m",
+                firstCellIsHeader = true
               )
             )
           ) + "</div>"
