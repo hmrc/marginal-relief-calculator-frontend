@@ -40,7 +40,8 @@
     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
-    @replaceTableHeader(displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config))
+    @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)
+
 
     @govukButton(
         Button(

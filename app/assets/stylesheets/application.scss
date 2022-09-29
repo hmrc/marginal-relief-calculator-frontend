@@ -13,10 +13,6 @@
     overflow-x: auto;
 }
 
-.app-table .govuk-table__cell {
-   white-space: nowrap;
-}
-
 .govuk-back-link {
     display: none;
 }
@@ -25,4 +21,13 @@
     .govuk-back-link {
         display: inline-block;
     }
+}
+
+.sr-only {
+    position:absolute;
+    left:-10000px;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
 }
