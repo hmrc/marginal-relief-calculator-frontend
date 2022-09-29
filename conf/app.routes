@@ -48,3 +48,5 @@ GET        /two-associated-companies              controllers.TwoAssociatedCompa
 POST       /two-associated-companies              controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
 GET        /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
+
+GET        /pdf                                   controllers.PDFController.onPageLoad()

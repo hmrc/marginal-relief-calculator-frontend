@@ -307,3 +307,5 @@ twoAssociatedCompanies.financialYearFromTo = Financial year {0} to {1}
 twoAssociatedCompanies.numberOfAssociatedCompaniesBetween = Number of associated companies between {0} to {1}
 twoAssociatedCompanies.accountingPeriodCovers2Years = Your accounting period covers 2 financial years with different sets of Marginal Relief limits.
 twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave = How many active associated companies did you have?
+
+pdf.title = Download your calculation
