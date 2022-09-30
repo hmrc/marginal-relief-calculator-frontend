@@ -36,7 +36,8 @@
         }
 
         <h1 class="govuk-fieldset__legend--l">
-            @messages("taxableProfit.heading")
+            <span aria-hidden="true">@messages("taxableProfit.heading")</span>
+            <span class="sr-only">@messages("taxableProfit.heading.screenReader")</span>
         </h1>
 
         <p class="govuk-body">
