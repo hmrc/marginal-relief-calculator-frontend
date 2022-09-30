@@ -545,15 +545,20 @@ object ResultsPageHelper extends ViewHelper {
     val fromYear2 = year2.year
     val toYear2 = fromYear2 + 1
 
-    p(
-      messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
-        messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull) + "<br/>" +
+
+
+    Html(s"""${p(
+        messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
+        messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull),
+      "govuk-body govuk-!-margin-0"
+    )}
+    ${p (
         messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
         messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
-    )
+    )}""")
   }
 
   def screenReaderText()(implicit messages: Messages) = Html(
-    s"""<span class="sr-only">${messages("resultsPage.s")}</span>"""
+    s"""<span class="sr-only">${messages("resultsPage.days")}</span>"""
   )
 }
