@@ -588,6 +588,6 @@ object ResultsPageHelper extends ViewHelper {
   }
 
   def screenReaderText()(implicit messages: Messages) = Html(
-    s"""<span class="sr-only">${messages("resultsPage.s")}</span>"""
+    s"""<span class="sr-only">${messages("resultsPage.days")}</span>"""
   )
 }
