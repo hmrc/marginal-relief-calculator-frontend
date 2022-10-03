@@ -63,7 +63,7 @@ class FullResultsPageHelperSpec extends SpecBase {
                                       |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table"><thead class="govuk-table__head">
                                       |   <tr class="govuk-table__row">
                                       |     <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-                                      |     <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+                                      |     <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
                                       |     <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
                                       |     <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
                                       |   </tr>
@@ -134,7 +134,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <thead class="govuk-table__head">
             |      <tr class="govuk-table__row">
             |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |       <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |      </tr>
@@ -170,7 +170,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <thead class="govuk-table__head">
             |      <tr class="govuk-table__row">
             |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |        <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |      </tr>
@@ -220,7 +220,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
             |      <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |      <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |      <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |    </tr>
@@ -282,7 +282,9 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
             |    </tr>
             |    <tr class="govuk-table__row">
-            |      <th scope="row" class="govuk-table__header"><p class="govuk-body">fullResultsPage.taxableProfit.profitAndDistributions</p></td>
+            |      <th scope="row" class="govuk-table__header">
+            |        <p class="govuk-body">fullResultsPage.taxableProfit.profitAndDistributions</p>
+            |      </th>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£143.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£122.00</td>
@@ -309,7 +311,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
             |      <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |      <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |      <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |    </tr>
@@ -349,7 +351,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  </tr></thead>
             |  <tbody class="govuk-table__body">
             |    <tr class="govuk-table__row">
-            |     <th scope="row" class="govuk-table__header">
+            |      <th scope="row" class="govuk-table__header">
             |        <p class="govuk-body">fullResultsPage.taxableProfit.daysAllocated</p>
             |      </th>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">1010 <span class="sr-only">resultsPage.days</span></td>

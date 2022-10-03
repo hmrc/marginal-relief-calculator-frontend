@@ -169,7 +169,9 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo
+          messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -183,7 +185,9 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are within thresholds" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 0, 100, 1500, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo
+          messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(
@@ -197,7 +201,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate, profits are equal to lower threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 100, 100, 1000, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -211,7 +216,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate, profits are equal to lower threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 110, 1000, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -225,7 +231,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are below lower threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 0, 200, 1000, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -239,7 +246,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are below threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 200, 1000, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -253,7 +261,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate, profits are equal to upper threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 100, 1000, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -267,7 +276,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate, profits are equal to upper threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 100, 1000, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -281,7 +291,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are above upper threshold and distributions 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 200, 900, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -295,7 +306,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
       "when marginal rate and profits are above threshold and distributions greater than 0" in {
         val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 200, 900, 365))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -320,7 +332,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for both years" in {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 1000, 100, 0, 0), FlatRate(1971, 200, 20, 1000, 100, 0, 0))
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -336,7 +349,8 @@ class ResultsPageHelperSpec extends SpecBase {
           FlatRate(1970, 190, 19, 1000, 100, 0, 0),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(
@@ -353,7 +367,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0),
           FlatRate(1970, 190, 19, 1000, 100, 0, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(
@@ -370,7 +385,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0),
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(
@@ -387,7 +403,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1000, 1500, 100),
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1000, 1500, 100)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -404,7 +421,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1010, 1100, 1500, 100),
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1010, 1100, 1500, 100)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -421,7 +439,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0),
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -438,7 +457,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100, 0),
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             govukPanel(
@@ -455,7 +475,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0),
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(
@@ -472,7 +493,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100, 0),
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0)
         )
-        displayBanner(calculatorResult).htmlFormat shouldMatchTo
+        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(

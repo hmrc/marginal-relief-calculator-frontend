@@ -31,9 +31,11 @@
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
+@titleAndBanner = @{displayBanner(calculatorResult)}
 
-    @displayBanner(calculatorResult)
+@layout(pageTitle = titleNoForm(titleAndBanner._1)) {
+
+    @titleAndBanner._2
 
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
 
