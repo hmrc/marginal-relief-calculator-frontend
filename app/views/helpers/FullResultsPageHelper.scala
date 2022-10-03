@@ -318,8 +318,7 @@ object FullResultsPageHelper extends ViewHelper {
               classes = "not-header"
             ),
             HeadCell(
-              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-              classes = "not-header"
+              content = HtmlContent(s"""<span class="govuk-!-display-none">Calculation variables</span>"""),
             ),
             HeadCell(content = Text(messages("fullResultsPage.calculation"))),
             HeadCell(content = Text(messages("fullResultsPage.result")))
