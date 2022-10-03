@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package viewmodels
+package controllers
 
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.should.Matchers
+import com.google.inject.Inject
+import config.FrontendAppConfig
+import play.api.i18n.Lang
+import play.api.mvc._
+import uk.gov.hmrc.play.language.{ LanguageController, LanguageUtils }
 
-class WithCssClassSpec extends AnyFreeSpec with Matchers {
-  "toString" - {
-    "should return class name" in {
-      val impl = new WithCssClass("test-class") {}
-      impl.toString shouldBe "test-class"
-    }
-  }
+class LanguageSwitchController @Inject() (
+  appConfig: FrontendAppConfig,
+  languageUtils: LanguageUtils,
+  cc: ControllerComponents
+) extends LanguageController(languageUtils, cc) {
+
+  override def fallbackURL: String = routes.IndexController.onPageLoad.url
+
+  override def languageMap: Map[String, Lang] = appConfig.languageMap
 }

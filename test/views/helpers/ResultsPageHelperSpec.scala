@@ -159,7 +159,8 @@ class ResultsPageHelperSpec extends SpecBase {
           |  </div>
           |</dl>
           |<p class="govuk-heading-s">resultsPage.2years.period.heading</p>
-          |<p class="govuk-body">site.from.to: site.from.to<br/>site.from.to: site.from.to</p>
+          |<p class="govuk-body govuk-!-margin-0">site.from.to: site.from.to</p>
+          |<p class="govuk-body">site.from.to: site.from.to</p>
           |<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"/>""".stripMargin.htmlFormat
     }
   }

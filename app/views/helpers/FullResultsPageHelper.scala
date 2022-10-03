@@ -217,8 +217,7 @@ object FullResultsPageHelper extends ViewHelper {
     }
 
     def boldRow(text: String) = TableRow(
-      content = HtmlContent(s"""<span class="sr-only">Step</span> $text"""),
-      classes = "govuk-!-font-weight-bold"
+      content = HtmlContent(s"""<span class="sr-only">Step $text</span><span aria-hidden="true">$text</span>""")
     )
 
     val days = marginalRate.days

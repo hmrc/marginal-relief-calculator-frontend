@@ -235,6 +235,7 @@ associatedCompanies.change.hidden = Associated Companies
 
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
+taxableProfit.heading.screenReader = How much is your company''s taxable profit in pounds?
 taxableProfit.label = Profit amount
 taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits
