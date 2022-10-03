@@ -1,0 +1,444 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+<html>
+<head>
+  <title>Marginal Relief Calculator</title>
+  <style>
+        @page {
+            size: A4;
+            margin: 50px;
+        }
+        body {
+            font-family:Arial;
+            margin: 0;
+        }
+        .govuk-table {
+            font-weight: 400;
+            font-size: 16px;
+            font-size: 1.1875rem;
+            line-height: 1.31579;
+            color: #0b0c0c;
+            width: 100%;
+            margin-bottom: 30px;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        .govuk-table__cell:last-child, .govuk-table__header:last-child {
+            padding-right: 0;
+        }
+        .govuk-table__cell, .govuk-table__header {
+            padding: 10px 20px 10px 0;
+            border-bottom: 1px solid #b1b4b6;
+            text-align: left;
+            vertical-align: top;
+        }
+        .govuk-table__header {
+            font-weight: 700;
+        }
+        .govuk-heading-s {
+            color: #0b0c0c;
+            font-weight: 700;
+            font-size: 19px;
+            font-size: 1.1875rem;
+            line-height: 1.31579;
+            display: block;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .govuk-grid-column-full {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 0 15px;
+            float: left;
+        }
+        .govuk-grid-column-one-third {
+            box-sizing: border-box;
+            width: 33.3333%;
+            float: left;
+            padding: 0 15px;
+        }
+        .govuk-grid-column-two-thirds {
+            box-sizing: border-box;
+            width: 66.6666%;
+            float: left;
+            padding: 0 15px;
+        }
+        .govuk-heading-l {
+            color: #0b0c0c;
+            font-weight: 700;
+            font-size: 36px;
+            font-size: 2.25rem;
+            line-height: 1.11111;
+            display: block;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+        .govuk-body {
+            color: #0b0c0c;
+            font-weight: 400;
+            font-size: 19px;
+            font-size: 1.1875rem;
+            line-height: 1.31579;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .govuk-summary-list {
+            font-weight: 400;
+            font-size: 19px;
+            font-size: 1.1875rem;
+            line-height: 1.31579;
+            color: #0b0c0c;
+            margin: 0 0 20px;
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .govuk-summary-list--no-border .govuk-summary-list__row {
+            border: 0;
+        }
+        .govuk-summary-list__row {
+            border-bottom: 1px solid #b1b4b6;
+            display: table-row;
+        }
+        .govuk-summary-list__row:last-child {
+            padding-right: 0;
+        }
+        .govuk-summary-list--no-border .govuk-summary-list--no-border .govuk-summary-list__key, .govuk-summary-list--no-border .govuk-summary-list__value {
+            padding-bottom: 11px;
+        }
+        .govuk-summary-list__key {
+            margin-bottom: 5px;
+            font-weight: 700;
+            width: 30%;
+        }
+        .govuk-summary-list__key, .govuk-summary-list__value {
+            word-wrap: break-word;
+            margin: 0;
+            display: table-cell;
+            padding-top: 10px;
+            padding-right: 20px;
+            padding-bottom: 10px;
+        }
+        .govuk-section-break--visible {
+            border-bottom: 1px solid #b1b4b6;
+        }
+        .govuk-section-break--l {
+           margin-top: 30px;
+           margin-bottom: 30px;
+        }
+        .govuk-section-break {
+            margin: 0;
+            border: 0;
+        }
+        .pdf-page {
+            padding: 25px 50px;
+            page-break-after: always
+        }
+        .pdf-page .pdf-header {
+            margin-bottom: 15px;
+        }
+        .pdf-page .pdf-header h2 {
+            font-size: 1.4em;
+            font-weight: normal;
+            margin: 0;
+            line-height: 1;
+        }
+        .pdf-page__information-box {
+            border: 2px solid #28a197;
+            padding: 5px 10px;
+            width: 100%;
+            background-color: #e1f3f1;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+            margin-bottom: 1.875em
+        }
+        .information-box-title {
+            font-weight: 600;
+            font-size: 36px;
+        }
+        .information-box-content {
+            font-weight: 600;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        .grid-row {
+            margin: 0 -15px;
+        }
+        .grid-row::after {
+            clear: both;
+            content: "";
+            display: block;
+        }
+        .pdf-page .pdf-header .govuk-grid-column-one-third {
+            border-left: #28a197 solid;
+            padding-left: 8px;
+        }
+        .about-this-result {
+          background: #e1f3f1;
+          padding: 1px 10px;
+        }
+        .about-this-result,
+        .about-this-result ul li {
+          font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="pdf-page">
+  <div class="grid-row pdf-header">
+    <div class="govuk-grid-column-one-third">
+      <img class="pdf-header__hmrc-logo"
+           src="data:image/jpeg;base64,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"
+           alt="HM Revenue &amp; Customs"/>
+      <h2 class="govuk-heading-m">HM Revenue &amp; Customs</h2>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <h3 class="govuk-heading-m pdf-header__heading">
+        Marginal Relief for Corporation Tax results
+      </h3>
+    </div>
+  </div>
+  <div class="grid-row">
+    For your records
+  </div>
+  <div class="grid-row">
+    <h3>Company name</h3>
+    <p>SAMPLE LTD</p>
+  </div>
+  <div class="grid-row">
+    <h3>UTR Number</h3>
+    <p>123456</p>
+  </div>
+  <div class="grid-row">
+    <div class="pdf-page__information-box bold-small">
+      <p class="govuk-body information-box-title">Marginal Relief for your accounting period is</p>
+      <span class="govuk-body information-box-content">£154.11</span>
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <h2 class="govuk-heading-m" style="margin-bottom: 4px">Your details</h2>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Accounting Period
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <p class="govuk-body">1 January 2023 to 31 December 2023</p>
+                <p class="govuk-body">Covers 2 HMRC financial years</p>
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Company's Profit
+              </dt>
+              <dd class="govuk-summary-list__value">
+                £100,000
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Distributions
+              </dt>
+              <dd class="govuk-summary-list__value">
+                £10,000
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Associated companies
+              </dt>
+              <dd class="govuk-summary-list__value">
+                1
+              </dd>
+            </div>
+          </dl>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible"/>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <div class="about-this-result">
+            <h3 class="govuk-heading-s">About this result</h3>
+            <h4>Date of result</h4>
+            <p>18 September 2022 10:00:00 UTC</p>
+            <h4>HRMC legal declaration</h4>
+            <p>HM Revenue and Customs cannot be held liable for incorrect output from this
+              calculator. Correct information can only result form this calculator if correct
+              details are entered
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pdf-page">
+  <div class="grid-row">
+    <h2 class="govuk-heading-m" style="margin-bottom: 7px;">Corporation Tax liability</h2>
+    <span class="govuk-heading-l" style="margin-bottom: 4px;">£23,366.44</span>
+    <p class="govuk-body">Reduced from £23,520.55 after £154.11 Marginal Relief</p>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header"></th>
+        <th scope="col" class="govuk-table__header">2022 to 2023</th>
+        <th scope="col" class="govuk-table__header">2023 to 2024</th>
+        <th scope="col" class="govuk-table__header">Overall</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Days allocated to each financial year</th>
+        <td class="govuk-table__cell">90</td>
+        <td class="govuk-table__cell">275</td>
+        <td class="govuk-table__cell">365</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Corporation Tax liability before Marginal Relief
+        </th>
+        <td class="govuk-table__cell">£4,684.93</td>
+        <td class="govuk-table__cell">£18,835.62</td>
+        <td class="govuk-table__cell">£23,520.55</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Marginal Relief</th>
+        <td class="govuk-table__cell">£0</td>
+        <td class="govuk-table__cell">-£154.11</td>
+        <td class="govuk-table__cell">-£154.11</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Corporation Tax liability after Marginal Relief</th>
+        <td class="govuk-table__cell">£4,684.93</td>
+        <td class="govuk-table__cell">£18,681.51</td>
+        <td class="govuk-table__cell">£23,366.44</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="pdf-page">
+  <div class="grid-row">
+    <h2 class="govuk-heading-m" style="margin-bottom: 7px;">Effective tax rate</h2>
+    <span class="govuk-heading-l" style="margin-bottom: 4px;">23.36%</span>
+    <p class="govuk-body">Reduced from 23.52% after Marginal Relief</p>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header"></th>
+        <th scope="col" class="govuk-table__header">2022 to 2023</th>
+        <th scope="col" class="govuk-table__header">2023 to 2024</th>
+        <th scope="col" class="govuk-table__header">Overall</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Days allocated to financial year</th>
+        <td class="govuk-table__cell">90</td>
+        <td class="govuk-table__cell">275</td>
+        <td class="govuk-table__cell">365</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Corporation Tax main rate before Marginal Relief
+        </th>
+        <td class="govuk-table__cell">19.00%</td>
+        <td class="govuk-table__cell">25.00%</td>
+        <td class="govuk-table__cell">23.52%</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">Effective Corporation Tax rate after Marginal
+          Relief
+        </th>
+        <td class="govuk-table__cell">19.00%</td>
+        <td class="govuk-table__cell">24.80%</td>
+        <td class="govuk-table__cell">23.36%</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="pdf-page">
+  <div class="grid-row">
+    <h2 class="govuk-heading-l">How it's calculated</h2>
+    <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£154.11</h2>
+    <p class="govuk-body">Marginal Relief for your accounting period</p>
+    <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2022 to 2023 (90 days)</h3>
+    <p class="govuk-body">Marginal Relief was not available in financial year 2022 to 2023</p>
+    <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (275 days)</h3>
+    <div class="app-table" role="region" aria-label="Calculation breakdown table" tabindex="0">
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header"></th>
+          <th scope="col" class="govuk-table__header"></th>
+          <th scope="col" class="govuk-table__header">Calculation</th>
+          <th scope="col" class="govuk-table__header">Result</th>
+        </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-font-weight-bold">1</td>
+          <td class="govuk-table__cell">Adjusted upper limit</td>
+          <td class="govuk-table__cell">£250,000 upper limit × (275 days ÷ 365 days) ÷ (1 associated
+            company + 1 original company)
+          </td>
+          <td class="govuk-table__cell">£94,178.08</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-font-weight-bold">2</td>
+          <td class="govuk-table__cell">Taxable profit</td>
+          <td class="govuk-table__cell">£100,000 × (275 days ÷ 365 days)</td>
+          <td class="govuk-table__cell">£75,342.47</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-font-weight-bold">3</td>
+          <td class="govuk-table__cell">Taxable profit including distributions</td>
+          <td class="govuk-table__cell">(£100,000 + £10,000) × (275 days ÷ 365 days)</td>
+          <td class="govuk-table__cell">£82,876.71</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-font-weight-bold">4</td>
+          <td class="govuk-table__cell">Marginal Relief fraction</td>
+          <td class="govuk-table__cell">The set fraction used by HMRC to provide a gradual increase in
+            rate
+          </td>
+          <td class="govuk-table__cell">3 ÷ 200</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-font-weight-bold">5</td>
+          <td class="govuk-table__cell">Full calculation</td>
+          <td class="govuk-table__cell">(£94,178.08 - £82,876.71) × (£75,342.47 ÷ £82,876.71) × (3 ÷
+            200)
+          </td>
+          <td class="govuk-table__cell">£154.11</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="govuk-heading-s" style="margin-bottom: 4px;">Marginal Relief formula is:</h3>
+    <p class="govuk-body">(Adjusted upper limit - taxable profit including distributions) × (taxable profit
+      ÷ taxable profit including distributions) × (Marginal Relief fraction)
+    </p>
+  </div>
+</div>
+</body>
+</html>

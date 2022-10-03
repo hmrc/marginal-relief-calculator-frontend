@@ -50,3 +50,4 @@ GET        /change-two-associated-companies       controllers.TwoAssociatedCompa
 POST       /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
 
 GET        /pdf                                   controllers.PDFController.onPageLoad()
+GET        /pdf-test                              controllers.PDFGeneratorController.onPageLoad()
