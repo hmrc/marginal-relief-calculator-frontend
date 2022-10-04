@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import models.{ AssociatedCompanies, _ }
-import org.scalacheck.{ Arbitrary, Gen }
+import forms.PDFMetadataForm
+import pages.behaviours.PageBehaviours
 
-trait ModelGenerators {
 
-  implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
-    Arbitrary {
-      Gen.oneOf(DistributionsIncluded.values)
-    }
+class PDFMetadataPageSpec extends PageBehaviours {
 
-  implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
-    Arbitrary {
-      Gen.oneOf(Distribution.values.toSeq)
-    }
+  "PDFMetadataPage" - {
 
-  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
-    Arbitrary {
-      Gen.oneOf(AssociatedCompanies.values)
-    }
+    beRetrievable[PDFMetadataForm](PDFMetadataPage)
+
+    beSettable[PDFMetadataForm](PDFMetadataPage)
+
+    beRemovable[PDFMetadataForm](PDFMetadataPage)
+  }
 }

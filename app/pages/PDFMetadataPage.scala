@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
-import models.{ AssociatedCompanies, _ }
-import org.scalacheck.{ Arbitrary, Gen }
+import forms.PDFMetadataForm
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
+case object PDFMetadataPage extends QuestionPage[PDFMetadataForm] {
 
-  implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
-    Arbitrary {
-      Gen.oneOf(DistributionsIncluded.values)
-    }
+  override def path: JsPath = JsPath \ toString
 
-  implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
-    Arbitrary {
-      Gen.oneOf(Distribution.values.toSeq)
-    }
-
-  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
-    Arbitrary {
-      Gen.oneOf(AssociatedCompanies.values)
-    }
+  override def toString: String = "pdfMetadata"
 }

@@ -16,14 +16,22 @@
 
 package generators
 
-import forms.AssociatedCompaniesForm
-import models.{AssociatedCompanies, _}
-import org.scalacheck.Arbitrary
-import org.scalacheck.Arbitrary.{arbitrary, _}
+import forms.{ AssociatedCompaniesForm, PDFMetadataForm }
+import models.{ AssociatedCompanies, _ }
+import org.scalacheck.Arbitrary.{ arbitrary, _ }
+import org.scalacheck.{ Arbitrary, Gen }
 import pages._
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{ JsValue, Json }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryPDFMetadataUserAnswersEntry: Arbitrary[(PDFMetadataPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[PDFMetadataPage.type]
+        value <- arbitrary[PDFMetadataForm].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryDistributionsIncludedUserAnswersEntry
     : Arbitrary[(DistributionsIncludedPage.type, JsValue)] =
@@ -49,6 +57,16 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     } yield AssociatedCompaniesForm(
       associatedCompany,
       associatedCompaniesCount
+    )
+  }
+
+  implicit lazy val arbitraryPDFMetadataForm: Arbitrary[PDFMetadataForm] = Arbitrary {
+    for {
+      companyName <- Gen.option(arbitrary[String])
+      utr         <- Gen.option(arbitrary[String])
+    } yield PDFMetadataForm(
+      companyName,
+      utr
     )
   }
 

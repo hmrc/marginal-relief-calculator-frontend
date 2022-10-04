@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import models.{ AssociatedCompanies, _ }
-import org.scalacheck.{ Arbitrary, Gen }
+import play.api.libs.json.{Format, Json}
 
-trait ModelGenerators {
+final case class PDFMetadataForm(companyName: Option[String], utr: Option[String])
 
-  implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
-    Arbitrary {
-      Gen.oneOf(DistributionsIncluded.values)
-    }
-
-  implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
-    Arbitrary {
-      Gen.oneOf(Distribution.values.toSeq)
-    }
-
-  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
-    Arbitrary {
-      Gen.oneOf(AssociatedCompanies.values)
-    }
+object PDFMetadataForm {
+  implicit val format: Format[PDFMetadataForm] = Json.format[PDFMetadataForm]
 }
