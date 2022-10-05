@@ -66,11 +66,11 @@ class ResultsPageHelperSpec extends SpecBase {
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-                |     <dd class="govuk-summary-list__value">£1</dd>
+                |     <dd class="govuk-summary-list__value">£1.00</dd>
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-                |     <dd class="govuk-summary-list__value">£11</dd>
+                |     <dd class="govuk-summary-list__value">£11.00</dd>
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -110,11 +110,11 @@ class ResultsPageHelperSpec extends SpecBase {
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |   <dd class="govuk-summary-list__value">£1</dd>
+          |   <dd class="govuk-summary-list__value">£1.00</dd>
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |   <dd class="govuk-summary-list__value">£11</dd>
+          |   <dd class="govuk-summary-list__value">£11.00</dd>
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -147,11 +147,11 @@ class ResultsPageHelperSpec extends SpecBase {
           |  </div>
           |  <div class="govuk-summary-list__row">
           |    <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |    <dd class="govuk-summary-list__value">£1</dd>
+          |    <dd class="govuk-summary-list__value">£1.00</dd>
           |  </div>
           |  <div class="govuk-summary-list__row">
           |    <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |    <dd class="govuk-summary-list__value">£11</dd>
+          |    <dd class="govuk-summary-list__value">£11.00</dd>
           |  </div>
           |  <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -526,7 +526,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                    TableRow(content = Text("£1"))
+                    TableRow(content = Text("£1.00"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -563,15 +563,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
-                    TableRow(content = Text("£250"))
+                    TableRow(content = Text("£250.00"))
                   ),
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
-                    TableRow(content = Text("-£50"))
+                    TableRow(content = Text("-£50.00"))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                    TableRow(content = Text("£200"))
+                    TableRow(content = Text("£200.00"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -608,7 +608,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                    TableRow(content = Text("£25"))
+                    TableRow(content = Text("£25.00"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -845,7 +845,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-                    TableRow(content = Text("2.00%"))
+                    TableRow(content = Text("2%"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -881,11 +881,11 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                    TableRow(content = Text("25.00%"))
+                    TableRow(content = Text("25%"))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                    TableRow(content = Text("20.00%"))
+                    TableRow(content = Text("20%"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -928,8 +928,8 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-                    TableRow(content = Text("19.00%")),
-                    TableRow(content = Text("20.00%")),
+                    TableRow(content = Text("19%")),
+                    TableRow(content = Text("20%")),
                     TableRow(content = Text("19.50%"))
                   )
                 ),
@@ -973,14 +973,14 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                    TableRow(content = Text("25.00%")),
-                    TableRow(content = Text("30.00%")),
+                    TableRow(content = Text("25%")),
+                    TableRow(content = Text("30%")),
                     TableRow(content = Text("27.50%"))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                    TableRow(content = Text("20.00%")),
-                    TableRow(content = Text("25.00%")),
+                    TableRow(content = Text("20%")),
+                    TableRow(content = Text("25%")),
                     TableRow(content = Text("22.50%"))
                   )
                 ),
@@ -1024,8 +1024,8 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
-                    TableRow(content = Text("25.00%")),
-                    TableRow(content = Text("30.00%")),
+                    TableRow(content = Text("25%")),
+                    TableRow(content = Text("30%")),
                     TableRow(content = Text("27.50%"))
                   )
                 ),
@@ -1069,8 +1069,8 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                    TableRow(content = Text("25.00%")),
-                    TableRow(content = Text("30.00%")),
+                    TableRow(content = Text("25%")),
+                    TableRow(content = Text("30%")),
                     TableRow(content = Text("27.50%"))
                   )
                 ),
@@ -1116,9 +1116,9 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                    TableRow(content = Text("19.00%")),
-                    TableRow(content = Text("25.00%")),
-                    TableRow(content = Text("22.00%"))
+                    TableRow(content = Text("19%")),
+                    TableRow(content = Text("25%")),
+                    TableRow(content = Text("22%"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1162,9 +1162,9 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                    TableRow(content = Text("19.00%")),
-                    TableRow(content = Text("25.00%")),
-                    TableRow(content = Text("22.00%"))
+                    TableRow(content = Text("19%")),
+                    TableRow(content = Text("25%")),
+                    TableRow(content = Text("22%"))
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1208,14 +1208,14 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                    TableRow(content = Text("19.00%")),
-                    TableRow(content = Text("25.00%")),
-                    TableRow(content = Text("22.00%"))
+                    TableRow(content = Text("19%")),
+                    TableRow(content = Text("25%")),
+                    TableRow(content = Text("22%"))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                    TableRow(content = Text("19.00%")),
-                    TableRow(content = Text("20.00%")),
+                    TableRow(content = Text("19%")),
+                    TableRow(content = Text("20%")),
                     TableRow(content = Text("19.50%"))
                   )
                 ),

@@ -277,7 +277,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |      <td class="govuk-table__cell">
             |        <p class="govuk-body">fullResultsPage.taxableProfit.distributions</p>
             |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£77.00</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
             |    </tr>
@@ -369,7 +369,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |        <p class="govuk-body">fullResultsPage.taxableProfit.distributions</p>
             |      </td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£77.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.00</td>
+            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0</td>
             |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
             |    </tr>
             |    <tr class="govuk-table__row">

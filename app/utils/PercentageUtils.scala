@@ -32,6 +32,7 @@ object PercentageUtils {
     val result = value - n
     result match {
       case 0 => n.toString + "%"
-      case _ => twoDecimalFormat.format(value) + "%"}
+      case _ => twoDecimalFormat.format(value) + "%"
+    }
   }
 }
