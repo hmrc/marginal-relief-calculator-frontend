@@ -192,7 +192,7 @@ fullResultsPage.marginalReliefFormula.description = (Adjusted upper limit - taxa
 fullResultsPage.whatIsMarginalRateFraction = What is the Marginal Relief fraction?
 fullResultsPage.details.standardFraction = The standard fraction is the difference between the main rate and the marginal rate expressed as a fraction.
 fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.5% compared with the main rate 25% is 1.5% = 3 ÷ 200
-fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
+fullResultsPage.details.whatIsMarginalRate = Marginal rate calculation example
 fullResultsPage.details.smallProfitRate = Where the small profits rate is 19% and the main rate is 25%:
 fullResultsPage.details.examples.1 = £50,000 (lower limit) × 19% = £9,500
 fullResultsPage.details.examples.2 = £250,000 (upper limit) × 25% = £62,500
