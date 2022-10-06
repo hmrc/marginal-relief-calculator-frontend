@@ -295,17 +295,3 @@ errorInternal.title = Sorry, there is a problem with the service
 errorInternal.heading = Sorry, there is a problem with the service
 errorInternal.message1 = Try again later.
 errorInternal.message2 = We have not saved any of your answers. When the service is available, you will have to start again.
-
-twoAssociatedCompanies.checkYourAnswersLabel = Number of associated companies for financial year {0} to {1}
-twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Enter a number greater than 0 in at least one of your answers
-twoAssociatedCompanies.error.enterAtLeastOneAnswer = Enter a number for at least one of your answers
-twoAssociatedCompanies.error.nonNumeric = Enter a valid number for your associated companies. For example, 1
-twoAssociatedCompanies.error.required = Enter a valid number for your associated companies. For example, 1
-twoAssociatedCompanies.error.wholeNumber = Enter a valid number for your associated companies. For example, 1
-twoAssociatedCompanies.error.outOfRange = Enter a number between 1 and 99
-twoAssociatedCompanies.change.hidden = Two Associated Companies
-twoAssociatedCompanies.associatedCompanies = Associated Companies
-twoAssociatedCompanies.financialYearFromTo = Financial year {0} to {1}
-twoAssociatedCompanies.numberOfAssociatedCompaniesBetween = Number of associated companies between {0} to {1}
-twoAssociatedCompanies.accountingPeriodCovers2Years = Your accounting period covers 2 financial years with different sets of Marginal Relief limits.
-twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave = How many active associated companies did you have?

@@ -45,8 +45,3 @@ GET        /change-distributions-included         controllers.DistributionsInclu
 POST       /change-distributions-included         controllers.DistributionsIncludedController.onSubmit(mode: Mode = CheckMode)
 
 GET        /session-expired                       controllers.SessionExpiredController.onPageLoad()
-
-GET        /two-associated-companies              controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
-POST       /two-associated-companies              controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
-GET        /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)

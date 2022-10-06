@@ -18,7 +18,7 @@ package controllers
 
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.requests.DataRequest
 import models.{ Distribution, UserAnswers }
 import pages._
@@ -47,7 +47,6 @@ class ResultsPageController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
     userAnswers: UserAnswers
@@ -62,16 +61,14 @@ class ResultsPageController @Inject() (
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage),
-          request.userAnswers.get(TwoAssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage)
         ) match {
           case (
                 Some(accPeriod),
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                maybeAssociatedCompanies,
-                maybeTwoAssociatedCompanies
+                maybeAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               ResultsPageRequiredParams(
@@ -80,7 +77,6 @@ class ResultsPageController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
                 request.userAnswers
@@ -101,8 +97,8 @@ class ResultsPageController @Inject() (
           request.taxableProfit.toDouble,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
           request.associatedCompanies.flatMap(_.associatedCompaniesCount),
-          request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
-          request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
+          None,
+          None
         )
         .map(calculatorResult =>
           Ok(

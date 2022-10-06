@@ -40,9 +40,6 @@ class Navigator @Inject() () {
     case AssociatedCompaniesPage =>
       _ => routes.CheckYourAnswersController.onPageLoad
 
-    case TwoAssociatedCompaniesPage =>
-      _ => routes.CheckYourAnswersController.onPageLoad
-
     case _ =>
       _ => routes.IndexController.onPageLoad
   }
