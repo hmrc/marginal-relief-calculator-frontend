@@ -87,10 +87,10 @@ accountingPeriod.heading = What are your accounting period dates?
 accountingPeriod.hint = For example, 27 3 2023
 accountingPeriod.checkYourAnswersLabel = Accounting period dates
 accountingPeriod.defaultedEndDateMessage = End date defaulted to a full year from the start date.
-accountingPeriod.error.required.all = Enter the accountingPeriod.
-accountingPeriod.error.required.two = The accountingPeriod must include {0} and {1}.
-accountingPeriod.error.required = The accountingPeriod must include {0}.
-accountingPeriod.error.invalid = Enter a real AccountingPeriod.
+accountingPeriod.error.required.all = Enter the accountingPeriod
+accountingPeriod.error.required.two = The accountingPeriod must include {0} and {1}
+accountingPeriod.error.required = The accountingPeriod must include {0}
+accountingPeriod.error.invalid = Enter a real AccountingPeriod
 accountingPeriod.change.hidden = Accounting Period
 accountingPeriod.forExample=For example, 27 3 2023
 accountingPeriod.accountingPeriodCannotBeLongerThan12M=Your accounting period cannot be longer than a full year and is normally the same as the financial year covered by your company''s annual accounts.
@@ -165,6 +165,9 @@ resultsPage.howWeCalculated.body = Check the calculation in detail to see how we
 resultsPage.howWeCalculated.link = Check Marginal Relief calculation in detail
 resultsPage.effectiveTaxRateTable.hidden = Effective tax rate table
 resultsPage.corporationTaxTable.hidden = Corporation tax liability breakdown table
+resultsPage.getACopyOfResults = Get a copy of these results
+resultsPage.addReferenceBeforePrinting = You can also add reference details to this document before printing.
+resultsPage.printOrSave = Print or save your calculation
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
@@ -191,6 +194,14 @@ fullResultsPage.marginalReliefFormula = Marginal Relief formula is:
 fullResultsPage.marginalReliefFormula.description = (Adjusted upper limit - taxable profit including distributions) × (taxable profit ÷ taxable profit including distributions) × (Marginal Relief fraction)
 fullResultsPage.whatIsMarginalRateFraction = What is the Marginal Relief fraction?
 fullResultsPage.details.standardFraction = The standard fraction is the difference between the main rate and the marginal rate expressed as a fraction.
+fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.5% compared with the main rate 25% is 1.5% = 3 ÷ 200
+fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
+fullResultsPage.details.smallProfitRate = Where the small profits rate is 19% and the main rate is 25%:
+fullResultsPage.details.examples.1 = £50,000 (lower limit) × 19% = £9,500
+fullResultsPage.details.examples.2 = £250,000 (upper limit) × 25% = £62,500
+fullResultsPage.details.examples.3 = £200,000 (the difference between lower and upper limits) × X% = £53,000
+fullResultsPage.details.examples.4 = 53,000 ÷ 200,000 = 26.5% marginal rate
+fullResultsPage.variables = Calculation variables
 fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.50% compared with the main rate 25% is 1.5% = 3 ÷ 200
 fullResultsPage.details.whatIsMarginalRate = Marginal rate calculation example
 fullResultsPage.details.smallProfitRate = Small profits rate of
@@ -244,6 +255,7 @@ associatedCompanies.change.hidden = Associated Companies
 
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
+taxableProfit.heading.screenReader = How much is your company''s taxable profit in pounds?
 taxableProfit.label = Profit amount
 taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits.
@@ -291,7 +303,7 @@ distributionsIncluded.error.invalid = Select whether you received distributions 
 distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, 70000
 distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, 70000
 distributionsIncludedAmount.error.required = Enter an amount for your received distributions.
-distributionsIncluded.change.hidden = Distributions Amount
+distributionsIncluded.change.hidden = Distributions Included
 distributionsIncluded.emptyValue = None
 
 session.expired.title = Session expired
@@ -304,16 +316,11 @@ errorInternal.heading = Sorry, there is a problem with the service
 errorInternal.message1 = Try again later.
 errorInternal.message2 = We have not saved any of your answers. When the service is available, you will have to start again.
 
-twoAssociatedCompanies.checkYourAnswersLabel = Number of associated companies for financial year {0} to {1}
-twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Enter a number greater than 0 in at least one of your answers.
-twoAssociatedCompanies.error.enterAtLeastOneAnswer = Enter a number for at least one of your answers.
-twoAssociatedCompanies.error.nonNumeric = Enter a valid number for your associated companies. For example, 1.
-twoAssociatedCompanies.error.required = Enter a valid number for your associated companies. For example, 1.
-twoAssociatedCompanies.error.wholeNumber = Enter a valid number for your associated companies. For example, 1.
-twoAssociatedCompanies.error.outOfRange = Enter a number between 1 and 99.
-twoAssociatedCompanies.change.hidden = Two Associated Companies
-twoAssociatedCompanies.associatedCompanies = Associated Companies
-twoAssociatedCompanies.financialYearFromTo = Financial year {0} to {1}
-twoAssociatedCompanies.numberOfAssociatedCompaniesBetween = Number of associated companies between {0} to {1}
-twoAssociatedCompanies.accountingPeriodCovers2Years = Your accounting period covers 2 financial years with different sets of Marginal Relief limits.
-twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave = How many active associated companies did you have?
+pDFMetadata.title = Add company details to your results
+pDFMetadata.heading = Add company details to your results
+pDFMetadata.checkYourAnswersLabel = pDFMetadata
+pDFMetadata.companyname.label = Company name (optional)
+pDFMetadata.utr.label = UTR number (optional)
+pDFMetadata.companyname.error.length = Company name must be 160 characters or less
+pDFMetadata.utr.error.length = UTR number must be 100 characters or less
+pDFMetadata.change.hidden = PDF Meta Data

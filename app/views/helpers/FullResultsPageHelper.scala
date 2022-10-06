@@ -227,8 +227,7 @@ object FullResultsPageHelper extends ViewHelper {
     }
 
     def boldRow(text: String) = TableRow(
-      content = HtmlContent(s"""<span class="sr-only">Step</span> $text"""),
-      classes = "govuk-!-font-weight-bold"
+      content = HtmlContent(s"""<span class="sr-only">Step $text</span><span aria-hidden="true">$text</span>""")
     )
 
     val days = marginalRate.days
@@ -328,13 +327,14 @@ object FullResultsPageHelper extends ViewHelper {
               classes = "not-header"
             ),
             HeadCell(
-              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
-              classes = "not-header"
+              content =
+                HtmlContent(s"""<span class="govuk-!-display-none">${messages("fullResultsPage.variables")}</span>""")
             ),
             HeadCell(content = Text(messages("fullResultsPage.calculation"))),
             HeadCell(content = Text(messages("fullResultsPage.result")))
           )
-        )
+        ),
+        firstCellIsHeader = true
       )
       description match {
         case Some(text) =>
@@ -513,7 +513,8 @@ object FullResultsPageHelper extends ViewHelper {
                   )
                 ),
                 caption = Some(messages("fullResultsPage.taxableProfit")),
-                captionClasses = "govuk-table__caption--m"
+                captionClasses = "govuk-table__caption--m",
+                firstCellIsHeader = true
               )
             )
           ) + "</div>"

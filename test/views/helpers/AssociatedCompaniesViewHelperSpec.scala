@@ -49,9 +49,9 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
   private val govukInput = new GovukInput(govukErrorMessage, govukHint, govukLabel)
 
   "yesHtml" - {
-    "should return input field when AskAssociatedCompaniesParameter is AskFull" in {
+    "should return input field" in {
       val form = formProvider.apply()
-      AssociatedCompaniesViewHelper.yesHtml(form, AskFull) shouldBe Some(
+      AssociatedCompaniesViewHelper.yesHtml(form) shouldBe Some(
         govukInput(
           InputViewModel(
             field = form("associatedCompaniesCount"),
@@ -61,34 +61,6 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
             .withAttribute("maxlength" -> "2")
         )
       )
-    }
-
-    "should return input field when AskAssociatedCompaniesParameter is AskOnePart" in {
-      val form = formProvider.apply()
-      AssociatedCompaniesViewHelper.yesHtml(
-        form,
-        AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)))
-      ) shouldBe Some(
-        govukInput(
-          InputViewModel(
-            field = form("associatedCompaniesCount"),
-            label = Label(content = Text("Associated companies count"))
-          )
-            .withCssClass("govuk-!-width-one-third")
-            .withAttribute("maxlength" -> "2")
-        )
-      )
-    }
-
-    "should return None when AskAssociatedCompaniesParameter is DontAsk" in {
-      val form = formProvider.apply()
-      AssociatedCompaniesViewHelper.yesHtml(
-        form,
-        AskBothParts(
-          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
-          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
-        )
-      ) shouldBe None
     }
   }
 

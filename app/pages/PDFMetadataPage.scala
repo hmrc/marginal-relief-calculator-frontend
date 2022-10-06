@@ -16,17 +16,12 @@
 
 package pages
 
-import forms.TwoAssociatedCompaniesForm
-import pages.behaviours.PageBehaviours
+import forms.PDFMetadataForm
+import play.api.libs.json.JsPath
 
-class TwoAssociatedCompaniesPageSpec extends PageBehaviours {
+case object PDFMetadataPage extends QuestionPage[PDFMetadataForm] {
 
-  "TwoAssociatedCompaniesPage" - {
+  override def path: JsPath = JsPath \ toString
 
-    beRetrievable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
-
-    beSettable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
-
-    beRemovable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
-  }
+  override def toString: String = "pdfMetadata"
 }
