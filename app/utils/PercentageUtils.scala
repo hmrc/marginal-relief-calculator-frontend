@@ -23,7 +23,7 @@ object PercentageUtils {
 
   private val twoDecimalFormat = {
     val df = new DecimalFormat("0.00")
-    df.setRoundingMode(RoundingMode.HALF_DOWN)
+    df.setRoundingMode(RoundingMode.DOWN)
     df
   }
 
