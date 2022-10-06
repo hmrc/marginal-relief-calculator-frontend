@@ -16,7 +16,6 @@
 
 package views.helpers
 
-import akka.actor.typed.receptionist.Receptionist.Listing
 import connectors.sharedmodel._
 import forms.AccountingPeriodForm
 import forms.DateUtils.DateOps

@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter, DontAsk }
+import connectors.sharedmodel.{ AssociatedCompaniesParameter, DontAsk }
 import controllers.routes
 import models.{ CheckMode, UserAnswers }
 import pages.AssociatedCompaniesPage
@@ -31,7 +31,7 @@ object AssociatedCompaniesSummary {
     messages: Messages
   ): Option[SummaryListRow] =
     associatedCompaniesParameter match {
-      case DontAsk | AskBothParts(_, _) => None
+      case DontAsk => None
       case _ =>
         answers.get(AssociatedCompaniesPage).map { answer =>
           val count = answer.associatedCompaniesCount.getOrElse(0)
