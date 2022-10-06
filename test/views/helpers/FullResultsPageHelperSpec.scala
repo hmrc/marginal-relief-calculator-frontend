@@ -247,49 +247,6 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  </tbody>
             |</table>
             |</div>
-            |<div class="app-table" role="region" aria-label="fullResultsPage.taxableProfitTable.hidden" tabindex="0">
-            |<table summary="fullResultsPage.tableSummary" class="govuk-table">
-            |  <caption class="govuk-table__caption govuk-table__caption--m">fullResultsPage.taxableProfit</caption>
-            |  <thead class="govuk-table__head"><tr class="govuk-table__row">
-            |    <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">fullResultsPage.total</th>
-            |  </tr></thead>
-            |  <tbody class="govuk-table__body">
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell">
-            |        <p class="govuk-body">fullResultsPage.taxableProfit.daysAllocated</p>
-            |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">4 <span class="sr-only">resultsPage.s</span></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1010 <span class="sr-only">resultsPage.s</span></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1014 <span class="sr-only">resultsPage.s</span></td>
-            |    </tr>
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell">
-            |        <p class="govuk-body">fullResultsPage.taxableProfit</p>
-            |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£66.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£11.00</td>
-            |    </tr>
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell">
-            |        <p class="govuk-body">fullResultsPage.taxableProfit.distributions</p>
-            |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£77.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
-            |    </tr>
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell"><p class="govuk-body">fullResultsPage.taxableProfit.profitAndDistributions</p></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£143.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£122.00</td>
-            |    </tr>
-            |  </tbody>
-            |</table>
-            |</div>
             |""".stripMargin.htmlFormat
       }
       "when marginal rate for year 1 and flat rate for year 2, should display results table" in {
@@ -338,49 +295,6 @@ class FullResultsPageHelperSpec extends SpecBase {
             |</div>
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
-            |<div class="app-table" role="region" aria-label="fullResultsPage.taxableProfitTable.hidden" tabindex="0">
-            |<table summary="fullResultsPage.tableSummary" class="govuk-table">
-            |  <caption class="govuk-table__caption govuk-table__caption--m">fullResultsPage.taxableProfit</caption>
-            |  <thead class="govuk-table__head"><tr class="govuk-table__row">
-            |    <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">site.from.to</th>
-            |    <th scope="col" class="govuk-table__header govuk-table__header--numeric">fullResultsPage.total</th>
-            |  </tr></thead>
-            |  <tbody class="govuk-table__body">
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell">
-            |        <p class="govuk-body">fullResultsPage.taxableProfit.daysAllocated</p>
-            |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1010 <span class="sr-only">resultsPage.s</span></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">4 <span class="sr-only">resultsPage.s</span></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">1014 <span class="sr-only">resultsPage.s</span></td>
-            |    </tr>
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell">
-            |        <p class="govuk-body">fullResultsPage.taxableProfit</p>
-            |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£66.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£11.00</td>
-            |    </tr>
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell">
-            |        <p class="govuk-body">fullResultsPage.taxableProfit.distributions</p>
-            |      </td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£77.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£0.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£111.00</td>
-            |    </tr>
-            |    <tr class="govuk-table__row">
-            |      <td class="govuk-table__cell"><p class="govuk-body">fullResultsPage.taxableProfit.profitAndDistributions</p></td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£143.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£3.00</td>
-            |      <td class="govuk-table__cell govuk-table__cell--numeric">£122.00</td>
-            |    </tr>
-            |  </tbody>
-            |</table>
-            |</div>
             |""".stripMargin.htmlFormat
       }
       "when marginal relief > 0 show correct template" in {

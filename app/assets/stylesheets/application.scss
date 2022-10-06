@@ -119,6 +119,7 @@
             margin-bottom: 1em;
             padding: 5px 10px;
             background-color: #e1f3f1;
+            print-color-adjust: exact;
 
             .govuk-panel__body {
                 color: #0b0c0c;
@@ -163,6 +164,10 @@
             line-height: 1.3157894737;
             padding-bottom: 10px;
         }
+    }
+
+    .govuk-details {
+        display: none;
     }
 }
 
