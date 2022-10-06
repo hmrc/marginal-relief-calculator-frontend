@@ -28,11 +28,6 @@ object PercentageUtils {
   }
 
   def format(value: Double): String = {
-    val n = value.toInt
-    val result = value - n
-    result match {
-      case 0 => n.toString + "%"
-      case _ => twoDecimalFormat.format(value) + "%"
+    twoDecimalFormat.format(value).replace(".00", "") + "%"
     }
-  }
 }
