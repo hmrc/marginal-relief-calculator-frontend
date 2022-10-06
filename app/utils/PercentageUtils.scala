@@ -28,5 +28,5 @@ object PercentageUtils {
   }
 
   def format(value: Double): String =
-    twoDecimalFormat.format(value) + "%"
+    twoDecimalFormat.format(value).replace(".00", "") + "%"
 }

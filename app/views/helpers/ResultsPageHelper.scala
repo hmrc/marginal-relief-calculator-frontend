@@ -71,11 +71,11 @@ object ResultsPageHelper extends ViewHelper {
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.companysProfit").toKey,
-                    value = Value(CurrencyUtils.format(taxableProfit).toText)
+                    value = Value(CurrencyUtils.decimalFormat(taxableProfit).toText)
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.distributions").toKey,
-                    value = Value(CurrencyUtils.format(distributions).toText)
+                    value = Value(CurrencyUtils.decimalFormat(distributions).toText)
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.associatedCompanies").toKey,
@@ -310,14 +310,14 @@ object ResultsPageHelper extends ViewHelper {
                       else messages("resultsPage.corporationTaxLiability")
                     )
                   ),
-                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(details))))
+                  TableRow(content = Text(CurrencyUtils.decimalFormat(corporatonTaxBeforeMR(details))))
                 ),
                 if (marginalRelief(details) > 0) {
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
                     TableRow(content =
                       Text(
-                        "-" + CurrencyUtils.format(
+                        "-" + CurrencyUtils.decimalFormat(
                           marginalRelief(details)
                         )
                       )
@@ -329,7 +329,7 @@ object ResultsPageHelper extends ViewHelper {
                 if (marginalRelief(details) > 0) {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                    TableRow(content = Text(CurrencyUtils.format(details.corporationTax)))
+                    TableRow(content = Text(CurrencyUtils.decimalFormat(details.corporationTax)))
                   )
                 } else {
                   Seq.empty
