@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-package viewmodels
+package utils
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.prop.TableDrivenPropertyChecks
+import utils.PercentageUtils.format
 
-class WithCssClassSpec extends AnyFreeSpec with Matchers {
-  "toString" - {
-    "should return class name" in {
-      val impl = new WithCssClass("test-class") {}
-      impl.toString shouldBe "test-class"
+class PercentageUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
+
+  "format" - {
+    "should format the given number as a percentage and round to one decimal place " in {
+      val table = Table[Double, String](
+        ("input", "expected"),
+        (0.00, "0%"),
+        (0.01, "0.01%"),
+        (1.00, "1%"),
+        (1.01, "1.01%")
+      )
+      forAll(table) { (input, expected) =>
+        format(input) shouldBe expected
+      }
     }
   }
 }

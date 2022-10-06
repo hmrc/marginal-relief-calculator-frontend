@@ -89,8 +89,50 @@ class CheckYourAnswersControllerSpec
           AccountingPeriodSummary.row(requiredAnswers) ++
             TaxableProfitSummary.row(requiredAnswers) ++
             DistributionSummary.row(requiredAnswers) ++
-            AssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam) ++
-            TwoAssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam)
+            AssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam)
+        )
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view
+          .render(list, routes.ResultsPageController.onPageLoad().url, request, messages(application))
+          .toString
+      }
+    }
+
+    "must return OK and the correct view for a GET, when accounting period end date is empty" in {
+
+      val answers = requiredAnswers
+        .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), None))
+        .get
+
+      val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+        mock[MarginalReliefCalculatorConnector]
+
+      val application = applicationBuilder(userAnswers = Some(answers))
+        .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        .build()
+
+      mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        accountingPeriodStart = LocalDate.ofEpochDay(0),
+        accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1),
+        1.0,
+        Some(1)
+      )(*) returns Future.successful(AskFull)
+      implicit val msgs: Messages = messages(application)
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[CheckYourAnswersView]
+
+        val askAssociatedCompaniesParam = AskFull
+        val list = SummaryListViewModel(
+          AccountingPeriodSummary.row(answers) ++
+            TaxableProfitSummary.row(answers) ++
+            DistributionSummary.row(answers) ++
+            AssociatedCompaniesSummary.row(answers, askAssociatedCompaniesParam)
         )
 
         status(result) mustEqual OK

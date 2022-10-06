@@ -71,11 +71,11 @@ object ResultsPageHelper extends ViewHelper {
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.companysProfit").toKey,
-                    value = Value(CurrencyUtils.format(taxableProfit).toText)
+                    value = Value(CurrencyUtils.decimalFormat(taxableProfit).toText)
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.distributions").toKey,
-                    value = Value(CurrencyUtils.format(distributions).toText)
+                    value = Value(CurrencyUtils.decimalFormat(distributions).toText)
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.associatedCompanies").toKey,
@@ -134,39 +134,53 @@ object ResultsPageHelper extends ViewHelper {
       )
     }
 
-  def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
-    addBannerScreenReader(
-      calculatorResult,
-      calculatorResult match {
-        case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
+  def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): (String, Html) = {
+    val (title, panelHtml) = calculatorResult match {
+      case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
+        val title = messages("resultsPage.marginalReliefNotEligible")
+        (
+          title,
           govukPanel(
             Panel(
-              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              title = Text(title),
               content = Text(messages("resultsPage.marginalReliefNotApplicable"))
             )
           )
-        case SingleResult(m: MarginalRate) =>
-          marginalReliefBanner(m)
-        case DualResult(_: FlatRate, m: MarginalRate) =>
-          marginalReliefBanner(m)
-        case DualResult(m: MarginalRate, _: FlatRate) =>
-          marginalReliefBanner(m)
-        case DualResult(m1: MarginalRate, m2: MarginalRate) =>
-          marginalReliefBannerDual(m1, m2)
-      }
-    )
+        )
+      case SingleResult(m: MarginalRate) =>
+        marginalReliefBanner(m)
+      case DualResult(_: FlatRate, m: MarginalRate) =>
+        marginalReliefBanner(m)
+      case DualResult(m: MarginalRate, _: FlatRate) =>
+        marginalReliefBanner(m)
+      case DualResult(m1: MarginalRate, m2: MarginalRate) =>
+        marginalReliefBannerDual(m1, m2)
+    }
+    (title, addBannerScreenReader(calculatorResult, panelHtml))
+  }
 
-  private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit messages: Messages): Html =
+  private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit
+    messages: Messages
+  ): (String, Html) =
     if (m1.marginalRelief > 0 || m2.marginalRelief > 0) {
-      positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))
+      (
+        positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))._1,
+        positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))._2
+      )
     } else if (
       m1.adjustedAugmentedProfit >= m1.adjustedUpperThreshold && m2.adjustedAugmentedProfit >= m2.adjustedUpperThreshold
     ) {
-      adjustedProfitAboveUpperThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
+      (
+        adjustedProfitAboveUpperThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._1,
+        adjustedProfitAboveUpperThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._2
+      )
     } else if (
       m1.adjustedAugmentedProfit <= m1.adjustedLowerThreshold && m2.adjustedAugmentedProfit <= m2.adjustedLowerThreshold
     ) {
-      adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
+      (
+        adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._1,
+        adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._2
+      )
     } else {
       val message =
         "Marginal relief was 0, however adjusted profits for one year was below lower threshold and the other year was above upper threshold"
@@ -174,13 +188,22 @@ object ResultsPageHelper extends ViewHelper {
       throw new UnsupportedOperationException(message)
     }
 
-  private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): Html =
+  private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): (String, Html) =
     if (marginalRate.marginalRelief > 0) {
-      positiveMarginalReliefBanner(marginalRate.marginalRelief)
+      (
+        positiveMarginalReliefBanner(marginalRate.marginalRelief)._1,
+        positiveMarginalReliefBanner(marginalRate.marginalRelief)._2
+      )
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
-      adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions)
+      (
+        adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions)._1,
+        adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions)._2
+      )
     } else if (marginalRate.adjustedAugmentedProfit <= marginalRate.adjustedLowerThreshold) {
-      adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions)
+      (
+        adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions)._1,
+        adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions)._2
+      )
     } else {
       val message =
         "Marginal relief was 0, but augmented profit was neither <= lower-threshold or >= upper-threshold. Probably a rounding issue!"
@@ -188,7 +211,10 @@ object ResultsPageHelper extends ViewHelper {
       throw new UnsupportedOperationException(message)
     }
 
-  private def adjustedProfitBelowLowerThresholdBanner(adjustedDistributions: Double)(implicit messages: Messages) =
+  private def adjustedProfitBelowLowerThresholdBanner(
+    adjustedDistributions: Double
+  )(implicit messages: Messages): (String, Html) = (
+    messages("resultsPage.marginalReliefNotEligible"),
     govukPanel(
       Panel(
         title = Text(messages("resultsPage.marginalReliefNotEligible")),
@@ -203,8 +229,12 @@ object ResultsPageHelper extends ViewHelper {
         )
       )
     )
+  )
 
-  def adjustedProfitAboveUpperThresholdBanner(adjustedDistributions: Double)(implicit messages: Messages) =
+  def adjustedProfitAboveUpperThresholdBanner(
+    adjustedDistributions: Double
+  )(implicit messages: Messages): (String, Html) = (
+    messages("resultsPage.marginalReliefNotEligible"),
     govukPanel(
       Panel(
         title = Text(messages("resultsPage.marginalReliefNotEligible")),
@@ -219,14 +249,17 @@ object ResultsPageHelper extends ViewHelper {
         )
       )
     )
+  )
 
-  private def positiveMarginalReliefBanner(marginalRelief: Double)(implicit messages: Messages): Html =
+  private def positiveMarginalReliefBanner(marginalRelief: Double)(implicit messages: Messages): (String, Html) = (
+    messages("resultsPage.marginalReliefForAccPeriodIs"),
     bannerPanel(
       Panel(
         title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
         content = Text(CurrencyUtils.format(marginalRelief))
       )
     )
+  )
 
   def addBannerScreenReader(calculatorResult: CalculatorResult, bannerHtml: Html)(implicit messages: Messages): Html = {
     val master = bannerHtml.toString();
@@ -277,14 +310,14 @@ object ResultsPageHelper extends ViewHelper {
                       else messages("resultsPage.corporationTaxLiability")
                     )
                   ),
-                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(details))))
+                  TableRow(content = Text(CurrencyUtils.decimalFormat(corporatonTaxBeforeMR(details))))
                 ),
                 if (marginalRelief(details) > 0) {
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
                     TableRow(content =
                       Text(
-                        "-" + CurrencyUtils.format(
+                        "-" + CurrencyUtils.decimalFormat(
                           marginalRelief(details)
                         )
                       )
@@ -296,7 +329,7 @@ object ResultsPageHelper extends ViewHelper {
                 if (marginalRelief(details) > 0) {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                    TableRow(content = Text(CurrencyUtils.format(details.corporationTax)))
+                    TableRow(content = Text(CurrencyUtils.decimalFormat(details.corporationTax)))
                   )
                 } else {
                   Seq.empty
@@ -545,15 +578,18 @@ object ResultsPageHelper extends ViewHelper {
     val fromYear2 = year2.year
     val toYear2 = fromYear2 + 1
 
-    p(
-      messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
-        messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull) + "<br/>" +
+    Html(s"""${p(
+        messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
+          messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull),
+        "govuk-body govuk-!-margin-0"
+      )}
+    ${p(
         messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
-        messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
-    )
+          messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
+      )}""")
   }
 
   def screenReaderText()(implicit messages: Messages) = Html(
-    s"""<span class="sr-only">${messages("resultsPage.s")}</span>"""
+    s"""<span class="sr-only">${messages("resultsPage.days")}</span>"""
   )
 }

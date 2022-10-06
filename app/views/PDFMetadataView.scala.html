@@ -1,0 +1,67 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.InputWidth._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukInput: GovukInput,
+    govukButton: GovukButton
+)
+
+@(form: Form[_])(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("pDFMetadata.title"))) {
+
+    @formHelper(action = routes.PDFMetadataController.onSubmit()) {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(
+                ErrorSummaryViewModel(
+                    form,
+                    errorLinkOverrides = Map(form.errors.head.key -> form.errors.head.key)
+                )
+            )
+        }
+
+        <h1 class="govuk-fieldset__legend--l">@messages("pDFMetadata.title")</h1>
+        <p class="govuk-body">You will get a document that shows today’s date and time of completion, your answers and your result. This is for your records only, HMRC will not use these details.</p>
+
+        @govukInput(
+            InputViewModel(
+                field = form("companyName"),
+                label = Label(content = Text(messages("pDFMetadata.companyname.label")))
+            )
+            .withCssClass("govuk-!-width-two-thirds")
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("utr"),
+                label = Label(content = Text(messages("pDFMetadata.utr.label")))
+            )
+            .withCssClass("govuk-!-width-two-thirds")
+        )
+
+        <br/>
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

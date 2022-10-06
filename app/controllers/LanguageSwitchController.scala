@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package forms
+package controllers
 
-import play.api.libs.json.{ Format, Json }
+import com.google.inject.Inject
+import config.FrontendAppConfig
+import play.api.i18n.Lang
+import play.api.mvc._
+import uk.gov.hmrc.play.language.{ LanguageController, LanguageUtils }
 
-case class TwoAssociatedCompaniesForm(
-  associatedCompaniesFY1Count: Option[Int],
-  associatedCompaniesFY2Count: Option[Int]
-)
+class LanguageSwitchController @Inject() (
+  appConfig: FrontendAppConfig,
+  languageUtils: LanguageUtils,
+  cc: ControllerComponents
+) extends LanguageController(languageUtils, cc) {
 
-object TwoAssociatedCompaniesForm {
-  implicit val format: Format[TwoAssociatedCompaniesForm] = Json.format[TwoAssociatedCompaniesForm]
+  override def fallbackURL: String = routes.IndexController.onPageLoad.url
+
+  override def languageMap: Map[String, Lang] = appConfig.languageMap
 }

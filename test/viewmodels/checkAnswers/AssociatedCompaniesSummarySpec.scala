@@ -36,22 +36,6 @@ class AssociatedCompaniesSummarySpec extends AnyFreeSpec with Matchers with Tabl
   private implicit val messages: Messages = Helpers.stubMessages()
 
   "row" - {
-    "when AskAssociatedCompaniesParameter is AskBothParts, return empty" in {
-      val askAssociatedCompaniesParameter = AskBothParts(
-        Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
-        Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
-      )
-      val userAnswers = UserAnswers("id")
-        .set(
-          AssociatedCompaniesPage,
-          AssociatedCompaniesForm(
-            AssociatedCompanies.Yes,
-            None
-          )
-        )
-        .get
-      AssociatedCompaniesSummary.row(userAnswers, askAssociatedCompaniesParameter) shouldBe None
-    }
 
     "when AskAssociatedCompaniesParameter is DontAsk, return empty" in {
       AssociatedCompaniesSummary.row(UserAnswers("id"), DontAsk) shouldBe None
@@ -128,6 +112,31 @@ class AssociatedCompaniesSummarySpec extends AnyFreeSpec with Matchers with Tabl
         ),
         (
           AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0))),
+          UserAnswers("id")
+            .set(
+              AssociatedCompaniesPage,
+              AssociatedCompaniesForm(
+                AssociatedCompanies.No,
+                None
+              )
+            )
+            .get,
+          Some(
+            SummaryListRowViewModel(
+              key = "associatedCompanies.checkYourAnswersLabel",
+              value = ValueViewModel("0"),
+              actions = Seq(
+                ActionItemViewModel("site.change", routes.AssociatedCompaniesController.onPageLoad(CheckMode).url)
+                  .withVisuallyHiddenText("associatedCompanies.change.hidden")
+              )
+            )
+          )
+        ),
+        (
+          AskBothParts(
+            Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
+            Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
+          ),
           UserAnswers("id")
             .set(
               AssociatedCompaniesPage,

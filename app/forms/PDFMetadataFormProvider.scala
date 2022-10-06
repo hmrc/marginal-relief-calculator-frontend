@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import models.{ AssociatedCompanies, _ }
-import org.scalacheck.{ Arbitrary, Gen }
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.Forms.{ mapping, optional }
 
-trait ModelGenerators {
+class PDFMetadataFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
-    Arbitrary {
-      Gen.oneOf(DistributionsIncluded.values)
-    }
-
-  implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =
-    Arbitrary {
-      Gen.oneOf(Distribution.values.toSeq)
-    }
-
-  implicit lazy val arbitraryAssociatedCompanies: Arbitrary[AssociatedCompanies] =
-    Arbitrary {
-      Gen.oneOf(AssociatedCompanies.values)
-    }
+  def apply(): Form[PDFMetadataForm] =
+    Form(
+      mapping(
+        "companyName" -> optional(
+          text()
+            .verifying(maxLength(160, "pDFMetadata.companyname.error.length"))
+        ),
+        "utr" -> optional(
+          text()
+            .verifying(maxLength(100, "pDFMetadata.utr.error.length"))
+        )
+      )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
+    )
 }

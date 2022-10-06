@@ -16,47 +16,50 @@
 
 package controllers
 
-import com.google.inject.Inject
-import connectors.MarginalReliefCalculatorConnector
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import controllers.actions._
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataFormProvider }
 import models.requests.DataRequest
-import models.{ Distribution, UserAnswers }
+import models.{ Distribution, NormalMode, UserAnswers }
+import navigation.Navigator
 import pages._
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc._
+import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.checkAnswers._
-import viewmodels.govuk.summarylist._
-import views.html.CheckYourAnswersView
+import views.html.PDFMetadataView
 
+import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
-class CheckYourAnswersController @Inject() (
+class PDFMetadataController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  formProvider: PDFMetadataFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourAnswersView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
+  view: PDFMetadataView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  case class CheckYourAnswersRequiredParams[A](
+  private val form = formProvider()
+
+  case class PDFMetadataPageRequiredParams[A](
     accountingPeriod: AccountingPeriodForm,
     taxableProfit: Int,
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
-    userAnswers: UserAnswers,
-    request: Request[A]
+    request: Request[A],
+    userId: String,
+    userAnswers: UserAnswers
   ) extends WrappedRequest[A](request)
-
-  private val requireDomainData = new ActionRefiner[DataRequest, CheckYourAnswersRequiredParams] {
+  private val requireDomainData = new ActionRefiner[DataRequest, PDFMetadataPageRequiredParams] {
     override protected def refine[A](
       request: DataRequest[A]
-    ): Future[Either[Result, CheckYourAnswersRequiredParams[A]]] =
+    ): Future[Either[Result, PDFMetadataPageRequiredParams[A]]] =
       Future.successful {
         (
           request.userAnswers.get(AccountingPeriodPage),
@@ -71,16 +74,17 @@ class CheckYourAnswersController @Inject() (
                 Some(distribution),
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies
-              ) =>
+              ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
-              CheckYourAnswersRequiredParams(
+              PDFMetadataPageRequiredParams(
                 accPeriod,
                 taxableProfit,
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                request.userAnswers,
-                request
+                request,
+                request.userId,
+                request.userAnswers
               )
             )
           case _ => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
@@ -89,23 +93,26 @@ class CheckYourAnswersController @Inject() (
     override protected def executionContext: ExecutionContext = ec
   }
 
-  def onPageLoad(): Action[AnyContent] =
-    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
-      for {
-        askAssociatedParameter <- marginalReliefCalculatorConnector.associatedCompaniesParameters(
-                                    request.accountingPeriod.accountingPeriodStartDate,
-                                    request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                    request.taxableProfit,
-                                    request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble)
-                                  )
-      } yield {
-        val list = SummaryListViewModel(
-          AccountingPeriodSummary.row(request.userAnswers) ++
-            TaxableProfitSummary.row(request.userAnswers) ++
-            DistributionSummary.row(request.userAnswers) ++
-            AssociatedCompaniesSummary.row(request.userAnswers, askAssociatedParameter)
-        )
-        Ok(view(list, routes.ResultsPageController.onPageLoad().url))
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(PDFMetadataPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
       }
-    }
+      Ok(view(preparedForm))
+  }
+
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFMetadataPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers))
+        )
+  }
 }

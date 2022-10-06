@@ -31,9 +31,11 @@
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
+@titleAndBanner = @{displayBanner(calculatorResult)}
 
-    @displayBanner(calculatorResult)
+@layout(pageTitle = titleNoForm(titleAndBanner._1)) {
+
+    @titleAndBanner._2
 
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
 
@@ -64,7 +66,15 @@
     <h2 class="govuk-heading-m">@messages("resultsPage.howWeCalculated.heading")</h2>
     <p class="govuk-body">@messages("resultsPage.howWeCalculated.body")</p>
     <p class="govuk-body"><a href="@routes.FullResultsPageController.onPageLoad().url" class="govuk-link">@messages("resultsPage.howWeCalculated.link")</a></p>
+
+    <h2 class="govuk-heading-m">@messages("resultsPage.getACopyOfResults")</h2>
+    <p class="govuk-body">@messages("resultsPage.addReferenceBeforePrinting")</p>
+    <p class="govuk-body">
+        <a href="@routes.PDFMetadataController.onPageLoad().url" class="govuk-link">@messages("resultsPage.printOrSave")</a>
+    </p>
+
     <br/>
+
     @govukButton(
         Button(
             href = Some(routes.IndexController.onPageLoad.url),
