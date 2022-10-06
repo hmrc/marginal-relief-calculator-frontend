@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataFormProvider, TwoAssociatedCompaniesForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataFormProvider }
 import models.requests.DataRequest
 import models.{ Distribution, NormalMode, UserAnswers }
 import navigation.Navigator
@@ -52,7 +52,6 @@ class PDFMetadataController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
     userAnswers: UserAnswers
@@ -67,16 +66,14 @@ class PDFMetadataController @Inject() (
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage),
-          request.userAnswers.get(TwoAssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage)
         ) match {
           case (
                 Some(accPeriod),
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                maybeAssociatedCompanies,
-                maybeTwoAssociatedCompanies
+                maybeAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               PDFMetadataPageRequiredParams(
@@ -85,7 +82,6 @@ class PDFMetadataController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
                 request.userAnswers
