@@ -17,19 +17,19 @@
 package controllers
 
 import controllers.actions._
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataFormProvider, TwoAssociatedCompaniesForm}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataFormProvider, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{Distribution, NormalMode, UserAnswers}
+import models.{ Distribution, NormalMode, UserAnswers }
 import navigation.Navigator
 import pages._
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PDFMetadataView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class PDFMetadataController @Inject() (
   override val messagesApi: MessagesApi,
@@ -47,20 +47,20 @@ class PDFMetadataController @Inject() (
   private val form = formProvider()
 
   case class PDFMetadataPageRequiredParams[A](
-                                           accountingPeriod: AccountingPeriodForm,
-                                           taxableProfit: Int,
-                                           distribution: Distribution,
-                                           distributionsIncluded: Option[DistributionsIncludedForm],
-                                           associatedCompanies: Option[AssociatedCompaniesForm],
-                                           twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
-                                           request: Request[A],
-                                           userId: String,
-                                           userAnswers: UserAnswers
-                                         ) extends WrappedRequest[A](request)
+    accountingPeriod: AccountingPeriodForm,
+    taxableProfit: Int,
+    distribution: Distribution,
+    distributionsIncluded: Option[DistributionsIncludedForm],
+    associatedCompanies: Option[AssociatedCompaniesForm],
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
+    request: Request[A],
+    userId: String,
+    userAnswers: UserAnswers
+  ) extends WrappedRequest[A](request)
   private val requireDomainData = new ActionRefiner[DataRequest, PDFMetadataPageRequiredParams] {
     override protected def refine[A](
-                                      request: DataRequest[A]
-                                    ): Future[Either[Result, PDFMetadataPageRequiredParams[A]]] =
+      request: DataRequest[A]
+    ): Future[Either[Result, PDFMetadataPageRequiredParams[A]]] =
       Future.successful {
         (
           request.userAnswers.get(AccountingPeriodPage),
@@ -71,13 +71,13 @@ class PDFMetadataController @Inject() (
           request.userAnswers.get(TwoAssociatedCompaniesPage)
         ) match {
           case (
-            Some(accPeriod),
-            Some(taxableProfit),
-            Some(distribution),
-            maybeDistributionsIncluded,
-            maybeAssociatedCompanies,
-            maybeTwoAssociatedCompanies
-            ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
+                Some(accPeriod),
+                Some(taxableProfit),
+                Some(distribution),
+                maybeDistributionsIncluded,
+                maybeAssociatedCompanies,
+                maybeTwoAssociatedCompanies
+              ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               PDFMetadataPageRequiredParams(
                 accPeriod,
@@ -97,25 +97,26 @@ class PDFMetadataController @Inject() (
     override protected def executionContext: ExecutionContext = ec
   }
 
-
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData) { implicit request =>
-    val preparedForm = request.userAnswers.get(PDFMetadataPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
-    }
-    Ok(view(preparedForm))
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(PDFMetadataPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+      Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFMetadataPage, value))
-            _              <- sessionRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers))
-      )
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
+    implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFMetadataPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers))
+        )
   }
 }

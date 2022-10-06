@@ -19,7 +19,6 @@ package pages
 import forms.PDFMetadataForm
 import pages.behaviours.PageBehaviours
 
-
 class PDFMetadataPageSpec extends PageBehaviours {
 
   "PDFMetadataPage" - {

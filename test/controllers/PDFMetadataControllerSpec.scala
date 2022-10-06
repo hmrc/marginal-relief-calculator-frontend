@@ -168,7 +168,10 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result).filterAndTrim mustEqual view(boundForm)(request, messages(application)).toString.filterAndTrim
+          contentAsString(result).filterAndTrim mustEqual view(boundForm)(
+            request,
+            messages(application)
+          ).toString.filterAndTrim
         }
       }
 

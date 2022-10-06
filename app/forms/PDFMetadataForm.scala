@@ -16,7 +16,7 @@
 
 package forms
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{ Format, Json }
 
 final case class PDFMetadataForm(companyName: Option[String], utr: Option[String])
 

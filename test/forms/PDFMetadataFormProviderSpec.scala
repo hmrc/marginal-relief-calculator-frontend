@@ -17,9 +17,9 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import org.scalacheck.{Gen, Shrink}
+import org.scalacheck.{ Gen, Shrink }
 import org.scalacheck.Gen.option
-import play.api.data.{Form, FormError}
+import play.api.data.{ Form, FormError }
 
 class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
@@ -50,7 +50,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
   "bind" - {
 
     "should bind empty map" in {
-      form.bind(Map.empty[String,String]).value mustBe Some(PDFMetadataForm(None, None))
+      form.bind(Map.empty[String, String]).value mustBe Some(PDFMetadataForm(None, None))
     }
 
     "should bind empty strings" in {
@@ -59,28 +59,36 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
     "should bind valid data" in {
       forAll(validPDFMetadataFormGenerator) { valid =>
-        form.bind((valid.companyName.map("companyName" -> _).toList ++ valid.utr.map("utr" -> _).toList).toMap).value mustBe Some(valid)
+        form
+          .bind((valid.companyName.map("companyName" -> _).toList ++ valid.utr.map("utr" -> _).toList).toMap)
+          .value mustBe Some(valid)
       }
     }
 
     "should return error when company name is invalid" in {
       forAll(invalidCompanyName) { invalid =>
-        val result = form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
+        val result =
+          form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
         result.errors mustBe List(FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)))
       }
     }
 
     "should return error when utr is invalid" in {
       forAll(invalidUTR) { invalid =>
-        val result = form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
+        val result =
+          form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
         result.errors mustBe List(FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(100)))
       }
     }
 
     "should return error when company name and utr are invalid" in {
       forAll(invalidCompanyNameUTR) { invalid =>
-        val result = form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
-        result.errors mustBe List(FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)), FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(100)))
+        val result =
+          form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
+        result.errors mustBe List(
+          FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)),
+          FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(100))
+        )
       }
     }
   }
