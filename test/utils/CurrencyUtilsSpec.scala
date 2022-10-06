@@ -68,7 +68,7 @@ class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenProper
     "should format the given number in GBP currency" in {
       val table = Table[Double, String](
         ("input", "expected"),
-        (0, "£0.00"),
+        (0, "£0"),
         (0.01, "£0.01"),
         (0.1, "£0.10"),
         (1, "£1.00"),

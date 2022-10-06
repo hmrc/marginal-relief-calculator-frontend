@@ -16,15 +16,14 @@
 
 package generators
 
-import models._
-import models.AssociatedCompanies
+import models.{ AssociatedCompanies, _ }
 import org.scalacheck.{ Arbitrary, Gen }
 
 trait ModelGenerators {
 
   implicit lazy val arbitraryDistributionsIncluded: Arbitrary[DistributionsIncluded] =
     Arbitrary {
-      Gen.oneOf(DistributionsIncluded.values.toSeq)
+      Gen.oneOf(DistributionsIncluded.values)
     }
 
   implicit lazy val arbitraryDistribution: Arbitrary[Distribution] =

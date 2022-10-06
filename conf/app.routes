@@ -46,7 +46,5 @@ POST       /change-distributions-included         controllers.DistributionsInclu
 
 GET        /session-expired                       controllers.SessionExpiredController.onPageLoad()
 
-GET        /two-associated-companies              controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = NormalMode)
-POST       /two-associated-companies              controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = NormalMode)
-GET        /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onPageLoad(mode: Mode = CheckMode)
-POST       /change-two-associated-companies       controllers.TwoAssociatedCompaniesController.onSubmit(mode: Mode = CheckMode)
+GET        /pdf-meta-data                         controllers.PDFMetadataController.onPageLoad()
+POST       /pdf-meta-data                         controllers.PDFMetadataController.onSubmit()

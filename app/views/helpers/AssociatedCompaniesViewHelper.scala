@@ -32,22 +32,17 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
   private val govukLabel = new GovukLabel
   private val govukInput = new GovukInput(govukErrorMessage, govukHint, govukLabel)
 
-  def yesHtml(form: Form[_], a: AskAssociatedCompaniesParameter)(implicit messages: Messages): Option[Html] =
-    a match {
-      case AskFull | AskOnePart(_) =>
-        Some(
-          govukInput(
-            InputViewModel(
-              field = form("associatedCompaniesCount"),
-              label = Label(content = Text(messages("associatedCompanies.countLabel")))
-            )
-              .withCssClass("govuk-!-width-one-third")
-              .withAttribute("maxlength" -> "2")
-          )
+  def yesHtml(form: Form[_])(implicit messages: Messages): Option[Html] =
+    Some(
+      govukInput(
+        InputViewModel(
+          field = form("associatedCompaniesCount"),
+          label = Label(content = Text(messages("associatedCompanies.countLabel")))
         )
-      case _ =>
-        None
-    }
+          .withCssClass("govuk-!-width-one-third")
+          .withAttribute("maxlength" -> "2")
+      )
+    )
 
   def heading(a: AskAssociatedCompaniesParameter)(implicit messages: Messages): Html =
     h1(

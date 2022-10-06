@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import forms.TwoAssociatedCompaniesForm
-import play.api.libs.json.JsPath
+import play.api.libs.json.{ Format, Json }
 
-case object TwoAssociatedCompaniesPage extends QuestionPage[TwoAssociatedCompaniesForm] {
+final case class PDFMetadataForm(companyName: Option[String], utr: Option[String])
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "twoAssociatedCompanies"
+object PDFMetadataForm {
+  implicit val format: Format[PDFMetadataForm] = Json.format[PDFMetadataForm]
 }

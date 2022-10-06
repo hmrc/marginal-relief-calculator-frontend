@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import play.api.libs.json.{ Format, Json }
+import forms.PDFMetadataForm
+import pages.behaviours.PageBehaviours
 
-case class TwoAssociatedCompaniesForm(
-  associatedCompaniesFY1Count: Option[Int],
-  associatedCompaniesFY2Count: Option[Int]
-)
+class PDFMetadataPageSpec extends PageBehaviours {
 
-object TwoAssociatedCompaniesForm {
-  implicit val format: Format[TwoAssociatedCompaniesForm] = Json.format[TwoAssociatedCompaniesForm]
+  "PDFMetadataPage" - {
+
+    beRetrievable[PDFMetadataForm](PDFMetadataPage)
+
+    beSettable[PDFMetadataForm](PDFMetadataPage)
+
+    beRemovable[PDFMetadataForm](PDFMetadataPage)
+  }
 }

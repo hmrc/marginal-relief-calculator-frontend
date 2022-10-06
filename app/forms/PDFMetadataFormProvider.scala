@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.Forms.{ mapping, optional }
 
-object PercentageUtils {
+class PDFMetadataFormProvider @Inject() extends Mappings {
 
-  private val twoDecimalFormat = {
-    val df = new DecimalFormat("0.00")
-    df.setRoundingMode(RoundingMode.HALF_DOWN)
-    df
-  }
-
-  def format(value: Double): String =
-    twoDecimalFormat.format(value).replace(".00", "") + "%"
+  def apply(): Form[PDFMetadataForm] =
+    Form(
+      mapping(
+        "companyName" -> optional(
+          text()
+            .verifying(maxLength(160, "pDFMetadata.companyname.error.length"))
+        ),
+        "utr" -> optional(
+          text()
+            .verifying(maxLength(100, "pDFMetadata.utr.error.length"))
+        )
+      )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
+    )
 }
