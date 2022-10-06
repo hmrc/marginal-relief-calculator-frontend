@@ -165,6 +165,9 @@ resultsPage.howWeCalculated.body = Check the calculation in detail to see how we
 resultsPage.howWeCalculated.link = Check Marginal Relief calculation in detail
 resultsPage.effectiveTaxRateTable.hidden = Effective tax rate table
 resultsPage.corporationTaxTable.hidden = Corporation tax liability breakdown table
+resultsPage.getACopyOfResults = Get a copy of these results
+resultsPage.addReferenceBeforePrinting = You can also add reference details to this document before printing.
+resultsPage.printOrSave = Print or save your calculation
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
@@ -295,3 +298,12 @@ errorInternal.title = Sorry, there is a problem with the service
 errorInternal.heading = Sorry, there is a problem with the service
 errorInternal.message1 = Try again later.
 errorInternal.message2 = We have not saved any of your answers. When the service is available, you will have to start again.
+
+pDFMetadata.title = Add company details to your results
+pDFMetadata.heading = Add company details to your results
+pDFMetadata.checkYourAnswersLabel = pDFMetadata
+pDFMetadata.companyname.label = Company name (optional)
+pDFMetadata.utr.label = UTR number (optional)
+pDFMetadata.companyname.error.length = Company name must be 160 characters or less
+pDFMetadata.utr.error.length = UTR number must be 100 characters or less
+pDFMetadata.change.hidden = PDF Meta Data

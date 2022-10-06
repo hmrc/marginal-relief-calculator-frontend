@@ -40,6 +40,9 @@ class Navigator @Inject() () {
     case AssociatedCompaniesPage =>
       _ => routes.CheckYourAnswersController.onPageLoad
 
+    case PDFMetadataPage =>
+      _ => routes.PDFMetadataController.onPageLoad()
+
     case _ =>
       _ => routes.IndexController.onPageLoad
   }
