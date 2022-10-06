@@ -43,7 +43,7 @@ class ResultsPageHelperSpec extends SpecBase {
   "displayYourDetails" - {
     "when accounting period falls in a single year" - {
       "should return valid summary" in {
-        val calculatorResult = SingleResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        val calculatorResult = SingleResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
 
         displayYourDetails(
           calculatorResult,
@@ -86,7 +86,11 @@ class ResultsPageHelperSpec extends SpecBase {
 
     "when accounting period spans multiple years and displayCoversFinancialYears is false" in {
       val calculatorResult =
-        DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        DualResult(
+          MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          1
+        )
 
       displayYourDetails(
         calculatorResult,
@@ -126,7 +130,11 @@ class ResultsPageHelperSpec extends SpecBase {
 
     "when accounting period spans multiple years and displayCoversFinancialYears is true" in {
       val calculatorResult =
-        DualResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+        DualResult(
+          MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          1
+        )
 
       displayYourDetails(
         calculatorResult,
@@ -168,7 +176,7 @@ class ResultsPageHelperSpec extends SpecBase {
   "displayBanner" - {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
-        val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
+        val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo
           messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -184,7 +192,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are within thresholds" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 0, 100, 1500, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 0, 100, 1500, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo
           messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -200,7 +208,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate, profits are equal to lower threshold and distributions 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 100, 100, 1000, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 100, 100, 1000, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -215,7 +223,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate, profits are equal to lower threshold and distributions greater than 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 110, 1000, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 110, 1000, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -230,7 +238,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are below lower threshold and distributions 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 0, 200, 1000, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 0, 200, 1000, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -245,7 +253,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are below threshold and distributions greater than 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 200, 1000, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 200, 1000, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -260,7 +268,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate, profits are equal to upper threshold and distributions 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 100, 1000, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 100, 1000, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -275,7 +283,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate, profits are equal to upper threshold and distributions greater than 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 100, 1000, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 100, 1000, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -290,7 +298,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are above upper threshold and distributions 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 200, 900, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 200, 900, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -305,7 +313,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are above threshold and distributions greater than 0" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 200, 900, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 200, 900, 365), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -320,7 +328,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate is 0, but profits are between threshold" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 1000, 1500, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 1000, 1500, 365), 1)
         val result = intercept[UnsupportedOperationException] {
           displayBanner(calculatorResult)
         }
@@ -331,7 +339,7 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period spans 2 years" - {
       "when flat rate for both years" in {
         val calculatorResult =
-          DualResult(FlatRate(1970, 190, 19, 1000, 100, 0, 0), FlatRate(1971, 200, 20, 1000, 100, 0, 0))
+          DualResult(FlatRate(1970, 190, 19, 1000, 100, 0, 0), FlatRate(1971, 200, 20, 1000, 100, 0, 0), 1)
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
           addBannerScreenReader(
@@ -347,7 +355,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate year 1 and marginal rate for year 2" in {
         val calculatorResult = DualResult(
           FlatRate(1970, 190, 19, 1000, 100, 0, 0),
-          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -365,7 +374,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate year 1 and flat rate for year 2" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0),
-          FlatRate(1970, 190, 19, 1000, 100, 0, 0)
+          FlatRate(1970, 190, 19, 1000, 100, 0, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -383,7 +393,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years and MR for both years are positive" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0),
-          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -401,7 +412,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, both years have 0 MR as adjusted profits are below lower limits (no distributions)" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1000, 1500, 100),
-          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1000, 1500, 100)
+          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 0, 1000, 1000, 1500, 100),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -419,7 +431,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, both years have 0 MR as adjusted profits are below lower limits (with distributions)" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1010, 1100, 1500, 100),
-          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1010, 1100, 1500, 100)
+          MarginalRate(1971, 190, 19, 190, 19, 0, 1000, 10, 1010, 1100, 1500, 100),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -437,7 +450,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, both years have 0 MR as adjusted profits are above upper limits (no distributions)" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0),
-          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0)
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -455,7 +469,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, both years have 0 MR as adjusted profits are above upper limits (with distributions)" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100, 0),
-          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100, 0)
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 100, 500, 100, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -473,7 +488,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, year 1 has positive MR and year 2 has 0 MR" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0),
-          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100, 0)
+          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -491,7 +507,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, year 1 has 0 MR and year 2 has positive MR" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1100, 1500, 100, 0),
-          MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0)
+          MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0),
+          1
         )
         displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
@@ -509,7 +526,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for 2 years, year 1 has 0 MR as adjusted profits below lower threshold and year 2 has 0 MR as adjusted profits above upper threshold" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1010, 1100, 1500, 100),
-          MarginalRate(1971, 300, 30, 200, 30, 0, 1000, 10, 1010, 100, 500, 100)
+          MarginalRate(1971, 300, 30, 200, 30, 0, 1000, 10, 1010, 100, 500, 100),
+          1
         )
         val result = intercept[UnsupportedOperationException] {
           displayBanner(calculatorResult)
@@ -524,7 +542,7 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period falls in a single year" - {
 
       "when flat rate" in {
-        val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
+        val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
@@ -561,7 +579,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are within thresholds" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 365), 1)
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
@@ -606,7 +624,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
 
       "when marginal rate and profits are below lower threshold" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1500, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1500, 365), 1)
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
@@ -646,7 +664,7 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period spans 2 years" - {
       "when flat rate for both years" in {
         val calculatorResult =
-          DualResult(FlatRate(1970, 190, 19, 0, 0, 1000, 100), FlatRate(1971, 200, 20, 0, 0, 1000, 100))
+          DualResult(FlatRate(1970, 190, 19, 0, 0, 1000, 100), FlatRate(1971, 200, 20, 0, 0, 1000, 100), 1)
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
@@ -691,7 +709,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for both years and profits are below lower threshold" in {
         val calculatorResult = DualResult(
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1000, 100),
-          MarginalRate(1971, 30, 30, 30, 30, 0, 100, 0, 10, 500, 1000, 100)
+          MarginalRate(1971, 30, 30, 30, 30, 0, 100, 0, 10, 500, 1000, 100),
+          1
         )
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
@@ -737,7 +756,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for both years and profits are above upper threshold" in {
         val calculatorResult = DualResult(
           MarginalRate(1970, 250, 25, 250, 25, 0, 1000, 10, 1010, 100, 500, 100),
-          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1010, 100, 500, 100)
+          MarginalRate(1971, 300, 30, 300, 30, 0, 1000, 10, 1010, 100, 500, 100),
+          1
         )
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
@@ -783,7 +803,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for both years and profits are within thresholds" in {
         val calculatorResult = DualResult(
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 100),
-          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 0, 10, 100, 1500, 100)
+          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 0, 10, 100, 1500, 100),
+          1
         )
         replaceTableHeader(
           messages("resultsPage.corporationTaxTableSummary"),
@@ -843,7 +864,7 @@ class ResultsPageHelperSpec extends SpecBase {
   "displayEffectiveTaxTable" - {
     "when accounting period falls in a single year" - {
       "when flat rate" in {
-        val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6))
+        val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
@@ -879,7 +900,7 @@ class ResultsPageHelperSpec extends SpecBase {
           ).htmlFormat
       }
       "when marginal rate" in {
-        val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365))
+        val calculatorResult = SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365), 1)
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
@@ -922,7 +943,7 @@ class ResultsPageHelperSpec extends SpecBase {
     "when accounting period spans 2 years" - {
       "when flat rate for both years, display corporation tax main rate row" in {
         val calculatorResult =
-          DualResult(FlatRate(1970, 190, 19, 1000, 0, 1000, 100), FlatRate(1971, 200, 20, 1000, 0, 1000, 100))
+          DualResult(FlatRate(1970, 190, 19, 1000, 0, 1000, 100), FlatRate(1971, 200, 20, 1000, 0, 1000, 100), 19.5)
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
@@ -966,7 +987,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for both years and profits within MR thresholds, display corporation tax main rate before and effective tax rate after MR rows" in {
         val calculatorResult = DualResult(
           MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1100, 100),
-          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 1010, 100, 1100, 100)
+          MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 1010, 100, 1100, 100),
+          22.50
         )
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
@@ -1017,7 +1039,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for both years and profits below MR lower threshold, display small profit tax rate row and corporation tax before MR row is hidden" in {
         val calculatorResult = DualResult(
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100),
-          MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 500, 1000, 100)
+          MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 500, 1000, 100),
+          27.50
         )
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
@@ -1062,7 +1085,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when marginal rate for both years and profits above MR threshold, display effective corporation tax rate row and corporation tax before MR row is hidden" in {
         val calculatorResult = DualResult(
           MarginalRate(1970, 25, 25, 25, 25, 0, 100, 10, 110, 10, 50, 100),
-          MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 10, 50, 100)
+          MarginalRate(1971, 30, 30, 30, 30, 0, 100, 10, 110, 10, 50, 100),
+          27.50
         )
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
@@ -1109,7 +1133,8 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           DualResult(
             FlatRate(1970, 19, 19, 100, 0, 100, 100),
-            MarginalRate(1971, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100)
+            MarginalRate(1971, 25, 25, 25, 25, 0, 100, 10, 110, 500, 1000, 100),
+            22
           )
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
@@ -1155,7 +1180,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for one year and marginal rate for another year and profits above MR threshold, display effective corporation tax rate row" in {
         val calculatorResult = DualResult(
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
-          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 1010, 500, 1000, 100)
+          MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 1010, 500, 1000, 100),
+          22
         )
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
@@ -1201,7 +1227,8 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate for one year and marginal rate for another year and profits within MR threshold, display corporation tax rate before MR row and effective corporation tax rate after MR row" in {
         val calculatorResult = DualResult(
           FlatRate(1970, 190, 19, 1000, 0, 1000, 100),
-          MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1500, 100)
+          MarginalRate(1971, 250, 25, 200, 20, 50, 1000, 10, 1010, 100, 1500, 100),
+          19.5
         )
         replaceTableHeader(
           messages("resultsPage.effectiveTaxTableSummary"),
