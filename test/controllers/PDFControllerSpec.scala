@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel.{ DualResult, MarginalRate, MarginalReliefConfig, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -78,6 +78,45 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           .build()
 
         val calculatorResult = SingleResult(
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+        )
+
+        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+
+        mockMarginalReliefCalculatorConnector.calculate(
+          accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+          1,
+          Some(1),
+          None,
+          Some(1),
+          Some(2)
+        )(*) returns Future.successful(calculatorResult)
+
+        running(application) {
+          val request = FakeRequest(GET, pdfViewRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[PDFView]
+
+          status(result) mustEqual OK
+          contentAsString(result).filterAndTrim mustEqual view
+            .render(calculatorResult, accountingPeriodForm, 1, 1, 0, config, request, messages(application))
+            .toString
+            .filterAndTrim
+        }
+      }
+      "must render pdf page when all data is available for dual year" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .build()
+
+        val calculatorResult = DualResult(
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
           MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
         )
 
