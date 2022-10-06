@@ -19,10 +19,10 @@ package controllers
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ CalculatorResult, FYConfig }
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ Distribution, UserAnswers }
 import models.requests.DataRequest
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,7 +49,6 @@ class PDFController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
     userAnswers: UserAnswers
@@ -65,16 +64,14 @@ class PDFController @Inject() (
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage),
-          request.userAnswers.get(TwoAssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage)
         ) match {
           case (
                 Some(accPeriod),
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                maybeAssociatedCompanies,
-                maybeTwoAssociatedCompanies
+                maybeAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               PDFPageRequiredParams(
@@ -83,7 +80,6 @@ class PDFController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
                 request.userAnswers
@@ -105,8 +101,8 @@ class PDFController @Inject() (
                                 request.taxableProfit.toDouble,
                                 request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble),
                                 request.associatedCompanies.flatMap(_.associatedCompaniesCount),
-                                request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
-                                request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
+                                None,
+                                None
                               )
         config <- getConfig(calculatorResult)
       } yield Ok(

@@ -19,10 +19,10 @@ package controllers
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ DualResult, MarginalRate, MarginalReliefConfig, SingleResult }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -44,6 +44,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     DistributionsIncluded.Yes,
     Some(1)
   )
+  private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, accountingPeriodForm)
     .get
@@ -58,12 +59,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     .get
     .set(
       AssociatedCompaniesPage,
-      AssociatedCompaniesForm(AssociatedCompanies.Yes, None)
-    )
-    .get
-    .set(
-      TwoAssociatedCompaniesPage,
-      TwoAssociatedCompaniesForm(Some(1), Some(2))
+      AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
     )
     .get
 
@@ -88,9 +84,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           Some(1),
-          None,
           Some(1),
-          Some(2)
+          None,
+          None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -102,7 +98,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view
-            .render(calculatorResult, accountingPeriodForm, 1, 1, 0, config, request, messages(application))
+            .render(calculatorResult, accountingPeriodForm, 1, 1, 1, config, request, messages(application))
             .toString
             .filterAndTrim
         }
@@ -127,9 +123,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           Some(1),
-          None,
           Some(1),
-          Some(2)
+          None,
+          None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -141,7 +137,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view
-            .render(calculatorResult, accountingPeriodForm, 1, 1, 0, config, request, messages(application))
+            .render(calculatorResult, accountingPeriodForm, 1, 1, 1, config, request, messages(application))
             .toString
             .filterAndTrim
         }

@@ -34,9 +34,8 @@
     pageTitle = titleNoForm(messages("pdf.title")),
     mainContentLayout = Some(new templates.FullMainContent().render(_)),
 ) {
-<h1 class="govuk-heading-l">Save or print your calculation</h1>
+<h1 class="govuk-heading-l">@messages("pdf.title")</h1>
 <div class="pdf-preview">
-
     <div class="print-document">
         <div class="grid-row print-header">
             <div class="govuk-grid-column-one-third">
@@ -91,7 +90,6 @@
         </div>
         <span class="govuk-body-s footer-page-no">Page 1 of 3</span>
     </div>
-
     <div class="print-document">
         <div class="grid-row">
             <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
@@ -111,7 +109,6 @@
         </div>
         <span class="govuk-body-s footer-page-no">Page 2 of 3</span>
     </div>
-
     <div class="print-document">
         <div class="grid-row">
             <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
@@ -121,6 +118,5 @@
         </div>
         <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
     </div>
-
 </div>
 }
