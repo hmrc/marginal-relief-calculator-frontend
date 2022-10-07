@@ -358,17 +358,32 @@ object ResultsPageHelper extends ViewHelper {
                     content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                     classes = "not-header"
                   ),
-                  HeadCell(content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString))),
-                  HeadCell(content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString))),
-                  HeadCell(content = Text(messages("site.overall")))
+                  HeadCell(
+                    content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString)),
+                    classes = "govuk-table__header--numeric"
+                  ),
+                  HeadCell(
+                    content = Text(messages("site.from.to", year2.year.toString, (year2.year + 1).toString)),
+                    classes = "govuk-table__header--numeric"
+                  ),
+                  HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                 )
               ),
               rows = Seq(
                 Seq(
                   TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                  TableRow(content = HtmlContent(s"""${year1.days.toString} $screenReaderText""")),
-                  TableRow(content = HtmlContent(s"""${year2.days.toString} $screenReaderText""")),
-                  TableRow(content = HtmlContent(s"""${d.totalDays.toString} $screenReaderText"""))
+                  TableRow(
+                    content = HtmlContent(s"""${year1.days.toString} $screenReaderText"""),
+                    classes = "govuk-table__cell--numeric"
+                  ),
+                  TableRow(
+                    content = HtmlContent(s"""${year2.days.toString} $screenReaderText"""),
+                    classes = "govuk-table__cell--numeric"
+                  ),
+                  TableRow(
+                    content = HtmlContent(s"""${d.totalDays.toString} $screenReaderText"""),
+                    classes = "govuk-table__cell--numeric"
+                  )
                 ),
                 Seq(
                   TableRow(content =
@@ -377,28 +392,42 @@ object ResultsPageHelper extends ViewHelper {
                       else messages("resultsPage.corporationTaxLiability")
                     )
                   ),
-                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year1)))),
-                  TableRow(content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year2)))),
-                  TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTaxBeforeMR)))
+                  TableRow(
+                    content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year1))),
+                    classes = "govuk-table__cell--numeric"
+                  ),
+                  TableRow(
+                    content = Text(CurrencyUtils.format(corporatonTaxBeforeMR(year2))),
+                    classes = "govuk-table__cell--numeric"
+                  ),
+                  TableRow(
+                    content = Text(CurrencyUtils.format(d.totalCorporationTaxBeforeMR)),
+                    classes = "govuk-table__cell--numeric"
+                  )
                 ),
                 if (d.totalMarginalRelief > 0) {
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
-                    TableRow(content =
-                      Text(
+                    TableRow(
+                      content = Text(
                         (if (marginalRelief(year1) > 0) "-" else "") + CurrencyUtils.format(
                           marginalRelief(year1)
                         )
-                      )
+                      ),
+                      classes = "govuk-table__cell--numeric"
                     ),
-                    TableRow(content =
-                      Text(
+                    TableRow(
+                      content = Text(
                         (if (marginalRelief(year2) > 0) "-" else "") + CurrencyUtils.format(
                           marginalRelief(year2)
                         )
-                      )
+                      ),
+                      classes = "govuk-table__cell--numeric"
                     ),
-                    TableRow(content = Text("-" + CurrencyUtils.format(d.totalMarginalRelief)))
+                    TableRow(
+                      content = Text("-" + CurrencyUtils.format(d.totalMarginalRelief)),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   )
                 } else {
                   Seq.empty
@@ -406,9 +435,18 @@ object ResultsPageHelper extends ViewHelper {
                 if (d.totalMarginalRelief > 0) {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                    TableRow(content = Text(CurrencyUtils.format(year1.corporationTax))),
-                    TableRow(content = Text(CurrencyUtils.format(year2.corporationTax))),
-                    TableRow(content = Text(CurrencyUtils.format(d.totalCorporationTax)))
+                    TableRow(
+                      content = HtmlContent(CurrencyUtils.format(year1.corporationTax)),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(CurrencyUtils.format(year2.corporationTax)),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(CurrencyUtils.format(d.totalCorporationTax)),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   )
                 } else {
                   Seq.empty
@@ -474,28 +512,54 @@ object ResultsPageHelper extends ViewHelper {
         val dataRows = Seq(
           Seq(
             TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-            TableRow(content = HtmlContent(s"""${d.year1.days.toString} $screenReaderText"""), classes = "govuk-table__cell--numeric"),
-            TableRow(content = HtmlContent(s"""${d.year2.days.toString} $screenReaderText"""), classes = "govuk-table__cell--numeric"),
-            TableRow(content = HtmlContent(s"""${(d.year1.days + d.year2.days).toString} $screenReaderText"""),
-              classes = "govuk-table__cell--numeric")
+            TableRow(
+              content = HtmlContent(s"""${d.year1.days.toString} $screenReaderText"""),
+              classes = "govuk-table__cell--numeric"
+            ),
+            TableRow(
+              content = HtmlContent(s"""${d.year2.days.toString} $screenReaderText"""),
+              classes = "govuk-table__cell--numeric"
+            ),
+            TableRow(
+              content = HtmlContent(s"""${(d.year1.days + d.year2.days).toString} $screenReaderText"""),
+              classes = "govuk-table__cell--numeric"
+            )
           )
         ) ++ ((d.year1, d.year2) match {
           case (_: FlatRate, _: FlatRate) =>
             Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-                TableRow(content = Text(PercentageUtils.format(d.year1.taxRate)), classes = "govuk-table__cell--numeric"),
-                TableRow(content = Text(PercentageUtils.format(d.year2.taxRate)), classes = "govuk-table__cell--numeric"),
-                TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRate)), classes = "govuk-table__cell--numeric")
+                TableRow(
+                  content = Text(PercentageUtils.format(d.year1.taxRate)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = Text(PercentageUtils.format(d.year2.taxRate)),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = Text(PercentageUtils.format(d.effectiveTaxRate)),
+                  classes = "govuk-table__cell--numeric"
+                )
               )
             )
           case _ =>
             (Seq(if (d.totalMarginalRelief > 0) {
               Seq(
                 TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                TableRow(content = Text(PercentageUtils.format(d.year1.fold(_.taxRate)(_.taxRateBeforeMR))), classes = "govuk-table__cell--numeric"),
-                TableRow(content = Text(PercentageUtils.format(d.year2.fold(_.taxRate)(_.taxRateBeforeMR))), classes = "govuk-table__cell--numeric"),
-                TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRateBeforeMR)), classes = "govuk-table__cell--numeric")
+                TableRow(
+                  content = Text(PercentageUtils.format(d.year1.fold(_.taxRate)(_.taxRateBeforeMR))),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = Text(PercentageUtils.format(d.year2.fold(_.taxRate)(_.taxRateBeforeMR))),
+                  classes = "govuk-table__cell--numeric"
+                ),
+                TableRow(
+                  content = Text(PercentageUtils.format(d.effectiveTaxRateBeforeMR)),
+                  classes = "govuk-table__cell--numeric"
+                )
               )
             } else {
               Seq.empty
@@ -515,9 +579,18 @@ object ResultsPageHelper extends ViewHelper {
                         messages("resultsPage.effectiveCorporationTax")
                     )
                   ),
-                  TableRow(content = Text(PercentageUtils.format(d.year1.taxRate)), classes = "govuk-table__cell--numeric"),
-                  TableRow(content = Text(PercentageUtils.format(d.year2.taxRate)), classes = "govuk-table__cell--numeric"),
-                  TableRow(content = Text(PercentageUtils.format(d.effectiveTaxRate)), classes = "govuk-table__cell--numeric")
+                  TableRow(
+                    content = Text(PercentageUtils.format(d.year1.taxRate)),
+                    classes = "govuk-table__cell--numeric"
+                  ),
+                  TableRow(
+                    content = Text(PercentageUtils.format(d.year2.taxRate)),
+                    classes = "govuk-table__cell--numeric"
+                  ),
+                  TableRow(
+                    content = Text(PercentageUtils.format(d.effectiveTaxRate)),
+                    classes = "govuk-table__cell--numeric"
+                  )
                 )
               )).filter(_.nonEmpty)
         })
@@ -529,9 +602,15 @@ object ResultsPageHelper extends ViewHelper {
                   content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                   classes = "not-header"
                 ),
-                HeadCell(content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString)), classes = "govuk-table__cell--numeric"),
-                HeadCell(content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString)), classes = "govuk-table__cell--numeric"),
-                HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__cell--numeric")
+                HeadCell(
+                  content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString)),
+                  classes = "govuk-table__header--numeric"
+                ),
+                HeadCell(
+                  content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString)),
+                  classes = "govuk-table__header--numeric"
+                ),
+                HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
               )
             ),
             rows = dataRows,
