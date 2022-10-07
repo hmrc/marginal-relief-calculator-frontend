@@ -661,23 +661,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                    TableRow(content = Text("£190")),
-                    TableRow(content = Text("£200")),
-                    TableRow(content = Text("£390"))
+                    TableRow(content = Text("£190"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£200"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£390"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -707,23 +722,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                    TableRow(content = Text("£25")),
-                    TableRow(content = Text("£30")),
-                    TableRow(content = Text("£55"))
+                    TableRow(content = Text("£25"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£30"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£55"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -753,23 +783,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
-                    TableRow(content = Text("£250")),
-                    TableRow(content = Text("£300")),
-                    TableRow(content = Text("£550"))
+                    TableRow(content = Text("£250"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£300"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£550"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -799,35 +844,50 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
-                    TableRow(content = Text("£250")),
-                    TableRow(content = Text("£300")),
-                    TableRow(content = Text("£550"))
+                    TableRow(content = Text("£250"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£300"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£550"), classes = "govuk-table__cell--numeric")
                   ),
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
-                    TableRow(content = Text("-£50")),
-                    TableRow(content = Text("-£50")),
-                    TableRow(content = Text("-£100"))
+                    TableRow(content = Text("-£50"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("-£50"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("-£100"), classes = "govuk-table__cell--numeric")
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
-                    TableRow(content = Text("£200")),
-                    TableRow(content = Text("£250")),
-                    TableRow(content = Text("£450"))
+                    TableRow(content = Text("£200"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£250"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("£450"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
@@ -937,23 +997,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
-                    TableRow(content = Text("19%")),
-                    TableRow(content = Text("20%")),
-                    TableRow(content = Text("19.50%"))
+                    TableRow(content = Text("19%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("20%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("19.50%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -982,29 +1057,44 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("30%")),
-                    TableRow(content = Text("27.50%"))
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("30%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("27.50%"), classes = "govuk-table__cell--numeric")
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                    TableRow(content = Text("20%")),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("22.50%"))
+                    TableRow(content = Text("20%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("22.50%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1033,23 +1123,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.smallProfitRate"))),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("30%")),
-                    TableRow(content = Text("27.50%"))
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("30%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("27.50%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1078,23 +1183,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("30%")),
-                    TableRow(content = Text("27.50%"))
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("30%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("27.50%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1125,23 +1245,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                    TableRow(content = Text("19%")),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("22%"))
+                    TableRow(content = Text("19%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("22%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1171,23 +1306,38 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTax"))),
-                    TableRow(content = Text("19%")),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("22%"))
+                    TableRow(content = Text("19%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("22%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -1217,29 +1367,44 @@ class ResultsPageHelperSpec extends SpecBase {
                       content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
                       classes = "not-header"
                     ),
-                    HeadCell(content = Text(messages("site.from.to", "1970", "1971"))),
-                    HeadCell(content = Text(messages("site.from.to", "1971", "1972"))),
-                    HeadCell(content = Text(messages("site.overall")))
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1970", "1971")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(
+                      content = Text(messages("site.from.to", "1971", "1972")),
+                      classes = "govuk-table__header--numeric"
+                    ),
+                    HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
                   )
                 ),
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""100 $screenReaderText""")),
-                    TableRow(content = HtmlContent(s"""200 $screenReaderText"""))
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    ),
+                    TableRow(
+                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      classes = "govuk-table__cell--numeric"
+                    )
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                    TableRow(content = Text("19%")),
-                    TableRow(content = Text("25%")),
-                    TableRow(content = Text("22%"))
+                    TableRow(content = Text("19%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("25%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("22%"), classes = "govuk-table__cell--numeric")
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief"))),
-                    TableRow(content = Text("19%")),
-                    TableRow(content = Text("20%")),
-                    TableRow(content = Text("19.50%"))
+                    TableRow(content = Text("19%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("20%"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("19.50%"), classes = "govuk-table__cell--numeric")
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
