@@ -358,8 +358,8 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0),
           1
         )
-        displayBanner(calculatorResult)._1 shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
-        displayBanner(calculatorResult)._2.htmlFormat shouldMatchTo
+        displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
+        displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
           addBannerScreenReader(
             calculatorResult,
             bannerPanel(

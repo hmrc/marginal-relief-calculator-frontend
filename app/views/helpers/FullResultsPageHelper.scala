@@ -23,7 +23,7 @@ import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
-import views.helpers.ResultsPageHelper.{ replaceTableHeader, screenReaderText }
+import views.helpers.ResultsPageHelper.replaceTableHeader
 
 import scala.collection.immutable.Seq
 
