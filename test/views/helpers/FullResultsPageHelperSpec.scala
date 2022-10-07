@@ -38,7 +38,8 @@ class FullResultsPageHelperSpec extends SpecBase {
 
       "when only FlatRate, should throw exception" in {
         val calculatorResult = SingleResult(
-          FlatRate(epoch.getYear, 1, 2, 3, 4, 5, 6)
+          FlatRate(epoch.getYear, 1, 2, 3, 4, 5, 6),
+          1
         )
         val caught =
           intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
@@ -49,7 +50,8 @@ class FullResultsPageHelperSpec extends SpecBase {
 
       "when MarginalRate, should display full results table" in {
         val calculatorResult = SingleResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10)
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10),
+          1
         )
 
         FullResultsPageHelper
@@ -98,7 +100,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       "when flat rates only, should throw exception" in {
         val calculatorResult = DualResult(
           FlatRate(epoch.getYear, 1, 2, 3, 4, 5, 6),
-          FlatRate(epoch.getYear + 1, 11, 22, 33, 44, 55, 66)
+          FlatRate(epoch.getYear + 1, 11, 22, 33, 44, 55, 66),
+          1
         )
         val caught =
           intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
@@ -109,7 +112,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       "when marginal rate only, should display results table" in {
         val calculatorResult = DualResult(
           MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, 88, 99, 1010)
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, 88, 99, 1010),
+          1
         )
 
         FullResultsPageHelper
@@ -204,7 +208,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       "when flat rate for year 1 and marginal rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
           FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010)
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010),
+          1
         )
 
         FullResultsPageHelper
@@ -252,7 +257,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       "when marginal rate for year 1 and flat rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
           MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010),
-          FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4)
+          FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4),
+          1
         )
 
         FullResultsPageHelper
@@ -312,7 +318,8 @@ class FullResultsPageHelperSpec extends SpecBase {
             adjustedLowerThreshold = -100000,
             adjustedUpperThreshold = 100000,
             days = 1010
-          )
+          ),
+          1
         )
 
         FullResultsPageHelper
@@ -336,7 +343,8 @@ class FullResultsPageHelperSpec extends SpecBase {
             adjustedLowerThreshold = 100000,
             adjustedUpperThreshold = 1000000,
             days = 1010
-          )
+          ),
+          1
         )
 
         FullResultsPageHelper
