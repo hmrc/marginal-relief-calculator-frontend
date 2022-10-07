@@ -20,7 +20,8 @@
 @import utils.PercentageUtils
 @import forms.DateUtils._
 @import forms._
-@import java.time.LocalDate
+@import java.time.LocalDateTime
+@import java.time.format.DateTimeFormatter;
 @import views.helpers.ResultsPageHelper._
 @import views.helpers.FullResultsPageHelper._
 
@@ -57,7 +58,7 @@
             <p class="govuk-body">123456</p>
         </div>
         <div class="grid-row print-banner">
-            @displayBanner(calculatorResult)._2
+            @displayBanner(calculatorResult).html
         </div>
         <div class="grid-row">
             <div class="govuk-grid-column-full">
@@ -65,14 +66,7 @@
                     <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
                         <div class="grid-row">
                             <div class="govuk-grid-column-full">
-                                @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
-                            </div>
-                        </div>
-                        <div class="grid-row">
-                            <div class="govuk-grid-column-full">
-                                <h3 class="govuk-heading-s">Your accounting period covers 2 HMRC financial years</h3>
-                                <p class="govuk-body">2022 to 2023: 1 January 2024 to 31 March 2024<br>
-                                    2023 to 2024: 1 April 2024 to 31 December 2024</p>
+                                @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
                             </div>
                         </div>
                     </div>
@@ -80,7 +74,7 @@
                         <div class="got-ni-box">
                             <h3 class="govuk-heading-s got-ni-box-border">@messages("pdf.aboutThisResult")</h3>
                             <h4 class="govuk-heading-xs">@messages("pdf.dataOfResult")</h4>
-                            <p class="govuk-body got-ni-box-border">18 September 2022 10:00:00 UTC</p>
+                            <p class="govuk-body got-ni-box-border">@Html(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")).toString())</p>
                             <h4 class="govuk-heading-xs">@messages("pdf.legalDeclarationTitle")</h4>
                             <p class="govuk-body">@messages("pdf.legalDeclaration")</p>
                         </div>
@@ -88,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <span class="govuk-body-s footer-page-no">Page 1 of 3</span>
+        <span class="govuk-body-s footer-page-no">@messages("pdf.page1")</span>
     </div>
     <div class="print-document">
         <div class="grid-row">
@@ -107,7 +101,7 @@
             }
             @displayEffectiveTaxTable(calculatorResult)
         </div>
-        <span class="govuk-body-s footer-page-no">Page 2 of 3</span>
+        <span class="govuk-body-s footer-page-no">@messages("pdf.page2")</span>
     </div>
     <div class="print-document">
         <div class="grid-row">
@@ -116,7 +110,7 @@
             <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
             @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)
         </div>
-        <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
+        <span class="govuk-body-s footer-page-no">@messages("pdf.page3")</span>
     </div>
 </div>
 }

@@ -42,6 +42,8 @@ object ResultsPageHelper extends ViewHelper {
 
   private val bannerPanel = new BannerPanel()
 
+  case class Banner(title: String, html: Html)
+
   def displayYourDetails(
     calculatorResult: CalculatorResult,
     accountingPeriodForm: AccountingPeriodForm,
@@ -134,7 +136,7 @@ object ResultsPageHelper extends ViewHelper {
       )
     }
 
-  def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): (String, Html) = {
+  def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): (Banner) = {
     val (title, panelHtml) = calculatorResult match {
       case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
         val title = messages("resultsPage.marginalReliefNotEligible")
@@ -156,7 +158,7 @@ object ResultsPageHelper extends ViewHelper {
       case DualResult(m1: MarginalRate, m2: MarginalRate) =>
         marginalReliefBannerDual(m1, m2)
     }
-    (title, addBannerScreenReader(calculatorResult, panelHtml))
+    Banner(title, addBannerScreenReader(calculatorResult, panelHtml))
   }
 
   private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit
