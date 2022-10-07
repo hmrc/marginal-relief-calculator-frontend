@@ -33,9 +33,9 @@
 
 @titleAndBanner = @{displayBanner(calculatorResult)}
 
-@layout(pageTitle = titleNoForm(titleAndBanner._1)) {
+@layout(pageTitle = titleNoForm(titleAndBanner.title)) {
 
-    @titleAndBanner._2
+    @titleAndBanner.html
 
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
 

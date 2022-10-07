@@ -1,12 +1,12 @@
-@import "lib/govuk-frontend/govuk/base";
+@import 'lib/govuk-frontend/govuk/base';
 
 .app-related-items {
-  border-top: 2px solid govuk-colour("blue");
-  padding-top: govuk-spacing(2);
+    border-top: 2px solid govuk-colour('blue');
+    padding-top: govuk-spacing(2);
 }
 
 .app-related-items .govuk-list > li {
-  margin-bottom: govuk-spacing(2);
+    margin-bottom: govuk-spacing(2);
 }
 
 .app-table {
@@ -24,10 +24,205 @@
 }
 
 .sr-only {
-    position:absolute;
-    left:-10000px;
-    top:auto;
-    width:1px;
-    height:1px;
-    overflow:hidden;
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.print-this,
+.save-this {
+    border-bottom: 1px solid #0b0c0c;
+    margin: 0 0 15px;
+    display: inline-block;
+
+    &__link,
+    &__link:visited {
+        color: #0b0c0c;
+        font-size: 16px;
+        text-decoration: none;
+    }
+}
+
+.save-this {
+    margin-left: 1em;
+}
+
+.print-this__link,
+.save-this__link {
+    color: #000;
+    font-size: 16px;
+    padding-bottom: 20px;
+    text-decoration: none;
+    font-family: 'GDS Transport', Arial, sans-serif;
+}
+
+@page {
+    size: auto;
+    margin: 0;
+}
+
+.print-document {
+    font-family: GDS Transport, arial, sans-serif;
+    border: 1px solid #6f777b;
+    position: relative;
+    box-shadow: 6px 6px 0 0 #dee0e2;
+    padding: 25px 50px 40px 50px;
+    margin-bottom: 20px;
+    width: 75%;
+    min-height: calc(296mm - 100px);
+    page-break-after: always;
+
+    .grid-row {
+        margin: 0 -15px;
+    }
+
+    .grid-row::after {
+        clear: both;
+        content: '';
+        display: block;
+    }
+
+    .print-header {
+        margin-bottom: 15px;
+
+        .govuk-grid-column-one-third {
+            border-left: #28a197 solid;
+            padding-left: 8px;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            font-weight: normal;
+            margin: 0;
+            line-height: 1;
+
+            span {
+                display: block;
+            }
+        }
+
+        h3 {
+            text-align: right;
+            margin: 2em 0 0;
+            color: #0b0c0c;
+            font-weight: 600;
+        }
+    }
+
+    .print-banner {
+        .govuk-panel--confirmation {
+            border: 2px solid #28a197;
+            display: block;
+            margin-bottom: 1em;
+            padding: 5px 10px;
+            background-color: #e1f3f1;
+            print-color-adjust: exact;
+
+            .govuk-panel__body {
+                color: #0b0c0c;
+                margin-top: 0;
+            }
+
+            .govuk-panel__title {
+                color: #0b0c0c;
+            }
+        }
+    }
+
+    @media (max-width: 40.0624em) {
+        .govuk-grid-column-one-third {
+            padding: 0;
+        }
+    }
+
+    hr {
+        display: none;
+    }
+
+    .footer-page-no {
+        position: absolute;
+        bottom: 0px;
+        left: 35px;
+    }
+
+    .about-results {
+        background: #e1f3f1;
+        padding: 1px 10px;
+        print-color-adjust: exact;
+
+        h3 {
+            margin-top: 1.05263em;
+            margin-bottom: 0;
+        }
+
+        .about-results-border {
+            border-bottom: 2px solid #28a197;
+            margin-bottom: 20px;
+            line-height: 1.3157894737;
+            padding-bottom: 10px;
+        }
+    }
+
+    .govuk-details {
+        display: none;
+    }
+}
+
+@media print {
+    br {
+        display: none;
+    }
+
+    .pdf-preview {
+        visibility: visible;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    .pdf-preview * {
+        box-sizing: border-box;
+    }
+
+    .print-document {
+        border: none;
+        box-shadow: none;
+        min-height: 296mm;
+        width: 100%;
+
+        .print-header h3 {
+            text-align: right;
+        }
+    }
+
+    .govuk-template__body {
+        visibility: hidden;
+    }
+
+    .print-header .govuk-grid-column-two-thirds {
+        margin-top: -4em;
+    }
+
+    .print-document {
+        width: 100%;
+
+        .govuk-grid-column-two-thirds {
+            width: 62%;
+            float: left;
+        }
+
+        .govuk-grid-column-one-third {
+            width: 38%;
+            float: left;
+        }
+
+        p,
+        li {
+            font-size: 16px;
+        }
+    }
 }
