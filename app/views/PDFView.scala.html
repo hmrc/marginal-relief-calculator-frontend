@@ -29,7 +29,7 @@
   layout: templates.Layout
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = titleNoForm(messages("pdf.title")),
@@ -49,14 +49,18 @@
                 </h3>
             </div>
         </div>
-        <div class="grid-row">
-            <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">@messages("pdf.companyName")</h3>
-            <p class="govuk-body">SAMPLE LTD</p>
-        </div>
-        <div class="grid-row">
-            <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">@messages("pdf.utr")</h3>
-            <p class="govuk-body">123456</p>
-        </div>
+        @if(pdfMetadata.companyName.isDefined) {
+            <div class="grid-row">
+                <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">@messages("pdf.companyName")</h3>
+                <p class="govuk-body">@{pdfMetadata.companyName.getOrElse("")}</p>
+            </div>
+        }
+        @if(pdfMetadata.utr.isDefined) {
+            <div class="grid-row">
+                <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">@messages("pdf.utr")</h3>
+                <p class="govuk-body">@{pdfMetadata.utr.getOrElse("")}</p>
+            </div>
+        }
         <div class="grid-row print-banner">
             @displayBanner(calculatorResult).html
         </div>
