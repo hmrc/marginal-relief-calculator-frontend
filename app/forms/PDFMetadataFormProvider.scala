@@ -32,7 +32,7 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
         ),
         "utr" -> optional(
           text()
-            .verifying(maxLength(100, "pDFMetadata.utr.error.length"))
+            .verifying(maxLength(15, "pDFMetadata.utr.error.length"))
         )
       )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
     )

@@ -17,20 +17,20 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ CalculatorResult, FYConfig }
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
-import models.{ Distribution, UserAnswers }
+import connectors.sharedmodel.{CalculatorResult, FYConfig}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm}
+import models.{Distribution, UserAnswers}
 import models.requests.DataRequest
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFMetadataPage, TaxableProfitPage}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PDFView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class PDFController @Inject() (
   override val messagesApi: MessagesApi,
@@ -49,6 +49,7 @@ class PDFController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
+    pdfMetadata: PDFMetadataForm,
     request: Request[A],
     userId: String,
     userAnswers: UserAnswers
@@ -64,14 +65,16 @@ class PDFController @Inject() (
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage),
+          request.userAnswers.get(PDFMetadataPage)
         ) match {
           case (
                 Some(accPeriod),
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                maybeAssociatedCompanies
+                maybeAssociatedCompanies,
+                Some(pdfMetadata)
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               PDFPageRequiredParams(
@@ -80,6 +83,7 @@ class PDFController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
+                pdfMetadata,
                 request,
                 request.userId,
                 request.userAnswers
@@ -107,6 +111,7 @@ class PDFController @Inject() (
         config <- getConfig(calculatorResult)
       } yield Ok(
         view(
+          request.pdfMetadata,
           calculatorResult,
           request.accountingPeriod,
           request.taxableProfit,

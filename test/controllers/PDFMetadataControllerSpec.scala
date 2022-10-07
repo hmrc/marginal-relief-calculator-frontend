@@ -158,10 +158,10 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         running(application) {
           val request =
             FakeRequest(POST, pDFMetadataRoute)
-              .withFormUrlEncodedBody("companyName" -> "A" * 161, "utr" -> "1" * 101)
+              .withFormUrlEncodedBody("companyName" -> "A" * 161, "utr" -> "1" * 16)
 
           val boundForm = form
-            .bind(Map("companyName" -> "A" * 161, "utr" -> "1" * 101))
+            .bind(Map("companyName" -> "A" * 161, "utr" -> "1" * 16))
 
           val view = application.injector.instanceOf[PDFMetadataView]
 
