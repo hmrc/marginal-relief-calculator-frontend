@@ -136,16 +136,15 @@ object ResultsPageHelper extends ViewHelper {
       )
     }
 
-  def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): (Banner) = {
+  def displayBanner(calculatorResult: CalculatorResult)(implicit messages: Messages): (String, Html) = {
     val (title, panelHtml) = calculatorResult match {
       case SingleResult(_: FlatRate) | DualResult(_: FlatRate, _: FlatRate) =>
-        val title = messages("resultsPage.marginalReliefNotEligible")
+        val title = messages("resultsPage.marginalReliefNotApplicable")
         (
           title,
           govukPanel(
             Panel(
-              title = Text(title),
-              content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+              content = Text(messages("resultsPage.marginalReliefNotApplicableFlatRate"))
             )
           )
         )
