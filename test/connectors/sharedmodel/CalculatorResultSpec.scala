@@ -26,7 +26,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
   private val marginalRate = MarginalRate(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
 
-  private val singleResult = SingleResult(marginalRate)
+  private val singleResult = SingleResult(marginalRate, 13)
 
   "SingleResult" - {
     "totalDays" - {
@@ -54,7 +54,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
     }
   }
 
-  private val dualResult = DualResult(flatRate, marginalRate)
+  private val dualResult = DualResult(flatRate, marginalRate, 13)
 
   "DualResult" - {
     "totalDays" - {

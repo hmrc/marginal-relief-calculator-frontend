@@ -73,7 +73,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          1
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
@@ -126,7 +127,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          1
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
@@ -183,7 +185,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          1
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
@@ -231,7 +234,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          1
         )
 
         mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))

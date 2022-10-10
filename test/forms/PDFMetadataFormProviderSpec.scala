@@ -27,22 +27,22 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   val validPDFMetadataFormGenerator: Gen[PDFMetadataForm] = for {
     companyName <- option(stringsWithMaxLength(160))
-    utr         <- option(stringsWithMaxLength(100))
+    utr         <- option(stringsWithMaxLength(15))
   } yield PDFMetadataForm(companyName, utr)
 
   val invalidCompanyName: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- stringsWithMaxLength(100)
+    utr         <- stringsWithMaxLength(15)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   val invalidUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
-    utr         <- stringsLongerThan(100)
+    utr         <- stringsLongerThan(15)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   val invalidCompanyNameUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- stringsLongerThan(100)
+    utr         <- stringsLongerThan(15)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val form: Form[PDFMetadataForm] = new PDFMetadataFormProvider()()
@@ -77,7 +77,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
       forAll(invalidUTR) { invalid =>
         val result =
           form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
-        result.errors mustBe List(FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(100)))
+        result.errors mustBe List(FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(15)))
       }
     }
 
@@ -87,7 +87,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
           form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
         result.errors mustBe List(
           FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)),
-          FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(100))
+          FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(15))
         )
       }
     }

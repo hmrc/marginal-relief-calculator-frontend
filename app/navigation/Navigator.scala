@@ -41,7 +41,7 @@ class Navigator @Inject() () {
       _ => routes.CheckYourAnswersController.onPageLoad
 
     case PDFMetadataPage =>
-      _ => routes.PDFMetadataController.onPageLoad()
+      _ => routes.PDFController.onPageLoad()
 
     case _ =>
       _ => routes.IndexController.onPageLoad

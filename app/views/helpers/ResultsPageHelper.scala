@@ -148,13 +148,13 @@ object ResultsPageHelper extends ViewHelper {
             )
           )
         )
-      case SingleResult(m: MarginalRate) =>
+      case SingleResult(m: MarginalRate, _) =>
         marginalReliefBanner(m)
-      case DualResult(_: FlatRate, m: MarginalRate) =>
+      case DualResult(_: FlatRate, m: MarginalRate, _) =>
         marginalReliefBanner(m)
-      case DualResult(m: MarginalRate, _: FlatRate) =>
+      case DualResult(m: MarginalRate, _: FlatRate, _) =>
         marginalReliefBanner(m)
-      case DualResult(m1: MarginalRate, m2: MarginalRate) =>
+      case DualResult(m1: MarginalRate, m2: MarginalRate, _) =>
         marginalReliefBannerDual(m1, m2)
     }
     Banner(title, addBannerScreenReader(calculatorResult, panelHtml))
@@ -295,7 +295,7 @@ object ResultsPageHelper extends ViewHelper {
     replaceTableHeader(
       messages("resultsPage.corporationTaxTableScreenReaderSummary"),
       calculatorResult match {
-        case SingleResult(details: TaxDetails) =>
+        case SingleResult(details: TaxDetails, _) =>
           govukTable(
             Table(
               rows = Seq(
@@ -350,7 +350,7 @@ object ResultsPageHelper extends ViewHelper {
               firstCellIsHeader = true
             )
           )
-        case d @ DualResult(year1: TaxDetails, year2: TaxDetails) =>
+        case d @ DualResult(year1: TaxDetails, year2: TaxDetails, _) =>
           govukTable(
             Table(
               head = Some(

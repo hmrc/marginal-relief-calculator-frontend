@@ -84,13 +84,13 @@ object CalculatorResult {
 }
 
 case class SingleResult(
-  details: TaxDetails
+  details: TaxDetails,
+  effectiveTaxRate: Double
 ) extends CalculatorResult {
   override def totalDays: Int = details.days
   override def totalMarginalRelief: Double = details.fold(_ => 0.0)(_.marginalRelief)
   override def totalCorporationTax: Double = details.corporationTax
   override def totalCorporationTaxBeforeMR: Double = details.fold(_.corporationTax)(_.corporationTaxBeforeMR)
-  override def effectiveTaxRate: Double = details.taxRate
   override def effectiveTaxRateBeforeMR: Double = (
     (BigDecimal(this.totalCorporationTaxBeforeMR) / BigDecimal(
       details.adjustedProfit
@@ -100,7 +100,8 @@ case class SingleResult(
 
 case class DualResult(
   year1: TaxDetails,
-  year2: TaxDetails
+  year2: TaxDetails,
+  effectiveTaxRate: Double
 ) extends CalculatorResult {
   override def totalDays: Int = year1.days + year2.days
   override def totalMarginalRelief: Double = roundUp(
@@ -119,10 +120,6 @@ case class DualResult(
     (((BigDecimal(year1.fold(_.corporationTax)(_.corporationTaxBeforeMR)) + BigDecimal(
       year2.fold(_.corporationTax)(_.corporationTaxBeforeMR)
     )) /
-      (BigDecimal(year1.adjustedProfit) + BigDecimal(year2.adjustedProfit))) * 100).toDouble
-
-  override def effectiveTaxRate: Double =
-    (((BigDecimal(year1.corporationTax) + BigDecimal(year2.corporationTax)) /
       (BigDecimal(year1.adjustedProfit) + BigDecimal(year2.adjustedProfit))) * 100).toDouble
 
 }

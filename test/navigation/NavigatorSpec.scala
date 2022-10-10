@@ -68,12 +68,12 @@ class NavigatorSpec extends SpecBase {
         ) mustBe routes.AssociatedCompaniesController.onPageLoad(NormalMode)
       }
 
-      "must go from PDFMetadata page to PDFMetadata page" in {
+      "must go from PDFMetadata page to PDF page" in {
         navigator.nextPage(
           PDFMetadataPage,
           NormalMode,
           UserAnswers("id")
-        ) mustBe routes.PDFMetadataController.onPageLoad()
+        ) mustBe routes.PDFController.onPageLoad()
       }
 
       "must go from a page that doesn't exist in the route map to Index" in {
