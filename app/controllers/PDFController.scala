@@ -17,20 +17,20 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{CalculatorResult, FYConfig}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm}
-import models.{Distribution, UserAnswers}
+import connectors.sharedmodel.{ CalculatorResult, FYConfig }
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm }
+import models.{ Distribution, UserAnswers }
 import models.requests.DataRequest
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFMetadataPage, TaxableProfitPage}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFMetadataPage, TaxableProfitPage }
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PDFView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class PDFController @Inject() (
   override val messagesApi: MessagesApi,
