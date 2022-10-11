@@ -126,7 +126,12 @@ accountingPeriodIrrelevant.restart = Restart calculation
 resultsPage.title = Marginal Relief Results
 resultsPage.heading = Marginal Relief Results
 resultsPage.marginalReliefNotEligible = You''re not eligible for Marginal Relief
+<<<<<<< Updated upstream
 resultsPage.marginalReliefNotApplicableFlatRate = Marginal Relief does not apply for financial years with a single Corporation Tax rate
+=======
+resultsPage.marginalReliefNotEligibleFlatRate = Marginal Relief does not apply for financial years with a single Corporation Tax rate
+
+>>>>>>> Stashed changes
 resultsPage.marginalReliefNotApplicable = Marginal Relief not applicable
 resultsPage.marginalReliefForAccPeriodIs = Marginal Relief for your accounting period is
 resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit = Your taxable profits and included distributions are above the Marginal Relief limit

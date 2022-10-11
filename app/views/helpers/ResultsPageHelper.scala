@@ -144,7 +144,11 @@ object ResultsPageHelper extends ViewHelper {
           title,
           govukPanel(
             Panel(
+<<<<<<< Updated upstream
               content = Text(messages("resultsPage.marginalReliefNotApplicableFlatRate"))
+=======
+              content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
+>>>>>>> Stashed changes
             )
           )
         )
