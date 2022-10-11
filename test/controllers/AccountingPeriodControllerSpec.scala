@@ -17,20 +17,21 @@
 package controllers
 
 import base.SpecBase
-import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm }
-import models.{ AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers }
-import navigation.{ FakeNavigator, Navigator }
+import forms.{AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm}
+import models.{AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages._
 import play.api.inject.bind
-import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
-import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
+import uk.gov.hmrc.play.bootstrap.controller
+import views.html.{AccountingPeriodView, IrrelevantPeriodView}
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -109,7 +110,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result).filterAndTrim mustEqual view
-          .render(form, NormalMode, getRequest, messages(application))
+          .render(form, NormalMode, controllers.routes.IndexController.onPageLoad.path(), getRequest, messages(application))
           .toString
           .filterAndTrim
       }
@@ -127,7 +128,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest).value
 
         status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode)(
+        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode, controllers.routes.IndexController.onPageLoad.path())(
           getRequest,
           messages(application)
         ).toString.filterAndTrim

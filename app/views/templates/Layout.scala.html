@@ -39,7 +39,8 @@
   timeout: Boolean = true,
   showSignOut: Boolean = false,
   mainContentLayout: Option[Html => Html] = Some(defaultMainContentLayout(_)),
-  breadCrumbs: Option[Html] = None
+  breadCrumbs: Option[Html] = None,
+  backLink: String = ""
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @headBlock = {
@@ -82,7 +83,7 @@
     }
 
     @if(showBackLink) {
-        @govukBackLink(BackLinkViewModel(href = "#"))
+        <a href="@backLink" class="govuk-link">Back</a>
     }
 
     @breadCrumbs.getOrElse(HtmlFormat.empty)

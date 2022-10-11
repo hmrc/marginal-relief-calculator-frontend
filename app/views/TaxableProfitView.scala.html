@@ -15,6 +15,8 @@
  *@
 
 @import viewmodels.InputWidth._
+@import views.helpers.BackLinkHelper
+@import controllers.routes
 
 @this(
     layout: templates.Layout,
@@ -27,7 +29,7 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("taxableProfit.title"))) {
+@layout(pageTitle = title(form, messages("taxableProfit.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.AccountingPeriodController.onPageLoad(NormalMode).path())) {
 
     @formHelper(action = routes.TaxableProfitController.onSubmit(mode), 'autoComplete -> "off") {
 

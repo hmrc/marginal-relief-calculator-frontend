@@ -14,6 +14,9 @@
  * limitations under the License.
  *@
 
+@import views.helpers.BackLinkHelper
+@import controllers.routes
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
@@ -38,7 +41,7 @@
     )
 }
 
-@layout(pageTitle = title(form, messages("distributionsIncluded.title"))) {
+@layout(pageTitle = title(form, messages("distributionsIncluded.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path())) {
 
     @formHelper(action = routes.DistributionsIncludedController.onSubmit(mode), 'autoComplete -> "off") {
 
