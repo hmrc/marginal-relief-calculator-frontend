@@ -41,7 +41,11 @@
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
     @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)
-
+    @if(showMarginalReliefExplanation(calculatorResult)) {
+        @marginalReliefFormula
+        @whatIsMarginalRate(calculatorResult)
+        @views.helpers.FullResultsPageHelper.hr
+    }
 
     @govukButton(
         Button(
