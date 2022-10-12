@@ -144,8 +144,7 @@ object ResultsPageHelper extends ViewHelper {
           title,
           govukPanel(
             Panel(
-              title = Text(title),
-              content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+              content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
             )
           )
         )
