@@ -240,7 +240,7 @@ fullResultsPage.calculationTable.hidden = Calculation breakdown table
 associatedCompanies.title = Number of associated companies
 associatedCompanies.heading = Did your company have any active associated companies?
 associatedCompanies.heading.between = Did your company have any active associated companies between {0} and {1}?
-associatedCompanies.warning = This does not include the company you''re currently calculating Marginal Relief for.
+associatedCompanies.warning = Do not include the company you''re currently calculating Marginal Relief for in your answer. Doing so will provide you with an incorrect result.
 associatedCompanies.detailsTitle = What are associated companies?
 associatedCompanies.detailsHtml = <p>A company is considered associated to another if:</p><ul class="govuk-list govuk-list--bullet"><li>one of the companies has control of the other</li><li>both companies are controlled by the same companies or people</li></ul>
 associatedCompanies.countLabel = Enter only the number of additional associated companies
