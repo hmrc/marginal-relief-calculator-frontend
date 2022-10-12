@@ -20,8 +20,7 @@
 @import utils.PercentageUtils
 @import forms.DateUtils._
 @import forms._
-@import java.time.LocalDateTime
-@import java.time.format.DateTimeFormatter;
+@import utils.DateUtils
 @import views.helpers.ResultsPageHelper._
 @import views.helpers.FullResultsPageHelper._
 
@@ -78,7 +77,7 @@
                         <div class="about-results">
                             <h3 class="govuk-heading-s about-results-border">@messages("pdf.aboutThisResult")</h3>
                             <h4 class="govuk-heading-xs">@messages("pdf.dataOfResult")</h4>
-                            <p class="govuk-body about-results-border">@Html(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")).toString())</p>
+                            <p class="govuk-body about-results-border">@Html(DateUtils.formatUTCDateTime)</p>
                             <h4 class="govuk-heading-xs">@messages("pdf.legalDeclarationTitle")</h4>
                             <p class="govuk-body">@messages("pdf.legalDeclaration")</p>
                         </div>
