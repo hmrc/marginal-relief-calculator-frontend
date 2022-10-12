@@ -184,8 +184,7 @@ class ResultsPageHelperSpec extends SpecBase {
             calculatorResult,
             govukPanel(
               Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+                content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
               )
             )
           ).htmlFormat
@@ -346,8 +345,7 @@ class ResultsPageHelperSpec extends SpecBase {
             calculatorResult,
             govukPanel(
               Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.marginalReliefNotApplicable"))
+                content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
               )
             )
           ).htmlFormat
