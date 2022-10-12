@@ -27,6 +27,6 @@ document.getElementById('save').addEventListener('click', function(e){
       filename:     filename
     };
 
-    html2pdf(clone, opt).then(function(){ element.classList.remove('save') });
+    html2pdf(clone, opt);
 
 });
