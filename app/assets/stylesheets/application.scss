@@ -32,32 +32,50 @@
     overflow: hidden;
 }
 
-.print-this,
-.save-this {
-    border-bottom: 1px solid #0b0c0c;
-    margin: 0 0 15px;
-    display: inline-block;
 
-    &__link,
-    &__link:visited {
-        color: #0b0c0c;
-        font-size: 16px;
+.print-this {
+    font-family: GDS Transport, arial, sans-serif;
+    font-size: 16px;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px !important;
+
+    &__print {
+        color: #000000;
+        display: inline-block;
+        background-image: url(../images/printer-icon.svg);
+        background-position: 0 4px;
+        background-repeat: no-repeat;
+        background-size: 14px;
+        padding-left: 30px;
+        margin-right: 1em;
         text-decoration: none;
+
+        span {
+            display: inline-block;
+            text-decoration: underline;
+            text-underline-offset: 0.3em;
+        }
+
+        &:hover {
+            span {
+                text-decoration-thickness: 3px;
+            }
+        }
+    }
+
+    &__save {
+        color: #000000;
+        display: inline-block;
+        text-decoration: underline;
+        text-underline-offset: 0.3em;
+
+        &:hover {
+            text-decoration-thickness: 3px;
+        }
     }
 }
 
-.save-this {
-    margin-left: 1em;
-}
-
-.print-this__link,
-.save-this__link {
-    color: #000;
-    font-size: 16px;
-    padding-bottom: 20px;
-    text-decoration: none;
-    font-family: 'GDS Transport', Arial, sans-serif;
-}
 
 @page {
     size: auto;
