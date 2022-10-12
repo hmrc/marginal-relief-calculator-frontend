@@ -41,7 +41,7 @@
     )
 }
 
-@layout(pageTitle = title(form, messages("distributionsIncluded.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path())) {
+@layout(pageTitle = title(form, messages("distributionsIncluded.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path(), mode)) {
 
     @formHelper(action = routes.DistributionsIncludedController.onSubmit(mode), 'autoComplete -> "off") {
 

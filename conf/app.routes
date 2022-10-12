@@ -25,7 +25,8 @@ POST       /change-associated-companies           controllers.AssociatedCompanie
 
 GET        /accounting-period                     controllers.AccountingPeriodController.onPageLoad(mode: Mode = NormalMode)
 POST       /accounting-period                     controllers.AccountingPeriodController.onSubmit(mode: Mode = NormalMode)
-GET        /irrelevant-accounting-period          controllers.AccountingPeriodController.irrelevantPeriodPage()
+GET        /irrelevant-accounting-period          controllers.AccountingPeriodController.irrelevantPeriodPage(mode: Mode = NormalMode)
+GET        /change-irrelevant-accounting-period   controllers.AccountingPeriodController.irrelevantPeriodPage(mode: Mode = CheckMode)
 GET        /change-accounting-period              controllers.AccountingPeriodController.onPageLoad(mode: Mode = CheckMode)
 POST       /change-accounting-period              controllers.AccountingPeriodController.onSubmit(mode: Mode = CheckMode)
 

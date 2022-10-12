@@ -27,7 +27,7 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("distribution.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.TaxableProfitController.onPageLoad(NormalMode).path())) {
+@layout(pageTitle = title(form, messages("distribution.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.TaxableProfitController.onPageLoad(NormalMode).path(), mode)) {
 
     @formHelper(action = routes.DistributionController.onSubmit(mode), 'autoComplete -> "off") {
 

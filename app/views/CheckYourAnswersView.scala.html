@@ -25,7 +25,7 @@
 
 @(list: SummaryList, continueUrl: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("checkYourAnswers.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.AssociatedCompaniesController.onPageLoad(NormalMode).path())) {
+@layout(pageTitle = titleNoForm(messages("checkYourAnswers.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.AssociatedCompaniesController.onPageLoad(NormalMode).path(), NormalMode)) {
 
     <h1 class="govuk-heading-xl">@messages("checkYourAnswers.heading")</h1>
 

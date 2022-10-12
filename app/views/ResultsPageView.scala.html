@@ -34,7 +34,7 @@
 
 @titleAndBanner = @{displayBanner(calculatorResult)}
 
-@layout(pageTitle = titleNoForm(titleAndBanner.title), backLink = BackLinkHelper.backLinkOrDefault(routes.CheckYourAnswersController.onPageLoad.path())) {
+@layout(pageTitle = titleNoForm(titleAndBanner.title), backLink = BackLinkHelper.backLinkOrDefault(routes.CheckYourAnswersController.onPageLoad.path(), NormalMode)) {
 
     @titleAndBanner.html
 

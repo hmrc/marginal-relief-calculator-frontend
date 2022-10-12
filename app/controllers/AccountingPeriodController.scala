@@ -17,7 +17,6 @@
 package controllers
 
 import controllers.actions._
-import filters.BackLinksFilter
 import forms.{AccountingPeriodForm, AccountingPeriodFormProvider}
 import models.requests.OptionalDataRequest
 import models.{Mode, UserAnswers}
@@ -25,7 +24,6 @@ import navigation.Navigator
 import org.slf4j.{Logger, LoggerFactory}
 import pages.AccountingPeriodPage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -87,7 +85,7 @@ class AccountingPeriodController @Inject() (
               logger.info("Accounting period is irrelevant as it lies before the beginning of the 2023 tax year")
               Future.successful(
                 Redirect(
-                  routes.AccountingPeriodController.irrelevantPeriodPage()
+                  routes.AccountingPeriodController.irrelevantPeriodPage(mode)
                 )
               )
             } else {
@@ -101,7 +99,7 @@ class AccountingPeriodController @Inject() (
         )
     }
 
-  def irrelevantPeriodPage(): Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(irrelevantPeriodView())
+  def irrelevantPeriodPage(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    Ok(irrelevantPeriodView(mode))
   }
 }

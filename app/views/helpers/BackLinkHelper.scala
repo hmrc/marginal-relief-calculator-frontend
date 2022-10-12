@@ -17,15 +17,21 @@
 package views.helpers
 
 import filters.BackLinksFilter
+import models.{ CheckMode, Mode, NormalMode }
 import play.api.libs.json.Json
 import play.api.mvc.RequestHeader
 
 object BackLinkHelper {
-  def backLinkOrDefault(defaultPath: String)(implicit request: RequestHeader): String =
-    request.session.get(BackLinksFilter.visitedLinks) match {
-      case Some(value) =>
-        val backLinks = Json.parse(value).as[List[String]]
-        backLinks.headOption.getOrElse(defaultPath) + "?back=true"
-      case None => defaultPath + "?back=true"
+  def backLinkOrDefault(defaultPath: String, mode: Mode)(implicit request: RequestHeader): String =
+    mode match {
+      case CheckMode =>
+        controllers.routes.CheckYourAnswersController.onPageLoad.path()
+      case NormalMode =>
+        (request.session.get(BackLinksFilter.visitedLinks) match {
+          case Some(value) =>
+            val backLinks = Json.parse(value).as[List[String]]
+            backLinks.tail.headOption.getOrElse(defaultPath)
+          case None => defaultPath
+        }) + "?back=true"
     }
 }

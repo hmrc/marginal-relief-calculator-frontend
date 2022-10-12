@@ -28,20 +28,22 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BackLinkFilter @Inject() (override val mat: Materializer, ec: ExecutionContext) extends Filter {
 
-  private val supportedBackLinks = Set(
+  private val supportedPages = Set(
     routes.AccountingPeriodController.onPageLoad(NormalMode).path,
     routes.CheckYourAnswersController.onPageLoad.path,
     routes.DistributionController.onPageLoad(NormalMode).path,
     routes.DistributionsIncludedController.onPageLoad(NormalMode).path,
+    routes.AssociatedCompaniesController.onPageLoad(NormalMode).path,
     routes.ResultsPageController.onPageLoad().path,
     routes.FullResultsPageController.onPageLoad().path,
     routes.IndexController.onPageLoad.path,
     routes.TaxableProfitController.onPageLoad(NormalMode).path,
-    routes.PDFMetadataController.onPageLoad().path
+    routes.PDFMetadataController.onPageLoad().path,
+    routes.PDFController.onPageLoad().path
   )
 
   override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] =
-    if (rh.method == "GET" && supportedBackLinks.contains(rh.path)) {
+    if (rh.method == "GET" && supportedPages.contains(rh.path)) {
       val session = rh.session
       val visitedLinks = session.get(BackLinksFilter.visitedLinks) match {
         case Some(value) =>
@@ -50,14 +52,19 @@ class BackLinkFilter @Inject() (override val mat: Materializer, ec: ExecutionCon
           List.empty
       }
       val isBackLinkClicked = rh.queryString.contains("back")
+      val isRefererChangePage = rh.headers.get("Referer").exists(_.contains("/change-"))
       val updatedVisitedLinks = if(isBackLinkClicked) {
-        visitedLinks.drop(2)
+        if(isRefererChangePage) {
+          visitedLinks
+        } else {
+          visitedLinks.tail
+        }
       } else {
         if (visitedLinks.headOption.contains(rh.path)) visitedLinks else rh.path :: visitedLinks
       }
       val updatedSession = session + (BackLinksFilter.visitedLinks -> Json.toJson(updatedVisitedLinks).toString())
       f(
-        if (isBackLinkClicked) rh.addAttr(RequestAttrKey.Session, Cell(updatedSession)) else rh
+        rh.addAttr(RequestAttrKey.Session, Cell(updatedSession))
       ).map(_.withSession(updatedSession))(ec)
     } else {
       f(rh)

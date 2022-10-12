@@ -30,7 +30,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.play.bootstrap.controller
 import views.html.{AccountingPeriodView, IrrelevantPeriodView}
 
 import java.time.LocalDate
@@ -110,7 +109,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result).filterAndTrim mustEqual view
-          .render(form, NormalMode, controllers.routes.IndexController.onPageLoad.path(), getRequest, messages(application))
+          .render(form, NormalMode, getRequest, messages(application))
           .toString
           .filterAndTrim
       }
@@ -128,7 +127,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest).value
 
         status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode, controllers.routes.IndexController.onPageLoad.path())(
+        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode)(
           getRequest,
           messages(application)
         ).toString.filterAndTrim
@@ -302,7 +301,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val view = application.injector.instanceOf[IrrelevantPeriodView]
 
-        val request = FakeRequest(routes.AccountingPeriodController.irrelevantPeriodPage())
+        val request = FakeRequest(routes.AccountingPeriodController.irrelevantPeriodPage(NormalMode))
 
         val result = route(application, request).value
 
@@ -310,6 +309,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         contentAsString(result).filterAndTrim mustEqual view
           .render(
+            NormalMode,
             request,
             messages(application)
           )
@@ -332,7 +332,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage().url))
+        redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage(CheckMode).url))
       }
     }
 
@@ -353,7 +353,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage().url))
+        redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage(CheckMode).url))
       }
     }
   }

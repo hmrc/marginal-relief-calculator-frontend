@@ -83,7 +83,7 @@
     }
 
     @if(showBackLink) {
-        <a href="@backLink" class="govuk-link">Back</a>
+        @govukBackLink(BackLinkViewModel(href = backLink))
     }
 
     @breadCrumbs.getOrElse(HtmlFormat.empty)

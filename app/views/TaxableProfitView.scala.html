@@ -29,7 +29,7 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("taxableProfit.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.AccountingPeriodController.onPageLoad(NormalMode).path())) {
+@layout(pageTitle = title(form, messages("taxableProfit.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.AccountingPeriodController.onPageLoad(NormalMode).path(), mode)) {
 
     @formHelper(action = routes.TaxableProfitController.onSubmit(mode), 'autoComplete -> "off") {
 
