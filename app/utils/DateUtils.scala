@@ -17,9 +17,12 @@
 package utils
 
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZoneId, ZonedDateTime}
+import java.time.{ LocalDateTime, ZoneId, ZonedDateTime }
 
 object DateUtils {
   def formatUTCDateTime(): String =
-    ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z")).toString()
+    ZonedDateTime
+      .of(LocalDateTime.now(), ZoneId.of("UTC"))
+      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+      .toString()
 }
