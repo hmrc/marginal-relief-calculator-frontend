@@ -66,11 +66,11 @@ class ResultsPageHelperSpec extends SpecBase {
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-                |     <dd class="govuk-summary-list__value">£1.00</dd>
+                |     <dd class="govuk-summary-list__value">£1</dd>
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-                |     <dd class="govuk-summary-list__value">£11.00</dd>
+                |     <dd class="govuk-summary-list__value">£11</dd>
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -114,11 +114,11 @@ class ResultsPageHelperSpec extends SpecBase {
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |   <dd class="govuk-summary-list__value">£1.00</dd>
+          |   <dd class="govuk-summary-list__value">£1</dd>
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |   <dd class="govuk-summary-list__value">£11.00</dd>
+          |   <dd class="govuk-summary-list__value">£11</dd>
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -155,11 +155,11 @@ class ResultsPageHelperSpec extends SpecBase {
           |  </div>
           |  <div class="govuk-summary-list__row">
           |    <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |    <dd class="govuk-summary-list__value">£1.00</dd>
+          |    <dd class="govuk-summary-list__value">£1</dd>
           |  </div>
           |  <div class="govuk-summary-list__row">
           |    <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |    <dd class="govuk-summary-list__value">£11.00</dd>
+          |    <dd class="govuk-summary-list__value">£11</dd>
           |  </div>
           |  <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>

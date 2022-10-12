@@ -73,11 +73,11 @@ object ResultsPageHelper extends ViewHelper {
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.companysProfit").toKey,
-                    value = Value(CurrencyUtils.decimalFormat(taxableProfit).toText)
+                    value = Value(CurrencyUtils.format(taxableProfit).toText)
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.distributions").toKey,
-                    value = Value(CurrencyUtils.decimalFormat(distributions).toText)
+                    value = Value(CurrencyUtils.format(distributions).toText)
                   ),
                   SummaryListRow(
                     key = messages("resultsPage.associatedCompanies").toKey,
