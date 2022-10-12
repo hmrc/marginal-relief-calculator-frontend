@@ -235,6 +235,9 @@ fullResultsPage.tableSummary = This is a table describing your taxable profit ca
 fullResultsPage.taxableProfitTableScrollableLabel = Taxable profit table
 fullResultsPage.taxableProfitTable.hidden = Taxable profit table
 fullResultsPage.calculationTable.hidden = Calculation breakdown table
+fullResultsPage.whatToDoNext = What to do next
+fullResultsPage.completeYourCorporationTaxReturn = Complete your Corporation Tax return
+fullResultsPage.payYourCorporationTaxBy = Pay your Corporation Tax by
 
 
 associatedCompanies.title = Number of associated companies
