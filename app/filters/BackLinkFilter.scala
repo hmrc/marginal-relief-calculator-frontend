@@ -21,10 +21,10 @@ import com.google.inject.Inject
 import controllers.routes
 import models.NormalMode
 import play.api.libs.json.Json
-import play.api.mvc.request.{Cell, RequestAttrKey}
-import play.api.mvc.{Filter, RequestHeader, Result}
+import play.api.mvc.request.{ Cell, RequestAttrKey }
+import play.api.mvc.{ Filter, RequestHeader, Result }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class BackLinkFilter @Inject() (override val mat: Materializer, ec: ExecutionContext) extends Filter {
 
@@ -53,8 +53,8 @@ class BackLinkFilter @Inject() (override val mat: Materializer, ec: ExecutionCon
       }
       val isBackLinkClicked = rh.queryString.contains("back")
       val isRefererChangePage = rh.headers.get("Referer").exists(_.contains("/change-"))
-      val updatedVisitedLinks = if(isBackLinkClicked) {
-        if(isRefererChangePage) {
+      val updatedVisitedLinks = if (isBackLinkClicked) {
+        if (isRefererChangePage) {
           visitedLinks
         } else {
           visitedLinks.tail
