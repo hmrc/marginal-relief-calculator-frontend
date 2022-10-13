@@ -20,8 +20,7 @@
 @import utils.PercentageUtils
 @import forms.DateUtils._
 @import forms._
-@import java.time.LocalDateTime
-@import java.time.format.DateTimeFormatter;
+@import utils.DateUtils
 @import views.helpers.ResultsPageHelper._
 @import views.helpers.FullResultsPageHelper._
 @import views.helpers.BackLinkHelper
@@ -39,7 +38,11 @@
     backLink = BackLinkHelper.backLinkOrDefault(routes.PDFMetadataController.onPageLoad.path(), NormalMode)
 ) {
 <h1 class="govuk-heading-l">@messages("pdf.title")</h1>
-<div class="pdf-preview">
+<div class="print-this govuk-!-margin-bottom-4">
+    <a class="print-this__print" href="javascript:window.print()"><span>Print this page</span></a>
+    <a class="print-this__save" id="save" href="#">Save as a PDF</a>
+</div>
+<div class="pdf-preview" id="pdf-preview">
     <div class="print-document">
         <div class="grid-row print-header">
             <div class="govuk-grid-column-one-third">
@@ -81,7 +84,7 @@
                         <div class="about-results">
                             <h3 class="govuk-heading-s about-results-border">@messages("pdf.aboutThisResult")</h3>
                             <h4 class="govuk-heading-xs">@messages("pdf.dataOfResult")</h4>
-                            <p class="govuk-body about-results-border">@Html(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss")).toString())</p>
+                            <p class="govuk-body about-results-border">@Html(DateUtils.formatUTCDateTime)</p>
                             <h4 class="govuk-heading-xs">@messages("pdf.legalDeclarationTitle")</h4>
                             <p class="govuk-body">@messages("pdf.legalDeclaration")</p>
                         </div>
