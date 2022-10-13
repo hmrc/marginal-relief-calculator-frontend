@@ -34,12 +34,14 @@ object FullResultsPageHelper extends ViewHelper {
 
   def nonTabCalculationResultsTable(
     taxDetails: Seq[TaxDetails],
-    daysInAccountingPeriod: Int,
     associatedCompanies: Int,
     taxableProfit: Int,
     distributions: Int,
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
+
+    val daysInAccountingPeriod = taxDetails.map(_.days).sum
+
     taxDetails match {
       case Seq(_: FlatRate) => throw new RuntimeException("Only flat rate year is available")
       case _                => ()
@@ -151,7 +153,6 @@ object FullResultsPageHelper extends ViewHelper {
         case (y1: MarginalRate, y2: FlatRate) =>
           nonTabCalculationResultsTable(
             Seq(y1, y2),
-            daysInAccountingPeriod,
             associatedCompanies,
             taxableProfit,
             distributions,
@@ -160,7 +161,6 @@ object FullResultsPageHelper extends ViewHelper {
         case (y1: FlatRate, y2: MarginalRate) =>
           nonTabCalculationResultsTable(
             Seq(y1, y2),
-            daysInAccountingPeriod,
             associatedCompanies,
             taxableProfit,
             distributions,
@@ -173,7 +173,6 @@ object FullResultsPageHelper extends ViewHelper {
     calculatorResult.fold(single =>
       nonTabCalculationResultsTable(
         Seq(single.details),
-        single.details.days,
         associatedCompanies,
         taxableProfit,
         distributions,
