@@ -21,6 +21,8 @@
 @import views.helpers.FullResultsPageHelper._
 @import forms.DateUtils._
 @import java.time.LocalDate
+@import views.helpers.BackLinkHelper
+@import controllers.routes
 
 @this(
     layout: templates.Layout,
@@ -31,7 +33,7 @@
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("resultsPage.title"))) {
+@layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
