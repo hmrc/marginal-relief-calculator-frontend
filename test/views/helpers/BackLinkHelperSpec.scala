@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import models.{CheckMode, NormalMode}
+import models.{ CheckMode, NormalMode }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.libs.json.Json

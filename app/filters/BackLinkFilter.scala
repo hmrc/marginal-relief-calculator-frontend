@@ -21,10 +21,10 @@ import com.google.inject.Inject
 import controllers.routes
 import models.NormalMode
 import play.api.libs.json.Json
-import play.api.mvc.request.{Cell, RequestAttrKey}
-import play.api.mvc.{Filter, RequestHeader, Result, SessionCookieBaker}
+import play.api.mvc.request.{ Cell, RequestAttrKey }
+import play.api.mvc.{ Filter, RequestHeader, Result, SessionCookieBaker }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class BackLinkFilter(
   override val mat: Materializer,

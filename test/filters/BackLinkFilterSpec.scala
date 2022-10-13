@@ -20,20 +20,20 @@ import akka.stream.Materializer
 import com.google.inject.Inject
 import controllers.routes
 import models.NormalMode
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.play.components.OneAppPerSuiteWithComponents
-import play.api.http.{HttpFilters, Status}
+import play.api.http.{ HttpFilters, Status }
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.mvc.{Result, SessionCookieBaker}
-import play.api.test.{FakeRequest, Helpers}
-import play.api.test.Helpers.{route, status, writeableOf_AnyContentAsEmpty, session, defaultAwaitTimeout}
-import play.api.{Application, BuiltInComponents, BuiltInComponentsFromContext, NoHttpFiltersComponents}
+import play.api.mvc.{ Result, SessionCookieBaker }
+import play.api.test.{ FakeRequest, Helpers }
+import play.api.test.Helpers.{ defaultAwaitTimeout, route, session, status, writeableOf_AnyContentAsEmpty }
+import play.api.{ Application, BuiltInComponents, BuiltInComponentsFromContext, NoHttpFiltersComponents }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 object BackLinkFilterSpec {
   class Filters @Inject() (backlinkFilter: BackLinkFilter) extends HttpFilters {
@@ -179,20 +179,36 @@ class BackLinkFilterSpec
     "should update session attribute visitedLinks if there it exists" in {
       val Some(result) = route(
         app,
-        FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period").withSession("visitedLinks" -> Json.toJson(List("/marginal-relief-calculator")).toString)
+        FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period").withSession(
+          "visitedLinks" -> Json.toJson(List("/marginal-relief-calculator")).toString
+        )
       )
       status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator"))
+      visitedLinksFromSession(result) shouldBe Some(
+        List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+      )
     }
 
     "should remove the head of the visitedLinks list, when back=true and source isn't a change page" in {
       val Some(result) = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period?back=true")
-          .withSession("visitedLinks" -> Json.toJson(List("/marginal-relief-calculator/taxable-profit", "/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")).toString)
+          .withSession(
+            "visitedLinks" -> Json
+              .toJson(
+                List(
+                  "/marginal-relief-calculator/taxable-profit",
+                  "/marginal-relief-calculator/accounting-period",
+                  "/marginal-relief-calculator"
+                )
+              )
+              .toString
+          )
       )
       status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator"))
+      visitedLinksFromSession(result) shouldBe Some(
+        List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+      )
     }
 
     "should not remove the head of the visitedLinks list, when back=true and source is a change page" in {
@@ -202,13 +218,27 @@ class BackLinkFilterSpec
           .withHeaders("Referer" -> "/marginal-relief-calculator/change-associated-companies")
           .withSession(
             "visitedLinks" -> Json
-              .toJson(List("/marginal-relief-calculator/associated-companies", "/marginal-relief-calculator/distribution", "/marginal-relief-calculator/taxable-profit", "/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator"))
+              .toJson(
+                List(
+                  "/marginal-relief-calculator/associated-companies",
+                  "/marginal-relief-calculator/distribution",
+                  "/marginal-relief-calculator/taxable-profit",
+                  "/marginal-relief-calculator/accounting-period",
+                  "/marginal-relief-calculator"
+                )
+              )
               .toString
           )
       )
       status(result) shouldBe Status.OK
       visitedLinksFromSession(result) shouldBe Some(
-        List("/marginal-relief-calculator/associated-companies", "/marginal-relief-calculator/distribution", "/marginal-relief-calculator/taxable-profit", "/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+        List(
+          "/marginal-relief-calculator/associated-companies",
+          "/marginal-relief-calculator/distribution",
+          "/marginal-relief-calculator/taxable-profit",
+          "/marginal-relief-calculator/accounting-period",
+          "/marginal-relief-calculator"
+        )
       )
     }
 
@@ -216,10 +246,16 @@ class BackLinkFilterSpec
       val Some(result) = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period")
-          .withSession("visitedLinks" -> Json.toJson(List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")).toString)
+          .withSession(
+            "visitedLinks" -> Json
+              .toJson(List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator"))
+              .toString
+          )
       )
       status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator"))
+      visitedLinksFromSession(result) shouldBe Some(
+        List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+      )
     }
   }
 
