@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-    layout: templates.Layout,
-    govukButton: GovukButton
-)
+package utils
 
-@(continueUrl: String)(implicit request: Request[_], messages: Messages)
+import java.time.format.DateTimeFormatter
+import java.time.{ LocalDateTime, ZoneId, ZonedDateTime }
 
-@layout(pageTitle = titleNoForm(messages("journeyRecovery.continue.title")), showBackLink = false) {
-
-    <h1 class="govuk-heading-xl">@messages("journeyRecovery.continue.heading")</h1>
-
-    <p class="govuk-body">@messages("journeyRecovery.continue.guidance")</p>
-
-    <p class="govuk-body">
-        @govukButton(
-            ButtonViewModel(messages("site.continue"))
-                .asLink(continueUrl)
-        )
-    </p>
+object DateUtils {
+  def formatUTCDateTime(): String =
+    ZonedDateTime
+      .of(LocalDateTime.now(), ZoneId.of("UTC"))
+      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+      .toString()
 }

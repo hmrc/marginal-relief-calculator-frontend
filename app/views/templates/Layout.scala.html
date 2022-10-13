@@ -39,7 +39,8 @@
   timeout: Boolean = true,
   showSignOut: Boolean = false,
   mainContentLayout: Option[Html => Html] = Some(defaultMainContentLayout(_)),
-  breadCrumbs: Option[Html] = None
+  breadCrumbs: Option[Html] = None,
+  backLink: String = ""
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @headBlock = {
@@ -67,6 +68,7 @@
 }
 
 @additionalScripts = {
+    <script src='@controllers.routes.Assets.versioned("javascripts/html2pdf.bundle.min.js")'></script>
     <script src='@controllers.routes.Assets.versioned("javascripts/application.min.js")'></script>
 }
 
@@ -82,7 +84,7 @@
     }
 
     @if(showBackLink) {
-        @govukBackLink(BackLinkViewModel(href = "#"))
+        @govukBackLink(BackLinkViewModel(href = backLink))
     }
 
     @breadCrumbs.getOrElse(HtmlFormat.empty)

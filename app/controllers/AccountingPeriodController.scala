@@ -57,7 +57,6 @@ class AccountingPeriodController @Inject() (
         case Some(value) =>
           form.fill(value.copy(accountingPeriodEndDate = Some(value.accountingPeriodEndDateOrDefault)))
       }
-
     Ok(view(preparedForm, mode))
   }
 
@@ -86,7 +85,7 @@ class AccountingPeriodController @Inject() (
               logger.info("Accounting period is irrelevant as it lies before the beginning of the 2023 tax year")
               Future.successful(
                 Redirect(
-                  routes.AccountingPeriodController.irrelevantPeriodPage()
+                  routes.AccountingPeriodController.irrelevantPeriodPage(mode)
                 )
               )
             } else {
@@ -100,7 +99,7 @@ class AccountingPeriodController @Inject() (
         )
     }
 
-  def irrelevantPeriodPage(): Action[AnyContent] = (identify andThen getData) { implicit request =>
-    Ok(irrelevantPeriodView())
+  def irrelevantPeriodPage(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
+    Ok(irrelevantPeriodView(mode))
   }
 }

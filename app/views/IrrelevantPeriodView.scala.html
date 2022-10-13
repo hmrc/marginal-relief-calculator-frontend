@@ -15,15 +15,17 @@
  *@
 
 @import models.NormalMode
+@import views.helpers.BackLinkHelper
+@import controllers.routes
 
 @this(
     layout: templates.Layout,
     govukButton: GovukButton
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("accountingPeriodIrrelevant.title"))) {
+@layout(pageTitle = titleNoForm(messages("accountingPeriodIrrelevant.title")), backLink = routes.AccountingPeriodController.onPageLoad(mode).path()) {
 
     <h1 class="govuk-heading-xl">@messages("accountingPeriodIrrelevant.heading")</h1>
 
