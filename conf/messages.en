@@ -329,9 +329,12 @@ pdf.aboutThisResult = About this result
 pdf.dataOfResult = Date of result
 pdf.legalDeclarationTitle = HRMC legal declaration
 pdf.legalDeclaration = HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result form this calculator if correct details are entered
-pdf.page1 = Page 1 of 3
-pdf.page2 = Page 2 of 3
-pdf.page3 = Page 3 of 3
+pdf.page1 = Page 1 of
+pdf.page2 = Page 2 of
+pdf.page3 = Page 3 of
+pdf.page4 = Page 4 of
+pdf.pageTotal3 = 3
+pdf.pageTotal4 = 4
 
 pDFMetadata.title = Add company details to your results
 pDFMetadata.info = You will get a document that shows today’s date and time of completion, your answers and your result. This is for your records only, HMRC will not use these details.
