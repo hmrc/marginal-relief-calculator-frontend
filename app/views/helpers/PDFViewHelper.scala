@@ -41,7 +41,7 @@ object PDFViewHelper extends ViewHelper {
       case SingleResult(flatRate: FlatRate, _) =>
         Html(s"""
               ${pdfHeaderHtml(
-            messages("pdf.pageTotal3"),
+            "3",
             pdfMetadata,
             calculatorResult,
             accountingPeriodForm,
@@ -49,17 +49,17 @@ object PDFViewHelper extends ViewHelper {
             distributions,
             associatedCompanies
           )}
-                ${pdfCorporationTaxHtml(messages("pdf.pageTotal3"), calculatorResult)}
-             ${pdfPageHtml(
+                ${pdfCorporationTaxHtml("3", calculatorResult)}
+             ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(flatRate), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
-            messages("pdf.pageTotal3")
+            "3"
           )}
              """)
       case DualResult(flatRate1: FlatRate, flatRate2: FlatRate, _) =>
         Html(s"""
               ${pdfHeaderHtml(
-            messages("pdf.pageTotal3"),
+            "3",
             pdfMetadata,
             calculatorResult,
             accountingPeriodForm,
@@ -67,8 +67,8 @@ object PDFViewHelper extends ViewHelper {
             distributions,
             associatedCompanies
           )}
-                ${pdfCorporationTaxHtml(messages("pdf.pageTotal3"), calculatorResult)}
-             ${pdfPageHtml(
+                ${pdfCorporationTaxHtml("3", calculatorResult)}
+             ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
               Seq(flatRate1, flatRate2),
               associatedCompanies,
@@ -77,13 +77,13 @@ object PDFViewHelper extends ViewHelper {
               config
             ),
             calculatorResult,
-            messages("pdf.pageTotal3")
+            "3"
           )}
              """)
       case SingleResult(m: MarginalRate, _) =>
         Html(s"""
               ${pdfHeaderHtml(
-            messages("pdf.pageTotal3"),
+            "3",
             pdfMetadata,
             calculatorResult,
             accountingPeriodForm,
@@ -91,17 +91,17 @@ object PDFViewHelper extends ViewHelper {
             distributions,
             associatedCompanies
           )}
-                ${pdfCorporationTaxHtml(messages("pdf.pageTotal3"), calculatorResult)}
-             ${pdfPageHtml(
+                ${pdfCorporationTaxHtml("3", calculatorResult)}
+             ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(m), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
-            messages("pdf.pageTotal3")
+            "3"
           )}
              """)
       case DualResult(flatRate: FlatRate, m: MarginalRate, _) =>
         Html(s"""
               ${pdfHeaderHtml(
-            messages("pdf.pageTotal3"),
+            "3",
             pdfMetadata,
             calculatorResult,
             accountingPeriodForm,
@@ -109,18 +109,18 @@ object PDFViewHelper extends ViewHelper {
             distributions,
             associatedCompanies
           )}
-                ${pdfCorporationTaxHtml(messages("pdf.pageTotal3"), calculatorResult)}
-             ${pdfPageHtml(
+                ${pdfCorporationTaxHtml("3", calculatorResult)}
+             ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(flatRate, m), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
-            messages("pdf.pageTotal3")
+            "3"
           )}
              """)
 
       case DualResult(m: MarginalRate, flatRate: FlatRate, _) =>
         Html(s"""
                 ${pdfHeaderHtml(
-            messages("pdf.pageTotal3"),
+            "3",
             pdfMetadata,
             calculatorResult,
             accountingPeriodForm,
@@ -128,17 +128,17 @@ object PDFViewHelper extends ViewHelper {
             distributions,
             associatedCompanies
           )}
-                ${pdfCorporationTaxHtml(messages("pdf.pageTotal3"), calculatorResult)}
-                ${pdfPageHtml(
+                ${pdfCorporationTaxHtml("3", calculatorResult)}
+                ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(m, flatRate), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
-            messages("pdf.pageTotal3")
+            "3"
           )}""")
 
       case DualResult(m1: MarginalRate, m2: MarginalRate, _) =>
         Html(s"""
         ${pdfHeaderHtml(
-            messages("pdf.pageTotal4"),
+            "4",
             pdfMetadata,
             calculatorResult,
             accountingPeriodForm,
@@ -146,19 +146,23 @@ object PDFViewHelper extends ViewHelper {
             distributions,
             associatedCompanies
           )}
-        ${pdfCorporationTaxHtml(messages("pdf.pageTotal4"), calculatorResult)}
-        ${pdfPageHtml(
+        ${pdfCorporationTaxHtml("4", calculatorResult)}
+        ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(m1), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
-            messages("pdf.pageTotal4")
+            "4"
           )}
-        ${pdfPageHtml2(
+        ${pdfDetailedCalculationHtmlWithoutHeader(
             nonTabCalculationResultsTable(Seq(m2), associatedCompanies, taxableProfit, distributions, config),
-            messages("pdf.pageTotal4")
+            "4"
           )}""")
     }
 
-  private def pdfPageHtml(resultsTable: Html, calculatorResult: CalculatorResult, pageCount: String)(implicit
+  private def pdfDetailedCalculationHtml(
+    resultsTable: Html,
+    calculatorResult: CalculatorResult,
+    pageCount: String
+  )(implicit
     messages: Messages
   ): Html =
     Html(s"""<div class="print-document">
@@ -170,15 +174,17 @@ object PDFViewHelper extends ViewHelper {
             <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
             $resultsTable
           </div>
-          <span class="govuk-body-s footer-page-no">${messages("pdf.page3")} $pageCount</span>
+          <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
         </div>""")
 
-  private def pdfPageHtml2(resultsTable: Html, pageCount: String)(implicit messages: Messages): Html =
+  private def pdfDetailedCalculationHtmlWithoutHeader(resultsTable: Html, pageCount: String)(implicit
+    messages: Messages
+  ): Html =
     Html(s"""<div class="print-document">
           <div class="grid-row">
             $resultsTable
           </div>
-          <span class="govuk-body-s footer-page-no">${messages("pdf.page4")} $pageCount</span>
+          <span class="govuk-body-s footer-page-no">${messages("pdf.page", "4", pageCount)}</span>
         </div>""")
 
   private def pdfHeaderHtml(
@@ -189,25 +195,7 @@ object PDFViewHelper extends ViewHelper {
     taxableProfit: Int,
     distributions: Int,
     associatedCompanies: Int
-  )(implicit messages: Messages): Html = {
-
-    var pdfName = ""
-    var pdfUtr = ""
-
-    if (pdfMetadata.companyName.isDefined) {
-      pdfName = s"""<div class="grid-row">
-        <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h3>
-        <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
-      </div>"""
-    }
-
-    if (pdfMetadata.utr.isDefined) {
-      pdfUtr = s"""<div class="grid-row">
-        <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h3>
-        <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
-      </div>"""
-    }
-
+  )(implicit messages: Messages): Html =
     Html(s"""<div class="print-document">
               <div class="grid-row print-header">
                      <div class="govuk-grid-column-one-third">
@@ -220,8 +208,18 @@ object PDFViewHelper extends ViewHelper {
                             </h3>
                         </div>
                     </div>
-                    $pdfName
-                    $pdfUtr
+                    ${if (pdfMetadata.companyName.isDefined) {
+        s"""<div class="grid-row">
+                        <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h3>
+                        <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
+                      </div>"""
+      }}
+                    ${if (pdfMetadata.utr.isDefined) {
+        s"""<div class="grid-row">
+                        <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h3>
+                        <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
+                      </div>"""
+      }}
                     <div class="grid-row print-banner">
                         ${displayBanner(calculatorResult).html}
                     </div>
@@ -258,30 +256,12 @@ object PDFViewHelper extends ViewHelper {
                             </div>
                         </div>
                     </div>
-                    <span class="govuk-body-s footer-page-no">${messages("pdf.page1")} $pageCount</span>
+                    <span class="govuk-body-s footer-page-no">${messages("pdf.page", "1", pageCount)}</span>
                 </div>""")
-  }
 
   private def pdfCorporationTaxHtml(pageCount: String, calculatorResult: CalculatorResult)(implicit
     messages: Messages
-  ): Html = {
-
-    var corporationTaxReducedFrom = ""
-    var reducedFromAfterMR = ""
-
-    if (calculatorResult.totalMarginalRelief > 0) {
-      corporationTaxReducedFrom = s"""<p class="govuk-body">${messages(
-          "resultsPage.corporationTaxReducedFrom",
-          CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
-          CurrencyUtils.format(calculatorResult.totalMarginalRelief)
-        )}</p>"""
-    }
-    if (calculatorResult.totalMarginalRelief > 0) {
-      reducedFromAfterMR = s"""<p class="govuk-body">${messages(
-          "resultsPage.reducedFromAfterMR",
-          PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR)
-        )}</p>"""
-    }
+  ): Html =
     Html(s""" <div class="print-document">
             <div class="grid-row">
                   <h2 class="govuk-heading-m" style="margin-bottom: 7px;">${messages(
@@ -290,7 +270,13 @@ object PDFViewHelper extends ViewHelper {
                   <span class="govuk-heading-l" style="margin-bottom: 4px;">${CurrencyUtils.format(
         calculatorResult.totalCorporationTax
       )}</span>
-                  $corporationTaxReducedFrom
+                  ${if (calculatorResult.totalMarginalRelief > 0) {
+        s"""<p class="govuk-body">${messages(
+            "resultsPage.corporationTaxReducedFrom",
+            CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
+            CurrencyUtils.format(calculatorResult.totalMarginalRelief)
+          )}</p>"""
+      }}
                   ${displayCorporationTaxTable(calculatorResult)}
                </div>
                <div class="grid-row">
@@ -300,10 +286,14 @@ object PDFViewHelper extends ViewHelper {
                    <span class="govuk-heading-l" style="margin-bottom: 4px;">${PercentageUtils.format(
         calculatorResult.effectiveTaxRate
       )}</span>
-                   $reducedFromAfterMR
+                   ${if (calculatorResult.totalMarginalRelief > 0) {
+        s"""<p class="govuk-body">${messages(
+            "resultsPage.reducedFromAfterMR",
+            PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR)
+          )}</p>"""
+      }}
                    ${displayEffectiveTaxTable(calculatorResult)}
                </div>
-               <span class="govuk-body-s footer-page-no">${messages("pdf.page2")} $pageCount</span>
+               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
            </div>""")
-  }
 }
