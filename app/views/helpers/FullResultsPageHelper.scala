@@ -32,6 +32,66 @@ object FullResultsPageHelper extends ViewHelper {
   private val govukTable = new GovukTable()
   private val govukDetails = new GovukDetails()
 
+  def nonTabCalculationResultsTable(
+    taxDetails: Seq[TaxDetails],
+    associatedCompanies: Int,
+    taxableProfit: Int,
+    distributions: Int,
+    config: Map[Int, FYConfig]
+  )(implicit messages: Messages): Html = {
+
+    val daysInAccountingPeriod = taxDetails.map(_.days).sum
+
+    taxDetails match {
+      case Seq(_: FlatRate) => throw new RuntimeException("Only flat rate year is available")
+      case _                => ()
+    }
+    val html = taxDetails.flatMap { td =>
+      val year = td.year
+      val days = td.days
+      td.fold { _ =>
+        Seq(
+          h3(
+            messages(
+              "fullResultsPage.forFinancialYear",
+              year.toString,
+              (year + 1).toString,
+              days
+            )
+          ),
+          p(
+            messages(
+              "fullResultsPage.marginalReliefNotAvailable",
+              year.toString,
+              (year + 1).toString
+            )
+          )
+        )
+      } { marginal =>
+        Seq(
+          h3(
+            messages(
+              "fullResultsPage.forFinancialYear",
+              year.toString,
+              (year + 1).toString,
+              days
+            )
+          ),
+          displayFullFinancialYearTable(
+            marginal,
+            associatedCompanies,
+            taxableProfit,
+            distributions,
+            config,
+            daysInAccountingPeriod
+          )
+        )
+      }
+    }
+
+    HtmlFormat.fill(html)
+  }
+
   def displayFullCalculationResult(
     calculatorResult: CalculatorResult,
     associatedCompanies: Int,
@@ -39,57 +99,6 @@ object FullResultsPageHelper extends ViewHelper {
     distributions: Int,
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
-
-    def nonTabDisplay(taxDetails: Seq[TaxDetails], daysInAccountingPeriod: Int) = {
-      taxDetails match {
-        case Seq(_: FlatRate) => throw new RuntimeException("Only flat rate year is available")
-        case _                => ()
-      }
-      val html = taxDetails.flatMap { td =>
-        val year = td.year
-        val days = td.days
-        td.fold { _ =>
-          Seq(
-            h3(
-              messages(
-                "fullResultsPage.forFinancialYear",
-                year.toString,
-                (year + 1).toString,
-                days
-              )
-            ),
-            p(
-              messages(
-                "fullResultsPage.marginalReliefNotAvailable",
-                year.toString,
-                (year + 1).toString
-              )
-            )
-          )
-        } { marginal =>
-          Seq(
-            h3(
-              messages(
-                "fullResultsPage.forFinancialYear",
-                year.toString,
-                (year + 1).toString,
-                days
-              )
-            ),
-            displayFullFinancialYearTable(
-              marginal,
-              associatedCompanies,
-              taxableProfit,
-              distributions,
-              config,
-              daysInAccountingPeriod
-            )
-          )
-        }
-      }
-
-      HtmlFormat.fill(html)
-    }
 
     def dualResultTable(dual: DualResult) = {
       def tabBtn(year: Int) =
@@ -141,72 +150,75 @@ object FullResultsPageHelper extends ViewHelper {
 
       dual.year1 -> dual.year2 match {
         case (y1: MarginalRate, y2: MarginalRate) => tabDisplay(Seq(y1, y2), daysInAccountingPeriod)
-        case (y1: MarginalRate, y2: FlatRate)     => nonTabDisplay(Seq(y1, y2), daysInAccountingPeriod)
-        case (y1: FlatRate, y2: MarginalRate)     => nonTabDisplay(Seq(y1, y2), daysInAccountingPeriod)
-        case _                                    => throw new RuntimeException("Both financial years are flat rate")
+        case (y1: MarginalRate, y2: FlatRate) =>
+          nonTabCalculationResultsTable(
+            Seq(y1, y2),
+            associatedCompanies,
+            taxableProfit,
+            distributions,
+            config
+          )
+        case (y1: FlatRate, y2: MarginalRate) =>
+          nonTabCalculationResultsTable(
+            Seq(y1, y2),
+            associatedCompanies,
+            taxableProfit,
+            distributions,
+            config
+          )
+        case _ => throw new RuntimeException("Both financial years are flat rate")
       }
     }
 
-    val financialYearTables =
-      calculatorResult.fold(single => nonTabDisplay(Seq(single.details), single.details.days))(dualResultTable)
-
-    HtmlFormat.fill(
-      Seq(
-        financialYearTables,
-        whatIsMarginalRate(calculatorResult)
+    calculatorResult.fold(single =>
+      nonTabCalculationResultsTable(
+        Seq(single.details),
+        associatedCompanies,
+        taxableProfit,
+        distributions,
+        config
       )
-    )
+    )(dualResultTable)
   }
 
-  private def marginalReliefFormula(implicit messages: Messages): Html =
+  def marginalReliefFormula(implicit messages: Messages): Html =
     Html(s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">${messages(
              "fullResultsPage.marginalReliefFormula"
            )}</h3>
             |<p class="govuk-body">${messages("fullResultsPage.marginalReliefFormula.description")}</p>""".stripMargin)
 
-  private def whatIsMarginalRate(calculatorResult: CalculatorResult)(implicit messages: Messages) = {
-
-    val show = {
-      val taxDetails = calculatorResult.fold(single => Seq(single.details))(dual => Seq(dual.year1, dual.year2))
-      taxDetails.exists(taxDetails => taxDetails.fold(_ => false)(isFiveStepMarginalRate))
-    }
-
-    if (show) {
-      HtmlFormat.fill(
-        Seq(
-          marginalReliefFormula,
-          govukDetails(
-            Details(
-              summary = Text(messages("fullResultsPage.whatIsMarginalRateFraction")),
-              content = HtmlContent(
-                s"""<p>${messages("fullResultsPage.details.standardFraction")}</p>
-                   |    <p>${messages("fullResultsPage.details.standardFractionExample")}</p>
-                   |    <p><b>${messages("fullResultsPage.details.whatIsMarginalRate")}</b></p>
-                   |    <p>${messages("fullResultsPage.details.smallProfitRate")}
-                   |      <strong>${messages("fullResultsPage.details.smallProfitRateNumber")}</strong><br/>
-                   |        ${messages("fullResultsPage.details.mainProfitRate")}
-                   |       <strong> ${messages("fullResultsPage.details.mainProfitRateNumber")}</strong><br>
-                   |        ${messages("fullResultsPage.details.lowerLimitRate")}
-                   |        <strong>${messages("fullResultsPage.details.lowerLimitRateNumber")}</strong><br/>
-                   |        ${messages("fullResultsPage.details.upperLimitRate")}
-                   |        <strong>${messages("fullResultsPage.details.upperLimitRateNumber")}</strong></p>
-                   |    <p>
-                   |        ${messages("fullResultsPage.details.examples.1")}
-                   |       <strong> ${messages("fullResultsPage.details.examples.1.ans")}</strong><br/>
-                   |        ${messages("fullResultsPage.details.examples.2")}
-                   |        <strong>${messages("fullResultsPage.details.examples.2.ans")}</strong><br/>
-                   |        ${messages("fullResultsPage.details.examples.3")}
-                   |       <strong> ${messages("fullResultsPage.details.examples.3.ans")}</strong>
-                   |        ${messages("fullResultsPage.details.examples.3.rate")} <br/>
-                   |    </p>""".stripMargin
-              )
-            )
-          ),
-          hr
+  def showMarginalReliefExplanation(calculatorResult: CalculatorResult): Boolean = {
+    val taxDetails = calculatorResult.fold(single => Seq(single.details))(dual => Seq(dual.year1, dual.year2))
+    taxDetails.exists(taxDetails => taxDetails.fold(_ => false)(isFiveStepMarginalRate))
+  }
+  def whatIsMarginalRate(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
+    govukDetails(
+      Details(
+        summary = Text(messages("fullResultsPage.whatIsMarginalRateFraction")),
+        content = HtmlContent(
+          s"""<p>${messages("fullResultsPage.details.standardFraction")}</p>
+             |    <p>${messages("fullResultsPage.details.standardFractionExample")}</p>
+             |    <p><b>${messages("fullResultsPage.details.whatIsMarginalRate")}</b></p>
+             |    <p>${messages("fullResultsPage.details.smallProfitRate")}
+             |      <strong>${messages("fullResultsPage.details.smallProfitRateNumber")}</strong><br/>
+             |        ${messages("fullResultsPage.details.mainProfitRate")}
+             |       <strong> ${messages("fullResultsPage.details.mainProfitRateNumber")}</strong><br>
+             |        ${messages("fullResultsPage.details.lowerLimitRate")}
+             |        <strong>${messages("fullResultsPage.details.lowerLimitRateNumber")}</strong><br/>
+             |        ${messages("fullResultsPage.details.upperLimitRate")}
+             |        <strong>${messages("fullResultsPage.details.upperLimitRateNumber")}</strong></p>
+             |    <p>
+             |        ${messages("fullResultsPage.details.examples.1")}
+             |       <strong> ${messages("fullResultsPage.details.examples.1.ans")}</strong><br/>
+             |        ${messages("fullResultsPage.details.examples.2")}
+             |        <strong>${messages("fullResultsPage.details.examples.2.ans")}</strong><br/>
+             |        ${messages("fullResultsPage.details.examples.3")}
+             |       <strong> ${messages("fullResultsPage.details.examples.3.ans")}</strong>
+             |        ${messages("fullResultsPage.details.examples.3.rate")} <br/>
+             |    </p>""".stripMargin
         )
       )
-    } else { HtmlFormat.empty }
-  }
+    )
 
   private def isFiveStepMarginalRate(marginalRate: MarginalRate) = marginalRate.marginalRelief > 0
 

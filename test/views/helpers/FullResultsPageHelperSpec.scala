@@ -354,5 +354,66 @@ class FullResultsPageHelperSpec extends SpecBase {
           .contains("fullResultsPage.notEligibleBelowLowerLimit") mustBe true
       }
     }
+    "renders marginal relief formula" in {
+      FullResultsPageHelper.marginalReliefFormula(messages)
+    }
+    "shows marginal relief explanation if marginal relief > 0" in {
+      val calculatorResult = SingleResult(
+        MarginalRate(
+          year = epoch.getYear,
+          corporationTaxBeforeMR = 11,
+          taxRateBeforeMR = 22,
+          corporationTax = 33,
+          taxRate = 44,
+          marginalRelief = 1,
+          adjustedProfit = 66,
+          adjustedDistributions = 77,
+          adjustedAugmentedProfit = 88,
+          adjustedLowerThreshold = 100000,
+          adjustedUpperThreshold = 1000000,
+          days = 1010
+        ),
+        1
+      )
+
+      FullResultsPageHelper.showMarginalReliefExplanation(calculatorResult) mustBe true
+    }
+
+    "does not show marginal relief explanation if marginal relief <= 0" in {
+      val calculatorResult = SingleResult(
+        MarginalRate(
+          year = epoch.getYear,
+          corporationTaxBeforeMR = 11,
+          taxRateBeforeMR = 22,
+          corporationTax = 33,
+          taxRate = 44,
+          marginalRelief = 0,
+          adjustedProfit = 66,
+          adjustedDistributions = 77,
+          adjustedAugmentedProfit = 88,
+          adjustedLowerThreshold = 100000,
+          adjustedUpperThreshold = 1000000,
+          days = 1010
+        ),
+        1
+      )
+      FullResultsPageHelper.showMarginalReliefExplanation(calculatorResult) mustBe false
+    }
+
+    "does not show marginal relief explanation if marginal relief not available" in {
+      val calculatorResult = SingleResult(
+        FlatRate(
+          year = epoch.getYear,
+          corporationTax = 33,
+          taxRate = 44,
+          adjustedProfit = 66,
+          adjustedDistributions = 77,
+          adjustedAugmentedProfit = 88,
+          days = 1010
+        ),
+        1
+      )
+      FullResultsPageHelper.showMarginalReliefExplanation(calculatorResult) mustBe false
+    }
   }
 }
