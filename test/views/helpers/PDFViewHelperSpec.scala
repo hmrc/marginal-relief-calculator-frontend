@@ -157,7 +157,7 @@ class PDFViewHelperSpec extends SpecBase {
               pageCount
             )}""").htmlFormat
       }
-      "when marginal rate year 1 and flat  rate for year 2" in {
+      "when marginal rate year 1 and flat rate for year 2" in {
         val flatRate = FlatRate(2022, 190, 19, 1000, 100, 0, 0)
         val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
         val calculatorResult = DualResult(
@@ -191,6 +191,49 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(
                 Seq(marginalRate, flatRate),
+                associatedCompanies,
+                taxableProfit,
+                distributions,
+                config
+              ),
+              calculatorResult,
+              pageCount
+            )}""").htmlFormat
+      }
+      "when flat rate year 1 and marginal rate for year 2" in {
+        val flatRate = FlatRate(2023, 190, 19, 1000, 100, 0, 0)
+        val marginalRate = MarginalRate(2022, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+        val calculatorResult = DualResult(
+          marginalRate,
+          flatRate,
+          1
+        )
+
+        val pageCount = "3"
+
+        pdfTableHtml(
+          calculatorResult,
+          associatedCompanies,
+          taxableProfit,
+          distributions,
+          config,
+          pdfMetadataForm,
+          accountingPeriodForm
+        ).htmlFormat shouldMatchTo
+          Html(s"""
+                ${pdfHeaderHtml(
+              pageCount,
+              pdfMetadataForm,
+              calculatorResult,
+              accountingPeriodForm,
+              taxableProfit,
+              distributions,
+              associatedCompanies
+            )}
+                ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
+                ${pdfDetailedCalculationHtml(
+              nonTabCalculationResultsTable(
+                Seq(flatRate, marginalRate),
                 associatedCompanies,
                 taxableProfit,
                 distributions,

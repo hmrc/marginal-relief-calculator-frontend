@@ -213,13 +213,13 @@ object PDFViewHelper extends ViewHelper {
                         <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h3>
                         <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
                       </div>"""
-      }}
+      } else s""}
                     ${if (pdfMetadata.utr.isDefined) {
         s"""<div class="grid-row">
                         <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h3>
                         <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
                       </div>"""
-      }}
+      } else s""}
                     <div class="grid-row print-banner">
                         ${displayBanner(calculatorResult).html}
                     </div>
@@ -276,7 +276,7 @@ object PDFViewHelper extends ViewHelper {
             CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
             CurrencyUtils.format(calculatorResult.totalMarginalRelief)
           )}</p>"""
-      }}
+      } else s""}
                   ${displayCorporationTaxTable(calculatorResult)}
                </div>
                <div class="grid-row">
@@ -291,7 +291,7 @@ object PDFViewHelper extends ViewHelper {
             "resultsPage.reducedFromAfterMR",
             PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR)
           )}</p>"""
-      }}
+      } else s""}
                    ${displayEffectiveTaxTable(calculatorResult)}
                </div>
                <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
