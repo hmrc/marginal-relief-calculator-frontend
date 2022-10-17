@@ -158,7 +158,7 @@ object PDFViewHelper extends ViewHelper {
           )}""")
     }
 
-  private def pdfDetailedCalculationHtml(
+  def pdfDetailedCalculationHtml(
     resultsTable: Html,
     calculatorResult: CalculatorResult,
     pageCount: String
@@ -177,7 +177,7 @@ object PDFViewHelper extends ViewHelper {
           <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
         </div>""")
 
-  private def pdfDetailedCalculationHtmlWithoutHeader(resultsTable: Html, pageCount: String)(implicit
+  def pdfDetailedCalculationHtmlWithoutHeader(resultsTable: Html, pageCount: String)(implicit
     messages: Messages
   ): Html =
     Html(s"""<div class="print-document">
@@ -187,7 +187,7 @@ object PDFViewHelper extends ViewHelper {
           <span class="govuk-body-s footer-page-no">${messages("pdf.page", "4", pageCount)}</span>
         </div>""")
 
-  private def pdfHeaderHtml(
+  def pdfHeaderHtml(
     pageCount: String,
     pdfMetadata: PDFMetadataForm,
     calculatorResult: CalculatorResult,
@@ -259,7 +259,7 @@ object PDFViewHelper extends ViewHelper {
                     <span class="govuk-body-s footer-page-no">${messages("pdf.page", "1", pageCount)}</span>
                 </div>""")
 
-  private def pdfCorporationTaxHtml(pageCount: String, calculatorResult: CalculatorResult)(implicit
+  def pdfCorporationTaxHtml(pageCount: String, calculatorResult: CalculatorResult)(implicit
     messages: Messages
   ): Html =
     Html(s""" <div class="print-document">
