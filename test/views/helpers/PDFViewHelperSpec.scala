@@ -40,7 +40,7 @@ class PDFViewHelperSpec extends SpecBase {
 
   private val pdfMetadataForm = PDFMetadataForm(Some("company"), Some("utr"))
 
-  private val taxableProfit = 75000
+  private val taxableProfit = 65000
   private val distributions = 0
   private val associatedCompanies = 0
 
@@ -158,8 +158,8 @@ class PDFViewHelperSpec extends SpecBase {
             )}""").htmlFormat
       }
       "when marginal rate year 1 and flat rate for year 2" in {
-        val flatRate = FlatRate(2022, 190, 19, 1000, 100, 0, 0)
         val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+        val flatRate = FlatRate(2022, 190, 19, 1000, 100, 0, 0)
         val calculatorResult = DualResult(
           marginalRate,
           flatRate,
@@ -202,10 +202,10 @@ class PDFViewHelperSpec extends SpecBase {
       }
       "when flat rate year 1 and marginal rate for year 2" in {
         val flatRate = FlatRate(2023, 190, 19, 1000, 100, 0, 0)
-        val marginalRate = MarginalRate(2022, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+        val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
         val calculatorResult = DualResult(
-          marginalRate,
           flatRate,
+          marginalRate,
           1
         )
 
