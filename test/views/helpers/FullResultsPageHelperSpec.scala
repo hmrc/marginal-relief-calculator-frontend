@@ -36,18 +36,6 @@ class FullResultsPageHelperSpec extends SpecBase {
 
     "single result" - {
 
-      "when only FlatRate, should throw exception" in {
-        val calculatorResult = SingleResult(
-          FlatRate(epoch.getYear, 1, 2, 3, 4, 5, 6),
-          1
-        )
-        val caught =
-          intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
-            FullResultsPageHelper.displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
-          }
-        caught.getMessage mustBe "Only flat rate year is available"
-      }
-
       "when MarginalRate, should display full results table" in {
         val calculatorResult = SingleResult(
           MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10),

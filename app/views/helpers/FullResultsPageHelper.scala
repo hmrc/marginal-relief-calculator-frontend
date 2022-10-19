@@ -42,10 +42,6 @@ object FullResultsPageHelper extends ViewHelper {
 
     val daysInAccountingPeriod = taxDetails.map(_.days).sum
 
-    taxDetails match {
-      case Seq(_: FlatRate) => throw new RuntimeException("Only flat rate year is available")
-      case _                => ()
-    }
     val html = taxDetails.flatMap { td =>
       val year = td.year
       val days = td.days
