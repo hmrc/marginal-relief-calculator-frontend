@@ -187,44 +187,6 @@
     }
 }
 
-.save {
-margin: 0;
-padding: 0;
-    &.pdf-preview {
-        box-sizing: border-box;
-        width: 88%;
-
-        .print-document {
-            border: none;
-            box-shadow: none;
-            width: 100%;
-
-            .print-header .govuk-grid-column-two-thirds {
-                margin-top: -4em;
-            }
-
-            .print-header h3 {
-                text-align: right;
-            }
-
-            .govuk-grid-column-two-thirds {
-                width: 62%;
-                float: left;
-            }
-
-            .govuk-grid-column-one-third {
-                width: 38%;
-                float: left;
-            }
-
-            p,
-            li {
-                font-size: 16px;
-            }
-        }
-    }
-}
-
 @media print {
     br {
         display: none;
