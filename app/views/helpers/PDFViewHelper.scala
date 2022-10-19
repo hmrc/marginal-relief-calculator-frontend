@@ -260,19 +260,34 @@ object PDFViewHelper extends ViewHelper {
   ): Html =
     Html(s"""<div class="print-document">
             |            <div class="grid-row">
-            |                  <h2 class="govuk-heading-m" style="margin-bottom: 7px;">${messages("resultsPage.corporationTaxLiability")}</h2>
-            |                  <span class="govuk-heading-l" style="margin-bottom: 4px;">${CurrencyUtils.format(calculatorResult.totalCorporationTax)}</span>
+            |                  <h2 class="govuk-heading-m" style="margin-bottom: 7px;">${messages(
+             "resultsPage.corporationTaxLiability"
+           )}</h2>
+            |                  <span class="govuk-heading-l" style="margin-bottom: 4px;">${CurrencyUtils.format(
+             calculatorResult.totalCorporationTax
+           )}</span>
             |                  ${if (calculatorResult.totalMarginalRelief > 0) {
-              s"""<p class="govuk -body">${messages("resultsPage.corporationTaxReducedFrom", CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR), CurrencyUtils.format(calculatorResult.totalMarginalRelief))}</p>"""
-              } else s""}
+             s"""<p class="govuk -body">${messages(
+                 "resultsPage.corporationTaxReducedFrom",
+                 CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
+                 CurrencyUtils.format(calculatorResult.totalMarginalRelief)
+               )}</p>"""
+           } else s""}
             |                  ${displayCorporationTaxTable(calculatorResult)}
             |               </div>
             |               <div class="grid-row">
-            |                   <h2 class="govuk-heading-m" style="margin-bottom: 7px;">${messages("resultsPage.effectiveTaxRate")}</h2>
-            |                   <span class="govuk-heading-l" style="margin-bottom: 4px;">${PercentageUtils.format(calculatorResult.effectiveTaxRate)}</span>
+            |                   <h2 class="govuk-heading-m" style="margin-bottom: 7px;">${messages(
+             "resultsPage.effectiveTaxRate"
+           )}</h2>
+            |                   <span class="govuk-heading-l" style="margin-bottom: 4px;">${PercentageUtils.format(
+             calculatorResult.effectiveTaxRate
+           )}</span>
             |                   ${if (calculatorResult.totalMarginalRelief > 0) {
-                s"""<p class="govuk -body">${messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))}</p>"""
-                } else s""}
+             s"""<p class="govuk -body">${messages(
+                 "resultsPage.reducedFromAfterMR",
+                 PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR)
+               )}</p>"""
+           } else s""}
             |                   ${displayEffectiveTaxTable(calculatorResult)}
             |               </div>
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
