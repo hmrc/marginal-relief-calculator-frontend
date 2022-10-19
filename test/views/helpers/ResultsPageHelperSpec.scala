@@ -445,6 +445,96 @@ class ResultsPageHelperSpec extends SpecBase {
           ).htmlFormat
       }
 
+      "when marginal rate for 2 years, both years are outside of threshold limits (no distributions)" - {
+        val calculatorResult = DualResult(
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 1000,
+            adjustedDistributions = 0,
+            adjustedAugmentedProfit = 1000,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 2000,
+            adjustedDistributions = 0,
+            adjustedAugmentedProfit = 2000,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          1
+        )
+        displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAboveAndBelowMarginalReliefLimit"))
+              )
+            )
+          ).htmlFormat
+      }
+
+      "when marginal rate for 2 years, both years are outside of threshold limits (with distributions)" - {
+        val calculatorResult = DualResult(
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 1000,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1001,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 2000,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 2001,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          1
+        )
+        displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveAndBelowMarginalReliefLimit"))
+              )
+            )
+          ).htmlFormat
+      }
+
       "when marginal rate for 2 years, both years have 0 MR as adjusted profits are above upper limits (no distributions)" in {
         val calculatorResult = DualResult(
           MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 0, 100, 500, 100, 0),
