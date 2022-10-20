@@ -30,8 +30,9 @@ object PDFFileTemplateHelper {
     taxableProfit: Int,
     distributions: Int,
     associatedCompanies: Int,
-    config: Map[Int, FYConfig]
-  )(implicit messages: Messages): Html =
+    config: Map[Int, FYConfig],
+    pageCount: Int
+  )(implicit messages: Messages): Html = {
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
         Html(s"""
@@ -50,6 +51,7 @@ object PDFFileTemplateHelper {
                  config
                )}
                 |        </div>
+                |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
                 |
                 |""".stripMargin)
@@ -70,6 +72,7 @@ object PDFFileTemplateHelper {
                  config
                )}
                 |        </div>
+                |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
                 |""".stripMargin)
       case SingleResult(marginalRate: MarginalRate, _) =>
@@ -89,6 +92,7 @@ object PDFFileTemplateHelper {
                  config
                )}
                 |        </div>
+                |   <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
                 |""".stripMargin)
       case DualResult(flatRate: FlatRate, marginalRate: MarginalRate, _) =>
@@ -109,6 +113,7 @@ object PDFFileTemplateHelper {
               config
             )}
              |        </div>
+             |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
              |</div>
              |""".stripMargin
         )
@@ -129,6 +134,7 @@ object PDFFileTemplateHelper {
                  config
                )}
                 |        </div>
+                |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
                 |""".stripMargin)
       case DualResult(marginalRate1: MarginalRate, marginalRate2: MarginalRate, _) =>
@@ -149,8 +155,9 @@ object PDFFileTemplateHelper {
               config
             )}
              |      </div>
-             |      </div>
-             |      <div class="pdf-page">
+             |      <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
+             |</div>
+             |<div class="pdf-page">
              |          <div class="grid-row">
              |            ${nonTabCalculationResultsTable(
               Seq(marginalRate2),
@@ -160,9 +167,15 @@ object PDFFileTemplateHelper {
               config
             )}
              |      </div>
+             |      <span class="govuk-body-s footer-page-no">${messages("pdf.page", "4", pageCount)}</span>
              |</div>
-             |
              |""".stripMargin
         )
     }
+  }
+
+  def numberOfPages(calculatorResult: CalculatorResult): Int = calculatorResult match {
+    case DualResult(_: MarginalRate, _: MarginalRate, _) => 4
+    case _                                               => 3
+  }
 }

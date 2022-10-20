@@ -29,17 +29,16 @@
 @this()
 
 @(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentDateTime: LocalDateTime)(implicit request: Request[_], messages: Messages)
-
+@pageCount = @{
+  numberOfPages(calculatorResult)
+}
 <html>
 <head>
-    <title>Marginal Relief Calculator</title>
+    <title>@{messages("pdf.previewTitle")}</title>
     <style>
          @@page {
              size: A4;
              margin: 25px;
-             @@bottom-left {
-                content: "@messages("pdf.page", "\" counter(page) \"", "\" counter(pages)");
-             }
          }
          body {
              font-family:GDS Transport, arial, sans-serif;
@@ -316,6 +315,11 @@
         .pdf-page .govuk-details {
             display:none
         }
+        .footer-page-no {
+            position: absolute;
+            bottom: 0px;
+            left: 35px;
+        }
     </style>
 </head>
 <body>
@@ -365,6 +369,7 @@
                 </div>
             </div>
         </div>
+        <span class="govuk-body-s footer-page-no">@{messages("pdf.page", "1", pageCount)}</span>
     </div>
     <div class="pdf-page">
         <div class="grid-row">
@@ -383,8 +388,9 @@
             }
             @displayEffectiveTaxTable(calculatorResult)
         </div>
+        <span class="govuk-body-s footer-page-no">@{messages("pdf.page", "2", pageCount)}</span>
     </div>
-    @pdfHowItsCalculated(calculatorResult, taxableProfit, distributions, associatedCompanies, config)
+    @pdfHowItsCalculated(calculatorResult, taxableProfit, distributions, associatedCompanies, config, pageCount)
 </div>
 </body>
 </html>

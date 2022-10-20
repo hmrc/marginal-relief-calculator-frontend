@@ -15,7 +15,7 @@
  */
 
 package utils
-import java.time.{LocalDateTime, ZoneOffset}
+import java.time.{ LocalDateTime, ZoneOffset }
 
 class FakeDateTime extends DateTime {
   override def now: LocalDateTime = LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)

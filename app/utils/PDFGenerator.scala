@@ -28,6 +28,8 @@ object PDFGenerator {
       builder.useFastMode()
       builder.useFont(new File(getClass.getClassLoader.getResource("arial.ttf").getFile), "Arial")
       builder.useFont(new File(getClass.getClassLoader.getResource("light-f591b13f7d-v2.ttf").getFile), "GDS Transport")
+      builder.usePdfUaAccessbility(true)
+      builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)
       builder.toStream(outputStream)
       builder.run()

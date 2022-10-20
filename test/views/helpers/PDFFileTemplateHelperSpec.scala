@@ -21,7 +21,7 @@ import connectors.sharedmodel._
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.i18n.Messages
-import play.api.test.Helpers.stubMessages
+import play.api.test.Helpers.{ stubMessages, stubMessagesApi }
 import utils.FormatUtils._
 import views.helpers.PDFFileTemplateHelper.pdfHowItsCalculated
 
@@ -30,7 +30,16 @@ import java.time.LocalDate
 class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
 
   private val epoch = LocalDate.ofEpochDay(0)
-  private implicit val messages: Messages = stubMessages()
+  private implicit val messages: Messages = stubMessages(
+    stubMessagesApi(
+      messages = Map(
+        "en" ->
+          Map(
+            "pdf.page" -> "Page {0} of {1}"
+          )
+      )
+    )
+  )
 
   "pdfHowItsCalculated" - {
     "should render single result with flat rate" in {
@@ -38,7 +47,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         epoch.getYear -> FlatRateConfig(epoch.getYear, 0.19)
       )
       val calculatorResult = SingleResult(FlatRate(epoch.getYear, 1, 1, 1, 1, 1, 1), 1)
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config).htmlFormat shouldMatchTo
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldMatchTo
         """
           |<div class="pdf-page">
           |        <div class="grid-row">
@@ -47,6 +56,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |          <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |          <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3><p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
           |        </div>
+          |        <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
           |""".stripMargin.htmlFormat
     }
@@ -56,7 +66,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         epoch.getYear -> MarginalReliefConfig(epoch.getYear, 50000, 250000, 0.19, 0.25, 0.015)
       )
       val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -109,6 +119,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |         </table>
           |      </div>
           |   </div>
+          |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
           |""".stripMargin.htmlFormat
     }
@@ -123,7 +134,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         MarginalRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -178,6 +189,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |         </table>
           |      </div>
           |   </div>
+          |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
           |""".stripMargin.htmlFormat
     }
@@ -192,7 +204,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         FlatRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -204,6 +216,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
           |   </div>
+          |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
           |""".stripMargin.htmlFormat
     }
@@ -218,7 +231,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         FlatRate(epoch.getYear + 1, 1, 1, 1, 1, 1, 1),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -273,6 +286,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
           |   </div>
+          |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
           |""".stripMargin.htmlFormat
     }
@@ -287,7 +301,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 4).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -340,6 +354,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |         </table>
           |      </div>
           |   </div>
+          |   <span class="govuk-body-s footer-page-no">Page 3 of 4</span>
           |</div>
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -389,6 +404,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |         </table>
           |      </div>
           |   </div>
+          |   <span class="govuk-body-s footer-page-no">Page 4 of 4</span>
           |</div>
           |""".stripMargin.htmlFormat
     }
