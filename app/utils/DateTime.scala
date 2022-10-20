@@ -16,12 +16,11 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
-import java.time.{ LocalDateTime, ZoneId, ZonedDateTime }
+import com.google.inject.Singleton
 
-object DateUtils {
-  def formatUTCDateTime(current: LocalDateTime = LocalDateTime.now()): String =
-    ZonedDateTime
-      .of(current, ZoneId.of("UTC"))
-      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+import java.time.LocalDateTime
+
+@Singleton
+class DateTime() {
+  def now: LocalDateTime = LocalDateTime.now()
 }

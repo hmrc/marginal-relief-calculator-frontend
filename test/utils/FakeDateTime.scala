@@ -15,13 +15,8 @@
  */
 
 package utils
+import java.time.{LocalDateTime, ZoneOffset}
 
-import java.time.format.DateTimeFormatter
-import java.time.{ LocalDateTime, ZoneId, ZonedDateTime }
-
-object DateUtils {
-  def formatUTCDateTime(current: LocalDateTime = LocalDateTime.now()): String =
-    ZonedDateTime
-      .of(current, ZoneId.of("UTC"))
-      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+class FakeDateTime extends DateTime {
+  override def now: LocalDateTime = LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC)
 }

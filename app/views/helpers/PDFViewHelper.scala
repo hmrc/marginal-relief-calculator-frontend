@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ CalculatorResult, DualResult, FYConfig, FlatRate, MarginalRate, SingleResult }
+import connectors.sharedmodel._
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
@@ -24,6 +24,7 @@ import utils.{ CurrencyUtils, DateUtils, PercentageUtils }
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
+import java.time.LocalDateTime
 import scala.collection.immutable.Seq
 
 object PDFViewHelper extends ViewHelper {
@@ -35,7 +36,8 @@ object PDFViewHelper extends ViewHelper {
     distributions: Int,
     config: Map[Int, FYConfig],
     pdfMetadata: PDFMetadataForm,
-    accountingPeriodForm: AccountingPeriodForm
+    accountingPeriodForm: AccountingPeriodForm,
+    now: LocalDateTime
   )(implicit messages: Messages): Html =
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
@@ -47,7 +49,8 @@ object PDFViewHelper extends ViewHelper {
             accountingPeriodForm,
             taxableProfit,
             distributions,
-            associatedCompanies
+            associatedCompanies,
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -65,7 +68,8 @@ object PDFViewHelper extends ViewHelper {
             accountingPeriodForm,
             taxableProfit,
             distributions,
-            associatedCompanies
+            associatedCompanies,
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -89,7 +93,8 @@ object PDFViewHelper extends ViewHelper {
             accountingPeriodForm,
             taxableProfit,
             distributions,
-            associatedCompanies
+            associatedCompanies,
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -107,7 +112,8 @@ object PDFViewHelper extends ViewHelper {
             accountingPeriodForm,
             taxableProfit,
             distributions,
-            associatedCompanies
+            associatedCompanies,
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -126,7 +132,8 @@ object PDFViewHelper extends ViewHelper {
             accountingPeriodForm,
             taxableProfit,
             distributions,
-            associatedCompanies
+            associatedCompanies,
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -144,7 +151,8 @@ object PDFViewHelper extends ViewHelper {
             accountingPeriodForm,
             taxableProfit,
             distributions,
-            associatedCompanies
+            associatedCompanies,
+            now
           )}
         ${pdfCorporationTaxHtml("4", calculatorResult)}
         ${pdfDetailedCalculationHtml(
@@ -194,7 +202,8 @@ object PDFViewHelper extends ViewHelper {
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
     distributions: Int,
-    associatedCompanies: Int
+    associatedCompanies: Int,
+    now: LocalDateTime
   )(implicit messages: Messages): Html =
     Html(
       s"""<div class="print-document">
@@ -243,7 +252,7 @@ object PDFViewHelper extends ViewHelper {
          |<div class="about-results">
          |<h3 class="govuk-heading-s about-results-border">${messages("pdf.aboutThisResult")}</h3>
          | <h4 class="govuk-heading-xs">${messages("pdf.dataOfResult")}</h4>
-         | <p class="govuk-body about-results-border">${Html(DateUtils.formatUTCDateTime)}</p>
+         | <p class="govuk-body about-results-border">${Html(DateUtils.formatUTCDateTime(now))}</p>
          | <h4 class="govuk-heading-xs">${messages("pdf.legalDeclarationTitle")}</h4>
          |<p class="govuk-body">${messages("pdf.legalDeclaration")}</p>
          |</div>
