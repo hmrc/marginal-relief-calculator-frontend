@@ -20,7 +20,7 @@ import com.google.inject.{ Inject, Singleton }
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import play.api.Environment
 
-import java.io.{ ByteArrayOutputStream, File }
+import java.io.ByteArrayOutputStream
 
 @Singleton
 class PDFGenerator @Inject() (env: Environment) {
@@ -30,8 +30,22 @@ class PDFGenerator @Inject() (env: Environment) {
     try {
       val builder = new PdfRendererBuilder()
       builder.useFastMode()
-      env.resource("arial.ttf").fold(())(ff => builder.useFont(new File(ff.getFile), "Arial"))
-      env.resource("gds.ttf").fold(())(ff => builder.useFont(new File(ff.getFile), "GDS Transport"))
+      env
+        .resourceAsStream("arial.ttf")
+        .fold(())(s =>
+          builder.useFont(
+            () => s,
+            "Arial"
+          )
+        )
+      env
+        .resourceAsStream("gds.ttf")
+        .fold(())(s =>
+          builder.useFont(
+            () => s,
+            "GDS Transport"
+          )
+        )
       builder.usePdfUaAccessbility(true)
       builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)
