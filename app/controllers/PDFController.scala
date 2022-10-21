@@ -29,8 +29,7 @@ import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.DateTime
-import utils.PDFGenerator.generatePdf
+import utils.{ DateTime, PDFGenerator }
 import views.html.{ PDFFileTemplate, PDFView }
 
 import java.io.ByteArrayInputStream
@@ -48,7 +47,8 @@ class PDFController @Inject() (
   view: PDFView,
   pdfFileTemplate: PDFFileTemplate,
   marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector,
-  dateTime: DateTime
+  dateTime: DateTime,
+  pdfGenerator: PDFGenerator
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -159,7 +159,7 @@ class PDFController @Inject() (
         ).toString
         Ok.sendEntity(
           HttpEntity.Streamed(
-            StreamConverters.fromInputStream(() => new ByteArrayInputStream(generatePdf(html))),
+            StreamConverters.fromInputStream(() => new ByteArrayInputStream(pdfGenerator.generatePdf(html))),
             None,
             Some("application/pdf")
           ),
