@@ -18,7 +18,6 @@ package utils
 
 import com.google.inject.{ Inject, Singleton }
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
-import org.slf4j.{ Logger, LoggerFactory }
 import play.api.Environment
 
 import java.io.{ ByteArrayOutputStream, File }
@@ -26,17 +25,12 @@ import java.io.{ ByteArrayOutputStream, File }
 @Singleton
 class PDFGenerator @Inject() (env: Environment) {
 
-  private val logger: Logger = LoggerFactory.getLogger(getClass)
-
   def generatePdf(html: String): Array[Byte] = {
     val outputStream = new ByteArrayOutputStream()
     try {
       val builder = new PdfRendererBuilder()
       builder.useFastMode()
-      logger.info("Arial font: " + env.resource("arial.ttf").get)
       env.resource("arial.ttf").fold(())(ff => builder.useFont(new File(ff.getFile), "Arial"))
-      logger.info("GDS font: " + env.resource("gds.ttf").get)
-      env.resource("gds.ttf").fold(())(ff => builder.useFont(new File(ff.getFile), "GDS Transport"))
       builder.usePdfUaAccessbility(true)
       builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)
