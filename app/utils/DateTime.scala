@@ -16,12 +16,11 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
-import java.time.{ Instant, ZoneId }
+import com.google.inject.Singleton
 
-object DateUtils extends App {
-  def formatInstantUTC(instant: Instant = Instant.now()): String =
-    instant
-      .atZone(ZoneId.of("UTC"))
-      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+import java.time.Instant
+
+@Singleton
+class DateTime() {
+  def currentInstant: Instant = Instant.now()
 }
