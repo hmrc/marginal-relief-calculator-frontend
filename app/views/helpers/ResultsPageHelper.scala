@@ -162,7 +162,11 @@ object ResultsPageHelper extends ViewHelper {
 
   private def marginalReliefBannerDual(m1: MarginalRate, m2: MarginalRate)(implicit
     messages: Messages
-  ): (String, Html) =
+  ): (String, Html) = {
+
+    def marginalRateOutsideOfThresholdBounds(marginalRate: MarginalRate): Boolean =
+      marginalRate.adjustedAugmentedProfit <= marginalRate.adjustedLowerThreshold || marginalRate.adjustedAugmentedProfit >= m1.adjustedUpperThreshold
+
     if (m1.marginalRelief > 0 || m2.marginalRelief > 0) {
       (
         positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))._1,
@@ -182,12 +186,15 @@ object ResultsPageHelper extends ViewHelper {
         adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._1,
         adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._2
       )
+    } else if (marginalRateOutsideOfThresholdBounds(m1) && marginalRateOutsideOfThresholdBounds(m2)) {
+      adjustedProfitAboveAndBelowThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
     } else {
       val message =
         "Marginal relief was 0, however adjusted profits for one year was below lower threshold and the other year was above upper threshold"
       logger.error(message)
       throw new UnsupportedOperationException(message)
     }
+  }
 
   private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): (String, Html) =
     if (marginalRate.marginalRelief > 0) {
@@ -225,6 +232,26 @@ object ResultsPageHelper extends ViewHelper {
               "resultsPage.yourProfitsBelowMarginalReliefLimit"
             } else {
               "resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"
+            }
+          )
+        )
+      )
+    )
+  )
+
+  private def adjustedProfitAboveAndBelowThresholdBanner(
+    adjustedDistributions: Double
+  )(implicit messages: Messages): (String, Html) = (
+    messages("resultsPage.marginalReliefNotEligible"),
+    govukPanel(
+      Panel(
+        title = Text(messages("resultsPage.marginalReliefNotEligible")),
+        content = Text(
+          messages(
+            if (adjustedDistributions == 0) {
+              "resultsPage.yourProfitsAboveAndBelowMarginalReliefLimit"
+            } else {
+              "resultsPage.yourProfitsAndDistributionsAboveAndBelowMarginalReliefLimit"
             }
           )
         )
