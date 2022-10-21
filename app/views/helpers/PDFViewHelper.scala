@@ -168,11 +168,7 @@ object PDFViewHelper extends ViewHelper {
     Html(s"""<div class="print-document">
             |            <div class="grid-row">
             |            <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-            |            <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-             calculatorResult.totalMarginalRelief
-           )}</h2>
-            |            <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
-            |            $resultsTable
+            |             $resultsTable
             |          </div>
             |          <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
             |        </div>""".stripMargin)
@@ -273,7 +269,11 @@ object PDFViewHelper extends ViewHelper {
                  CurrencyUtils.format(calculatorResult.totalMarginalRelief)
                )}</p>"""
            } else s""}
+            |  <div class="app-table" role="region" aria-label="${messages(
+             "resultsPage.corporationTaxTable.hidden"
+           )}" tabindex="0">
             |                  ${displayCorporationTaxTable(calculatorResult)}
+            |                  </div>
             |               </div>
             |               <div class="grid-row">
             |                   <h2 class="govuk-heading-m" style="margin-bottom: 7px;">${messages(
@@ -288,7 +288,11 @@ object PDFViewHelper extends ViewHelper {
                  PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR)
                )}</p>"""
            } else s""}
+            |  <div class="app-table" role="region" aria-label="${messages(
+             "resultsPage.effectiveTaxRateTable.hidden"
+           )}" tabindex="0">
             |                   ${displayEffectiveTaxTable(calculatorResult)}
+            |                   </div>
             |               </div>
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
             |           </div>""".stripMargin)
