@@ -16,13 +16,12 @@
 
 package utils
 
-import com.google.inject.Inject
+import com.google.inject.{ Inject, Singleton }
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import org.slf4j.{ Logger, LoggerFactory }
 import play.api.Environment
 
 import java.io.{ ByteArrayOutputStream, File }
-import javax.inject.Singleton
 
 @Singleton
 class PDFGenerator @Inject() (env: Environment) {
