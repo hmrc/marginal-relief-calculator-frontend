@@ -25,10 +25,10 @@
 @import views.helpers.FullResultsPageHelper._
 @import views.helpers.PDFFileTemplateHelper._
 @import scala.collection.immutable.Seq
-@import java.time.LocalDateTime
+@import java.time.Instant
 @this()
 
-@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentDateTime: LocalDateTime)(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant)(implicit request: Request[_], messages: Messages)
 @pageCount = @{
   numberOfPages(calculatorResult)
 }
@@ -363,7 +363,7 @@
                 <div class="about-results">
                     <h3 class="govuk-heading-s about-results-border">@messages("pdf.aboutThisResult")</h3>
                     <h4 class="govuk-heading-xs">@messages("pdf.dataOfResult")</h4>
-                    <p class="govuk-body about-results-border">@Html(DateUtils.formatUTCDateTime(currentDateTime))</p>
+                    <p class="govuk-body about-results-border">@Html(DateUtils.formatInstantUTC(currentInstant))</p>
                     <h4 class="govuk-heading-xs">@messages("pdf.legalDeclarationTitle")</h4>
                     <p class="govuk-body">@messages("pdf.legalDeclaration")</p>
                 </div>

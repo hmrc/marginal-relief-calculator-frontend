@@ -18,9 +18,9 @@ package utils
 
 import com.google.inject.Singleton
 
-import java.time.LocalDateTime
+import java.time.Instant
 
 @Singleton
 class DateTime() {
-  def now: LocalDateTime = LocalDateTime.now()
+  def currentInstant: Instant = Instant.now()
 }

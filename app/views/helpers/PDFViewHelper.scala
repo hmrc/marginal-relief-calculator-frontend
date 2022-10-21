@@ -24,7 +24,7 @@ import utils.{ CurrencyUtils, DateUtils, PercentageUtils }
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
-import java.time.LocalDateTime
+import java.time.Instant
 import scala.collection.immutable.Seq
 
 object PDFViewHelper extends ViewHelper {
@@ -37,7 +37,7 @@ object PDFViewHelper extends ViewHelper {
     config: Map[Int, FYConfig],
     pdfMetadata: PDFMetadataForm,
     accountingPeriodForm: AccountingPeriodForm,
-    now: LocalDateTime
+    now: Instant
   )(implicit messages: Messages): Html =
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
@@ -203,7 +203,7 @@ object PDFViewHelper extends ViewHelper {
     taxableProfit: Int,
     distributions: Int,
     associatedCompanies: Int,
-    now: LocalDateTime
+    now: Instant
   )(implicit messages: Messages): Html =
     Html(
       s"""<div class="print-document">
@@ -252,7 +252,7 @@ object PDFViewHelper extends ViewHelper {
          |<div class="about-results">
          |<h3 class="govuk-heading-s about-results-border">${messages("pdf.aboutThisResult")}</h3>
          | <h4 class="govuk-heading-xs">${messages("pdf.dataOfResult")}</h4>
-         | <p class="govuk-body about-results-border">${Html(DateUtils.formatUTCDateTime(now))}</p>
+         | <p class="govuk-body about-results-border">${Html(DateUtils.formatInstantUTC(now))}</p>
          | <h4 class="govuk-heading-xs">${messages("pdf.legalDeclarationTitle")}</h4>
          |<p class="govuk-body">${messages("pdf.legalDeclaration")}</p>
          |</div>

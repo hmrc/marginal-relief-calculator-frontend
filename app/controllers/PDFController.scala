@@ -34,6 +34,7 @@ import utils.PDFGenerator.generatePdf
 import views.html.{ PDFFileTemplate, PDFView }
 
 import java.io.ByteArrayInputStream
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
@@ -126,7 +127,7 @@ class PDFController @Inject() (
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
           request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
           config,
-          dateTime.now
+          dateTime.currentInstant
         )
       )
     }
@@ -154,7 +155,7 @@ class PDFController @Inject() (
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
           request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
           config,
-          dateTime.now
+          dateTime.currentInstant
         ).toString
         Ok.sendEntity(
           HttpEntity.Streamed(
@@ -164,7 +165,7 @@ class PDFController @Inject() (
           ),
           false,
           Some(
-            s"marginal-relief-for-corporation-tax-result-${dateTime.now.format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf"
+            s"marginal-relief-for-corporation-tax-result-${dateTime.currentInstant.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf"
           )
         )
       }

@@ -30,7 +30,7 @@ import play.api.test.Helpers._
 import utils.{ DateTime, FakeDateTime }
 import views.html.PDFView
 
-import java.time.LocalDate
+import java.time.{ LocalDate, ZoneOffset }
 import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
@@ -119,7 +119,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
               1,
               1,
               config,
-              fakeDateTime.now,
+              fakeDateTime.currentInstant,
               request,
               messages(application)
             )
@@ -171,7 +171,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
               1,
               1,
               config,
-              fakeDateTime.now,
+              fakeDateTime.currentInstant,
               request,
               messages(application)
             )
@@ -217,7 +217,8 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           status(result) mustEqual OK
           val contentDisposition = headers(result).get("Content-Disposition")
           contentDisposition.isDefined mustBe true
-          contentDisposition.get mustBe s"""attachment; filename="marginal-relief-for-corporation-tax-result-${fakeDateTime.now
+          contentDisposition.get mustBe s"""attachment; filename="marginal-relief-for-corporation-tax-result-${fakeDateTime.currentInstant
+              .atOffset(ZoneOffset.UTC)
               .format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf""""
           contentAsBytes(result).nonEmpty mustBe true
         }

@@ -27,7 +27,7 @@ import utils.DateUtils
 import utils.FormatUtils._
 import views.html.PDFFileTemplate
 
-import java.time.{ LocalDate, LocalDateTime }
+import java.time.{ Instant, LocalDate }
 
 class PDFFileTemplateSpec extends SpecBase {
 
@@ -40,7 +40,7 @@ class PDFFileTemplateSpec extends SpecBase {
 
     "should render dual result with marginal rates" in {
 
-      implicit val now: LocalDateTime = LocalDateTime.now()
+      implicit val now: Instant = Instant.now()
       val accountingPeriodForm =
         AccountingPeriodForm(LocalDate.parse("2023-04-01"), Some(LocalDate.parse("2024-03-31")))
       val application = applicationBuilder()
@@ -206,7 +206,7 @@ class PDFFileTemplateSpec extends SpecBase {
     }
   }
 
-  private def expectation(howItsCalculated: String)(implicit current: LocalDateTime): String = {
+  private def expectation(howItsCalculated: String)(implicit current: Instant): String = {
     s"""
        |<html>
        |  <head>
@@ -283,7 +283,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |            <div class="about-results">
        |              <h3 class="govuk-heading-s about-results-border">About this result</h3>
        |              <h4 class="govuk-heading-xs">Date of result</h4>
-       |              <p class="govuk-body about-results-border">${DateUtils.formatUTCDateTime(current)}</p>
+       |              <p class="govuk-body about-results-border">${DateUtils.formatInstantUTC(current)}</p>
        |              <h4 class="govuk-heading-xs">HRMC legal declaration</h4>
        |              <p class="govuk-body">HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result form this calculator if correct details are entered</p>
        |            </div>
