@@ -329,7 +329,7 @@ pdf.companyName = Company name
 pdf.utr = UTR Number
 pdf.aboutThisResult = About this result
 pdf.dataOfResult = Date of result
-pdf.legalDeclarationTitle = HRMC legal declaration
+pdf.legalDeclarationTitle = HMRC legal declaration
 pdf.legalDeclaration = HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result form this calculator if correct details are entered
 pdf.page = Page {0} of {1}
 
