@@ -16,12 +16,16 @@
 
 package utils
 
+import com.google.inject.Inject
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import org.slf4j.{ Logger, LoggerFactory }
+import play.api.Environment
 
 import java.io.{ ByteArrayOutputStream, File }
+import javax.inject.Singleton
 
-object PDFGenerator {
+@Singleton
+class PDFGenerator @Inject() (env: Environment) {
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
@@ -30,13 +34,10 @@ object PDFGenerator {
     try {
       val builder = new PdfRendererBuilder()
       builder.useFastMode()
-      logger.info("Arial font: " + getClass.getClassLoader.getResource("/arial.ttf").getFile)
-      builder.useFont(new File(getClass.getClassLoader.getResource("/arial.ttf").getFile), "Arial")
-      logger.info(
-        "light-94a07e06a1-v2.ttf font: " + getClass.getClassLoader.getResource("/light-94a07e06a1-v2.ttf").getFile
-      )
-      logger.info("GDS font: " + getClass.getClassLoader.getResource("/gds.ttf").getFile)
-      builder.useFont(new File(getClass.getClassLoader.getResource("/gds.ttf").getFile), "GDS Transport")
+      logger.info("Arial font: " + env.resource("arial.ttf").get)
+      env.resource("arial.ttf").fold(())(ff => builder.useFont(new File(ff.getFile), "Arial"))
+      logger.info("GDS font: " + env.resource("gds.ttf").get)
+      env.resource("gds.ttf").fold(())(ff => builder.useFont(new File(ff.getFile), "GDS Transport"))
       builder.usePdfUaAccessbility(true)
       builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)

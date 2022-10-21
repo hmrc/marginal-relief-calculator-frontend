@@ -18,11 +18,15 @@ package utils
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
+import play.api.{ Environment, Mode }
+
+import java.io.File
 
 class PDFGeneratorSpec extends AnyFreeSpec with Matchers {
   "generatePdf" - {
     "should generate PDF for the given HTML" in {
-      PDFGenerator
+      val pdfGenerator = new PDFGenerator(Environment(new File("/"), getClass.getClassLoader, Mode.Test))
+      pdfGenerator
         .generatePdf("""
                        |<html>
                        |  <head>
