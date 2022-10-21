@@ -17,17 +17,26 @@
 package utils
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import org.slf4j.{ Logger, LoggerFactory }
 
 import java.io.{ ByteArrayOutputStream, File }
 
 object PDFGenerator {
+
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
+
   def generatePdf(html: String): Array[Byte] = {
     val outputStream = new ByteArrayOutputStream()
     try {
       val builder = new PdfRendererBuilder()
       builder.useFastMode()
-      builder.useFont(new File(getClass.getClassLoader.getResource("arial.ttf").getFile), "Arial")
-      builder.useFont(new File(getClass.getClassLoader.getResource("gds.ttf").getFile), "GDS Transport")
+      logger.info("Arial font: " + getClass.getClassLoader.getResource("/arial.ttf").getFile)
+      builder.useFont(new File(getClass.getClassLoader.getResource("/arial.ttf").getFile), "Arial")
+      logger.info(
+        "light-94a07e06a1-v2.ttf font: " + getClass.getClassLoader.getResource("/light-94a07e06a1-v2.ttf").getFile
+      )
+      logger.info("GDS font: " + getClass.getClassLoader.getResource("/gds.ttf").getFile)
+      builder.useFont(new File(getClass.getClassLoader.getResource("/gds.ttf").getFile), "GDS Transport")
       builder.usePdfUaAccessbility(true)
       builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)
