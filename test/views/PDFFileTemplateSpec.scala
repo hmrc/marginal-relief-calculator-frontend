@@ -18,16 +18,16 @@ package views
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{DualResult, MarginalRate, MarginalReliefConfig}
+import connectors.sharedmodel.{ DualResult, MarginalRate, MarginalReliefConfig }
 import controllers.routes
-import forms.{AccountingPeriodForm, PDFMetadataForm}
+import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import org.jsoup.Jsoup
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, running}
+import play.api.test.Helpers.{ GET, running }
 import utils.DateUtils
 import views.html.PDFFileTemplate
 
-import java.time.{Instant, LocalDate}
+import java.time.{ Instant, LocalDate }
 
 class PDFFileTemplateSpec extends SpecBase {
 
