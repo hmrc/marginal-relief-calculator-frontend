@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ DualResult, MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -80,7 +80,21 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           .build()
 
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          MarginalRate(
+            accountingPeriodForm.accountingPeriodStartDate.getYear,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            FYRatio(1, 365)
+          ),
           1
         )
 
@@ -129,8 +143,36 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           .build()
 
         val calculatorResult = DualResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          MarginalRate(
+            accountingPeriodForm.accountingPeriodStartDate.getYear,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            FYRatio(1, 365)
+          ),
+          MarginalRate(
+            accountingPeriodForm.accountingPeriodStartDate.getYear,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            FYRatio(1, 365)
+          ),
           1
         )
 

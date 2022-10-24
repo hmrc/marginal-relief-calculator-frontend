@@ -24,7 +24,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
   private val flatRate = FlatRate(1, 11, 111, 1111, 11111, 111111, 1111111)
 
-  private val marginalRate = MarginalRate(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+  private val marginalRate = MarginalRate(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, FYRatio(12, 13))
 
   private val singleResult = SingleResult(marginalRate, 13)
 
