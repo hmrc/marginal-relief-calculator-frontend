@@ -19,7 +19,7 @@ package views.helpers
 import utils.FormatUtils._
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
 import play.api.i18n.Messages
 import play.api.test.Helpers._
 
@@ -38,7 +38,7 @@ class FullResultsPageHelperSpec extends SpecBase {
 
       "when MarginalRate, should display full results table" in {
         val calculatorResult = SingleResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10),
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10, FYRatio(10, 10)),
           1
         )
 
@@ -99,8 +99,8 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate only, should display results table" in {
         val calculatorResult = DualResult(
-          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, 88, 99, 1010),
+          MarginalRate(epoch.getYear, 1, 2, 3, 4, 0, 6, 7, 13, 8, 9, 10, FYRatio(10, 1020)),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, 88, 99, 1010, FYRatio(1010, 1020)),
           1
         )
 
@@ -196,7 +196,7 @@ class FullResultsPageHelperSpec extends SpecBase {
       "when flat rate for year 1 and marginal rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
           FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4),
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010, FYRatio(1010, 1014)),
           1
         )
 
@@ -244,7 +244,7 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate for year 1 and flat rate for year 2, should display results table" in {
         val calculatorResult = DualResult(
-          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010),
+          MarginalRate(epoch.getYear, 11, 22, 33, 44, 0, 66, 77, 143, -10, 0, 1010, FYRatio(1010, 1014)),
           FlatRate(epoch.getYear, 1, 2, 3, 0, 3, 4),
           1
         )
@@ -305,7 +305,8 @@ class FullResultsPageHelperSpec extends SpecBase {
             adjustedAugmentedProfit = 88,
             adjustedLowerThreshold = -100000,
             adjustedUpperThreshold = 100000,
-            days = 1010
+            days = 1010,
+            FYRatio(1010, 1020)
           ),
           1
         )
@@ -330,7 +331,8 @@ class FullResultsPageHelperSpec extends SpecBase {
             adjustedAugmentedProfit = 88,
             adjustedLowerThreshold = 100000,
             adjustedUpperThreshold = 1000000,
-            days = 1010
+            days = 1010,
+            FYRatio(1010, 1020)
           ),
           1
         )
@@ -359,7 +361,8 @@ class FullResultsPageHelperSpec extends SpecBase {
           adjustedAugmentedProfit = 88,
           adjustedLowerThreshold = 100000,
           adjustedUpperThreshold = 1000000,
-          days = 1010
+          days = 1010,
+          FYRatio(1010, 1020)
         ),
         1
       )
@@ -381,7 +384,8 @@ class FullResultsPageHelperSpec extends SpecBase {
           adjustedAugmentedProfit = 88,
           adjustedLowerThreshold = 100000,
           adjustedUpperThreshold = 1000000,
-          days = 1010
+          days = 1010,
+          FYRatio(1010, 1020)
         ),
         1
       )

@@ -20,6 +20,11 @@ import julienrf.json.derived
 import play.api.libs.json.{ OFormat, __ }
 import utils.NumberUtils.roundUp
 
+object FYRatio {
+  implicit val format: OFormat[FYRatio] = derived.oformat[FYRatio]()
+}
+case class FYRatio(numerator: BigDecimal, denominator: Int)
+
 sealed trait TaxDetails {
   def year: Int
   def days: Int
@@ -56,7 +61,8 @@ case class MarginalRate(
   adjustedAugmentedProfit: Double,
   adjustedLowerThreshold: Double,
   adjustedUpperThreshold: Double,
-  days: Int
+  days: Int,
+  fyRatio: FYRatio
 ) extends TaxDetails
 
 object TaxDetails {

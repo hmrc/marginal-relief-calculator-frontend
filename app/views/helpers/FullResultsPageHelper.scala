@@ -40,8 +40,6 @@ object FullResultsPageHelper extends ViewHelper {
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
-    val daysInAccountingPeriod = taxDetails.map(_.days).sum
-
     val html = taxDetails.flatMap { td =>
       val year = td.year
       val days = td.days
@@ -78,8 +76,7 @@ object FullResultsPageHelper extends ViewHelper {
             associatedCompanies,
             taxableProfit,
             distributions,
-            config,
-            daysInAccountingPeriod
+            config
           )
         )
       }
@@ -106,7 +103,7 @@ object FullResultsPageHelper extends ViewHelper {
           )}</a>
            |    </li>""".stripMargin
 
-      def tabContent(marginalRate: MarginalRate, daysInAccountingPeriod: Int) = {
+      def tabContent(marginalRate: MarginalRate) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
@@ -123,8 +120,7 @@ object FullResultsPageHelper extends ViewHelper {
             associatedCompanies,
             taxableProfit,
             distributions,
-            config,
-            daysInAccountingPeriod
+            config
           )}
            |  </div>""".stripMargin
       }
@@ -138,7 +134,7 @@ object FullResultsPageHelper extends ViewHelper {
                 |  <ul class="govuk-tabs__list">
                 |    ${marginalRates.map(_.year).map(tabBtn).mkString}
                 |  </ul>
-                |  ${marginalRates.map(rate => tabContent(rate, daysInAccountingPeriod)).mkString}
+                |  ${marginalRates.map(rate => tabContent(rate)).mkString}
                 |</div>
                 |""".stripMargin)
 
@@ -223,8 +219,7 @@ object FullResultsPageHelper extends ViewHelper {
     associatedCompanies: Int,
     taxableProfit: Int,
     distributions: Int,
-    config: Map[Int, FYConfig],
-    daysInAccountingPeriod: Int
+    config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
     val yearConfig = config(marginalRate.year) match {
@@ -236,7 +231,9 @@ object FullResultsPageHelper extends ViewHelper {
       content = HtmlContent(s"""<span class="sr-only">Step $text</span><span aria-hidden="true">$text</span>""")
     )
 
-    val days = marginalRate.days
+    val days = marginalRate.fyRatio.numerator.toInt
+
+    val daysInAccountingPeriod = marginalRate.fyRatio.denominator
 
     val upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)
 
