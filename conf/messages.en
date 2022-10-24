@@ -106,7 +106,7 @@ accountingPeriodStartDate.error.required.all = Enter a valid start date for the 
 accountingPeriodStartDate.error.required.two = The start date must include {0} and {1}.
 accountingPeriodStartDate.error.required = The start date must include {0}.
 accountingPeriodStartDate.error.invalid = Enter a valid start date for the accounting period, like 27 3 2023.
-accountingPeriodStartDate.change.hidden = Start date
+accountingPeriodStartDate.change.hidden = Change accounting period dates
 accountingPeriodEndDate.title = End date
 accountingPeriodEndDate.heading = End date
 accountingPeriodEndDate.hint = If you do not enter a date we will default to a full year from the start date
@@ -170,7 +170,7 @@ resultsPage.effectiveTaxRateTable.hidden = Effective tax rate table
 resultsPage.corporationTaxTable.hidden = Corporation tax liability breakdown table
 resultsPage.getACopyOfResults = Get a copy of these results
 resultsPage.addReferenceBeforePrinting = You can also add reference details to this document before printing.
-resultsPage.printOrSave = Print or save your calculation
+resultsPage.printOrSave = Add your details and print or save your calculation
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
@@ -330,7 +330,7 @@ pdf.utr = UTR Number
 pdf.aboutThisResult = About this result
 pdf.dataOfResult = Date of result
 pdf.legalDeclarationTitle = HMRC legal declaration
-pdf.legalDeclaration = HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result form this calculator if correct details are entered
+pdf.legalDeclaration = HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result from this calculator if correct details are entered
 pdf.page = Page {0} of {1}
 
 pDFMetadata.title = Add company details to your results

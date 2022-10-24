@@ -39,7 +39,7 @@
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
-    <h2 class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</h2>
+    <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</span>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
     @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)

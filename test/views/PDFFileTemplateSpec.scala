@@ -386,7 +386,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      <h1 class="govuk-panel__body govuk-!-static-margin-bottom-3">Marginal Relief for your accounting period is</h1>
        |      <div class="govuk-panel__title govuk-!-margin-0">
        |       £2
-       |      </div> <span class="sr-only"> <h2>Corporation Tax liability</h2> <span>£2</span> <p>Reduced from £2 after £2 Marginal Relief</p> <h2>Effective tax rate</h2> <span>1%</span> <p>Reduced from 100% after Marginal Relief</p> </span>
+       |      </div>
        |     </div>
        |    </div>
        |    <div class="grid-row">
@@ -441,7 +441,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |       <h4 class="govuk-heading-xs">Date of result</h4>
        |       <p class="govuk-body about-results-border">${DateUtils.formatInstantUTC(current)}</p>
        |       <h4 class="govuk-heading-xs">HMRC legal declaration</h4>
-       |       <p class="govuk-body">HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result form this calculator if correct details are entered</p>
+       |       <p class="govuk-body">HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result from this calculator if correct details are entered</p>
        |      </div>
        |     </div>
        |    </div> <span class="govuk-body-s footer-page-no">Page 1 of 4</span>
