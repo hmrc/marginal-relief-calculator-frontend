@@ -673,4 +673,10 @@ object ResultsPageHelper extends ViewHelper {
   def screenReaderText()(implicit messages: Messages) = Html(
     s"""<span class="sr-only">${messages("resultsPage.days")}</span>"""
   )
+  def isFlatRateOnly(calculatorResult: CalculatorResult): Boolean =
+    calculatorResult match {
+      case SingleResult(_: FlatRate, _) | DualResult(_: FlatRate, _: FlatRate, _) => true
+      case _                                                                      => false
+    }
+
 }

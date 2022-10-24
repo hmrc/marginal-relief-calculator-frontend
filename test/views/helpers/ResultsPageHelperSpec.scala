@@ -26,7 +26,7 @@ import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ addBannerScreenReader, displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, replaceTableHeader, screenReaderText }
+import views.helpers.ResultsPageHelper.{ addBannerScreenReader, displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, isFlatRateOnly, replaceTableHeader, screenReaderText }
 import views.html.templates.BannerPanel
 import utils.FormatUtils._
 
@@ -1439,6 +1439,22 @@ class ResultsPageHelperSpec extends SpecBase {
             )
           ).htmlFormat
       }
+    }
+  }
+  "isFlatRateOnly" - {
+    "when calculator result is single result flat rate, return true" - {
+      val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
+      isFlatRateOnly(calculatorResult) shouldMatchTo true
+    }
+    "when calculator result is dual result flat rate, return true" - {
+      val calculatorResult =
+        DualResult(FlatRate(1970, 190, 19, 1000, 100, 0, 0), FlatRate(1971, 200, 20, 1000, 100, 0, 0), 1)
+      isFlatRateOnly(calculatorResult) shouldMatchTo true
+    }
+    "when calculator result is marginal rate, return false" - {
+      val calculatorResult =
+        SingleResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
+      isFlatRateOnly(calculatorResult) shouldMatchTo false
     }
   }
 }
