@@ -80,16 +80,25 @@
     margin: 0;
 }
 
+.pdf-preview * {
+        box-sizing: border-box;
+    }
+
 .print-document {
     font-family: GDS Transport, arial, sans-serif;
     border: 1px solid #6f777b;
     position: relative;
     box-shadow: 6px 6px 0 0 #dee0e2;
-    padding: 25px 50px 40px 50px;
+    padding: 25px 30px 40px 30px;
     margin-bottom: 20px;
-    width: 75%;
+    width: 100%;
     min-height: calc(296mm - 100px);
     page-break-after: always;
+
+    @media (min-width: 40.0625em) {
+        padding: 25px 50px 40px 50px;
+        width: 86%;
+    }
 
     .grid-row {
         margin: 0 -15px;

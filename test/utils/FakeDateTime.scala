@@ -15,13 +15,8 @@
  */
 
 package utils
+import java.time.Instant
 
-import java.time.format.DateTimeFormatter
-import java.time.{ Instant, ZoneId }
-
-object DateUtils extends App {
-  def formatInstantUTC(instant: Instant = Instant.now()): String =
-    instant
-      .atZone(ZoneId.of("UTC"))
-      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+class FakeDateTime extends DateTime {
+  override def currentInstant: Instant = Instant.ofEpochSecond(0)
 }

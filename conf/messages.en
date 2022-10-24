@@ -329,16 +329,14 @@ pdf.companyName = Company name
 pdf.utr = UTR Number
 pdf.aboutThisResult = About this result
 pdf.dataOfResult = Date of result
-pdf.legalDeclarationTitle = HRMC legal declaration
+pdf.legalDeclarationTitle = HMRC legal declaration
 pdf.legalDeclaration = HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result form this calculator if correct details are entered
 pdf.page = Page {0} of {1}
 
 pDFMetadata.title = Add company details to your results
 pDFMetadata.info = You will get a document that shows today’s date and time of completion, your answers and your result. This is for your records only, HMRC will not use these details.
 pDFMetadata.heading = Add company details to your results
-pDFMetadata.checkYourAnswersLabel = pDFMetadata
 pDFMetadata.companyname.label = Company name (optional)
 pDFMetadata.utr.label = UTR number (optional)
 pDFMetadata.companyname.error.length = Company name must be 160 characters or less.
 pDFMetadata.utr.error.length = UTR number must be 15 characters or less.
-pDFMetadata.change.hidden = PDF Meta Data
