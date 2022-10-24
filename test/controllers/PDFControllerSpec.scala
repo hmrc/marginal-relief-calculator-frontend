@@ -234,7 +234,21 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           .build()
 
         val calculatorResult = SingleResult(
-          MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+          MarginalRate(
+            accountingPeriodForm.accountingPeriodStartDate.getYear,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            FYRatio(1, 365)
+          ),
           1
         )
 

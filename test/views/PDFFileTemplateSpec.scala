@@ -18,7 +18,7 @@ package views
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, MarginalRate, MarginalReliefConfig }
+import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig }
 import controllers.routes
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import org.jsoup.Jsoup
@@ -47,8 +47,36 @@ class PDFFileTemplateSpec extends SpecBase {
         .build()
 
       val calculatorResult = DualResult(
-        MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-        MarginalRate(accountingPeriodForm.accountingPeriodStartDate.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+        MarginalRate(
+          accountingPeriodForm.accountingPeriodStartDate.getYear,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          FYRatio(1, 1)
+        ),
+        MarginalRate(
+          accountingPeriodForm.accountingPeriodStartDate.getYear,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          FYRatio(1, 1)
+        ),
         1
       )
 
