@@ -21,6 +21,10 @@
     .govuk-back-link {
         display: inline-block;
     }
+
+    .print-this__print {
+        display: inline-block;
+    }
 }
 
 .sr-only {
@@ -40,8 +44,8 @@
     margin-bottom: 20px !important;
 
     &__print {
-        color: #000000;
-        display: inline-block;
+        color: #000000 !important;
+        display: none;
         background-image: url(../images/printer-icon.svg);
         background-position: 0 4px;
         background-repeat: no-repeat;
@@ -64,7 +68,7 @@
     }
 
     &__save {
-        color: #000000;
+        color: #000000 !important;
         display: inline-block;
         text-decoration: underline;
         text-underline-offset: 0.3em;

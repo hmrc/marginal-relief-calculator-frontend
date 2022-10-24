@@ -226,7 +226,7 @@ object PDFViewHelper extends ViewHelper {
               <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
               </div>"""
         } else s""}
-         |       <div class="grid-row print-banner">${displayBanner(calculatorResult).html}</div>
+         |       <div class="grid-row print-banner">${replaceBannerHtml(displayBanner(calculatorResult).html)}</div>
          |       <div class="grid-row">
          |       <div class="govuk-grid-column-full">
          |       <div class="grid-row">
@@ -305,4 +305,19 @@ object PDFViewHelper extends ViewHelper {
             |               </div>
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
             |           </div>""".stripMargin)
+
+  def replaceBannerHtml(bannerHtml: Html)(implicit messages: Messages): Html =
+    Html(
+      bannerHtml
+        .toString()
+        .replaceAll("[\n\r]", "")
+        .replace(
+          "<h1",
+          "<h2"
+        )
+        .replace(
+          "</h1>",
+          "</h2>"
+        )
+    )
 }

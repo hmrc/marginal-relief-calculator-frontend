@@ -456,7 +456,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      </caption>
        |      <thead class="govuk-table__head">
        |       <tr class="govuk-table__row">
-       |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+       |        <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Overall</th>
@@ -499,7 +499,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      </caption>
        |      <thead class="govuk-table__head">
        |       <tr class="govuk-table__row">
-       |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+       |        <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Overall</th>
@@ -538,7 +538,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      <table summary="This is a table describing your Marginal Relief calculation in detail." class="govuk-table">
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
-       |         <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+       |         <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
        |         <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">Calculation variables</span></th>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>
@@ -587,7 +587,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      <table summary="This is a table describing your Marginal Relief calculation in detail." class="govuk-table">
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
-       |         <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+       |         <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
        |         <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">Calculation variables</span></th>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>

@@ -52,7 +52,7 @@ class FullResultsPageHelperSpec extends SpecBase {
                                       |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
                                       |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table"><thead class="govuk-table__head">
                                       |   <tr class="govuk-table__row">
-                                      |     <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+                                      |     <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
                                       |     <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
                                       |     <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
                                       |     <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
@@ -125,7 +125,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
             |    <thead class="govuk-table__head">
             |      <tr class="govuk-table__row">
-            |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |        <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
             |       <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
@@ -161,7 +161,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
             |    <thead class="govuk-table__head">
             |      <tr class="govuk-table__row">
-            |        <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |        <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
             |        <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
@@ -212,7 +212,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
-            |      <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |      <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
             |      <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
@@ -259,7 +259,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
-            |      <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+            |      <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
             |      <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
