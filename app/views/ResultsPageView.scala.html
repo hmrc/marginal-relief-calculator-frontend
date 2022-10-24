@@ -22,7 +22,8 @@
 @import forms._
 @import java.time.LocalDate
 @import views.helpers.ResultsPageHelper._
-
+@import views.helpers.BackLinkHelper
+@import controllers.routes
 
 @this(
         layout: templates.Layout,
@@ -33,7 +34,7 @@
 
 @titleAndBanner = @{displayBanner(calculatorResult)}
 
-@layout(pageTitle = titleNoForm(titleAndBanner.title)) {
+@layout(pageTitle = titleNoForm(titleAndBanner.title), backLink = BackLinkHelper.backLinkOrDefault(routes.CheckYourAnswersController.onPageLoad.path(), NormalMode)) {
 
     @titleAndBanner.html
 
@@ -72,9 +73,14 @@
 
     <h2 class="govuk-heading-m">@messages("resultsPage.getACopyOfResults")</h2>
     <p class="govuk-body">@messages("resultsPage.addReferenceBeforePrinting")</p>
-    <p class="govuk-body">
-        <a href="@routes.PDFMetadataController.onPageLoad().url" class="govuk-link">@messages("resultsPage.printOrSave")</a>
-    </p>
+    <p class="govuk-body"><a href="@routes.PDFMetadataController.onPageLoad().url" class="govuk-link">@messages("resultsPage.printOrSave")</a></p>
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <h3 class="govuk-heading-s">@messages("fullResultsPage.whatToDoNext")</h3>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("fullResultsPage.completeYourCorporationTaxReturn")</li>
+        <li>@messages("fullResultsPage.payYourCorporationTaxBy") <b>@accountingPeriodForm.accountingPeriodEndDateOrDefault.plusMonths(9).plusDays(1).formatDateFull</b>.</li>
+    </ul>
 
     <br/>
 

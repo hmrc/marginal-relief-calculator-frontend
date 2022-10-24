@@ -66,11 +66,11 @@ class ResultsPageHelperSpec extends SpecBase {
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-                |     <dd class="govuk-summary-list__value">£1.00</dd>
+                |     <dd class="govuk-summary-list__value">£1</dd>
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-                |     <dd class="govuk-summary-list__value">£11.00</dd>
+                |     <dd class="govuk-summary-list__value">£11</dd>
                 |   </div>
                 |   <div class="govuk-summary-list__row">
                 |     <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -114,11 +114,11 @@ class ResultsPageHelperSpec extends SpecBase {
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |   <dd class="govuk-summary-list__value">£1.00</dd>
+          |   <dd class="govuk-summary-list__value">£1</dd>
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |   <dd class="govuk-summary-list__value">£11.00</dd>
+          |   <dd class="govuk-summary-list__value">£11</dd>
           | </div>
           | <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -155,11 +155,11 @@ class ResultsPageHelperSpec extends SpecBase {
           |  </div>
           |  <div class="govuk-summary-list__row">
           |    <dt class="govuk-summary-list__key">resultsPage.companysProfit</dt>
-          |    <dd class="govuk-summary-list__value">£1.00</dd>
+          |    <dd class="govuk-summary-list__value">£1</dd>
           |  </div>
           |  <div class="govuk-summary-list__row">
           |    <dt class="govuk-summary-list__key">resultsPage.distributions</dt>
-          |    <dd class="govuk-summary-list__value">£11.00</dd>
+          |    <dd class="govuk-summary-list__value">£11</dd>
           |  </div>
           |  <div class="govuk-summary-list__row">
           |   <dt class="govuk-summary-list__key">resultsPage.associatedCompanies</dt>
@@ -440,6 +440,96 @@ class ResultsPageHelperSpec extends SpecBase {
               Panel(
                 title = Text(messages("resultsPage.marginalReliefNotEligible")),
                 content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
+              )
+            )
+          ).htmlFormat
+      }
+
+      "when marginal rate for 2 years, both years are outside of threshold limits (no distributions)" - {
+        val calculatorResult = DualResult(
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 1000,
+            adjustedDistributions = 0,
+            adjustedAugmentedProfit = 1000,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 2000,
+            adjustedDistributions = 0,
+            adjustedAugmentedProfit = 2000,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          1
+        )
+        displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAboveAndBelowMarginalReliefLimit"))
+              )
+            )
+          ).htmlFormat
+      }
+
+      "when marginal rate for 2 years, both years are outside of threshold limits (with distributions)" - {
+        val calculatorResult = DualResult(
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 1000,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1001,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          MarginalRate(
+            year = 1971,
+            corporationTaxBeforeMR = 190,
+            taxRateBeforeMR = 19,
+            corporationTax = 190,
+            taxRate = 19,
+            marginalRelief = 0,
+            adjustedProfit = 2000,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 2001,
+            adjustedLowerThreshold = 1100,
+            adjustedUpperThreshold = 1500,
+            days = 100
+          ),
+          1
+        )
+        displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
+          addBannerScreenReader(
+            calculatorResult,
+            govukPanel(
+              Panel(
+                title = Text(messages("resultsPage.marginalReliefNotEligible")),
+                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveAndBelowMarginalReliefLimit"))
               )
             )
           ).htmlFormat
