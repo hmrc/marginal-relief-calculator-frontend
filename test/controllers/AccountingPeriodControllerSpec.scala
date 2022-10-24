@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages._
+import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
@@ -40,7 +41,8 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
   private val epoch: LocalDate = LocalDate.parse("2022-04-02")
 
   val formProvider = new AccountingPeriodFormProvider()
-  private def form = formProvider()
+
+  private def form(messages: Messages) = formProvider(messages)
 
   lazy val completedUserAnswers = UserAnswers(
     "test-session-id"
@@ -109,7 +111,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result).filterAndTrim mustEqual view
-          .render(form, NormalMode, getRequest, messages(application))
+          .render(form(messages(application)), NormalMode, getRequest, messages(application))
           .toString
           .filterAndTrim
       }
@@ -127,7 +129,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest).value
 
         status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(form.fill(validAnswer), NormalMode)(
+        contentAsString(result).filterAndTrim mustEqual view(form(messages(application)).fill(validAnswer), NormalMode)(
           getRequest,
           messages(application)
         ).toString.filterAndTrim

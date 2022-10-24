@@ -16,13 +16,14 @@
 
 package forms.mappings
 
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.should.Matchers
+import base.SpecBase
 import play.api.data.FormError
 
 import java.time.LocalDate
 
-class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
+class EndLocalDateFormatterSpec extends SpecBase {
+
+  private val msgs = messages(applicationBuilder(None).build())
 
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
   private val epochEnd: LocalDate = epoch.plusDays(1)
@@ -33,7 +34,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
     "someEndDateId.tworequired.key",
     "someEndDateId.required.key",
     "someStartDateId"
-  )
+  )(msgs)
 
   "EndLocalDateFormatter" - {
     "bind" - {
@@ -49,7 +50,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year"    -> epochEnd.getYear.toString
           )
         )
-        result shouldBe Right(epochEnd)
+        result mustBe Right(epochEnd)
       }
 
       "should return error when end date is invalid" in {
@@ -64,7 +65,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year"    -> epochEnd.getYear.toString
           )
         )
-        result shouldBe Left(List(FormError("someEndDateId", "someEndDateId.invalid.key")))
+        result mustBe Left(List(FormError("someEndDateId", "someEndDateId.invalid.key")))
       }
 
       "should error when end date is longer than a year from start date" in {
@@ -79,7 +80,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year"    -> epoch.plusYears(1).getYear.toString
           )
         )
-        result shouldBe Left(List(FormError("someEndDateId", "accountingPeriod.error.periodIsMoreThanAYear")))
+        result mustBe Left(List(FormError("someEndDateId", "accountingPeriod.error.periodIsMoreThanAYear")))
       }
 
       "should error when end date equal or before start date" in {
@@ -94,7 +95,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year"    -> epoch.getYear.toString
           )
         )
-        result shouldBe Left(List(FormError("someEndDateId", "accountingPeriod.error.startShouldBeBeforeEnd")))
+        result mustBe Left(List(FormError("someEndDateId", "accountingPeriod.error.startShouldBeBeforeEnd")))
       }
 
       "should return end date when start date is invalid" in {
@@ -109,7 +110,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year"    -> epoch.getYear.toString
           )
         )
-        result shouldBe Right(epoch)
+        result mustBe Right(epoch)
       }
 
       "should return error when one of the date component is missing" in {
@@ -120,7 +121,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year"  -> epoch.getYear.toString
           )
         )
-        result shouldBe Left(List(FormError("someEndDateId", List("someEndDateId.required.key"), List("day"))))
+        result mustBe Left(List(FormError("someEndDateId", List("someEndDateId.required.key"), List("day"))))
       }
 
       "should return error when two of the date components are missing" in {
@@ -130,7 +131,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
             "someEndDateId.year" -> epoch.getYear.toString
           )
         )
-        result shouldBe Left(
+        result mustBe Left(
           List(FormError("someEndDateId", List("someEndDateId.tworequired.key"), List("day", "month")))
         )
       }
@@ -140,7 +141,7 @@ class EndLocalDateFormatterSpec extends AnyFreeSpec with Matchers {
           "someEndDateId",
           Map.empty
         )
-        result shouldBe Left(List(FormError("someEndDateId", List("someEndDateId.allrequired.key"))))
+        result mustBe Left(List(FormError("someEndDateId", List("someEndDateId.allrequired.key"))))
       }
     }
   }

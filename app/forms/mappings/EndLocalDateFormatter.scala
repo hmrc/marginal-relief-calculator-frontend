@@ -18,6 +18,7 @@ package forms.mappings
 
 import forms.DateUtils.DateOps
 import play.api.data.FormError
+import play.api.i18n.Messages
 
 import java.time.LocalDate
 
@@ -28,7 +29,8 @@ class EndLocalDateFormatter(
   requiredKey: String,
   startDateId: String,
   args: Seq[String] = Seq.empty
-) extends LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args) {
+)(implicit messages: Messages)
+    extends LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args) {
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
@@ -40,6 +42,7 @@ class EndLocalDateFormatter(
       .withFilter(_._2.isEmpty)
       .map(_._1)
       .toList
+      .map(x => Messages("accountingPeriod.error." + x))
 
     fields.count(_._2.isDefined) match {
       case 3 =>
