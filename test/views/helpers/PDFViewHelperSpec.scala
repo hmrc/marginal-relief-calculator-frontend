@@ -78,6 +78,7 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(Seq(flatRate), associatedCompanies, taxableProfit, distributions, config),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
@@ -116,6 +117,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
@@ -162,6 +164,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
@@ -207,6 +210,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
@@ -252,6 +256,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
@@ -297,6 +302,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}
         ${pdfDetailedCalculationHtmlWithoutHeader(
@@ -307,6 +313,8 @@ class PDFViewHelperSpec extends SpecBase {
                 distributions,
                 config
               ),
+              calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
