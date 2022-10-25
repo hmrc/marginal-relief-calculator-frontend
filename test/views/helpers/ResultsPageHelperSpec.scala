@@ -1560,7 +1560,7 @@ class ResultsPageHelperSpec extends SpecBase {
     }
     "when calculator result is marginal rate, return false" - {
       val calculatorResult =
-        SingleResult(MarginalRate(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
+        SingleResult(MarginalRate(1971, 250, 25, 250, 25, 0, 1000, 10, 1010, 500, 1000, 100, FYRatio(100, 365)), 22)
       isFlatRateOnly(calculatorResult) shouldMatchTo false
     }
   }
