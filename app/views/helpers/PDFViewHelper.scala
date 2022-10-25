@@ -17,11 +17,12 @@
 package views.helpers
 
 import connectors.sharedmodel._
+import forms.DateUtils.DateOps
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.{ CurrencyUtils, DateUtils, PercentageUtils }
-import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
+import views.helpers.FullResultsPageHelper.{ marginalReliefFormula, nonTabCalculationResultsTable, showMarginalReliefExplanation }
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
 import java.time.Instant
@@ -56,6 +57,7 @@ object PDFViewHelper extends ViewHelper {
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(flatRate), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
+            accountingPeriodForm,
             "3"
           )}
              """)
@@ -81,6 +83,7 @@ object PDFViewHelper extends ViewHelper {
               config
             ),
             calculatorResult,
+            accountingPeriodForm,
             "3"
           )}
              """)
@@ -100,6 +103,7 @@ object PDFViewHelper extends ViewHelper {
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(m), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
+            accountingPeriodForm,
             "3"
           )}
              """)
@@ -119,6 +123,7 @@ object PDFViewHelper extends ViewHelper {
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(flatRate, m), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
+            accountingPeriodForm,
             "3"
           )}
              """)
@@ -139,6 +144,7 @@ object PDFViewHelper extends ViewHelper {
                 ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(m, flatRate), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
+            accountingPeriodForm,
             "3"
           )}""")
 
@@ -158,10 +164,13 @@ object PDFViewHelper extends ViewHelper {
         ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(Seq(m1), associatedCompanies, taxableProfit, distributions, config),
             calculatorResult,
+            accountingPeriodForm,
             "4"
           )}
         ${pdfDetailedCalculationHtmlWithoutHeader(
             nonTabCalculationResultsTable(Seq(m2), associatedCompanies, taxableProfit, distributions, config),
+            calculatorResult,
+            accountingPeriodForm,
             "4"
           )}""")
     }
@@ -169,6 +178,7 @@ object PDFViewHelper extends ViewHelper {
   def pdfDetailedCalculationHtml(
     resultsTable: Html,
     calculatorResult: CalculatorResult,
+    accountingPeriodForm: AccountingPeriodForm,
     pageCount: String
   )(implicit
     messages: Messages
@@ -177,16 +187,27 @@ object PDFViewHelper extends ViewHelper {
             |            <div class="grid-row">
             |            <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
             |             $resultsTable
-            |          </div>
-            |          <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
+            |            ${if (pageCount == "3") {
+             pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)
+           } else s""}
+            |           </div>
+            |         <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
             |        </div>""".stripMargin)
 
-  def pdfDetailedCalculationHtmlWithoutHeader(resultsTable: Html, pageCount: String)(implicit
+  def pdfDetailedCalculationHtmlWithoutHeader(
+    resultsTable: Html,
+    calculatorResult: CalculatorResult,
+    accountingPeriodForm: AccountingPeriodForm,
+    pageCount: String
+  )(implicit
     messages: Messages
   ): Html =
     Html(s"""<div class="print-document">
             |          <div class="grid-row">
             |            $resultsTable
+            |            ${if (pageCount == "4") {
+             pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)
+           } else s""}
             |          </div>
             |          <span class="govuk-body-s footer-page-no">${messages("pdf.page", "4", pageCount)}</span>
             |        </div>""".stripMargin)
@@ -305,4 +326,24 @@ object PDFViewHelper extends ViewHelper {
             |               </div>
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
             |           </div>""".stripMargin)
+
+  def pdfFormulaAndNextHtml(accountingPeriodForm: AccountingPeriodForm, calculatorResult: CalculatorResult)(implicit
+    messages: Messages
+  ): Html = Html(
+    s"""
+       ${if (showMarginalReliefExplanation(calculatorResult)) {
+        s"""
+      |   $marginalReliefFormula
+      |   ${views.helpers.FullResultsPageHelper.hr}"""
+      } else s"No"}
+
+       |<h3 class="govuk-heading-s">${messages("fullResultsPage.whatToDoNext")}</h3>
+       |    <ul class="govuk-list govuk-list--bullet">
+       |        <li>${messages("fullResultsPage.completeYourCorporationTaxReturn")}</li>
+       |        <li>${messages(
+        "fullResultsPage.payYourCorporationTaxBy"
+      )} <b>${accountingPeriodForm.accountingPeriodEndDateOrDefault.plusMonths(9).plusDays(1).formatDateFull}</b>.</li>
+       |    </ul>
+       |""".stripMargin
+  )
 }
