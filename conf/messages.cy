@@ -15,6 +15,7 @@ site.corporationTax=Treth Gorfforaeth
 site.marginalReliefForCorporationTax=Rhyddhad Ffiniol ar gyfer Treth Gorfforaeth
 site.marginalRelief=Rhyddhad Ffiniol
 site.overall=Yn gyffredinol
+site.visuallyHiddenErrorMessage=Gwall
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn

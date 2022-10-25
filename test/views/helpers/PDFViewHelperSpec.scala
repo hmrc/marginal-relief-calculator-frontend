@@ -27,7 +27,7 @@ import utils.FormatUtils.HtmlFormat
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
 import views.helpers.PDFViewHelper.{ pdfCorporationTaxHtml, pdfDetailedCalculationHtml, pdfDetailedCalculationHtmlWithoutHeader, pdfHeaderHtml, pdfTableHtml }
 
-import java.time.{ Instant, LocalDate, LocalDateTime }
+import java.time.{ Instant, LocalDate }
 import scala.collection.immutable.Seq
 
 class PDFViewHelperSpec extends SpecBase {
