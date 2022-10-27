@@ -75,7 +75,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£1</h2>
           |      <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
           |         <table class="govuk-table">
           |           <caption class="govuk-table__caption govuk-visually-hidden">
           |             fullResultsPage.calculationTableCaption
@@ -148,7 +148,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
           |         <table class="govuk-table">
           |           <caption class="govuk-table__caption govuk-visually-hidden">
           |             fullResultsPage.calculationTableCaption
@@ -246,7 +246,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£2</h2>
           |      <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
           |         <table class="govuk-table">
           |            <caption class="govuk-table__caption govuk-visually-hidden">
           |             fullResultsPage.calculationTableCaption
@@ -319,7 +319,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£3</h2>
           |      <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
           |         <table class="govuk-table">
           |            <caption class="govuk-table__caption govuk-visually-hidden">
           |             fullResultsPage.calculationTableCaption
@@ -372,7 +372,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |<div class="pdf-page">
           |   <div class="grid-row">
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
           |         <table class="govuk-table">
           |            <caption class="govuk-table__caption govuk-visually-hidden">
           |             fullResultsPage.calculationTableCaption

@@ -562,7 +562,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£2</h2>
        |     <p class="govuk-body">Marginal Relief for your accounting period</p>
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
-       |     <div class="app-table" role="region" aria-label="Calculation breakdown table" tabindex="0">
+       |     <div class="app-table" role="region" aria-label="This is a table describing your Marginal Relief calculation in detail." tabindex="0">
        |      <table class="govuk-table">
        |       <caption class="govuk-table__caption govuk-visually-hidden">
        |        This is a table describing your Marginal Relief calculation in detail.
@@ -614,7 +614,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |   <div class="pdf-page">
        |    <div class="grid-row">
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
-       |     <div class="app-table" role="region" aria-label="Calculation breakdown table" tabindex="0">
+       |     <div class="app-table" role="region" aria-label="This is a table describing your Marginal Relief calculation in detail." tabindex="0">
        |      <table class="govuk-table">
        |       <caption class="govuk-table__caption govuk-visually-hidden">
        |        This is a table describing your Marginal Relief calculation in detail.

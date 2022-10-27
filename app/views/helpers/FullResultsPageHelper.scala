@@ -349,7 +349,7 @@ object FullResultsPageHelper extends ViewHelper {
               p(text),
               Html(
                 s"""<div class="app-table" role="region" aria-label="${messages(
-                    "fullResultsPage.calculationTable.hidden"
+                    "fullResultsPage.calculationTableCaption"
                   )}" tabindex="0">""" + replaceTableHeader(
                   govukTable(table)
                 ) + "</div >"
@@ -359,7 +359,7 @@ object FullResultsPageHelper extends ViewHelper {
         case _ =>
           Html(
             s"""<div class="app-table" role="region" aria-label="${messages(
-                "fullResultsPage.calculationTable.hidden"
+                "fullResultsPage.calculationTableCaption"
               )}" tabindex="0">""" + replaceTableHeader(
               govukTable(table)
             ) + "</div>"

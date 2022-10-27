@@ -49,7 +49,7 @@ class FullResultsPageHelperSpec extends SpecBase {
                                       |   fullResultsPage.forFinancialYear
                                       |</h3>
                                       |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
-                                      |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+                                      |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
                                       |<table class="govuk-table">
                                       |  <caption class="govuk-table__caption govuk-visually-hidden">
                                       |     fullResultsPage.calculationTableCaption
@@ -125,7 +125,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <div class="govuk-tabs__panel" id="year1970">
             |    <h2 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h2>
             |    <p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
-            |    <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+            |    <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
             |    <table class="govuk-table">
             |      <caption class="govuk-table__caption govuk-visually-hidden">
             |     fullResultsPage.calculationTableCaption
@@ -164,7 +164,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<div class="govuk-tabs__panel" id="year1970">
             |  <h2 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h2>
             |  <p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£99</b></p>
-            |  <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+            |  <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
             |  <table class="govuk-table">
             |    <caption class="govuk-table__caption govuk-visually-hidden">
             |     fullResultsPage.calculationTableCaption
@@ -218,7 +218,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
-            |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+            |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
             |<table class="govuk-table">
             |  <caption class="govuk-table__caption govuk-visually-hidden">
             |     fullResultsPage.calculationTableCaption
@@ -268,7 +268,7 @@ class FullResultsPageHelperSpec extends SpecBase {
           """
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
-            |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
+            |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
             |<table class="govuk-table">
             |  <caption class="govuk-table__caption govuk-visually-hidden">
             |     fullResultsPage.calculationTableCaption
