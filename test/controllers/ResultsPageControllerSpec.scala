@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, SingleResult }
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -65,7 +65,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
+        val calculatorResult =
+          SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
@@ -111,7 +112,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           )
         ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
+        val calculatorResult =
+          SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
@@ -156,7 +158,11 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           .build()
 
         val calculatorResult =
-          DualResult(MarginalRate(2022, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 90), FlatRate(2023, 1, 1, 1, 1, 1, 275), 1)
+          DualResult(
+            MarginalRate(2022, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 90, FYRatio(90, 365)),
+            FlatRate(2023, 1, 1, 1, 1, 1, 275),
+            1
+          )
         mockMarginalReliefCalculatorConnector.calculate(
           accountingPeriodStart = startDate,
           accountingPeriodEnd = endDate,

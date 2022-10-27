@@ -16,6 +16,8 @@ site.corporationTax = Corporation Tax
 site.marginalReliefForCorporationTax = Marginal Relief for Corporation Tax
 site.marginalRelief = Marginal Relief
 site.overall = Overall
+site.warning = Warning
+site.visuallyHiddenErrorMessage = Error
 
 date.day = Day
 date.month = Month

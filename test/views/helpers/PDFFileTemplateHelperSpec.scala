@@ -65,7 +65,8 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
       val config = Map(
         epoch.getYear -> MarginalReliefConfig(epoch.getYear, 50000, 250000, 0.19, 0.25, 0.015)
       )
-      val calculatorResult = SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 1)
+      val calculatorResult =
+        SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 1)), 1)
       pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
         """
           |<div class="pdf-page">
@@ -134,7 +135,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
       )
       val calculatorResult = DualResult(
         FlatRate(epoch.getYear, 1, 1, 1, 1, 1, 1),
-        MarginalRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+        MarginalRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 3)),
         1
       )
       pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
@@ -233,7 +234,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         epoch.getYear + 1 -> FlatRateConfig(epoch.getYear + 1, 0.19)
       )
       val calculatorResult = DualResult(
-        MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+        MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 3)),
         FlatRate(epoch.getYear + 1, 1, 1, 1, 1, 1, 1),
         1
       )
@@ -306,8 +307,8 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         epoch.getYear + 1 -> MarginalReliefConfig(epoch.getYear + 1, 50000, 250000, 0.19, 0.25, 0.015)
       )
       val calculatorResult = DualResult(
-        MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-        MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+        MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 1)),
+        MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 2)),
         1
       )
       pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 4).htmlFormat shouldBe

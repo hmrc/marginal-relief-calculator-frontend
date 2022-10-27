@@ -18,7 +18,7 @@ package views.helpers
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.api.test.Helpers
@@ -27,7 +27,7 @@ import utils.FormatUtils.HtmlFormat
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
 import views.helpers.PDFViewHelper.{ pdfCorporationTaxHtml, pdfDetailedCalculationHtml, pdfDetailedCalculationHtmlWithoutHeader, pdfHeaderHtml, pdfTableHtml }
 
-import java.time.{ Instant, LocalDate, LocalDateTime }
+import java.time.{ Instant, LocalDate }
 import scala.collection.immutable.Seq
 
 class PDFViewHelperSpec extends SpecBase {
@@ -78,11 +78,12 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(Seq(flatRate), associatedCompanies, taxableProfit, distributions, config),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
       "when marginal rate" in {
-        val marginalRate = MarginalRate(2023, 250, 25, 200, 20, 50, 1000, 10, 0, 100, 1500, 365)
+        val marginalRate = MarginalRate(2023, 250, 25, 200, 20, 50, 1000, 10, 0, 100, 1500, 365, FYRatio(365, 365))
         val calculatorResult = SingleResult(marginalRate, 1)
         val pageCount = "3"
         pdfTableHtml(
@@ -116,6 +117,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
@@ -164,11 +166,12 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
       "when marginal rate year 1 and flat rate for year 2" in {
-        val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+        val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0, FYRatio(0, 365))
         val flatRate = FlatRate(2022, 190, 19, 1000, 100, 0, 0)
         val calculatorResult = DualResult(
           marginalRate,
@@ -209,12 +212,13 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
       "when flat rate year 1 and marginal rate for year 2" in {
         val flatRate = FlatRate(2023, 190, 19, 1000, 100, 0, 0)
-        val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+        val marginalRate = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0, FYRatio(0, 365))
         val calculatorResult = DualResult(
           flatRate,
           marginalRate,
@@ -254,12 +258,13 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
       "when marginal rate year 1 and marginal rate for year 2" in {
-        val marginalRate1 = MarginalRate(2023, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0)
-        val marginalRate2 = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0)
+        val marginalRate1 = MarginalRate(2023, 250, 25, 200, 20, 50, 1000, 10, 100, 1500, 100, 0, FYRatio(0, 365))
+        val marginalRate2 = MarginalRate(2023, 300, 30, 250, 25, 50, 1000, 10, 100, 1500, 100, 0, FYRatio(0, 365))
         val calculatorResult = DualResult(
           marginalRate1,
           marginalRate2,
@@ -299,6 +304,7 @@ class PDFViewHelperSpec extends SpecBase {
                 config
               ),
               calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}
         ${pdfDetailedCalculationHtmlWithoutHeader(
@@ -309,6 +315,8 @@ class PDFViewHelperSpec extends SpecBase {
                 distributions,
                 config
               ),
+              calculatorResult,
+              accountingPeriodForm,
               pageCount
             )}""").htmlFormat
       }
