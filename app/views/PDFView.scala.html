@@ -41,8 +41,8 @@
 ) {
 <h1 class="govuk-heading-l">@messages("pdf.title")</h1>
 <div class="print-this govuk-!-margin-bottom-4">
-    <a class="print-this__print" href="javascript:window.print()"><span>Print this page</span></a>
-    <a class="print-this__save" id="save" href="@{routes.PDFController.downloadPdf.path()}">Save as a PDF</a>
+    <a class="govuk-link print-this__print" href="javascript:window.print()"><span>Print your full calculation</span></a>
+    <a class="govuk-link print-this__save" id="save" href="@{routes.PDFController.downloadPdf.path()}">Save as a PDF</a>
 </div>
 <div class="pdf-preview">
     @pdfTableHtml(calculatorResult, associatedCompanies, taxableProfit, distributions, config, pdfMetadata, accountingPeriodForm, currentInstant)

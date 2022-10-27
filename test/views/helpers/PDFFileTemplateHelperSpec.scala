@@ -75,12 +75,15 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£1</h2>
           |      <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-          |         <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
+          |         <table class="govuk-table">
+          |           <caption class="govuk-table__caption govuk-visually-hidden">
+          |             fullResultsPage.calculationTableCaption
+          |           </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-          |                  <th scope="col" class="govuk-table__header"  ><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+          |                  <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
           |               </tr>
@@ -145,12 +148,15 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-          |         <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
+          |         <table class="govuk-table">
+          |           <caption class="govuk-table__caption govuk-visually-hidden">
+          |             fullResultsPage.calculationTableCaption
+          |           </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-          |                  <th scope="col" class="govuk-table__header"  ><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+          |                  <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
           |               </tr>
@@ -240,14 +246,17 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£2</h2>
           |      <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-          |         <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
+          |         <table class="govuk-table">
+          |            <caption class="govuk-table__caption govuk-visually-hidden">
+          |             fullResultsPage.calculationTableCaption
+          |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-          |                  <th scope="col" class="govuk-table__header"  ><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
-          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
-          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
@@ -258,7 +267,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
+          |                  <th scope="row" class="govuk-table__header"><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
           |                  <td class="govuk-table__cell"  >£1 × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
@@ -310,14 +319,17 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£3</h2>
           |      <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-          |         <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
+          |         <table class="govuk-table">
+          |            <caption class="govuk-table__caption govuk-visually-hidden">
+          |             fullResultsPage.calculationTableCaption
+          |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-          |                  <th scope="col" class="govuk-table__header"  ><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
-          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
-          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
@@ -360,14 +372,17 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |<div class="pdf-page">
           |   <div class="grid-row">
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
-          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-          |         <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+          |      <div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
+          |         <table class="govuk-table">
+          |            <caption class="govuk-table__caption govuk-visually-hidden">
+          |             fullResultsPage.calculationTableCaption
+          |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td scope="col" class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-          |                  <th scope="col" class="govuk-table__header"  ><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
-          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
-          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">

@@ -326,18 +326,21 @@ object FullResultsPageHelper extends ViewHelper {
         head = Some(
           Seq(
             HeadCell(
-              content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+              content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
               classes = "not-header"
             ),
             HeadCell(
               content =
-                HtmlContent(s"""<span class="govuk-!-display-none">${messages("fullResultsPage.variables")}</span>""")
+                HtmlContent(s"""<span class="govuk-visually-hidden">${messages("fullResultsPage.variables")}</span>"""),
+              classes = "not-header"
             ),
             HeadCell(content = Text(messages("fullResultsPage.calculation"))),
             HeadCell(content = Text(messages("fullResultsPage.result")))
           )
         ),
-        firstCellIsHeader = true
+        firstCellIsHeader = true,
+        caption = Some(messages("fullResultsPage.calculationTableCaption")),
+        captionClasses = "govuk-visually-hidden"
       )
       description match {
         case Some(text) =>
@@ -346,9 +349,8 @@ object FullResultsPageHelper extends ViewHelper {
               p(text),
               Html(
                 s"""<div class="app-table" role="region" aria-label="${messages(
-                    "fullResultsPage.calculationTable.hidden"
+                    "fullResultsPage.calculationTableCaption"
                   )}" tabindex="0">""" + replaceTableHeader(
-                  messages("fullResultsPage.calculationTableSummary"),
                   govukTable(table)
                 ) + "</div >"
               )
@@ -357,9 +359,8 @@ object FullResultsPageHelper extends ViewHelper {
         case _ =>
           Html(
             s"""<div class="app-table" role="region" aria-label="${messages(
-                "fullResultsPage.calculationTable.hidden"
+                "fullResultsPage.calculationTableCaption"
               )}" tabindex="0">""" + replaceTableHeader(
-              messages("fullResultsPage.calculationTableSummary"),
               govukTable(table)
             ) + "</div>"
           )

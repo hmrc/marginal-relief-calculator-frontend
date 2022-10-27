@@ -235,19 +235,19 @@ object PDFViewHelper extends ViewHelper {
          |                            </h3>
          |                        </div>
          |                    </div>
-         | ${if (pdfMetadata.companyName.isDefined) {
+         | ${if (pdfMetadata.companyName.exists(_.trim.nonEmpty)) {
           s"""<div class="grid-row">
               <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h3>
               <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
               </div>"""
         } else s""}
-             ${if (pdfMetadata.utr.isDefined) {
+             ${if (pdfMetadata.utr.exists(_.trim.nonEmpty)) {
           s"""<div class="grid-row">
               <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h3>
               <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
               </div>"""
         } else s""}
-         |       <div class="grid-row print-banner">${displayBanner(calculatorResult).html}</div>
+         |       <div class="grid-row print-banner">${replaceBannerHtml(displayBanner(calculatorResult).html)}</div>
          |       <div class="grid-row">
          |       <div class="govuk-grid-column-full">
          |       <div class="grid-row">
@@ -326,6 +326,21 @@ object PDFViewHelper extends ViewHelper {
             |               </div>
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
             |           </div>""".stripMargin)
+
+  def replaceBannerHtml(bannerHtml: Html)(implicit messages: Messages): Html =
+    Html(
+      bannerHtml
+        .toString()
+        .replaceAll("[\n\r]", "")
+        .replace(
+          "<h1",
+          "<h2"
+        )
+        .replace(
+          "</h1>",
+          "</h2>"
+        )
+    )
 
   def pdfFormulaAndNextHtml(accountingPeriodForm: AccountingPeriodForm, calculatorResult: CalculatorResult)(implicit
     messages: Messages

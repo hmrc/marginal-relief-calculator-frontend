@@ -26,7 +26,7 @@ import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
-import views.helpers.ResultsPageHelper.{ addBannerScreenReader, displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, isFlatRateOnly, replaceTableHeader, screenReaderText }
+import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, isFlatRateOnly, replaceTableHeader, screenReaderText }
 import views.html.templates.BannerPanel
 import utils.FormatUtils._
 
@@ -180,12 +180,9 @@ class ResultsPageHelperSpec extends SpecBase {
         displayBanner(calculatorResult).title shouldMatchTo
           messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
-              )
+          govukPanel(
+            Panel(
+              content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
             )
           ).htmlFormat
       }
@@ -196,13 +193,10 @@ class ResultsPageHelperSpec extends SpecBase {
         displayBanner(calculatorResult).title shouldMatchTo
           messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            bannerPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-                content = Text("£50")
-              )
+          bannerPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+              content = Text("£50")
             )
           ).htmlFormat
       }
@@ -212,13 +206,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 100, 100, 1000, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -228,13 +219,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 110, 1000, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -244,13 +232,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 0, 0, 200, 1000, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -260,13 +245,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 19, 19, 19, 19, 0, 100, 10, 0, 200, 1000, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -276,13 +258,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 100, 1000, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -292,13 +271,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 100, 1000, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -308,13 +284,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 0, 1000, 200, 900, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -324,13 +297,10 @@ class ResultsPageHelperSpec extends SpecBase {
           SingleResult(MarginalRate(1970, 190, 19, 190, 19, 0, 1000, 10, 1010, 200, 900, 365, FYRatio(365, 365)), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -351,12 +321,9 @@ class ResultsPageHelperSpec extends SpecBase {
           DualResult(FlatRate(1970, 190, 19, 1000, 100, 0, 0), FlatRate(1971, 200, 20, 1000, 100, 0, 0), 1)
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
-              )
+          govukPanel(
+            Panel(
+              content = Text(messages("resultsPage.marginalReliefNotEligibleFlatRate"))
             )
           ).htmlFormat
       }
@@ -368,13 +335,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            bannerPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-                content = Text("£50")
-              )
+          bannerPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+              content = Text("£50")
             )
           ).htmlFormat
       }
@@ -387,13 +351,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            bannerPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-                content = Text("£50")
-              )
+          bannerPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+              content = Text("£50")
             )
           ).htmlFormat
       }
@@ -406,13 +367,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            bannerPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-                content = Text("£100")
-              )
+          bannerPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+              content = Text("£100")
             )
           ).htmlFormat
       }
@@ -425,13 +383,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -444,13 +399,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -491,13 +443,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAboveAndBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAboveAndBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -538,13 +487,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveAndBelowMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveAndBelowMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -557,13 +503,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAboveMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -576,13 +519,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            govukPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefNotEligible")),
-                content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
-              )
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit"))
             )
           ).htmlFormat
       }
@@ -595,13 +535,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            bannerPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-                content = Text("£50")
-              )
+          bannerPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+              content = Text("£50")
             )
           ).htmlFormat
       }
@@ -614,13 +551,10 @@ class ResultsPageHelperSpec extends SpecBase {
         )
         displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefForAccPeriodIs")
         displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
-          addBannerScreenReader(
-            calculatorResult,
-            bannerPanel(
-              Panel(
-                title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
-                content = Text("£50")
-              )
+          bannerPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefForAccPeriodIs")),
+              content = Text("£50")
             )
           ).htmlFormat
       }
@@ -646,17 +580,15 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
@@ -673,7 +605,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -684,17 +616,15 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 0, 10, 100, 1500, 365, FYRatio(365, 365)), 1)
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
@@ -719,7 +649,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -730,17 +660,15 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           SingleResult(MarginalRate(1970, 25, 25, 25, 25, 0, 100, 0, 10, 500, 1500, 365, FYRatio(365, 365)), 1)
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
@@ -757,7 +685,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -770,17 +698,15 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 0, 0, 1000, 100), FlatRate(1971, 200, 20, 0, 0, 1000, 100), 1)
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -818,7 +744,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -832,17 +758,15 @@ class ResultsPageHelperSpec extends SpecBase {
           1
         )
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -880,7 +804,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -894,17 +818,15 @@ class ResultsPageHelperSpec extends SpecBase {
           1
         )
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -942,7 +864,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -956,17 +878,15 @@ class ResultsPageHelperSpec extends SpecBase {
           1
         )
         replaceTableHeader(
-          messages("resultsPage.corporationTaxTableSummary"),
           displayCorporationTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.corporationTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1016,7 +936,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1030,17 +950,15 @@ class ResultsPageHelperSpec extends SpecBase {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
@@ -1057,7 +975,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1067,17 +985,15 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365, FYRatio(365, 365)), 1)
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(content = Text(messages("site.from.to", "1970", "1971")))
@@ -1098,7 +1014,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1110,17 +1026,15 @@ class ResultsPageHelperSpec extends SpecBase {
         val calculatorResult =
           DualResult(FlatRate(1970, 190, 19, 1000, 0, 1000, 100), FlatRate(1971, 200, 20, 1000, 0, 1000, 100), 19.5)
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1158,7 +1072,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1171,17 +1085,15 @@ class ResultsPageHelperSpec extends SpecBase {
           22.50
         )
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1225,7 +1137,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1238,17 +1150,15 @@ class ResultsPageHelperSpec extends SpecBase {
           27.50
         )
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1286,7 +1196,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1299,17 +1209,15 @@ class ResultsPageHelperSpec extends SpecBase {
           27.50
         )
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1347,7 +1255,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1362,17 +1270,15 @@ class ResultsPageHelperSpec extends SpecBase {
             22
           )
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1410,7 +1316,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1424,17 +1330,15 @@ class ResultsPageHelperSpec extends SpecBase {
           22
         )
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1472,7 +1376,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
@@ -1486,17 +1390,15 @@ class ResultsPageHelperSpec extends SpecBase {
           19.5
         )
         replaceTableHeader(
-          messages("resultsPage.effectiveTaxTableSummary"),
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo
           replaceTableHeader(
-            messages("resultsPage.effectiveTaxTableSummary"),
             govukTable(
               Table(
                 head = Some(
                   Seq(
                     HeadCell(
-                      content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                      content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                       classes = "not-header"
                     ),
                     HeadCell(
@@ -1540,7 +1442,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   )
                 ),
                 caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-                captionClasses = "govuk-!-display-none",
+                captionClasses = "govuk-visually-hidden",
                 firstCellIsHeader = true
               )
             )
