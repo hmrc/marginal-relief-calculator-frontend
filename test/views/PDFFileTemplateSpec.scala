@@ -450,13 +450,13 @@ class PDFFileTemplateSpec extends SpecBase {
        |    <div class="grid-row">
        |     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">Corporation Tax liability</h2> <span class="govuk-heading-l" style="margin-bottom: 4px;">£2</span>
        |     <p class="govuk-body">Reduced from £2 after £2 Marginal Relief</p>
-       |     <table summary="This is a table describing your Corporation Tax liability for your accounting period." class="govuk-table">
-       |      <caption class="govuk-table__caption govuk-!-display-none">
+       |     <table class="govuk-table">
+       |      <caption class="govuk-table__caption govuk-visually-hidden">
        |       Corporation Tax liability breakdown for your accounting period
        |      </caption>
        |      <thead class="govuk-table__head">
        |       <tr class="govuk-table__row">
-       |        <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+       |        <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Overall</th>
@@ -493,13 +493,13 @@ class PDFFileTemplateSpec extends SpecBase {
        |    <div class="grid-row">
        |     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">Effective tax rate</h2> <span class="govuk-heading-l" style="margin-bottom: 4px;">1%</span>
        |     <p class="govuk-body">Reduced from 100% after Marginal Relief</p>
-       |     <table summary="This is a table describing your Corporation Tax effective tax rate for your accounting period." class="govuk-table">
-       |      <caption class="govuk-table__caption govuk-!-display-none">
+       |     <table class="govuk-table">
+       |      <caption class="govuk-table__caption govuk-visually-hidden">
        |       Effective tax rate breakdown for your accounting period
        |      </caption>
        |      <thead class="govuk-table__head">
        |       <tr class="govuk-table__row">
-       |        <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
+       |        <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Overall</th>
@@ -535,11 +535,14 @@ class PDFFileTemplateSpec extends SpecBase {
        |     <p class="govuk-body">Marginal Relief for your accounting period</p>
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
        |     <div class="app-table" role="region" aria-label="Calculation breakdown table" tabindex="0">
-       |      <table summary="This is a table describing your Marginal Relief calculation in detail." class="govuk-table">
+       |      <table class="govuk-table">
+       |       <caption class="govuk-table__caption govuk-visually-hidden">
+       |        This is a table describing your Marginal Relief calculation in detail.
+       |       </caption>
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
-       |         <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-       |         <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">Calculation variables</span></th>
+       |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+       |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">Calculation variables</span></td>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>
        |        </tr>
@@ -584,11 +587,14 @@ class PDFFileTemplateSpec extends SpecBase {
        |    <div class="grid-row">
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
        |     <div class="app-table" role="region" aria-label="Calculation breakdown table" tabindex="0">
-       |      <table summary="This is a table describing your Marginal Relief calculation in detail." class="govuk-table">
+       |      <table class="govuk-table">
+       |       <caption class="govuk-table__caption govuk-visually-hidden">
+       |        This is a table describing your Marginal Relief calculation in detail.
+       |       </caption>
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
-       |         <td class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-       |         <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">Calculation variables</span></th>
+       |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+       |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">Calculation variables</span></td>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>
        |        </tr>

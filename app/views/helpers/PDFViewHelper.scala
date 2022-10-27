@@ -214,13 +214,13 @@ object PDFViewHelper extends ViewHelper {
          |                            </h3>
          |                        </div>
          |                    </div>
-         | ${if (pdfMetadata.companyName.isDefined) {
+         | ${if (pdfMetadata.companyName.exists(_.trim.nonEmpty)) {
           s"""<div class="grid-row">
               <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h3>
               <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
               </div>"""
         } else s""}
-             ${if (pdfMetadata.utr.isDefined) {
+             ${if (pdfMetadata.utr.exists(_.trim.nonEmpty)) {
           s"""<div class="grid-row">
               <h3 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h3>
               <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>

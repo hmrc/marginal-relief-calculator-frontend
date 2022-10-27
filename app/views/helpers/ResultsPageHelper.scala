@@ -291,7 +291,6 @@ object ResultsPageHelper extends ViewHelper {
 
   def displayCorporationTaxTable(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
     replaceTableHeader(
-      messages("resultsPage.corporationTaxTableScreenReaderSummary"),
       calculatorResult match {
         case SingleResult(details: TaxDetails, _) =>
           govukTable(
@@ -337,14 +336,14 @@ object ResultsPageHelper extends ViewHelper {
               head = Some(
                 Seq(
                   HeadCell(
-                    content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                    content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                     classes = "not-header"
                   ),
                   HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
                 )
               ),
               caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-              captionClasses = "govuk-!-display-none",
+              captionClasses = "govuk-visually-hidden",
               firstCellIsHeader = true
             )
           )
@@ -354,7 +353,7 @@ object ResultsPageHelper extends ViewHelper {
               head = Some(
                 Seq(
                   HeadCell(
-                    content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                    content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                     classes = "not-header"
                   ),
                   HeadCell(
@@ -452,7 +451,7 @@ object ResultsPageHelper extends ViewHelper {
                 }
               ).filter(_.nonEmpty),
               caption = Some(messages("resultsPage.effectiveCorporationTaxTableCaption")),
-              captionClasses = "govuk-!-display-none",
+              captionClasses = "govuk-visually-hidden",
               firstCellIsHeader = true
             )
           )
@@ -463,14 +462,13 @@ object ResultsPageHelper extends ViewHelper {
     messages: Messages
   ): Html =
     replaceTableHeader(
-      messages("resultsPage.effectiveTaxTableScreenReaderSummary"),
       calculatorResult.fold(s =>
         govukTable(
           Table(
             head = Some(
               Seq(
                 HeadCell(
-                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                   classes = "not-header"
                 ),
                 HeadCell(content =
@@ -503,7 +501,7 @@ object ResultsPageHelper extends ViewHelper {
               )
             ).filter(_.nonEmpty),
             caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-            captionClasses = "govuk-!-display-none",
+            captionClasses = "govuk-visually-hidden",
             firstCellIsHeader = true
           )
         )
@@ -598,7 +596,7 @@ object ResultsPageHelper extends ViewHelper {
             head = Some(
               Seq(
                 HeadCell(
-                  content = HtmlContent(s"""<span class="govuk-!-display-none">No header</span>"""),
+                  content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
                   classes = "not-header"
                 ),
                 HeadCell(
@@ -614,25 +612,31 @@ object ResultsPageHelper extends ViewHelper {
             ),
             rows = dataRows,
             caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
-            captionClasses = "govuk-!-display-none",
+            captionClasses = "govuk-visually-hidden",
             firstCellIsHeader = true
           )
         )
       }
     )
 
-  def replaceTableHeader(tableSummary: String, tableHtml: Html): Html =
+  def replaceTableHeader(tableHtml: Html)(implicit
+    messages: Messages
+  ): Html =
     Html(
       tableHtml
         .toString()
         .replaceAll("[\n\r]", "")
         .replace(
-          "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-!-display-none\">No header</span></th>",
-          "<td class=\"govuk-table__header not-header\"><span class=\"govuk-!-display-none\">No header</span></td>"
+          "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-visually-hidden\">No header</span></th>",
+          "<td class=\"govuk-table__header not-header\"><span class=\"govuk-visually-hidden\">No header</span></td>"
         )
         .replace(
-          "<table",
-          s"""<table summary="$tableSummary""""
+          s"""<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-visually-hidden\">${messages(
+              "fullResultsPage.variables"
+            )}</span></th>""",
+          s"""<td class=\"govuk-table__header not-header\"><span class=\"govuk-visually-hidden\">${messages(
+              "fullResultsPage.variables"
+            )}</span></td>"""
         )
     )
 

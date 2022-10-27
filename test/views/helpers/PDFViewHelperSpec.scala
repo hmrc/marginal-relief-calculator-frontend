@@ -131,6 +131,8 @@ class PDFViewHelperSpec extends SpecBase {
 
         val pageCount = "3"
 
+        val pdfMetadataForm = PDFMetadataForm(Some(""), Some(""))
+
         pdfTableHtml(
           calculatorResult,
           associatedCompanies,

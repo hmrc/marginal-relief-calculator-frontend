@@ -50,10 +50,14 @@ class FullResultsPageHelperSpec extends SpecBase {
                                       |</h3>
                                       |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
                                       |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-                                      |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table"><thead class="govuk-table__head">
+                                      |<table class="govuk-table">
+                                      |  <caption class="govuk-table__caption govuk-visually-hidden">
+                                      |     fullResultsPage.calculationTableCaption
+                                      |   </caption>
+                                      |   <thead class="govuk-table__head">
                                       |   <tr class="govuk-table__row">
-                                      |     <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-                                      |     <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+                                      |     <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+                                      |     <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
                                       |     <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
                                       |     <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
                                       |   </tr>
@@ -122,11 +126,14 @@ class FullResultsPageHelperSpec extends SpecBase {
             |    <h2 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h2>
             |    <p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
             |    <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-            |    <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+            |    <table class="govuk-table">
+            |      <caption class="govuk-table__caption govuk-visually-hidden">
+            |     fullResultsPage.calculationTableCaption
+            |   </caption>
             |    <thead class="govuk-table__head">
             |      <tr class="govuk-table__row">
-            |        <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |       <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+            |        <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+            |        <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |      </tr>
@@ -158,11 +165,14 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  <h2 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h2>
             |  <p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£99</b></p>
             |  <div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-            |  <table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+            |  <table class="govuk-table">
+            |    <caption class="govuk-table__caption govuk-visually-hidden">
+            |     fullResultsPage.calculationTableCaption
+            |   </caption>
             |    <thead class="govuk-table__head">
             |      <tr class="govuk-table__row">
-            |        <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |        <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+            |        <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+            |        <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |        <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |      </tr>
@@ -209,11 +219,14 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
             |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-            |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+            |<table class="govuk-table">
+            |  <caption class="govuk-table__caption govuk-visually-hidden">
+            |     fullResultsPage.calculationTableCaption
+            |   </caption>
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
-            |      <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |      <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+            |      <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+            |      <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |    </tr>
@@ -256,11 +269,14 @@ class FullResultsPageHelperSpec extends SpecBase {
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
             |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTable.hidden" tabindex="0">
-            |<table summary="fullResultsPage.calculationTableSummary" class="govuk-table">
+            |<table class="govuk-table">
+            |  <caption class="govuk-table__caption govuk-visually-hidden">
+            |     fullResultsPage.calculationTableCaption
+            |   </caption>
             |  <thead class="govuk-table__head">
             |    <tr class="govuk-table__row">
-            |      <td  class="govuk-table__header not-header"><span class="govuk-!-display-none">No header</span></td>
-            |      <th scope="col" class="govuk-table__header"><span class="govuk-!-display-none">fullResultsPage.variables</span></th>
+            |      <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
+            |      <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
             |      <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
             |    </tr>
