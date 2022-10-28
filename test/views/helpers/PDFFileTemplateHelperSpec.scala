@@ -18,6 +18,7 @@ package views.helpers
 
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
 import connectors.sharedmodel._
+import forms.AccountingPeriodForm
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.i18n.Messages
@@ -41,13 +42,16 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
     )
   )
 
+  private val accountingPeriodForm =
+    AccountingPeriodForm(LocalDate.parse("2023-01-01"), Some(LocalDate.parse("2023-12-31")))
+
   "pdfHowItsCalculated" - {
     "should render single result with flat rate" in {
       val config = Map(
         epoch.getYear -> FlatRateConfig(epoch.getYear, 0.19)
       )
       val calculatorResult = SingleResult(FlatRate(epoch.getYear, 1, 1, 1, 1, 1, 1), 1)
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldMatchTo
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldMatchTo
         """
           |<div class="pdf-page">
           |        <div class="grid-row">
@@ -55,6 +59,11 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£0</h2>
           |          <p class="govuk-body">fullResultsPage.marginalReliefForAccountingPeriod</p>
           |          <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3><p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
+          |          <h3 class="govuk-heading-s">fullResultsPage.whatToDoNext</h3>
+          |          <ul class="govuk-list govuk-list--bullet">
+          |           <li>fullResultsPage.completeYourCorporationTaxReturn</li>
+          |           <li>fullResultsPage.payYourCorporationTaxBy <b>1 October 2024</b>.</li>
+          |         </ul>
           |        </div>
           |        <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
@@ -67,7 +76,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
       )
       val calculatorResult =
         SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 1)), 1)
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -122,6 +131,14 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </tbody>
           |         </table>
           |      </div>
+          |      <h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.marginalReliefFormula</h3>
+          |      <p class="govuk-body">fullResultsPage.marginalReliefFormula.description</p>
+          |      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          |      <h3 class="govuk-heading-s">fullResultsPage.whatToDoNext</h3>
+          |      <ul class="govuk-list govuk-list--bullet">
+          |       <li>fullResultsPage.completeYourCorporationTaxReturn</li>
+          |       <li>fullResultsPage.payYourCorporationTaxBy <b>1 October 2024</b>.</li>
+          |      </ul>
           |   </div>
           |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
@@ -138,7 +155,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         MarginalRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 3)),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -195,6 +212,14 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </tbody>
           |         </table>
           |      </div>
+          |      <h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.marginalReliefFormula</h3>
+          |      <p class="govuk-body">fullResultsPage.marginalReliefFormula.description</p>
+          |      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          |      <h3 class="govuk-heading-s">fullResultsPage.whatToDoNext</h3>
+          |      <ul class="govuk-list govuk-list--bullet">
+          |       <li>fullResultsPage.completeYourCorporationTaxReturn</li>
+          |       <li>fullResultsPage.payYourCorporationTaxBy <b>1 October 2024</b>.</li>
+          |      </ul>
           |   </div>
           |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
@@ -211,7 +236,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         FlatRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -222,6 +247,11 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
+          |      <h3 class="govuk-heading-s">fullResultsPage.whatToDoNext</h3>
+          |      <ul class="govuk-list govuk-list--bullet">
+          |       <li>fullResultsPage.completeYourCorporationTaxReturn</li>
+          |       <li>fullResultsPage.payYourCorporationTaxBy <b>1 October 2024</b>.</li>
+          |      </ul>
           |   </div>
           |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
@@ -238,7 +268,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         FlatRate(epoch.getYear + 1, 1, 1, 1, 1, 1, 1),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -295,6 +325,14 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |      </div>
           |      <h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
           |      <p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
+          |      <h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.marginalReliefFormula</h3>
+          |      <p class="govuk-body">fullResultsPage.marginalReliefFormula.description</p>
+          |      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          |      <h3 class="govuk-heading-s">fullResultsPage.whatToDoNext</h3>
+          |      <ul class="govuk-list govuk-list--bullet">
+          |       <li>fullResultsPage.completeYourCorporationTaxReturn</li>
+          |       <li>fullResultsPage.payYourCorporationTaxBy <b>1 October 2024</b>.</li>
+          |      </ul>
           |   </div>
           |   <span class="govuk-body-s footer-page-no">Page 3 of 3</span>
           |</div>
@@ -311,7 +349,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 2)),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 4).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 4, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -419,6 +457,14 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </tbody>
           |         </table>
           |      </div>
+          |      <h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.marginalReliefFormula</h3>
+          |      <p class="govuk-body">fullResultsPage.marginalReliefFormula.description</p>
+          |      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          |      <h3 class="govuk-heading-s">fullResultsPage.whatToDoNext</h3>
+          |      <ul class="govuk-list govuk-list--bullet">
+          |       <li>fullResultsPage.completeYourCorporationTaxReturn</li>
+          |       <li>fullResultsPage.payYourCorporationTaxBy <b>1 October 2024</b>.</li>
+          |      </ul>
           |   </div>
           |   <span class="govuk-body-s footer-page-no">Page 4 of 4</span>
           |</div>

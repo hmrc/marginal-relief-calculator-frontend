@@ -350,8 +350,7 @@ object PDFViewHelper extends ViewHelper {
         s"""
       |   $marginalReliefFormula
       |   ${views.helpers.FullResultsPageHelper.hr}"""
-      } else s"No"}
-
+      } else s""}
        |<h3 class="govuk-heading-s">${messages("fullResultsPage.whatToDoNext")}</h3>
        |    <ul class="govuk-list govuk-list--bullet">
        |        <li>${messages("fullResultsPage.completeYourCorporationTaxReturn")}</li>
