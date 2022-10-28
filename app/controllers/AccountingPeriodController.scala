@@ -24,7 +24,7 @@ import navigation.Navigator
 import org.slf4j.{ Logger, LoggerFactory }
 import pages.AccountingPeriodPage
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, RequestHeader }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
@@ -48,7 +48,7 @@ class AccountingPeriodController @Inject() (
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  private def form = formProvider()
+  private def form(implicit req: RequestHeader) = formProvider(messagesApi.preferred(req))
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm =

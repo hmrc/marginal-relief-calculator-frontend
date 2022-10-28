@@ -16,22 +16,23 @@
 
 package forms
 
-import forms.mappings.{ EndLocalDateFormatter, Mappings }
+import forms.mappings.{ EndLocalDateFormatter, LocalDateFormatter, Mappings }
 import play.api.data.Form
 import play.api.data.Forms.{ mapping, of, optional }
+import play.api.i18n.Messages
 
-import javax.inject.Inject
+class AccountingPeriodFormProvider extends Mappings {
 
-class AccountingPeriodFormProvider @Inject() extends Mappings {
-
-  def apply(): Form[AccountingPeriodForm] =
+  def apply(implicit messages: Messages): Form[AccountingPeriodForm] =
     Form(
       mapping(
-        "accountingPeriodStartDate" -> localDate(
-          invalidKey = "accountingPeriodStartDate.error.invalid",
-          allRequiredKey = "accountingPeriodStartDate.error.required.all",
-          twoRequiredKey = "accountingPeriodStartDate.error.required.two",
-          requiredKey = "accountingPeriodStartDate.error.required"
+        "accountingPeriodStartDate" -> of(
+          new LocalDateFormatter(
+            invalidKey = "accountingPeriodStartDate.error.invalid",
+            allRequiredKey = "accountingPeriodStartDate.error.required.all",
+            twoRequiredKey = "accountingPeriodStartDate.error.required.two",
+            requiredKey = "accountingPeriodStartDate.error.required"
+          )
         ),
         "accountingPeriodEndDate" -> optional(
           of(

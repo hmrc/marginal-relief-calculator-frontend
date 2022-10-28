@@ -16,15 +16,17 @@
 
 package forms
 
+import base.SpecBase
 import forms.behaviours.DateBehaviours
 import org.scalacheck.Gen
 import play.api.data.FormError
 
 import java.time.LocalDate
 
-class AccountingPeriodFormProviderSpec extends DateBehaviours {
+class AccountingPeriodFormProviderSpec extends DateBehaviours with SpecBase {
 
-  val form = new AccountingPeriodFormProvider()()
+  private val application = applicationBuilder(userAnswers = None).build()
+  val form = new AccountingPeriodFormProvider()(messages(application))
 
   "bind" - {
 

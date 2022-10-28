@@ -19,17 +19,19 @@ package forms.mappings
 import java.time.LocalDate
 import play.api.data.FormError
 import play.api.data.format.Formatter
+import play.api.i18n.Messages
 import utils.StringUtils.removeSpaceLineBreaks
 
 import scala.util.{ Failure, Success, Try }
 
-private[mappings] class LocalDateFormatter(
+class LocalDateFormatter(
   invalidKey: String,
   allRequiredKey: String,
   twoRequiredKey: String,
   requiredKey: String,
   args: Seq[String] = Seq.empty
-) extends Formatter[LocalDate] with Formatters {
+)(implicit messages: Messages)
+    extends Formatter[LocalDate] with Formatters {
 
   protected val fieldKeys: List[String] = List("day", "month", "year")
 
@@ -68,6 +70,7 @@ private[mappings] class LocalDateFormatter(
       .withFilter(_._2.isEmpty)
       .map(_._1)
       .toList
+      .map(x => Messages("accountingPeriod.error." + x))
 
     fields.count(_._2.isDefined) match {
       case 3 =>
