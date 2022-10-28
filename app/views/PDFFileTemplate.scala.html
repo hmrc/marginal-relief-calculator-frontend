@@ -24,6 +24,7 @@
 @import views.helpers.ResultsPageHelper._
 @import views.helpers.FullResultsPageHelper._
 @import views.helpers.PDFFileTemplateHelper._
+@import views.helpers.PDFViewHelper._
 @import scala.collection.immutable.Seq
 @import java.time.Instant
 @this()
@@ -344,7 +345,7 @@
         </div>
         }
         <div class="grid-row pdf-banner">
-            @displayBanner(calculatorResult).html
+            @replaceBannerHtml(displayBanner(calculatorResult).html)
         </div>
         <div class="grid-row">
             <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
