@@ -411,7 +411,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |    </div>
        |    <div class="grid-row pdf-banner">
        |     <div class="govuk-panel govuk-panel--confirmation">
-       |      <h1 class="govuk-panel__body govuk-!-static-margin-bottom-3">Marginal Relief for your accounting period is</h1>
+       |      <h2 class="govuk-panel__body govuk-!-static-margin-bottom-3">Marginal Relief for your accounting period is</h2>
        |      <div class="govuk-panel__title govuk-!-margin-0">
        |       £2
        |      </div>
