@@ -661,6 +661,14 @@ class PDFFileTemplateSpec extends SpecBase {
        |       </tbody>
        |      </table>
        |     </div>
+       |     <h3 class="govuk-heading-s" style="margin-bottom: 4px;">Marginal Relief formula is:</h3>
+       |     <p class="govuk-body">(Adjusted upper limit - taxable profit including distributions) × (taxable profit ÷ taxable profit including distributions) × (Marginal Relief fraction)</p>
+       |     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+       |     <h3 class="govuk-heading-s">What to do next</h3>
+       |     <ul class="govuk-list govuk-list--bullet">
+       |      <li>Complete your Corporation Tax return</li>
+       |      <li>Pay your Corporation Tax no later than <b>1 January 2025</b>.</li>
+       |     </ul>
        |    </div> <span class="govuk-body-s footer-page-no">Page 4 of 4</span>
        |   </div>
        |  </div>

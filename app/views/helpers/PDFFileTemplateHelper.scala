@@ -17,10 +17,12 @@
 package views.helpers
 
 import connectors.sharedmodel._
+import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.CurrencyUtils
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
+import views.helpers.PDFViewHelper.pdfFormulaAndNextHtml
 
 import scala.collection.immutable.Seq
 
@@ -31,7 +33,8 @@ object PDFFileTemplateHelper {
     distributions: Int,
     associatedCompanies: Int,
     config: Map[Int, FYConfig],
-    pageCount: Int
+    pageCount: Int,
+    accountingPeriodForm: AccountingPeriodForm
   )(implicit messages: Messages): Html = {
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
@@ -50,6 +53,7 @@ object PDFFileTemplateHelper {
                  distributions,
                  config
                )}
+                ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
                 |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
@@ -71,6 +75,7 @@ object PDFFileTemplateHelper {
                  distributions,
                  config
                )}
+                ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
                 |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
@@ -91,6 +96,7 @@ object PDFFileTemplateHelper {
                  distributions,
                  config
                )}
+                ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
                 |   <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
@@ -112,6 +118,7 @@ object PDFFileTemplateHelper {
               distributions,
               config
             )}
+             ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
              |        </div>
              |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
              |</div>
@@ -133,6 +140,7 @@ object PDFFileTemplateHelper {
                  distributions,
                  config
                )}
+                ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
                 |        <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
                 |</div>
@@ -166,6 +174,7 @@ object PDFFileTemplateHelper {
               distributions,
               config
             )}
+             ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
              |      </div>
              |      <span class="govuk-body-s footer-page-no">${messages("pdf.page", "4", pageCount)}</span>
              |</div>
