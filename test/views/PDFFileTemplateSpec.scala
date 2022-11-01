@@ -131,10 +131,9 @@ class PDFFileTemplateSpec extends SpecBase {
        |            content: '';
        |            display: block;
        |        }
-       |        .govuk-\\!-display-none {
+       |        .govuk-\\!-display-none, .govuk-visually-hidden {
        |            display: none!important;
        |        }
-       |
        |        .sr-only {
        |            position: absolute;
        |            left: -10000px;
@@ -332,16 +331,14 @@ class PDFFileTemplateSpec extends SpecBase {
        |            padding-left:8px;
        |            padding-right:20px;
        |        }
-       |        .pdf-page .pdf-page-header h2 {
+       |        .pdf-page .pdf-page-header span {
+       |            display:block;
        |            font-size:1.4em;
        |            font-weight:normal;
        |            margin:0;
        |            line-height:1
        |        }
-       |        .pdf-page .pdf-page-header h2 span {
-       |            display:block
-       |        }
-       |        .pdf-page .pdf-page-header h3 {
+       |        .pdf-page .pdf-page-header h1 {
        |            text-align:right;
        |            margin:2em 0 0;
        |            color:#0b0c0c;
@@ -370,7 +367,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |            padding:1px 10px;
        |            print-color-adjust:exact
        |        }
-       |        .pdf-page .about-results h3 {
+       |        .pdf-page .about-results h2 {
        |            margin-top:1.05263em;
        |            margin-bottom:0
        |        }
@@ -394,19 +391,18 @@ class PDFFileTemplateSpec extends SpecBase {
        |  <div class="pdf-container">
        |   <div class="pdf-page">
        |    <div class="grid-row pdf-page-header">
-       |     <div class="govuk-grid-column-one-third"><img class="pdf-page-header__hmrc-logo" src="data:image/jpeg;base64,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" alt="HM Revenue &amp; Customs">
-       |      <h2 class="govuk-heading-m">HM Revenue &amp; Customs</h2>
+       |     <div class="govuk-grid-column-one-third"><img class="pdf-page-header__hmrc-logo" src="data:image/jpeg;base64,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" alt="HM Revenue &amp; Customs"> <span class="govuk-heading-m">HM Revenue &amp; Customs</span>
        |     </div>
        |     <div class="govuk-grid-column-two-thirds">
-       |      <h3 class="govuk-heading-m pdf-page-header__heading">Marginal Relief for Corporation Tax results</h3>
+       |      <h1 class="govuk-heading-m pdf-page-header__heading">Marginal Relief for Corporation Tax results</h1>
        |     </div>
        |    </div>
        |    <div class="grid-row">
-       |     <h3 class="govuk-heading-s govuk-static-margin-bottom-1">Company name</h3>
+       |     <h2 class="govuk-heading-s govuk-static-margin-bottom-1">Company name</h2>
        |     <p class="govuk-body">company</p>
        |    </div>
        |    <div class="grid-row">
-       |     <h3 class="govuk-heading-s govuk-static-margin-bottom-1">UTR Number</h3>
+       |     <h2 class="govuk-heading-s govuk-static-margin-bottom-1">UTR Number</h2>
        |     <p class="govuk-body">utr</p>
        |    </div>
        |    <div class="grid-row pdf-banner">
@@ -465,10 +461,10 @@ class PDFFileTemplateSpec extends SpecBase {
        |     </div>
        |     <div class="govuk-grid-column-one-third govuk-!-padding-right-0">
        |      <div class="about-results">
-       |       <h3 class="govuk-heading-s about-results-border">About this result</h3>
-       |       <h4 class="govuk-heading-xs">Date of result</h4>
+       |       <h2 class="govuk-heading-s about-results-border">About this result</h2>
+       |       <h3 class="govuk-heading-xs">Date of result</h3>
        |       <p class="govuk-body about-results-border">${DateUtils.formatInstantUTC(current)}</p>
-       |       <h4 class="govuk-heading-xs">HMRC legal declaration</h4>
+       |       <h3 class="govuk-heading-xs">HMRC legal declaration</h3>
        |       <p class="govuk-body">HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result from this calculator if correct details are entered</p>
        |      </div>
        |     </div>
@@ -559,7 +555,6 @@ class PDFFileTemplateSpec extends SpecBase {
        |   <div class="pdf-page">
        |    <div class="grid-row">
        |     <h2 class="govuk-heading-l">How it's calculated</h2>
-       |     <h2 class="govuk-heading-m" style="margin-bottom: 4px;">£2</h2>
        |     <p class="govuk-body">Marginal Relief for your accounting period</p>
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
        |     <div class="app-table" role="region" aria-label="This is a table describing your Marginal Relief calculation in detail." tabindex="0">
