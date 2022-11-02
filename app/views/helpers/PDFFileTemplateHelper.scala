@@ -42,9 +42,6 @@ object PDFFileTemplateHelper {
                 |<div class="pdf-page">
                 |        <div class="grid-row">
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-                |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-                 calculatorResult.totalMarginalRelief
-               )}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
                  Seq(flatRate),
@@ -64,9 +61,6 @@ object PDFFileTemplateHelper {
                 |<div class="pdf-page">
                 |        <div class="grid-row">
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-                |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-                 calculatorResult.totalMarginalRelief
-               )}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
                  Seq(flatRate1, flatRate2),
@@ -85,9 +79,6 @@ object PDFFileTemplateHelper {
                 |<div class="pdf-page">
                 |        <div class="grid-row">
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-                |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-                 calculatorResult.totalMarginalRelief
-               )}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
                  Seq(marginalRate),
@@ -107,9 +98,6 @@ object PDFFileTemplateHelper {
              |<div class="pdf-page">
              |        <div class="grid-row">
              |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-             |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-              calculatorResult.totalMarginalRelief
-            )}</h2>
              |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
              |          ${nonTabCalculationResultsTable(
               Seq(flatRate, marginalRate),
@@ -129,9 +117,6 @@ object PDFFileTemplateHelper {
                 |<div class="pdf-page">
                 |        <div class="grid-row">
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-                |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-                 calculatorResult.totalMarginalRelief
-               )}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
                  Seq(marginalRate, flatRate),
@@ -151,9 +136,6 @@ object PDFFileTemplateHelper {
              |<div class="pdf-page">
              |      <div class="grid-row">
              |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
-             |          <h2 class="govuk-heading-m" style="margin-bottom: 4px;">${CurrencyUtils.format(
-              calculatorResult.totalMarginalRelief
-            )}</h2>
              |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
              |          ${nonTabCalculationResultsTable(
               Seq(marginalRate1),
