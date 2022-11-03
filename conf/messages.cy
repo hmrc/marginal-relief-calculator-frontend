@@ -40,14 +40,15 @@ error.summary.title=Mae problem wedi codi
 error.greaterThanOneBillion=Nodwch swm sy’n is na 1,000,000,000 neu’n hafal iddo
 error.greaterThan99=Nodwch rif sy’n is na 99 neu’n hafal iddo
 error.lessThanOne=Nodwch swm sy’n fwy na 0
+error.lessThanZero=Nodwch swm sy’n fwy na 0 neu sy’n hafal iddo.
 error.outOfRange=Nodwch swm rhwng {0} ac {1}
-index.title=marginal-relief-calculator-frontend
+index.title=Cyfrifo Rhyddhad Ffiniol ar gyfer Treth Gorfforaeth
 index.heading=Cyfrifo Rhyddhad Ffiniol ar gyfer Treth Gorfforaeth
 index.guidance.useThisServiceTo=Defnyddiwch y gwasanaeth hwn i wneud y canlynol:
 index.guidance.check.item1=gwirio cymhwystra’ch cwmni ar gyfer Rhyddhad Ffiniol
 index.guidance.check.item2=cyfrifo faint o Ryddhad Ffiniol y gallai’r cwmni fod â hawl iddo
 index.guidance.check.item3=cael amcan o’ch Treth Gorfforaeth a’ch cyfraddau treth effeithiol cyn ac ar ôl Rhyddhad Ffiniol
-index.guidance.inset=Nid yw CThEF yn cadw unrhyw ddata a nodwch yn y gwasanaeth hwn. At eich cofnodion chi’n unig y mae unrhyw gyfrifiadau ac nid ydynt yn cael eu storio gan y gwasanaeth.
+index.guidance.inset=Nid yw CThEF yn defnyddio unrhyw ddata a nodwch yn y gwasanaeth hwn. Mae unrhyw gyfrifiadau a geir at eich cofnodion chi’n unig.
 index.guidance.beforeYouStart=Cyn i chi ddechrau
 index.guidance.youNeedToKnow=Dylech wybod y canlynol:
 index.guidance.relatedContent=Cynnwys cysylltiedig
@@ -82,6 +83,7 @@ accountingPeriod.title=Beth yw dyddiadau’ch cyfnod cyfrifyddu?
 accountingPeriod.heading=Beth yw dyddiadau’ch cyfnod cyfrifyddu?
 accountingPeriod.hint=Er enghraifft, 27 3 2023
 accountingPeriod.checkYourAnswersLabel=Dyddiadau’r cyfnod cyfrifyddu
+accountingPeriod.defaultedEndDateMessage=Nodwyd yn ddiofyn fod y dyddiad dod i ben yn flwyddyn gyfan o’r dyddiad dechrau.
 accountingPeriod.error.required.all=Nodwch y accountingPeriod
 accountingPeriod.error.required.two=Mae’n rhaid i’r accountingPeriod gynnwys {0} a {1}
 accountingPeriod.error.required=Mae’n rhaid i’r accountingPeriod gynnwys {0}
@@ -89,7 +91,7 @@ accountingPeriod.error.day = Diwrnod
 accountingPeriod.error.month = mis
 accountingPeriod.error.year = Blwyddyn
 accountingPeriod.error.invalid=Nodwch accountingPeriod go iawn
-accountingPeriod.change.hidden=AccountingPeriod
+accountingPeriod.change.hidden=Cyfnod cyfrifyddu
 accountingPeriod.forExample=Er enghraifft, 27 3 2023
 accountingPeriod.accountingPeriodCannotBeLongerThan12M=Ni all eich cyfnod cyfrifyddu fod yn hirach na blwyddyn lawn ac fel arfer mae’r un peth â’r flwyddyn ariannol yng nghyfrifon blynyddol eich cwmni.
 accountingPeriod.whereCanIFindMyAccPeriodDates=Ble y gallaf ddod o hyd i’m dyddiadau cyfnod cyfrifyddu?
@@ -122,6 +124,7 @@ accountingPeriodIrrelevant.restart=Ailddechrau’r cyfrifiad
 resultsPage.title=Canlyniadau’r Rhyddhad Ffiniol
 resultsPage.heading=Canlyniadau’r Rhyddhad Ffiniol
 resultsPage.marginalReliefNotEligible=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol
+resultsPage.marginalReliefNotEligibleFlatRate=Nid yw Rhyddhad Ffiniol yn gymwys ar gyfer blynyddoedd ariannol sydd â chyfradd Treth Gorfforaeth unigol
 resultsPage.marginalReliefNotApplicable=Nid yw’r Rhyddhad Ffiniol yn gymwys
 resultsPage.marginalReliefForAccPeriodIs=Y Rhyddhad Ffiniol ar gyfer eich cyfnod cyfrifyddu yw
 resultsPage.yourProfitsAndDistributionsAboveMarginalReliefLimit=Mae’ch elw trethadwy a’ch dosbarthiadau sydd wedi’u cynnwys dros y terfyn ar gyfer Rhyddhad Ffiniol
@@ -151,6 +154,21 @@ resultsPage.2years.period.heading=Mae’ch cyfnod cyfrifyddu’n cwmpasu 2 flwyd
 resultsPage.howWeCalculated.heading=Sut rydym wedi cyfrifo’ch Rhyddhad Ffiniol
 resultsPage.howWeCalculated.body=Gwiriwch y cyfrifiad yn fanwl i weld sut rydym wedi cyfrifo’ch Rhyddhad Ffiniol.
 resultsPage.howWeCalculated.link=Gwirio’r cyfrifiad ar gyfer Rhyddhad Ffiniol yn fanwl
+
+resultsPage.corporationTaxTableScrollableLabel=Tabl o gyfraddau’r Dreth Gorfforaeth
+resultsPage.corporationTaxTableScreenReaderSummary=Tabl yw hwn sy’n disgrifio’ch rhwymedigaeth Treth Gorfforaeth ar gyfer eich cyfnod cyfrifyddu.
+resultsPage.days=Diwrnodau
+resultsPage.effectiveTaxTableScrollableLabel=Tabl o’r cyfraddau treth effeithiol
+resultsPage.effectiveTaxTableScreenReaderSummary=Tabl yw hwn sy’n disgrifio’r gyfradd dreth effeithiol mewn perthynas â’ch Treth Gorfforaeth ar gyfer eich cyfnod cyfrifyddu.
+resultsPage.effectiveTaxRateTableCaption=Dadansoddiad o’r cyfraddau treth effeithiol ar gyfer eich cyfnod cyfrifyddu
+resultsPage.effectiveCorporationTaxTableCaption=Dadansoddiad o’r rhwymedigaeth Treth Gorfforaeth ar gyfer eich cyfnod cyfrifyddu
+resultsPage.effectiveTaxRateTable.hidden=Tabl o’r cyfraddau treth effeithiol
+resultsPage.corporationTaxTable.hidden=Tabl dadansoddol o’r rhwymedigaeth Treth Gorfforaeth
+resultsPage.getACopyOfResults=Cael copi o’r canlyniadau hyn
+resultsPage.addReferenceBeforePrinting=Gallwch hefyd ychwanegu manylion cyfeirnodau at y ddogfen hon cyn ei hargraffu.
+resultsPage.printOrSave=Argraffu neu gadw’ch cyfrifiad
+
+
 fullResultsPage.heading=Cyfrifiad ar gyfer Rhyddhad Ffiniol llawn yn fanwl
 fullResultsPage.howItsCalculated=Sut mae’n cael ei gyfrifo
 fullResultsPage.marginalReliefForAccountingPeriod=Rhyddhad Ffiniol ar gyfer eich cyfnod cyfrifyddu
@@ -175,37 +193,75 @@ fullResultsPage.marginalReliefFormula.description=(Terfyn uchaf wedi’i addasu 
 fullResultsPage.whatIsMarginalRateFraction=Beth yw’r ffracsiwn Rhyddhad Ffiniol?
 fullResultsPage.details.standardFraction=Y ffracsiwn safonol yw’r gwahaniaeth rhwng y brif gyfradd a’r gyfradd ffiniol a fynegir fel ffracsiwn.
 fullResultsPage.details.standardFractionExample=Er enghraifft, y gwahaniaeth rhwng y gyfradd ffiniol o 26.5% o’i chymharu â’r brif gyfradd o 25% yw 1.5% = 3 ÷ 200
-fullResultsPage.details.whatIsMarginalRate=Beth yw’r gyfradd ffiniol?
-fullResultsPage.details.smallProfitRate=Pan fo’r gyfradd elw bychan yn 19% ac mae’r brif gyfradd yn 25%:
-fullResultsPage.details.examples.1=£50,000 (y terfyn isaf) × 19% = £9,500
-fullResultsPage.details.examples.2=£250,000 (y terfyn uchaf) × 25% = £62,500
-fullResultsPage.details.examples.3=£200,000 (y gwahaniaeth rhwng y terfyn isaf a’r terfyn uchaf) × X% = £53,000
+fullResultsPage.details.examples.1=£62,500 - £9,500 =
+fullResultsPage.details.examples.1.ans=£53,000
+fullResultsPage.details.examples.2=£250,000 - £50,000 =
+fullResultsPage.details.examples.2.ans=£200,000
+fullResultsPage.details.examples.3=£53,000 ÷ £200,000 =
+fullResultsPage.details.examples.3.ans=26.50%
 fullResultsPage.details.examples.4=53,000 ÷ 200,000 = 26.5% o gyfradd ffiniol
+fullResultsPage.details.examples.3.rate=cyfradd ffiniol
 fullResultsPage.calculation=Cyfrifiad
 fullResultsPage.result=Canlyniad
+fullResultsPage.whatToDoNext=Yr hyn i’w wneud nesaf
+fullResultsPage.completeYourCorporationTaxReturn=Llenwch eich Ffurflen Treth Gorfforaeth
+fullResultsPage.payYourCorporationTaxBy=Talwch eich Treth Gorfforaeth erbyn
+
+fullResultsPage.financialYear.adjustedUpperLimit=Terfyn uchaf addasedig
+fullResultsPage.financialYear.adjustedLowerLimit=Terfyn isaf addasedig
+fullResultsPage.lowerLimit=terfyn isaf
+fullResultsPage.variables=Elfennau newidiol y cyfrifiad
+fullResultsPage.details.whatIsMarginalRate=Enghraifft o gyfrifo cyfradd ffiniol
+fullResultsPage.details.smallProfitRate=Cyfradd elw bychan o
+fullResultsPage.details.smallProfitRateNumber=19%
+fullResultsPage.details.mainProfitRate=Y brif gyfradd o
+fullResultsPage.details.mainProfitRateNumber=25%
+fullResultsPage.details.lowerLimitRate=Y terfyn isaf yw £50,000 × 19% =
+fullResultsPage.details.lowerLimitRateNumber=£9,500
+fullResultsPage.details.upperLimitRate=Y terfyn uchaf yw £250,000 × 25% =
+fullResultsPage.details.upperLimitRateNumber=£62,500
+
+
+fullResultsPage.notEligibleAboveUpperLimit.1=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol oherwydd bod eich elw trethadwy gan gynnwys dosbarthiadau o
+fullResultsPage.notEligibleAboveUpperLimit.2=dros y terfyn uchaf addasedig o
+fullResultsPage.notEligibleBelowLowerLimit.1=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol oherwydd bod eich elw trethadwy gan gynnwys dosbarthiadau o
+fullResultsPage.notEligibleBelowLowerLimit.2=o dan y terfyn isaf addasedig o
+fullResultsPage.total=Cyfanswm
+fullResultsPage.taxableProfit=Elw trethadwy
+fullResultsPage.taxableProfit.daysAllocated=Diwrnodau wedi’u neilltuo i bob blwyddyn ariannol
+fullResultsPage.taxableProfit.distributions=Dosbarthiadau
+fullResultsPage.taxableProfit.profitAndDistributions=Elw trethadwy gan gynnwys dosbarthiadau
+fullResultsPage.calculationTableSummary=Tabl yw hwn sy’n disgrifio’ch cyfrifiad ar gyfer Rhyddhad Ffiniol yn fanwl.
+fullResultsPage.tableSummary=Tabl yw hwn sy’n disgrifio’ch cyfrifiad o elw trethadwy’n fanwl.
+fullResultsPage.taxableProfitTableScrollableLabel=Tabl o’r elw trethadwy
+fullResultsPage.taxableProfitTable.hidden=Tabl o’r elw trethadwy
+fullResultsPage.calculationTable.hidden=Tabl dadansoddol o’r cyfrifiad
+
+
 associatedCompanies.title=Nifer y cwmnïau cysylltiedig
 associatedCompanies.heading=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig?
 associatedCompanies.heading.between=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig rhwng {0} a {1}?
 associatedCompanies.warning=Peidiwch â chynnwys y cwmni rydych yn cyfrifo Rhyddhad Ffiniol amdano yn eich ateb. Bydd gwneud hynny yn arwain at ganlyniad anghywir.
 associatedCompanies.detailsTitle=Beth yw cwmnïau cysylltiedig?
-associatedCompanies.detailsHtml=<p>Mae cwmni’n cael ei ystyried yn gysylltiedig os yw’r canlynol yn wir:</p><ul class="govuk-list govuk-list--bullet"><li>mae gan un o’r cwmnïau <a href="https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm60210" class="govuk-link" target="_blank">reolaeth (yn agor tab newydd)</a> dros y llall</li><li>mae’r ddau gwmni wedi’u rheoli gan yr un cwmnïau neu’r un bobl</li></ul>
+associatedCompanies.detailsHtml=<p>Ystyrir bod cwmni’n gysylltiedig ag un arall os yw’r canlynol yn wir:</p><ul class="govuk-list govuk-list--bullet"><li>mae gan un o’r cwmnïau reolaeth dros y llall</li><li>mae’r ddau gwmni wedi’u rheoli gan yr un cwmnïau neu’r un bobl</li></ul>
 associatedCompanies.countLabel=Nodwch gwmnïau cysylltiedig yn unig
 associatedCompanies.countLabelBetween=Nodwch gwmnïau cysylltiedig ychwanegol rhwng {0} a {1}
 associatedCompanies.checkYourAnswersLabel=Nifer y cwmnïau cysylltiedig
 associatedCompanies.error.required=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompanies.error.invalid=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompaniesCount.error.wholeNumber=Peidiwch â defnyddio pwyntiau degol. Nodwch rif cyfan. Er enghraifft, 1
-associatedCompaniesCount.error.nonNumeric=Nodwch eich Nifer o gwmnïau cysylltiedig gan ddefnyddio rhifau
+associatedCompaniesCount.error.nonNumeric=Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig.
 associatedCompaniesCount.error.required=Nodwch y nifer o gwmnïau cysylltiedig sydd gennych. Er enghraifft, 1
 associatedCompanies.change.hidden=AssociatedCompanies
 taxableProfit.title=Faint yw elw trethadwy’ch cwmni?
 taxableProfit.heading=Faint yw elw trethadwy’ch cwmni?
+taxableProfit.heading.screenReader=Faint yw elw trethadwy eich cwmni mewn punnoedd?
 taxableProfit.label=Swm yr elw
 taxableProfit.checkYourAnswersLabel=Elw’r cwmni
 taxableProfit.error.required=Nodwch swm ar gyfer eich elw trethadwy
 taxableProfit.error.nonNumeric=Nodwch elw trethadwy dilys. Er enghraifft, 70000
 taxableProfit.error.doNotUseDecimals=Peidiwch â defnyddio pwyntiau degol ar gyfer elw trethadwy. Nodwch rif cyfan. Er enghraifft, 70000
-taxableProfit.change.hidden=TaxableProfit
+taxableProfit.change.hidden=Elw’r cwmni
 taxableProfit.chargeableProfitsOnCTR=Dyma’r elw taladwy ar gyfer Treth Gorfforaeth ar eich Ffurflen Dreth y Cwmni.
 taxableProfit.whereCanIFindMyCompanyTaxProfit=Ble y gallaf ddod o hyd i elw trethadwy fy nghwmni?
 taxableProfit.youCanFindYourCompanyProfitVia=Gallwch ddod o hyd i elw’r cwmni drwy’ch cyfrifydd neu’ch meddalwedd gyfrifyddu
@@ -223,6 +279,7 @@ distribution.checkYourAnswersLabel=A gawsoch unrhyw ddosbarthiadau?
 distribution.error.required=Dewiswch a gawsoch ddosbarthiadau ai peidio
 distribution.error.invalid=Dewiswch a gawsoch ddosbarthiadau ai peidio
 distribution.change.hidden=Dosbarthu
+distribution.errorsummary=Mae problem wedi codi.
 distributionsIncluded.title=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
 distributionsIncluded.heading=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
 distributionsIncluded.listHeading=I gyfrifo’ch Rhyddhad Ffiniol yn gywir, mae’n rhaid i chi roi gwybod i ni am unrhyw ddosbarthiadau a gewch o gwmnïau anghysylltiedig, amherthnasol. Mae dosbarthiadau’n cynnwys:
@@ -244,9 +301,28 @@ distributionsIncluded.error.invalid=Dewiswch a gawsoch ddosbarthiadau ai peidio
 distributionsIncludedAmount.error.doNotUseDecimals=Peidiwch â defnyddio pwyntiau degol. Nodwch rif cyfan. Er enghraifft, 70000
 distributionsIncludedAmount.error.nonNumeric=Nodwch swm o ddyraniadau dilys a gafwyd. Er enghraifft, 70000
 distributionsIncludedAmount.error.required=Nodwch swm ar gyfer eich dosbarthiadau a gafwyd
-distributionsIncluded.change.hidden=DistributionsIncluded
+distributionsIncluded.change.hidden=Dosbarthiadau wedi’u cynnwys
 distributionsIncluded.emptyValue=Dim
 session.expired.title=Mae’r sesiwn wedi dod i ben
 session.expired.heading=Mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch
 session.expired.body=Nid ydych wedi nodi unrhyw fanylion ar gyfer {0} o funudau, felly rydym wedi clirio’ch gwybodaeth.
 session.expired.btn.restart=Dechrau eto
+pdf.title=Cadw neu argraffu’ch cyfrifiad
+pdf.logoTitle=Cyllid a Thollau EF
+pdf.previewTitle=Canlyniadau o ran y Rhyddhad Ffiniol ar gyfer Treth Gorfforaeth
+pdf.companyName=Enw’r cwmni
+pdf.utr=Cyfeirnod Unigryw y Trethdalwr (UTR)
+pdf.aboutThisResult=Ynglŷn â’r canlyniad hwn
+pdf.dataOfResult=Dyddiad y canlyniad
+pdf.legalDeclarationTitle=Datganiad cyfreithiol CThEF
+pdf.legalDeclaration=Ni all Cyllid a Thollau EF fod yn atebol dros allbwn anghywir o’r gyfrifiannell hon. Dim ond os caiff manylion cywir eu nodi y gall y gyfrifiannell hon roi gwybodaeth gywir.
+pdf.page1=Tudalen 1 o 3
+pdf.page2=Tudalen 2 o 3
+pdf.page3=Tudalen 3 o 3
+pDFMetadata.title=Ychwanegu manylion y cwmni at eich canlyniadau
+pDFMetadata.info=Cewch ddogfen sy’n dangos dyddiad heddiw a’r amser cwblhau, ynghyd â’ch atebion a’ch canlyniad. Mae hyn at eich cofnodion yn unig – ni fydd CThEF yn defnyddio’r manylion hyn.
+pDFMetadata.heading=Ychwanegu manylion y cwmni at eich canlyniadau
+pDFMetadata.companyname.label=Enw’r cwmni (dewisol)
+pDFMetadata.utr.label=Cyfeirnod Unigryw y Trethdalwr (dewisol)
+pDFMetadata.companyname.error.length=Mae’n rhaid i enw’r cwmni fod yn 160 o gymeriadau neu lai.
+pDFMetadata.utr.error.length=Mae’n rhaid i’r Cyfeirnod Unigryw y Trethdalwr fod yn 15 o gymeriadau neu lai.
