@@ -5,12 +5,20 @@ This repository contains the necessary code to display user journey for Marginal
 
 The codebase uses the [scaffolding service](https://github.com/hmrc/hmrc-frontend-scaffold.g8) for generating pages in user journey. To add a new page, run the scaffolding sbt command with the appropriate template and run the migration script to add routes e.g `sbt g8Scaffold intPage`
 
-## Running Marginal Relief Calculator (frontend) locally with Service Manager
+## Running in DEV mode
+
+To run the service you need the following installed: `Java 1.8`, `Mongo 4.0.25`, `sbt 1.7.1`
+
+To start the service locally, execute the following command
+
+```$ sbt -jvm-debug DEBUG_PORT run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
+@@ -13,6 +16,8 @@ To run locally using Service Manager
+```sm --start MARGINAL_RELIEF_CALCULATOR_BACKEND```
+```sm --start DATASTREAM```
 
 ```
 sm --start MARGINAL_RELIEF_CALCULATOR
 ```
-
 This starts Marginal Relief Calculator (frontend) and all its dependencies
 
 ## Starting the calculation journey (QA env)
@@ -24,6 +32,14 @@ The subsequent pages in the journey ask user input for
 3. Associated companies
 
 Check your answers page shows a summary of the user entered data and allows any changes if required (via the change link). Once confirmed, marginal relief caclulation is triggered and the results page displays the result of the computation.
+
+### Running the tests
+
+    sbt test
+
+### Running the tests with coverage
+
+    sbt clean fmt coverage test it:test coverageReport
 
 ### License
 
