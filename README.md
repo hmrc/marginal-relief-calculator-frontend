@@ -13,8 +13,14 @@ To start the service locally, execute the following command
 
 ```$ sbt -jvm-debug DEBUG_PORT run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
 @@ -13,6 +16,8 @@ To run locally using Service Manager
-```sm --start MARGINAL_RELIEF_CALCULATOR_BACKEND```
-```sm --start DATASTREAM```
+
+```
+sm --start MARGINAL_RELIEF_CALCULATOR_BACKEND
+```
+
+```
+sm --start DATASTREAM
+```
 
 ```
 sm --start MARGINAL_RELIEF_CALCULATOR
