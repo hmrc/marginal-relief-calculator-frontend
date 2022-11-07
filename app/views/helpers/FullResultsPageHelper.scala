@@ -188,7 +188,7 @@ object FullResultsPageHelper extends ViewHelper {
       Details(
         summary = Text(messages("fullResultsPage.whatIsMarginalRateFraction")),
         content = HtmlContent(
-          s"""<p>${messages("fullResultsPage.details.standardFraction")}</p>
+          s"""<p class="govuk-!-margin-0">${messages("fullResultsPage.details.standardFraction")}</p>
              |    <p>${messages("fullResultsPage.details.standardFractionExample")}</p>
              |    <p><b>${messages("fullResultsPage.details.whatIsMarginalRate")}</b></p>
              |    <p>${messages("fullResultsPage.details.smallProfitRate")}
