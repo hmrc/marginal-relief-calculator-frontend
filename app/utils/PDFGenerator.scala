@@ -18,34 +18,27 @@ package utils
 
 import com.google.inject.{ Inject, Singleton }
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import org.apache.pdfbox.io.IOUtils
 import play.api.Environment
-
-import java.io.ByteArrayOutputStream
+import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, InputStream }
 
 @Singleton
 class PDFGenerator @Inject() (env: Environment) {
+
+  private val gdsFont = IOUtils.toByteArray(env.resourceAsStream("gds.ttf").get)
+
+  private val arialFont = IOUtils.toByteArray(env.resourceAsStream("arial.ttf").get)
+
+  private def gdsFontStream: InputStream = new ByteArrayInputStream(gdsFont)
+  private def arialFontStream: InputStream = new ByteArrayInputStream(arialFont)
 
   def generatePdf(html: String): Array[Byte] = {
     val outputStream = new ByteArrayOutputStream()
     try {
       val builder = new PdfRendererBuilder()
       builder.useFastMode()
-      env
-        .resourceAsStream("arial.ttf")
-        .fold(())(s =>
-          builder.useFont(
-            () => s,
-            "Arial"
-          )
-        )
-      env
-        .resourceAsStream("gds.ttf")
-        .fold(())(s =>
-          builder.useFont(
-            () => s,
-            "GDS Transport"
-          )
-        )
+      builder.useFont(() => arialFontStream, "Arial")
+      builder.useFont(() => gdsFontStream, "GDS Transport")
       builder.usePdfUaAccessbility(true)
       builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)
