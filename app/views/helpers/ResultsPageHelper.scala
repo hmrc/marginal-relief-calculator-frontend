@@ -29,8 +29,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
 import views.html.templates.BannerPanel
-
-import scala.collection.{ immutable, mutable }
+import scala.collection.immutable
 
 object ResultsPageHelper extends ViewHelper {
 
