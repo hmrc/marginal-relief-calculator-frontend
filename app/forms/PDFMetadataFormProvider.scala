@@ -18,8 +18,8 @@ package forms
 
 import javax.inject.Inject
 import forms.mappings.Mappings
-import play.api.data.Form
-import play.api.data.Forms.{ mapping, optional }
+import play.api.data.{Form, Forms}
+import play.api.data.Forms.{mapping, optional}
 
 class PDFMetadataFormProvider @Inject() extends Mappings {
 
@@ -31,8 +31,13 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
             .verifying(maxLength(160, "pDFMetadata.companyname.error.length"))
         ),
         "utr" -> optional(
-          text()
-            .verifying(maxLength(15, "pDFMetadata.utr.error.length"))
+          utrMapper(
+            "taxableProfit.error.required",
+            "Do not use decimal points. Enter a whole number. For example, 1.",
+            "Enter a valid UTR number. For example, 1234567891"
+          )
+//          text()
+//            .verifying(maxLength(15, "pDFMetadata.utr.error.length"))
         )
       )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
     )
