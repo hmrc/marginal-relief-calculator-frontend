@@ -18,6 +18,7 @@ package forms.mappings
 
 import cats.syntax.either._
 import models.Enumerable
+import org.bson.types.MaxKey
 import utils.StringUtils._
 import play.api.data.format.Formatter
 import play.api.data.{ FormError, Mapping }
@@ -184,12 +185,14 @@ trait Formatters {
   }
 
   private[mappings] def utrFormatter(
-                                      requiredKey: String,
-                                      wholeNumberKey: String,
-                                      nonNumericKey: String,
-                                      args: Seq[String] = Seq.empty
-                                    ): Formatter[Int] =
-    new Formatter[Int] {
+    requiredKey: String,
+    wholeNumberKey: String,
+    nonNumericKey: String,
+    maxKey: String,
+    maxValue: Long,
+    args: Seq[String] = Seq.empty
+  ): Formatter[Long] =
+    new Formatter[Long] {
 
       val decimalRegexp = """^-?(\d*\.\d*)$"""
 
@@ -206,12 +209,14 @@ trait Formatters {
               Left(Seq(FormError(key, wholeNumberKey, args)))
             case s =>
               nonFatalCatch
-                .either(s.toInt)
+                .either(s.toLong)
                 .left
                 .map(_ => Seq(FormError(key, nonNumericKey, args)))
+            case s if s.toLong > maxValue =>
+              Seq(FormError(key, maxKey)).asLeft[Long]
           }
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Long) =
         baseFormatter.unbind(key, value.toString)
     }
 }

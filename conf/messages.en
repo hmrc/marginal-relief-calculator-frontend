@@ -346,4 +346,4 @@ pDFMetadata.utr.label = UTR number (optional)
 pDFMetadata.companyname.error.length = Company name must be 160 characters or less.
 pDFMetadata.utr.error.length = UTR number must be 15 characters or less.
 pDFMetaData.utr.error.nonNumeric = Enter a valid UTR number. For example, 1234567891
-pDFmetaData.urd.error.args.temp = args error
+pDFmetaData.utr.error.greater.than.15 = UTR number must be 15 characters or less.
