@@ -16,12 +16,13 @@
 
 package generators
 
-import forms.{ AssociatedCompaniesForm, PDFMetadataForm }
+import forms.{ AssociatedCompaniesForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, _ }
 import org.scalacheck.Arbitrary.{ arbitrary, _ }
 import org.scalacheck.{ Arbitrary, Gen }
 import pages._
 import play.api.libs.json.{ JsValue, Json }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 
@@ -30,6 +31,15 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       for {
         page  <- arbitrary[PDFMetadataPage.type]
         value <- arbitrary[PDFMetadataForm].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryTwoAssociatedCompaniesUserAnswersEntry
+    : Arbitrary[(TwoAssociatedCompaniesPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[TwoAssociatedCompaniesPage.type]
+        value <- arbitrary[Int].map(Json.toJson(_))
       } yield (page, value)
     }
 
@@ -67,6 +77,16 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     } yield PDFMetadataForm(
       companyName,
       utr
+    )
+  }
+
+  implicit lazy val arbitraryTwoAssociatedCompaniesForm: Arbitrary[TwoAssociatedCompaniesForm] = Arbitrary {
+    for {
+      associatedCompaniesFY1Count <- Gen.option(arbitrary[Int])
+      associatedCompaniesFY2Count <- Gen.option(arbitrary[Int])
+    } yield TwoAssociatedCompaniesForm(
+      associatedCompaniesFY1Count,
+      associatedCompaniesFY2Count
     )
   }
 

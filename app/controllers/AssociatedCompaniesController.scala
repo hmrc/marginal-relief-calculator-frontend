@@ -187,16 +187,23 @@ class AssociatedCompaniesController @Inject() (
                            associatedCompaniesCount = None
                          )
                        )
+                       .flatMap(_.remove(TwoAssociatedCompaniesPage))
+
                  })
       _ <- sessionRepository.set(updated)
-    } yield Redirect(navigator.nextPage(AssociatedCompaniesPage, mode, updated))
+    } yield Redirect(associatedCompaniesParameter match {
+      case AskBothParts(_, _) if value.associatedCompanies == AssociatedCompanies.Yes =>
+        routes.TwoAssociatedCompaniesController.onPageLoad(mode)
+      case _ =>
+        navigator.nextPage(AssociatedCompaniesPage, mode, updated)
+    })
 
   private def validateRequiredFields(
     associatedCompaniesForm: AssociatedCompaniesForm,
     associatedCompaniesParameter: AssociatedCompaniesParameter
   ): Option[String] =
     associatedCompaniesParameter match {
-      case AskFull | AskOnePart(_) | AskBothParts(_, _)
+      case AskFull | AskOnePart(_)
           if associatedCompaniesForm.associatedCompanies == AssociatedCompanies.Yes && associatedCompaniesForm.associatedCompaniesCount.isEmpty =>
         Some("associatedCompaniesCount")
       case _ =>

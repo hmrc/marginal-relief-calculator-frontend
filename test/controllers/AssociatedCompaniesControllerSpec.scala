@@ -324,7 +324,43 @@ class AssociatedCompaniesControllerSpec
         }
       }
 
-      "must return a Bad Request when associated companies requirement is AskFull or AskOnePart or AskBothParts, but associatedCompaniesCount is empty" in {
+      "must redirect to the TwoAssociatedCompanies page when valid data is submitted and ask associated companies parameter is AskBothParts" in {
+
+        val mockSessionRepository = mock[SessionRepository]
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+
+        when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
+        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1),
+          1.0,
+          Some(1)
+        )(*) returns Future.successful(
+          AskBothParts(
+            Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
+            Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
+          )
+        )
+
+        val application =
+          applicationBuilder(userAnswers = Some(requiredAnswers))
+            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .build()
+
+        running(application) {
+          val request =
+            FakeRequest(POST, associatedCompaniesRoute)
+              .withFormUrlEncodedBody(("associatedCompanies", "yes"))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).url
+        }
+      }
+
+      "must return a Bad Request when associated companies requirement is AskFull or AskOnePart, but associatedCompaniesCount is empty" in {
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]
 
@@ -341,13 +377,6 @@ class AssociatedCompaniesControllerSpec
             (
               Map("associatedCompanies" -> "yes"),
               AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)))
-            ),
-            (
-              Map("associatedCompanies" -> "yes"),
-              AskBothParts(
-                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
-                Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
-              )
             )
           )
 
