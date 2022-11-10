@@ -182,36 +182,36 @@ trait Formatters {
     override def unbind(key: String, value: Option[A]): Map[String, String] =
       value.map(field.unbind).getOrElse(Map.empty)
   }
-//
-//
-//  private[mappings] def utrFormatter(
-//                                      wholeNumberKey: String,
-//                                      nonNumericKey: String
-//                                    ): Formatter[Int] =
-//    new Formatter[Int] {
-//
-//      val decimalRegexp = """^-?(\d*\.\d*)$"""
-//
-//      private val baseFormatter = stringFormatter(requiredKey, args)
-//
-//      override def bind(key: String, data: Map[String, String]) =
-//        baseFormatter
-//          .bind(key, data)
-//          .right
-//          .map(removeSpaceLineBreaks(_).replace(",", ""))
-//          .right
-//          .flatMap {
-//            case s if s.matches(decimalRegexp) =>
-//              Left(Seq(FormError(key, wholeNumberKey, args)))
-//            case s =>
-//              nonFatalCatch
-//                .either(s.toInt)
-//                .left
-//                .map(_ => Seq(FormError(key, nonNumericKey, args)))
-//          }
-//
-//      override def unbind(key: String, value: Int) =
-//        baseFormatter.unbind(key, value.toString)
-//    }
-//
+
+  private[mappings] def utrFormatter(
+                                      requiredKey: String,
+                                      wholeNumberKey: String,
+                                      nonNumericKey: String,
+                                      args: Seq[String] = Seq.empty
+                                    ): Formatter[Int] =
+    new Formatter[Int] {
+
+      val decimalRegexp = """^-?(\d*\.\d*)$"""
+
+      private val baseFormatter = stringFormatter(requiredKey, args)
+
+      override def bind(key: String, data: Map[String, String]) =
+        baseFormatter
+          .bind(key, data)
+          .right
+          .map(removeSpaceLineBreaks(_).replace(",", ""))
+          .right
+          .flatMap {
+            case s if s.matches(decimalRegexp) =>
+              Left(Seq(FormError(key, wholeNumberKey, args)))
+            case s =>
+              nonFatalCatch
+                .either(s.toInt)
+                .left
+                .map(_ => Seq(FormError(key, nonNumericKey, args)))
+          }
+
+      override def unbind(key: String, value: Int) =
+        baseFormatter.unbind(key, value.toString)
+    }
 }

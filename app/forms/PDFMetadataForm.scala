@@ -18,7 +18,7 @@ package forms
 
 import play.api.libs.json.{ Format, Json }
 
-final case class PDFMetadataForm(companyName: Option[String], utr: Option[Int])
+final case class PDFMetadataForm(companyName: Option[String], utr: Option[Long])
 
 object PDFMetadataForm {
   implicit val format: Format[PDFMetadataForm] = Json.format[PDFMetadataForm]

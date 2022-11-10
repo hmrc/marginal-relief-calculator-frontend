@@ -241,7 +241,7 @@ object PDFViewHelper extends ViewHelper {
               <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
               </div>"""
         } else s""}
-             ${if (pdfMetadata.utr.exists(_.trim.nonEmpty)) {
+             ${if (pdfMetadata.utr.nonEmpty) {
           s"""<div class="grid-row">
               <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h2>
               <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
