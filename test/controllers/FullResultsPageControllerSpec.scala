@@ -77,8 +77,23 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(
-          MarginalRate(
+        val calculatorResult = DualResult(
+          year1 = MarginalRate(
+            accountingPeriodForm.accountingPeriodStartDate.getYear,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            FYRatio(1, 1)
+          ),
+          year2 = MarginalRate(
             accountingPeriodForm.accountingPeriodStartDate.getYear,
             1,
             1,
@@ -104,7 +119,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1,
           Some(1),
           None,
-          None
+          Some(1),
+          Some(2)
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -172,8 +188,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           None,
           Some(1),
           None,
-          Some(1),
-          Some(2)
+          None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {

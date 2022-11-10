@@ -19,8 +19,9 @@ package utils
 import com.google.inject.Singleton
 
 import java.time.Instant
-
+// $COVERAGE-OFF$
 @Singleton
 class DateTime() {
   def currentInstant: Instant = Instant.now()
 }
+// $COVERAGE-ON$
