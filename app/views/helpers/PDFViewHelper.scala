@@ -327,7 +327,7 @@ object PDFViewHelper extends ViewHelper {
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
             |           </div>""".stripMargin)
 
-  def replaceBannerHtml(bannerHtml: Html)(implicit messages: Messages): Html =
+  def replaceBannerHtml(bannerHtml: Html): Html =
     Html(
       bannerHtml
         .toString()

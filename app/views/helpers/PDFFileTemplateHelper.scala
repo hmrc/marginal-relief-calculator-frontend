@@ -20,7 +20,6 @@ import connectors.sharedmodel._
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import utils.CurrencyUtils
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
 import views.helpers.PDFViewHelper.pdfFormulaAndNextHtml
 
