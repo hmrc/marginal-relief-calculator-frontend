@@ -19,7 +19,7 @@ package controllers
 import com.google.inject.Inject
 import connectors.MarginalReliefCalculatorConnector
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
 import models.{ Distribution, UserAnswers }
 import pages._
@@ -49,6 +49,7 @@ class CheckYourAnswersController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
+    twoAssociatedCompaniesForm: Option[TwoAssociatedCompaniesForm],
     userAnswers: UserAnswers,
     request: Request[A]
   ) extends WrappedRequest[A](request)
@@ -63,14 +64,16 @@ class CheckYourAnswersController @Inject() (
           request.userAnswers.get(TaxableProfitPage),
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage)
+          request.userAnswers.get(AssociatedCompaniesPage),
+          request.userAnswers.get(TwoAssociatedCompaniesPage)
         ) match {
           case (
                 Some(accPeriod),
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                maybeAssociatedCompanies
+                maybeAssociatedCompanies,
+                twoAssociatedCompanies
               ) =>
             Right(
               CheckYourAnswersRequiredParams(
@@ -79,6 +82,7 @@ class CheckYourAnswersController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
+                twoAssociatedCompanies,
                 request.userAnswers,
                 request
               )
@@ -103,7 +107,8 @@ class CheckYourAnswersController @Inject() (
           AccountingPeriodSummary.row(request.userAnswers) ++
             TaxableProfitSummary.row(request.userAnswers) ++
             DistributionSummary.row(request.userAnswers) ++
-            AssociatedCompaniesSummary.row(request.userAnswers, askAssociatedParameter)
+            AssociatedCompaniesSummary.row(request.userAnswers, askAssociatedParameter) ++
+            TwoAssociatedCompaniesSummary.row(request.userAnswers, askAssociatedParameter)
         )
         Ok(view(list, routes.ResultsPageController.onPageLoad().url))
       }

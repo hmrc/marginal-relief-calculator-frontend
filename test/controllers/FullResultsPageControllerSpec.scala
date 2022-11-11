@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages._
@@ -59,7 +59,12 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
     .get
     .set(
       AssociatedCompaniesPage,
-      AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
+      AssociatedCompaniesForm(AssociatedCompanies.Yes, None)
+    )
+    .get
+    .set(
+      TwoAssociatedCompaniesPage,
+      TwoAssociatedCompaniesForm(Some(1), Some(2))
     )
     .get
 
@@ -72,8 +77,23 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
           .build()
-        val calculatorResult = SingleResult(
-          MarginalRate(
+        val calculatorResult = DualResult(
+          year1 = MarginalRate(
+            accountingPeriodForm.accountingPeriodStartDate.getYear,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            FYRatio(1, 1)
+          ),
+          year2 = MarginalRate(
             accountingPeriodForm.accountingPeriodStartDate.getYear,
             1,
             1,
@@ -98,9 +118,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
           Some(1),
-          Some(1),
           None,
-          None
+          Some(1),
+          Some(2)
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -112,7 +132,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view
-            .render(calculatorResult, accountingPeriodForm, 1, 1, 1, config, request, messages(application))
+            .render(calculatorResult, accountingPeriodForm, 1, 1, 0, config, request, messages(application))
             .toString
             .filterAndTrim
         }

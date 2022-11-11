@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-import com.google.inject.Singleton
+import forms.TwoAssociatedCompaniesForm
+import play.api.libs.json.JsPath
 
-import java.time.Instant
-// $COVERAGE-OFF$
-@Singleton
-class DateTime() {
-  def currentInstant: Instant = Instant.now()
+case object TwoAssociatedCompaniesPage extends QuestionPage[TwoAssociatedCompaniesForm] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "twoAssociatedCompanies"
 }
-// $COVERAGE-ON$

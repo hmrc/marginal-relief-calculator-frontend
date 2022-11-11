@@ -1,0 +1,78 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.InputWidth._
+@import forms._
+@import connectors.sharedmodel._
+@import forms.DateUtils._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukInput: GovukInput,
+    govukButton: GovukButton,
+    govukWarningText : GovukWarningText,
+)
+
+@(form: Form[_], accountingPeriodForm: AccountingPeriodForm, askBothParts: AskBothParts, mode: Mode)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave"))) {
+
+    @formHelper(action = routes.TwoAssociatedCompaniesController.onSubmit(mode), 'autoComplete -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form))
+        }
+
+        <h1 class="govuk-fieldset__legend--l">@messages("twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave")</h1>
+
+        <p class="govuk-body govuk-!-margin-bottom-4"></p>
+
+        <p class="govuk-body">@messages("twoAssociatedCompanies.accountingPeriodCovers2Years")</p>
+
+        <p class="govuk-body govuk-!-margin-bottom-6"></p>
+
+        @govukWarningText(WarningText(
+            iconFallbackText = "Warning",
+            content = Text(messages("associatedCompanies.warning"))
+        ))
+
+        @govukInput(
+            InputViewModel(
+                field = form("associatedCompaniesFY1Count"),
+                label = Label(content = Text(messages("twoAssociatedCompanies.financialYearFromTo", financialYear(accountingPeriodForm.accountingPeriodStartDate).toString, (financialYear(accountingPeriodForm.accountingPeriodStartDate) + 1).toString))).withCssClass("govuk-label--s")
+            )
+            .withCssClass("govuk-!-width-one-third")
+            .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period1.start.formatDateFull, askBothParts.period1.end.formatDateFull)))
+        )
+
+        @govukInput(
+            InputViewModel(
+                field = form("associatedCompaniesFY2Count"),
+                label = Label(content = Text(messages("twoAssociatedCompanies.financialYearFromTo", financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault).toString, (financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault) + 1).toString))).withCssClass("govuk-label--s")
+            )
+            .withCssClass("govuk-!-width-one-third")
+            .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period2.start.formatDateFull, askBothParts.period2.end.formatDateFull)))
+        )
+
+        <p class="govuk-body govuk-!-margin-bottom-8"></p>
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

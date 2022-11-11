@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-import com.google.inject.Singleton
+import forms.TwoAssociatedCompaniesForm
+import pages.behaviours.PageBehaviours
 
-import java.time.Instant
-// $COVERAGE-OFF$
-@Singleton
-class DateTime() {
-  def currentInstant: Instant = Instant.now()
+class TwoAssociatedCompaniesPageSpec extends PageBehaviours {
+
+  "TwoAssociatedCompaniesPage" - {
+
+    beRetrievable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+
+    beSettable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+
+    beRemovable[TwoAssociatedCompaniesForm](TwoAssociatedCompaniesPage)
+  }
 }
-// $COVERAGE-ON$
