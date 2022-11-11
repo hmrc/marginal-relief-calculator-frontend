@@ -81,12 +81,13 @@ class PDFFileTemplateSpec extends SpecBase {
       )
 
       running(application) {
+        val longUTR = 123456789012345L
         val view = application.injector.instanceOf[PDFFileTemplate]
         Jsoup
           .parse(
             view
               .render(
-                PDFMetadataForm(Some("company"), Some("utr")),
+                PDFMetadataForm(Some("company"), Some(longUTR)),
                 calculatorResult,
                 accountingPeriodForm,
                 1,

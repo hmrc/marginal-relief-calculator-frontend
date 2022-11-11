@@ -88,8 +88,10 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
+        val longUTR = 123456789112345L
+
         val userAnswers =
-          requiredAnswers.set(PDFMetadataPage, PDFMetadataForm(Some("name"), Some("utr"))).get
+          requiredAnswers.set(PDFMetadataPage, PDFMetadataForm(Some("name"), Some(longUTR))).get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -101,7 +103,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form.fill(PDFMetadataForm(Some("name"), Some("utr"))))(
+          contentAsString(result).filterAndTrim mustEqual view(form.fill(PDFMetadataForm(Some("name"), Some(longUTR))))(
             request,
             messages(application)
           ).toString.filterAndTrim
