@@ -404,7 +404,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |    </div>
        |    <div class="grid-row">
        |     <h2 class="govuk-heading-s govuk-static-margin-bottom-1">UTR Number</h2>
-       |     <p class="govuk-body">utr</p>
+       |     <p class="govuk-body">123456789012345</p>
        |    </div>
        |    <div class="grid-row pdf-banner">
        |     <div class="govuk-panel govuk-panel--confirmation">
