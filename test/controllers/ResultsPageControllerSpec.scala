@@ -92,6 +92,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
               1,
               1,
               1,
+              None,
               request,
               messages(application)
             )
@@ -187,7 +188,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
             AccountingPeriodForm(startDate, Some(endDate)),
             1,
             1,
-            1
+            1,
+            None
           )(
             request,
             messages(application)

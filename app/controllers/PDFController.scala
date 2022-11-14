@@ -20,7 +20,7 @@ import akka.stream.scaladsl.StreamConverters
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ CalculatorResult, FYConfig }
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
 import models.{ Distribution, UserAnswers }
 import pages._
@@ -59,6 +59,7 @@ class PDFController @Inject() (
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
     pdfMetadata: PDFMetadataForm,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
     userAnswers: UserAnswers
@@ -75,7 +76,8 @@ class PDFController @Inject() (
           request.userAnswers.get(DistributionPage),
           request.userAnswers.get(DistributionsIncludedPage),
           request.userAnswers.get(AssociatedCompaniesPage),
-          request.userAnswers.get(PDFMetadataPage)
+          request.userAnswers.get(PDFMetadataPage),
+          request.userAnswers.get(TwoAssociatedCompaniesPage)
         ) match {
           case (
                 Some(accPeriod),
@@ -83,7 +85,8 @@ class PDFController @Inject() (
                 Some(distribution),
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                Some(pdfMetadata)
+                Some(pdfMetadata),
+                maybeTwoAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               PDFPageRequiredParams(
@@ -93,6 +96,7 @@ class PDFController @Inject() (
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
                 pdfMetadata,
+                maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
                 request.userAnswers
@@ -127,7 +131,8 @@ class PDFController @Inject() (
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
           request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
           config,
-          dateTime.currentInstant
+          dateTime.currentInstant,
+          request.twoAssociatedCompanies
         )
       )
     }
@@ -155,7 +160,8 @@ class PDFController @Inject() (
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
           request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
           config,
-          dateTime.currentInstant
+          dateTime.currentInstant,
+          request.twoAssociatedCompanies
         ).toString
         Ok.sendEntity(
           HttpEntity.Streamed(

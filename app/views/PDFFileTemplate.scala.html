@@ -29,7 +29,7 @@
 @import java.time.Instant
 @this()
 
-@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant)(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 @pageCount = @{
   numberOfPages(calculatorResult)
 }
@@ -348,7 +348,7 @@
             <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
                 <div class="grid-row">
                     <div class="govuk-grid-column-full">
-                        @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
+                        @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies)
                     </div>
                 </div>
             </div>

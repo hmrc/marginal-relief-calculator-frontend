@@ -18,7 +18,7 @@ package views.helpers
 
 import connectors.sharedmodel._
 import forms.DateUtils.DateOps
-import forms.{ AccountingPeriodForm, PDFMetadataForm }
+import forms.{ AccountingPeriodForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.{ CurrencyUtils, DateUtils, PercentageUtils }
@@ -38,7 +38,8 @@ object PDFViewHelper extends ViewHelper {
     config: Map[Int, FYConfig],
     pdfMetadata: PDFMetadataForm,
     accountingPeriodForm: AccountingPeriodForm,
-    now: Instant
+    now: Instant,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
   )(implicit messages: Messages): Html =
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
@@ -51,7 +52,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -71,7 +73,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -97,7 +100,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -117,7 +121,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -138,7 +143,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -158,7 +164,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
         ${pdfCorporationTaxHtml("4", calculatorResult)}
         ${pdfDetailedCalculationHtml(
@@ -220,7 +227,8 @@ object PDFViewHelper extends ViewHelper {
     taxableProfit: Int,
     distributions: Int,
     associatedCompanies: Int,
-    now: Instant
+    now: Instant,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
   )(implicit messages: Messages): Html =
     Html(
       s"""<div class="print-document">
@@ -260,7 +268,8 @@ object PDFViewHelper extends ViewHelper {
           taxableProfit,
           distributions,
           associatedCompanies,
-          false
+          false,
+          twoAssociatedCompanies
         )}
          |       </div>
          |       </div>

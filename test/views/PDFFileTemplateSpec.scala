@@ -94,6 +94,7 @@ class PDFFileTemplateSpec extends SpecBase {
                 1,
                 config,
                 now,
+                None,
                 request,
                 messages(application)
               )

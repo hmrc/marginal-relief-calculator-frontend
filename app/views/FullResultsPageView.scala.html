@@ -31,12 +31,12 @@
     govukButton: GovukButton
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
-    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, twoAssociatedCompanies)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
     <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</span>
