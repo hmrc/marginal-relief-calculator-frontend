@@ -37,14 +37,15 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     utr         <- longBetween(0, longUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
-  val invalidUTR: Gen[PDFMetadataForm] = for {
+  val invalidLengthUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
     utr         <- longBetween(longUTR, over15LongUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
+
   val invalidCompanyNameUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- longBetween(over15LongUTR, over15LongUTR*2)
+    utr         <- longBetween(over15LongUTR, over15LongUTR * 2)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val form: Form[PDFMetadataForm] = new PDFMetadataFormProvider()()
@@ -77,17 +78,18 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
       }
     }
 
-    "should return error when utr is invalid" in {
-      forAll(invalidUTR) { invalid =>
+    "should return error when utr length is over 15" in {
+      forAll(invalidLengthUTR) { invalid =>
         val result =
           form.bind(
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
           )
-        result.errors mustBe List(FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq()))
+        result.errors mustBe List(FormError("utr", Seq("UTR number must be 15 characters or less.")))
       }
     }
 
-    "should return error when company name and utr are invalid" in {
+
+    "should return error when company name and utr length are invalid" in {
       forAll(invalidCompanyNameUTR) { invalid =>
         val result =
           form.bind(
@@ -95,7 +97,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
           )
         result.errors mustBe List(
           FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)),
-          FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq())
+          FormError("utr", Seq("UTR number must be 15 characters or less."))
         )
       }
     }

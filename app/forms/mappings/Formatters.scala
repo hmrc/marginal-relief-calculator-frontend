@@ -196,13 +196,13 @@ trait Formatters {
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Long] =
         for {
-          result <- baseFormatter.bind(key, data)
-          resultNoSpaces <- removeSpaceLineBreaks(result).asRight[Seq[FormError]]
+          result         <- baseFormatter.bind(key, data)
+          resultNoSpaces <- removeSpaceLineBreaks(result).asRight
           finalResult <- resultNoSpaces match {
-            case s if s.length > maxLength => Left(Seq(FormError(key, maxKey, args)))
-            case s if Try(s.toLong).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
-            case s => s.toLong.asRight[Seq[FormError]]
-          }
+                           case s if s.length > maxLength    => Left(Seq(FormError(key, maxKey, args)))
+                           case s if Try(s.toLong).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
+                           case s                            => s.toLong.asRight
+                         }
         } yield finalResult
 
       override def unbind(key: String, value: Long) =
