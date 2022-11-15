@@ -36,7 +36,7 @@ object PDFViewHelper extends ViewHelper {
     taxableProfit: Int,
     distributions: Int,
     config: Map[Int, FYConfig],
-    pdfMetadata: PDFMetadataForm,
+    pdfMetadata: Option[PDFMetadataForm],
     accountingPeriodForm: AccountingPeriodForm,
     now: Instant,
     twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
@@ -221,7 +221,7 @@ object PDFViewHelper extends ViewHelper {
 
   def pdfHeaderHtml(
     pageCount: String,
-    pdfMetadata: PDFMetadataForm,
+    pdfMetadata: Option[PDFMetadataForm],
     calculatorResult: CalculatorResult,
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
@@ -243,18 +243,9 @@ object PDFViewHelper extends ViewHelper {
          |                            </h2>
          |                        </div>
          |                    </div>
-         | ${if (pdfMetadata.companyName.exists(_.trim.nonEmpty)) {
-          s"""<div class="grid-row">
-              <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h2>
-              <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
-              </div>"""
-        } else s""}
-             ${if (pdfMetadata.utr.exists(_.trim.nonEmpty)) {
-          s"""<div class="grid-row">
-              <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h2>
-              <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
-              </div>"""
-        } else s""}
+         |       ${if (pdfMetadata.nonEmpty) {
+          pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)
+        } else ""}
          |       <div class="grid-row print-banner">${replaceBannerHtml(displayBanner(calculatorResult).html)}</div>
          |       <div class="grid-row">
          |       <div class="govuk-grid-column-full">
@@ -289,6 +280,22 @@ object PDFViewHelper extends ViewHelper {
          | <span class="govuk-body-s footer-page-no">${messages("pdf.page", "1", pageCount)}</span>
          | </div>""".stripMargin
     )
+
+  def pdfUtrCompanyName(companyName: Option[String], utr: Option[String])(implicit messages: Messages): Html =
+    Html(s"""
+            | ${if (companyName.nonEmpty) {
+             s"""<div class="grid-row">
+          <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h2>
+          <p class="govuk-body">${companyName.get}</p>
+          </div>"""
+           } else s""}
+          ${if (utr.nonEmpty) {
+             s"""<div class="grid-row">
+            <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h2>
+            <p class="govuk-body">${utr.get}</p>
+          </div>"""
+           } else s""}
+            |""".stripMargin)
 
   def pdfCorporationTaxHtml(pageCount: String, calculatorResult: CalculatorResult)(implicit
     messages: Messages

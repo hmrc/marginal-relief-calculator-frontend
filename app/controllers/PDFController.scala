@@ -58,7 +58,7 @@ class PDFController @Inject() (
     distribution: Distribution,
     distributionsIncluded: Option[DistributionsIncludedForm],
     associatedCompanies: Option[AssociatedCompaniesForm],
-    pdfMetadata: PDFMetadataForm,
+    pdfMetadata: Option[PDFMetadataForm],
     twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     request: Request[A],
     userId: String,
@@ -85,7 +85,7 @@ class PDFController @Inject() (
                 Some(distribution),
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                Some(pdfMetadata),
+                maybePdfMetadata,
                 maybeTwoAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
@@ -95,7 +95,7 @@ class PDFController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                pdfMetadata,
+                maybePdfMetadata,
                 maybeTwoAssociatedCompanies,
                 request,
                 request.userId,

@@ -29,7 +29,7 @@
 @import java.time.Instant
 @this()
 
-@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: Option[PDFMetadataForm], calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 @pageCount = @{
   numberOfPages(calculatorResult)
 }
@@ -329,18 +329,7 @@
                 </h1>
             </div>
         </div>
-        @if(pdfMetadata.companyName.isDefined) {
-        <div class="grid-row">
-            <h2 class="govuk-heading-s govuk-static-margin-bottom-1">@messages("pdf.companyName")</h2>
-            <p class="govuk-body">@{pdfMetadata.companyName.getOrElse("")}</p>
-        </div>
-        }
-        @if(pdfMetadata.utr.isDefined) {
-        <div class="grid-row">
-            <h2 class="govuk-heading-s govuk-static-margin-bottom-1">@messages("pdf.utr")</h2>
-            <p class="govuk-body">@{pdfMetadata.utr.getOrElse("")}</p>
-        </div>
-        }
+        @{pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)}
         <div class="grid-row pdf-banner">
             @replaceBannerHtml(displayBanner(calculatorResult).html)
         </div>
