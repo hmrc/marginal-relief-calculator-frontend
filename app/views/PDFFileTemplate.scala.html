@@ -62,6 +62,9 @@
         .govuk-\!-display-none, .govuk-visually-hidden {
             display: none!important;
         }
+        .govuk-\!-static-margin-bottom-1 {
+            margin-bottom: 5px!important;
+        }
         .sr-only {
             position: absolute;
             left: -10000px;
@@ -329,7 +332,9 @@
                 </h1>
             </div>
         </div>
-        @{pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)}
+        @if(pdfMetadata.nonEmpty) {
+        <div>pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)</div>
+        }
         <div class="grid-row pdf-banner">
             @replaceBannerHtml(displayBanner(calculatorResult).html)
         </div>
