@@ -18,7 +18,6 @@ package forms.mappings
 
 import cats.syntax.either._
 import models.Enumerable
-import org.bson.types.MaxKey
 import utils.StringUtils._
 import play.api.data.format.Formatter
 import play.api.data.{ FormError, Mapping }
@@ -186,36 +185,25 @@ trait Formatters {
 
   private[mappings] def utrFormatter(
     requiredKey: String,
-    wholeNumberKey: String,
     nonNumericKey: String,
     maxKey: String,
-    maxValue: Long,
+    maxLength: Int,
     args: Seq[String] = Seq.empty
   ): Formatter[Long] =
     new Formatter[Long] {
 
-      val decimalRegexp = """^-?(\d*\.\d*)$"""
-
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
-        baseFormatter
-          .bind(key, data)
-          .right
-          .map(removeSpaceLineBreaks(_).replace(",", ""))
-          .right
-          .flatMap {
-            case s if s.matches(decimalRegexp) =>
-              Left(Seq(FormError(key, wholeNumberKey, args)))
-            case s =>
-              nonFatalCatch
-                .either(s.toLong)
-                .left
-                .map(_ => Seq(FormError(key, nonNumericKey, args)))
-            case s if s.toLong > maxValue =>
-              Seq(FormError(key, maxKey, args)).asLeft[Long]
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Long] =
+        for {
+          result <- baseFormatter.bind(key, data)
+          resultNoSpaces <- removeSpaceLineBreaks(result).asRight[Seq[FormError]]
+          finalResult <- resultNoSpaces match {
+            case s if s.length > maxLength => Left(Seq(FormError(key, maxKey, args)))
+            case s if Try(s.toLong).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
             case s => s.toLong.asRight[Seq[FormError]]
           }
+        } yield finalResult
 
       override def unbind(key: String, value: Long) =
         baseFormatter.unbind(key, value.toString)

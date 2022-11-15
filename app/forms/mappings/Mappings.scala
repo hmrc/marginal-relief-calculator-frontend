@@ -60,19 +60,17 @@ trait Mappings extends Formatters with Constraints {
 
   protected def utrMapper(
     requiredKey: String = "error.required",
-    wholeNumberKey: String = "error.wholeNumber",
     nonNumericKey: String = "pDFMetaData.utr.error.nonNumeric",
     maxKey: String = "pDFmetaData.utr.error.greater.than.15",
-    maxValue: Long = Long.MaxValue,
+    maxLength: Int = 15,
     args: Seq[String] = Seq.empty
   ): FieldMapping[Long] =
     of(
       utrFormatter(
         requiredKey,
-        wholeNumberKey,
         nonNumericKey,
         maxKey,
-        maxValue,
+        maxLength,
         args
       )
     )

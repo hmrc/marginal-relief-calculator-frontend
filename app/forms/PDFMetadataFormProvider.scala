@@ -33,10 +33,9 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
         "utr" -> optional(
           utrMapper(
             "taxableProfit.error.required",
-            "Do not use decimal points. Enter a whole number. For example, 1.",
             "Enter a valid UTR number. For example, 1234567891",
             "UTR number must be 15 characters or less.",
-            999999999999999L
+            15
           )
         )
       )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
