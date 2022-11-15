@@ -213,7 +213,8 @@ trait Formatters {
                 .left
                 .map(_ => Seq(FormError(key, nonNumericKey, args)))
             case s if s.toLong > maxValue =>
-              Seq(FormError(key, maxKey)).asLeft[Long]
+              Seq(FormError(key, maxKey, args)).asLeft[Long]
+            case s => s.toLong.asRight[Seq[FormError]]
           }
 
       override def unbind(key: String, value: Long) =
