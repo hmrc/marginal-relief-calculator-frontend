@@ -68,6 +68,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
     )
     .get
 
+  private val twoAssociatedCompanies = TwoAssociatedCompaniesForm(Option(1), Option(2));
+
   "FullResultsPageController" - {
     "GET page" - {
       "must render results when all data is available" in {
@@ -132,7 +134,17 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view
-            .render(calculatorResult, accountingPeriodForm, 1, 1, 0, config, request, messages(application))
+            .render(
+              calculatorResult,
+              accountingPeriodForm,
+              1,
+              1,
+              0,
+              config,
+              Option(twoAssociatedCompanies),
+              request,
+              messages(application)
+            )
             .toString
             .filterAndTrim
         }
@@ -205,7 +217,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
             1,
             0,
             1,
-            config
+            config,
+            None
           )(request, messages(application)).toString.filterAndTrim
         }
       }
@@ -277,7 +290,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
             1,
             0,
             0,
-            config
+            config,
+            None
           )(request, messages(application)).toString.filterAndTrim
         }
       }

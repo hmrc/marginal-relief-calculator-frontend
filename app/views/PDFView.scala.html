@@ -32,7 +32,7 @@
   layout: templates.Layout
 )
 
-@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant)(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = titleNoForm(messages("pdf.title")),
@@ -45,6 +45,6 @@
     <a class="govuk-link print-this__save" id="save" href="@{routes.PDFController.downloadPdf.path()}">Save as a PDF</a>
 </div>
 <div class="pdf-preview">
-    @pdfTableHtml(calculatorResult, associatedCompanies, taxableProfit, distributions, config, pdfMetadata, accountingPeriodForm, currentInstant)
+    @pdfTableHtml(calculatorResult, associatedCompanies, taxableProfit, distributions, config, pdfMetadata, accountingPeriodForm, currentInstant, twoAssociatedCompanies)
 </div>
 }

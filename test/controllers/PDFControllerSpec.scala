@@ -134,6 +134,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
               1,
               config,
               fakeDateTime.currentInstant,
+              None,
               request,
               messages(application)
             )
@@ -214,6 +215,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
               1,
               config,
               fakeDateTime.currentInstant,
+              None,
               request,
               messages(application)
             )

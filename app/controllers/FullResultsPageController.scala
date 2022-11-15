@@ -127,7 +127,8 @@ class FullResultsPageController @Inject() (
           request.taxableProfit,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
           request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
-          config
+          config,
+          request.twoAssociatedCompanies
         )
       )
   }
