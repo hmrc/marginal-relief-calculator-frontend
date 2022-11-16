@@ -25,7 +25,6 @@ import org.jsoup.Jsoup
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ GET, running }
 import utils.DateUtils
-import views.helpers.PDFViewHelper.pdfUtrCompanyName
 import views.html.PDFFileTemplate
 
 import java.time.{ Instant, LocalDate }
