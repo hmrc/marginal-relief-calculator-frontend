@@ -24,25 +24,35 @@ import play.api.data.{ Form, FormError }
 class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   implicit val noShrinkString: Shrink[String] = Shrink.shrinkAny
-
+  val longUTR = 123456789012345L
+  val over15LongUTR = 123456789012345678L
   val validPDFMetadataFormGenerator: Gen[PDFMetadataForm] = for {
+
     companyName <- option(stringsWithMaxLength(160))
-    utr         <- option(stringsWithMaxLength(15))
+    utr         <- option(longBetween(0, longUTR))
   } yield PDFMetadataForm(companyName, utr)
 
   val invalidCompanyName: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- stringsWithMaxLength(15)
+    utr         <- longBetween(0, longUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
-  val invalidUTR: Gen[PDFMetadataForm] = for {
+  val invalidLengthUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
-    utr         <- stringsLongerThan(15)
+    utr         <- longBetween(longUTR, over15LongUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
+
+  private val invalidCharUTR = for {
+    _companyName <- stringsWithMaxLength(10)
+    _utr         <- nonNumerics
+  } yield Map(
+    "companyName" -> _companyName,
+    "utr"         -> _utr.take(15)
+  )
 
   val invalidCompanyNameUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- stringsLongerThan(15)
+    utr         <- longBetween(over15LongUTR, over15LongUTR * 2)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val form: Form[PDFMetadataForm] = new PDFMetadataFormProvider()()
@@ -60,7 +70,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     "should bind valid data" in {
       forAll(validPDFMetadataFormGenerator) { valid =>
         form
-          .bind((valid.companyName.map("companyName" -> _).toList ++ valid.utr.map("utr" -> _).toList).toMap)
+          .bind((valid.companyName.map("companyName" -> _).toList ++ valid.utr.map("utr" -> _.toString).toList).toMap)
           .value mustBe Some(valid)
       }
     }
@@ -68,26 +78,41 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     "should return error when company name is invalid" in {
       forAll(invalidCompanyName) { invalid =>
         val result =
-          form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
-        result.errors mustBe List(FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)))
+          form.bind(
+            (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
+          )
+        result.errors mustBe List(FormError("companyName", Seq("pdfMetaData.companyname.error.length"), Seq(160)))
       }
     }
 
-    "should return error when utr is invalid" in {
-      forAll(invalidUTR) { invalid =>
+    "should return error when utr length is over 15" in {
+      forAll(invalidLengthUTR) { invalid =>
         val result =
-          form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
-        result.errors mustBe List(FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(15)))
+          form.bind(
+            (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
+          )
+        result.errors mustBe List(FormError("utr", Seq("pdfMetaData.utr.error.length")))
       }
     }
 
-    "should return error when company name and utr are invalid" in {
+    "should return error when utr contains non numeric characters" in {
+      forAll(invalidCharUTR) { invalid =>
+        if (invalid.contains("companyName") && invalid.contains("utr")) {
+          val result = form.bind(invalid)
+          result.errors mustBe List(FormError("utr", Seq("pdfMetaData.utr.error.nonNumeric")))
+        }
+      }
+    }
+
+    "should return error when company name and utr length are invalid" in {
       forAll(invalidCompanyNameUTR) { invalid =>
         val result =
-          form.bind((invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _).toList).toMap)
+          form.bind(
+            (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
+          )
         result.errors mustBe List(
-          FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)),
-          FormError("utr", Seq("pDFMetadata.utr.error.length"), Seq(15))
+          FormError("companyName", Seq("pdfMetaData.companyname.error.length"), Seq(160)),
+          FormError("utr", Seq("pdfMetaData.utr.error.length"))
         )
       }
     }

@@ -28,11 +28,14 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
       mapping(
         "companyName" -> optional(
           text()
-            .verifying(maxLength(160, "pDFMetadata.companyname.error.length"))
+            .verifying(maxLength(160, "pdfMetaData.companyname.error.length"))
         ),
         "utr" -> optional(
-          text()
-            .verifying(maxLength(15, "pDFMetadata.utr.error.length"))
+          utrMapper(
+            nonNumericKey = "pdfMetaData.utr.error.nonNumeric",
+            maxKey = "pdfMetaData.utr.error.length",
+            maxLength = 15
+          )
         )
       )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
     )

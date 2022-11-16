@@ -243,8 +243,8 @@ object PDFViewHelper extends ViewHelper {
          |                            </h2>
          |                        </div>
          |                    </div>
-         |       ${if (pdfMetadata.nonEmpty) {
-          pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)
+         | ${if (pdfMetadata.nonEmpty) {
+          pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr.map(_.toString)).get)
         } else ""}
          |       <div class="grid-row print-banner">${replaceBannerHtml(displayBanner(calculatorResult).html)}</div>
          |       <div class="grid-row">

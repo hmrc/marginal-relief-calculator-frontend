@@ -81,12 +81,13 @@ class PDFFileTemplateSpec extends SpecBase {
       )
 
       running(application) {
+        val longUTR = 123456789012345L
         val view = application.injector.instanceOf[PDFFileTemplate]
         Jsoup
           .parse(
             view
               .render(
-                Option(PDFMetadataForm(Some("company"), Some("utr"))),
+                Option(PDFMetadataForm(Some("company"), Some(longUTR))),
                 calculatorResult,
                 accountingPeriodForm,
                 1,
@@ -407,8 +408,8 @@ class PDFFileTemplateSpec extends SpecBase {
        |      <p class="govuk-body">company</p>
        |     </div>
        |     <div class="grid-row">
-       |      <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">UTR Number</h2>
-       |      <p class="govuk-body">utr</p>
+       |      <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Unique Tax Reference</h2>
+       |      <p class="govuk-body">123456789012345</p>
        |     </div>
        |    </div>
        |    <div class="grid-row pdf-banner">

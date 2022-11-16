@@ -333,7 +333,7 @@
             </div>
         </div>
         @if(pdfMetadata.nonEmpty) {
-        <div>@pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)</div>
+        <div>@pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr.map(_.toString)).get)</div>
         }
         <div class="grid-row pdf-banner">
             @replaceBannerHtml(displayBanner(calculatorResult).html)

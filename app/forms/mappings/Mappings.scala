@@ -58,6 +58,23 @@ trait Mappings extends Formatters with Constraints {
       )
     )
 
+  protected def utrMapper(
+    requiredKey: String = "error.required",
+    nonNumericKey: String = "pdfMetaData.utr.error.nonNumeric",
+    maxKey: String = "pdfMetaData.utr.error.length",
+    maxLength: Int = 15,
+    args: Seq[String] = Seq.empty
+  ): FieldMapping[Long] =
+    of(
+      utrFormatter(
+        requiredKey,
+        nonNumericKey,
+        maxKey,
+        maxLength,
+        args
+      )
+    )
+
   protected def boolean(
     requiredKey: String = "error.required",
     invalidKey: String = "error.boolean",

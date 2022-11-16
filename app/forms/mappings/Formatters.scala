@@ -182,4 +182,30 @@ trait Formatters {
     override def unbind(key: String, value: Option[A]): Map[String, String] =
       value.map(field.unbind).getOrElse(Map.empty)
   }
+
+  private[mappings] def utrFormatter(
+    requiredKey: String,
+    nonNumericKey: String,
+    maxKey: String,
+    maxLength: Int,
+    args: Seq[String] = Seq.empty
+  ): Formatter[Long] =
+    new Formatter[Long] {
+
+      private val baseFormatter = stringFormatter(requiredKey, args)
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Long] =
+        for {
+          result         <- baseFormatter.bind(key, data)
+          resultNoSpaces <- removeSpaceLineBreaks(result).asRight
+          finalResult <- resultNoSpaces match {
+                           case s if s.length > maxLength    => Left(Seq(FormError(key, maxKey, args)))
+                           case s if Try(s.toLong).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
+                           case s                            => s.toLong.asRight
+                         }
+        } yield finalResult
+
+      override def unbind(key: String, value: Long) =
+        baseFormatter.unbind(key, value.toString)
+    }
 }
