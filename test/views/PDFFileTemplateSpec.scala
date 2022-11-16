@@ -86,7 +86,7 @@ class PDFFileTemplateSpec extends SpecBase {
           .parse(
             view
               .render(
-                PDFMetadataForm(Some("company"), Some("utr")),
+                Option(PDFMetadataForm(Some("company"), Some("utr"))),
                 calculatorResult,
                 accountingPeriodForm,
                 1,
@@ -134,6 +134,9 @@ class PDFFileTemplateSpec extends SpecBase {
        |        }
        |        .govuk-\\!-display-none, .govuk-visually-hidden {
        |            display: none!important;
+       |        }
+       |        .govuk-\\!-static-margin-bottom-1 {
+       |            margin-bottom: 5px!important;
        |        }
        |        .sr-only {
        |            position: absolute;
@@ -398,13 +401,15 @@ class PDFFileTemplateSpec extends SpecBase {
        |      <h1 class="govuk-heading-m pdf-page-header__heading">Marginal Relief for Corporation Tax results</h1>
        |     </div>
        |    </div>
-       |    <div class="grid-row">
-       |     <h2 class="govuk-heading-s govuk-static-margin-bottom-1">Company name</h2>
-       |     <p class="govuk-body">company</p>
-       |    </div>
-       |    <div class="grid-row">
-       |     <h2 class="govuk-heading-s govuk-static-margin-bottom-1">UTR Number</h2>
-       |     <p class="govuk-body">utr</p>
+       |    <div>
+       |     <div class="grid-row">
+       |      <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Company name</h2>
+       |      <p class="govuk-body">company</p>
+       |     </div>
+       |     <div class="grid-row">
+       |      <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">UTR Number</h2>
+       |      <p class="govuk-body">utr</p>
+       |     </div>
        |    </div>
        |    <div class="grid-row pdf-banner">
        |     <div class="govuk-panel govuk-panel--confirmation">

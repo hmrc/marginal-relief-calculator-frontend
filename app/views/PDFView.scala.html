@@ -32,7 +32,7 @@
   layout: templates.Layout
 )
 
-@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: Option[PDFMetadataForm], calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = titleNoForm(messages("pdf.title")),
