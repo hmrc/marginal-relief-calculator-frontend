@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import com.google.inject.Singleton
+import play.api.libs.json.{ Format, Json }
 
-import java.time.Instant
-// $COVERAGE-OFF$
-@Singleton
-class DateTime() {
-  def currentInstant: Instant = Instant.now()
+case class TwoAssociatedCompaniesForm(
+  associatedCompaniesFY1Count: Option[Int],
+  associatedCompaniesFY2Count: Option[Int]
+)
+
+object TwoAssociatedCompaniesForm {
+  implicit val format: Format[TwoAssociatedCompaniesForm] = Json.format[TwoAssociatedCompaniesForm]
 }
-// $COVERAGE-ON$

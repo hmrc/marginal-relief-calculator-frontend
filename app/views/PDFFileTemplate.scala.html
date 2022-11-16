@@ -29,7 +29,7 @@
 @import java.time.Instant
 @this()
 
-@(pdfMetadata: PDFMetadataForm, calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant)(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: Option[PDFMetadataForm], calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], currentInstant: Instant, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 @pageCount = @{
   numberOfPages(calculatorResult)
 }
@@ -61,6 +61,9 @@
         }
         .govuk-\!-display-none, .govuk-visually-hidden {
             display: none!important;
+        }
+        .govuk-\!-static-margin-bottom-1 {
+            margin-bottom: 5px!important;
         }
         .sr-only {
             position: absolute;
@@ -329,17 +332,8 @@
                 </h1>
             </div>
         </div>
-        @if(pdfMetadata.companyName.isDefined) {
-        <div class="grid-row">
-            <h2 class="govuk-heading-s govuk-static-margin-bottom-1">@messages("pdf.companyName")</h2>
-            <p class="govuk-body">@{pdfMetadata.companyName.getOrElse("")}</p>
-        </div>
-        }
-        @if(pdfMetadata.utr.isDefined) {
-        <div class="grid-row">
-            <h2 class="govuk-heading-s govuk-static-margin-bottom-1">@messages("pdf.utr")</h2>
-            <p class="govuk-body">@{pdfMetadata.utr.getOrElse("")}</p>
-        </div>
+        @if(pdfMetadata.nonEmpty) {
+        <div>@pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)</div>
         }
         <div class="grid-row pdf-banner">
             @replaceBannerHtml(displayBanner(calculatorResult).html)
@@ -348,7 +342,7 @@
             <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
                 <div class="grid-row">
                     <div class="govuk-grid-column-full">
-                        @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false)
+                        @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies)
                     </div>
                 </div>
             </div>

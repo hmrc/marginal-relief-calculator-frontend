@@ -50,7 +50,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     Some(1)
   )
   private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
-  private val pdfMetadataForm = PDFMetadataForm(Some("company"), Some(1234567890))
+  private val pdfMetadataForm = Option(PDFMetadataForm(Some("company"), Some(1234567890)))
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, accountingPeriodForm)
     .get
@@ -70,7 +70,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     .get
     .set(
       PDFMetadataPage,
-      pdfMetadataForm
+      PDFMetadataForm(Some("company"), Some("utr"))
     )
     .get
 
@@ -134,6 +134,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
               1,
               config,
               fakeDateTime.currentInstant,
+              None,
               request,
               messages(application)
             )
@@ -214,6 +215,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
               1,
               config,
               fakeDateTime.currentInstant,
+              None,
               request,
               messages(application)
             )

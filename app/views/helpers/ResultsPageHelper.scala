@@ -17,8 +17,8 @@
 package views.helpers
 
 import connectors.sharedmodel._
-import forms.AccountingPeriodForm
-import forms.DateUtils.DateOps
+import forms.{ AccountingPeriodForm, TwoAssociatedCompaniesForm }
+import forms.DateUtils.{ DateOps, financialYear }
 import org.slf4j.{ Logger, LoggerFactory }
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
@@ -30,7 +30,8 @@ import utils.NumberUtils.roundUp
 import utils.{ CurrencyUtils, PercentageUtils }
 import views.html.templates.BannerPanel
 
-import scala.collection.{ immutable, mutable }
+import scala.collection.immutable
+import scala.collection.immutable.Seq
 
 object ResultsPageHelper extends ViewHelper {
 
@@ -50,7 +51,8 @@ object ResultsPageHelper extends ViewHelper {
     taxableProfit: Int,
     distributions: Int,
     associatedCompanies: Int,
-    displayCoversFinancialYears: Boolean = false
+    displayCoversFinancialYears: Boolean = false,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
   )(implicit messages: Messages): Html =
     HtmlFormat.fill(
       immutable.Seq(
@@ -79,10 +81,18 @@ object ResultsPageHelper extends ViewHelper {
                     key = messages("resultsPage.distributions").toKey,
                     value = Value(CurrencyUtils.format(distributions).toText)
                   ),
-                  SummaryListRow(
-                    key = messages("resultsPage.associatedCompanies").toKey,
-                    value = Value(associatedCompanies.toString.toText)
-                  )
+                  if (twoAssociatedCompanies.isEmpty) {
+                    SummaryListRow(
+                      key = messages("resultsPage.associatedCompanies").toKey,
+                      value = Value(associatedCompanies.toString.toText)
+                    )
+                  } else {
+                    displayTwoAssociatedCompanies(
+                      accountingPeriodForm,
+                      twoAssociatedCompanies.map(_.associatedCompaniesFY1Count).get,
+                      twoAssociatedCompanies.map(_.associatedCompaniesFY2Count).get
+                    )
+                  }
                 ),
                 classes = "govuk-summary-list--no-border"
               )
@@ -101,6 +111,25 @@ object ResultsPageHelper extends ViewHelper {
             else "",
             hr.body
           ).mkString
+        )
+      )
+    )
+
+  def displayTwoAssociatedCompanies(accountingPeriodForm: AccountingPeriodForm, year1: Option[Int], year2: Option[Int])(
+    implicit messages: Messages
+  ) =
+    SummaryListRow(
+      key = messages("resultsPage.associatedCompanies").toKey,
+      value = Value(
+        content = HtmlContent(
+          s"""
+             |${financialYear(accountingPeriodForm.accountingPeriodStartDate).toString} to ${(financialYear(
+              accountingPeriodForm.accountingPeriodStartDate
+            ) + 1).toString}: ${year1.get}
+             |<br/>
+             |${financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault).toString} to ${(financialYear(
+              accountingPeriodForm.accountingPeriodEndDateOrDefault
+            ) + 1).toString}: ${year2.get}""".stripMargin
         )
       )
     )

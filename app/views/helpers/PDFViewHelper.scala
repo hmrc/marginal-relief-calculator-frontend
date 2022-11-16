@@ -18,7 +18,7 @@ package views.helpers
 
 import connectors.sharedmodel._
 import forms.DateUtils.DateOps
-import forms.{ AccountingPeriodForm, PDFMetadataForm }
+import forms.{ AccountingPeriodForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.{ CurrencyUtils, DateUtils, PercentageUtils }
@@ -36,9 +36,10 @@ object PDFViewHelper extends ViewHelper {
     taxableProfit: Int,
     distributions: Int,
     config: Map[Int, FYConfig],
-    pdfMetadata: PDFMetadataForm,
+    pdfMetadata: Option[PDFMetadataForm],
     accountingPeriodForm: AccountingPeriodForm,
-    now: Instant
+    now: Instant,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
   )(implicit messages: Messages): Html =
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
@@ -51,7 +52,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -71,7 +73,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -97,7 +100,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -117,7 +121,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -138,7 +143,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -158,7 +164,8 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now
+            now,
+            twoAssociatedCompanies
           )}
         ${pdfCorporationTaxHtml("4", calculatorResult)}
         ${pdfDetailedCalculationHtml(
@@ -214,13 +221,14 @@ object PDFViewHelper extends ViewHelper {
 
   def pdfHeaderHtml(
     pageCount: String,
-    pdfMetadata: PDFMetadataForm,
+    pdfMetadata: Option[PDFMetadataForm],
     calculatorResult: CalculatorResult,
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
     distributions: Int,
     associatedCompanies: Int,
-    now: Instant
+    now: Instant,
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
   )(implicit messages: Messages): Html =
     Html(
       s"""<div class="print-document">
@@ -235,18 +243,9 @@ object PDFViewHelper extends ViewHelper {
          |                            </h2>
          |                        </div>
          |                    </div>
-         | ${if (pdfMetadata.companyName.exists(_.trim.nonEmpty)) {
-          s"""<div class="grid-row">
-              <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h2>
-              <p class="govuk-body">${pdfMetadata.companyName.getOrElse("")}</p>
-              </div>"""
-        } else s""}
-             ${if (pdfMetadata.utr.nonEmpty) {
-          s"""<div class="grid-row">
-              <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h2>
-              <p class="govuk-body">${pdfMetadata.utr.getOrElse("")}</p>
-              </div>"""
-        } else s""}
+         |       ${if (pdfMetadata.nonEmpty) {
+          pdfUtrCompanyName(pdfMetadata.map(_.companyName).get, pdfMetadata.map(_.utr).get)
+        } else ""}
          |       <div class="grid-row print-banner">${replaceBannerHtml(displayBanner(calculatorResult).html)}</div>
          |       <div class="grid-row">
          |       <div class="govuk-grid-column-full">
@@ -260,7 +259,8 @@ object PDFViewHelper extends ViewHelper {
           taxableProfit,
           distributions,
           associatedCompanies,
-          false
+          false,
+          twoAssociatedCompanies
         )}
          |       </div>
          |       </div>
@@ -280,6 +280,22 @@ object PDFViewHelper extends ViewHelper {
          | <span class="govuk-body-s footer-page-no">${messages("pdf.page", "1", pageCount)}</span>
          | </div>""".stripMargin
     )
+
+  def pdfUtrCompanyName(companyName: Option[String], utr: Option[String])(implicit messages: Messages): Html =
+    Html(s"""
+            | ${if (companyName.nonEmpty) {
+             s"""<div class="grid-row">
+          <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.companyName")}</h2>
+          <p class="govuk-body">${companyName.get}</p>
+          </div>"""
+           } else s""}
+          ${if (utr.nonEmpty) {
+             s"""<div class="grid-row">
+            <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">${messages("pdf.utr")}</h2>
+            <p class="govuk-body">${utr.get}</p>
+          </div>"""
+           } else s""}
+            |""".stripMargin)
 
   def pdfCorporationTaxHtml(pageCount: String, calculatorResult: CalculatorResult)(implicit
     messages: Messages
@@ -327,7 +343,7 @@ object PDFViewHelper extends ViewHelper {
             |               <span class="govuk-body-s footer-page-no">${messages("pdf.page", "2", pageCount)}</span>
             |           </div>""".stripMargin)
 
-  def replaceBannerHtml(bannerHtml: Html)(implicit messages: Messages): Html =
+  def replaceBannerHtml(bannerHtml: Html): Html =
     Html(
       bannerHtml
         .toString()

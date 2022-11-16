@@ -43,6 +43,9 @@ class Navigator @Inject() () {
     case PDFMetadataPage =>
       _ => routes.PDFController.onPageLoad()
 
+    case TwoAssociatedCompaniesPage =>
+      _ => routes.CheckYourAnswersController.onPageLoad
+
     case _ =>
       _ => routes.IndexController.onPageLoad
   }

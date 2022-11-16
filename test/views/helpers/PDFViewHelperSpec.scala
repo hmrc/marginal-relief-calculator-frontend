@@ -41,7 +41,8 @@ class PDFViewHelperSpec extends SpecBase {
 
   private val accountingPeriodForm =
     AccountingPeriodForm(LocalDate.parse("2023-01-01"), Some(LocalDate.parse("2023-12-31")))
-  private val pdfMetadataForm = PDFMetadataForm(Some("company"), Some(longUTR))
+
+  private val pdfMetadataForm = Option(PDFMetadataForm(Some("company"), Some(longUTR)))
 
   private val taxableProfit = 65000
   private val distributions = 0
@@ -62,7 +63,8 @@ class PDFViewHelperSpec extends SpecBase {
           config,
           pdfMetadataForm,
           accountingPeriodForm,
-          now
+          now,
+          None
         ).htmlFormat shouldMatchTo
           Html(s"""
                 ${pdfHeaderHtml(
@@ -73,7 +75,8 @@ class PDFViewHelperSpec extends SpecBase {
               taxableProfit,
               distributions,
               associatedCompanies,
-              now
+              now,
+              None
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -95,7 +98,8 @@ class PDFViewHelperSpec extends SpecBase {
           config,
           pdfMetadataForm,
           accountingPeriodForm,
-          now
+          now,
+          None
         ).htmlFormat shouldMatchTo
           Html(s"""
               ${pdfHeaderHtml(
@@ -106,7 +110,8 @@ class PDFViewHelperSpec extends SpecBase {
               taxableProfit,
               distributions,
               associatedCompanies,
-              now
+              now,
+              None
             )}
              ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
              ${pdfDetailedCalculationHtml(
@@ -134,7 +139,7 @@ class PDFViewHelperSpec extends SpecBase {
 
         val pageCount = "3"
 
-        val pdfMetadataForm = PDFMetadataForm(Some(""), Some(longUTR))
+        val pdfMetadataForm = Option(PDFMetadataForm(Some(""), Some(longUTR)))
 
         pdfTableHtml(
           calculatorResult,
@@ -144,7 +149,8 @@ class PDFViewHelperSpec extends SpecBase {
           config,
           pdfMetadataForm,
           accountingPeriodForm,
-          now
+          now,
+          None
         ).htmlFormat shouldMatchTo
           Html(s"""
                 ${pdfHeaderHtml(
@@ -155,7 +161,8 @@ class PDFViewHelperSpec extends SpecBase {
               taxableProfit,
               distributions,
               associatedCompanies,
-              now
+              now,
+              None
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -190,7 +197,8 @@ class PDFViewHelperSpec extends SpecBase {
           config,
           pdfMetadataForm,
           accountingPeriodForm,
-          now
+          now,
+          None
         ).htmlFormat shouldMatchTo
           Html(s"""
                 ${pdfHeaderHtml(
@@ -201,7 +209,8 @@ class PDFViewHelperSpec extends SpecBase {
               taxableProfit,
               distributions,
               associatedCompanies,
-              now
+              now,
+              None
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -236,7 +245,8 @@ class PDFViewHelperSpec extends SpecBase {
           config,
           pdfMetadataForm,
           accountingPeriodForm,
-          now
+          now,
+          None
         ).htmlFormat shouldMatchTo
           Html(s"""
                 ${pdfHeaderHtml(
@@ -247,7 +257,8 @@ class PDFViewHelperSpec extends SpecBase {
               taxableProfit,
               distributions,
               associatedCompanies,
-              now
+              now,
+              None
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
@@ -282,7 +293,8 @@ class PDFViewHelperSpec extends SpecBase {
           config,
           pdfMetadataForm,
           accountingPeriodForm,
-          now
+          now,
+          None
         ).htmlFormat shouldMatchTo
           Html(s"""
                 ${pdfHeaderHtml(
@@ -293,7 +305,8 @@ class PDFViewHelperSpec extends SpecBase {
               taxableProfit,
               distributions,
               associatedCompanies,
-              now
+              now,
+              None
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(

@@ -89,7 +89,8 @@ class CheckYourAnswersControllerSpec
           AccountingPeriodSummary.row(requiredAnswers) ++
             TaxableProfitSummary.row(requiredAnswers) ++
             DistributionSummary.row(requiredAnswers) ++
-            AssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam)
+            AssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam) ++
+            TwoAssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam)
         )
 
         status(result) mustEqual OK
@@ -132,7 +133,8 @@ class CheckYourAnswersControllerSpec
           AccountingPeriodSummary.row(answers) ++
             TaxableProfitSummary.row(answers) ++
             DistributionSummary.row(answers) ++
-            AssociatedCompaniesSummary.row(answers, askAssociatedCompaniesParam)
+            AssociatedCompaniesSummary.row(answers, askAssociatedCompaniesParam) ++
+            TwoAssociatedCompaniesSummary.row(answers, askAssociatedCompaniesParam)
         )
 
         status(result) mustEqual OK

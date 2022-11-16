@@ -31,12 +31,12 @@
     govukButton: GovukButton
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, config:Map[Int,FYConfig], twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
-    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true)
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, twoAssociatedCompanies)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
     <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</span>
@@ -50,9 +50,9 @@
     }
 
     <h2 class="govuk-heading-m">@messages("resultsPage.getACopyOfResults")</h2>
-    <p class="govuk-body">@messages("resultsPage.addReferenceBeforePrinting")</p>
+    <p class="govuk-body"><a href="@routes.PDFMetadataController.onPageLoad().url" class="govuk-link">@messages("resultsPage.addReferenceBeforePrinting")</a></p>
     <p class="govuk-body">
-        <a href="@routes.PDFMetadataController.onPageLoad().url" class="govuk-link">@messages("resultsPage.printOrSave")</a>
+        <a href="@routes.PDFController.onPageLoad().url" class="govuk-link">@messages("resultsPage.printOrSave")</a>
     </p>
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
