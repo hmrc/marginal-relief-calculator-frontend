@@ -42,6 +42,13 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     utr         <- longBetween(longUTR, over15LongUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
+  private val invalidCharUTR = for {
+    _companyName <- stringsWithMaxLength(10)
+    _utr         <- nonNumerics
+  } yield Map(
+    "companyName" -> _companyName,
+    "utr"         -> _utr.take(15)
+  )
 
   val invalidCompanyNameUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
@@ -74,7 +81,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
           form.bind(
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
           )
-        result.errors mustBe List(FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)))
+        result.errors mustBe List(FormError("companyName", Seq("pdfMetaData.companyname.error.length"), Seq(160)))
       }
     }
 
@@ -84,10 +91,18 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
           form.bind(
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
           )
-        result.errors mustBe List(FormError("utr", Seq("Unique Tax Reference must be 15 characters or less.")))
+        result.errors mustBe List(FormError("utr", Seq("pdfMetaData.utr.error.length")))
       }
     }
 
+    "should return error when utr contains non numeric characters" in {
+      forAll(invalidCharUTR) { invalid =>
+        if (invalid.contains("companyName") && invalid.contains("utr")) {
+          val result = form.bind(invalid)
+          result.errors mustBe List(FormError("utr", Seq("pdfMetaData.utr.error.nonNumeric")))
+        }
+      }
+    }
 
     "should return error when company name and utr length are invalid" in {
       forAll(invalidCompanyNameUTR) { invalid =>
@@ -96,8 +111,8 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
           )
         result.errors mustBe List(
-          FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)),
-          FormError("utr", Seq("Unique Tax Reference must be 15 characters or less."))
+          FormError("companyName", Seq("pdfMetaData.companyname.error.length"), Seq(160)),
+          FormError("utr", Seq("pdfMetaData.utr.error.length"))
         )
       }
     }

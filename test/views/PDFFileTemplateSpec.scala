@@ -408,7 +408,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      <p class="govuk-body">company</p>
        |     </div>
        |     <div class="grid-row">
-       |      <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">UTR Number</h2>
+       |      <h2 class="govuk-heading-s govuk-!-static-margin-bottom-1">Unique Tax Reference</h2>
        |      <p class="govuk-body">123456789012345</p>
        |     </div>
        |    </div>

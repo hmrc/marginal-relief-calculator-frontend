@@ -28,14 +28,13 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
       mapping(
         "companyName" -> optional(
           text()
-            .verifying(maxLength(160, "pDFMetadata.companyname.error.length"))
+            .verifying(maxLength(160, "pdfMetaData.companyname.error.length"))
         ),
         "utr" -> optional(
           utrMapper(
-            "taxableProfit.error.required",
-            "Enter a valid Unique Tax Reference. For example, 1234567891",
-            "Unique Tax Reference must be 15 characters or less.",
-            15
+            nonNumericKey = "pdfMetaData.utr.error.nonNumeric",
+            maxKey = "pdfMetaData.utr.error.length",
+            maxLength = 15
           )
         )
       )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)

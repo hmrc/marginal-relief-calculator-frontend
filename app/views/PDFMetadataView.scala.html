@@ -28,7 +28,7 @@
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("pDFMetadata.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
+@layout(pageTitle = title(form, messages("pdfMetaData.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
 
     @formHelper(action = routes.PDFMetadataController.onSubmit()) {
 
@@ -41,13 +41,13 @@
             )
         }
 
-        <h1 class="govuk-fieldset__legend--l">@messages("pDFMetadata.title")</h1>
-        <p class="govuk-body">@messages("pDFMetadata.info")</p>
+        <h1 class="govuk-fieldset__legend--l">@messages("pdfMetaData.title")</h1>
+        <p class="govuk-body">@messages("pdfMetaData.info")</p>
 
         @govukInput(
             InputViewModel(
                 field = form("companyName"),
-                label = Label(content = Text(messages("pDFMetadata.companyname.label")))
+                label = Label(content = Text(messages("pdfMetaData.companyname.label")))
             )
             .withCssClass("govuk-!-width-two-thirds")
         )
@@ -55,7 +55,7 @@
         @govukInput(
             InputViewModel(
                 field = form("utr"),
-                label = Label(content = Text(messages("pDFMetadata.utr.label")))
+                label = Label(content = Text(messages("pdfMetaData.utr.label")))
             )
             .withCssClass("govuk-!-width-two-thirds")
         )

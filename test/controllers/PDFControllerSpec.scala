@@ -70,7 +70,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     .get
     .set(
       PDFMetadataPage,
-      PDFMetadataForm(Some("company"), Some("utr"))
+      PDFMetadataForm(Some("company"), Some(1234567890))
     )
     .get
 
