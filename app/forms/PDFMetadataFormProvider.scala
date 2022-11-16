@@ -33,8 +33,8 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
         "utr" -> optional(
           utrMapper(
             "taxableProfit.error.required",
-            "Enter a valid UTR number. For example, 1234567891",
-            "UTR number must be 15 characters or less.",
+            "Enter a valid Unique Tax Reference. For example, 1234567891",
+            "Unique Tax Reference must be 15 characters or less.",
             15
           )
         )

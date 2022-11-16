@@ -84,7 +84,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
           form.bind(
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
           )
-        result.errors mustBe List(FormError("utr", Seq("UTR number must be 15 characters or less.")))
+        result.errors mustBe List(FormError("utr", Seq("Unique Tax Reference must be 15 characters or less.")))
       }
     }
 
@@ -97,7 +97,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
           )
         result.errors mustBe List(
           FormError("companyName", Seq("pDFMetadata.companyname.error.length"), Seq(160)),
-          FormError("utr", Seq("UTR number must be 15 characters or less."))
+          FormError("utr", Seq("Unique Tax Reference must be 15 characters or less."))
         )
       }
     }
