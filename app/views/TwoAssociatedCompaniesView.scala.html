@@ -18,6 +18,8 @@
 @import forms._
 @import connectors.sharedmodel._
 @import forms.DateUtils._
+@import views.helpers.BackLinkHelper
+@import controllers.routes
 
 @this(
     layout: templates.Layout,
@@ -30,8 +32,10 @@
 
 @(form: Form[_], accountingPeriodForm: AccountingPeriodForm, askBothParts: AskBothParts, mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave"))) {
-
+@layout(
+    pageTitle = title(form, messages("twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave")),
+    backLink = BackLinkHelper.backLinkOrDefault(routes.AssociatedCompaniesController.onPageLoad(NormalMode).path(), mode)
+) {
     @formHelper(action = routes.TwoAssociatedCompaniesController.onSubmit(mode), 'autoComplete -> "off") {
 
         @if(form.errors.nonEmpty) {
