@@ -361,3 +361,6 @@ pdfMetaData.companyname.error.length = Company name must be 160 characters or le
 pdfMetaData.utr.error.length = Unique Tax Reference must be 15 characters or less.
 pdfMetaData.utr.error.nonNumeric = Enter a valid Unique Tax Reference. For example, 1234567891
 pdfMetaData.utr.error.greater.than.15 = Unique Tax Reference must be 15 characters or less
+
+exitSurvey.exit.message = If you''ve finished with this service,
+exitSurvey.exit.link = you can exit now and leave feedback (opens in new tab).
