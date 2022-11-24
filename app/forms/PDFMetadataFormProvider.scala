@@ -34,7 +34,7 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
           utrMapper(
             nonNumericKey = "pdfMetaData.utr.error.nonNumeric",
             maxKey = "pdfMetaData.utr.error.length",
-            maxLength = 15
+            maxLength = 10
           )
         )
       )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)

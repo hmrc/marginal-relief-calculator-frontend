@@ -325,4 +325,4 @@ pdfMetaData.heading=Ychwanegu manylion y cwmni at eich canlyniadau
 pdfMetaData.companyname.label=Enw’r cwmni (dewisol)
 pdfMetaData.utr.label=Cyfeirnod Unigryw y Trethdalwr (dewisol)
 pdfMetaData.companyname.error.length=Mae’n rhaid i enw’r cwmni fod yn 160 o gymeriadau neu lai.
-pdfMetaData.utr.error.length=Mae’n rhaid i’r Cyfeirnod Unigryw y Trethdalwr fod yn 15 o gymeriadau neu lai.
+pdfMetaData.utr.error.length=Mae’n rhaid i’r Cyfeirnod Unigryw y Trethdalwr fod yn 10 o gymeriadau neu lai.
