@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import connectors.MarginalReliefCalculatorConnector
 import forms._
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import navigation.{ FakeNavigator, Navigator }
@@ -131,12 +132,14 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
         val mockSessionRepository = mock[SessionRepository]
 
+        val mockConnector = mock[MarginalReliefCalculatorConnector]
+
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()

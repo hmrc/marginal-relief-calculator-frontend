@@ -18,25 +18,47 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
+import connectors.MarginalReliefCalculatorConnector
+import connectors.sharedmodel.{ AskBothParts, AskOnePart, DontAsk, Period }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm }
 import pages.{ DistributionPage, _ }
 import models._
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import play.api.inject.guice.GuiceApplicationBuilder
+import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
 
-class NavigatorSpec extends SpecBase {
+import java.time.LocalDate
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-  val navigator = new Navigator
+class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
+
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  val app: GuiceApplicationBuilder = applicationBuilder(None)
+
+  val connector: MarginalReliefCalculatorConnector = mock[MarginalReliefCalculatorConnector]
+
+  val sessionRepository: SessionRepository = app.injector().instanceOf[SessionRepository]
+
+  val navigator = new Navigator(connector, sessionRepository)
 
   "Navigator" - {
 
     "in Normal mode" - {
 
       "must go from AccountingPeriod page to TaxableProfit page" in {
-        navigator.nextPage(AccountingPeriodPage, NormalMode, UserAnswers("id")) mustBe routes.TaxableProfitController
-          .onPageLoad(NormalMode)
+        whenReady(navigator.nextPage(AccountingPeriodPage, NormalMode, UserAnswers("id"))) { result =>
+          result mustBe routes.TaxableProfitController.onPageLoad(NormalMode)
+        }
+
       }
 
       "must go from TaxableProfit page to Distribution page" in {
-        navigator.nextPage(TaxableProfitPage, NormalMode, UserAnswers("id")) mustBe routes.DistributionController
-          .onPageLoad(NormalMode)
+        whenReady(navigator.nextPage(TaxableProfitPage, NormalMode, UserAnswers("id"))) { result =>
+          result mustBe routes.DistributionController.onPageLoad(NormalMode)
+        }
       }
 
       "must go from Distribution to Distributions Included page" - {
@@ -45,6 +67,10 @@ class NavigatorSpec extends SpecBase {
           navigator.distributionsNextRoute(userAnswers) mustBe routes.DistributionsIncludedController.onPageLoad(
             NormalMode
           )
+
+          whenReady(navigator.nextPage(DistributionPage, NormalMode, userAnswers)) { result =>
+            result mustBe routes.DistributionsIncludedController.onPageLoad(NormalMode)
+          }
         }
 
         "With Distribution Page No" in {
@@ -61,25 +87,35 @@ class NavigatorSpec extends SpecBase {
       }
 
       "must go from Distribution Included page to Associated Companies page" in {
-        navigator.nextPage(
-          DistributionsIncludedPage,
-          NormalMode,
-          UserAnswers("id")
-        ) mustBe routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+        whenReady(
+          navigator.nextPage(
+            DistributionsIncludedPage,
+            NormalMode,
+            UserAnswers("id")
+          )
+        ) { result =>
+          result mustBe routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+        }
       }
 
       "must go from PDFMetadata page to PDF page" in {
-        navigator.nextPage(
-          PDFMetadataPage,
-          NormalMode,
-          UserAnswers("id")
-        ) mustBe routes.PDFController.onPageLoad()
+        whenReady(
+          navigator.nextPage(
+            PDFMetadataPage,
+            NormalMode,
+            UserAnswers("id")
+          )
+        ) { result =>
+          result mustBe routes.PDFController.onPageLoad()
+        }
       }
 
       "must go from a page that doesn't exist in the route map to Index" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id")) mustBe routes.IndexController.onPageLoad
+        whenReady(navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id"))) { result =>
+          result mustBe routes.IndexController.onPageLoad
+        }
       }
     }
 
@@ -88,28 +124,149 @@ class NavigatorSpec extends SpecBase {
       "must go from a page that doesn't exist in the edit route map to CheckYourAnswers" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(
-          UnknownPage,
-          CheckMode,
-          UserAnswers("id")
-        ) mustBe routes.CheckYourAnswersController.onPageLoad
+        whenReady(
+          navigator.nextPage(
+            UnknownPage,
+            CheckMode,
+            UserAnswers("id")
+          )
+        ) { result =>
+          result mustBe routes.CheckYourAnswersController.onPageLoad
+        }
       }
 
       "must go from distribution to distributions included" in {
         val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.Yes).success.value
-        navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.DistributionsIncludedController
-          .onPageLoad(CheckMode)
+        whenReady(navigator.nextPage(DistributionPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.DistributionsIncludedController
+            .onPageLoad(CheckMode)
+        }
       }
 
       "must go from distribution to CheckYourAnswers" in {
         val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.No).success.value
-        navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.CheckYourAnswersController.onPageLoad
+        whenReady(navigator.nextPage(DistributionPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.CheckYourAnswersController.onPageLoad
+        }
       }
 
       "must go from distribution to JourneyRecoveryController when value not set" in {
         val userAnswers = UserAnswers("id")
-        navigator.nextPage(DistributionPage, CheckMode, userAnswers) mustBe routes.JourneyRecoveryController
-          .onPageLoad()
+        whenReady(navigator.nextPage(DistributionPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.JourneyRecoveryController
+            .onPageLoad()
+        }
+      }
+
+      "must go from AccountingPeriodPage to AssociatedCompaniesPage if two accounting companies are now required" in {
+        val userAnswers = UserAnswers("id")
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.now(), None))
+          .get
+          .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
+          .get
+
+        connector.associatedCompaniesParameters(
+          *,
+          *
+        )(*) returns Future.successful(
+          AskBothParts(Period(LocalDate.now(), LocalDate.now()), Period(LocalDate.now(), LocalDate.now()))
+        )
+
+        whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.AssociatedCompaniesController.onPageLoad(CheckMode)
+        }
+      }
+
+      "must go from AccountingPeriodPage to AssociatedCompaniesPage if associated companies are not asked" in {
+        val userAnswers = UserAnswers("id")
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.now(), None))
+          .get
+          .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
+          .get
+
+        connector.associatedCompaniesParameters(
+          *,
+          *
+        )(*) returns Future.successful(
+          DontAsk
+        )
+
+        whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.CheckYourAnswersController.onPageLoad
+        }
+      }
+
+      "must go from AccountingPeriodPage to CheckYourAnswersPage if type of associated companies did not change" in {
+        val userAnswers = UserAnswers("id")
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.now(), None))
+          .get
+          .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
+          .get
+
+        connector.associatedCompaniesParameters(
+          *,
+          *
+        )(*) returns Future.successful(AskOnePart(Period(LocalDate.now(), LocalDate.now())))
+
+        whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.CheckYourAnswersController.onPageLoad
+        }
+      }
+
+      "must go from AccountingPeriodPage to AssociatedCompaniesPage if two associated companies changed to one" in {
+        val userAnswers = UserAnswers("id")
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.now(), None))
+          .get
+          .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, None))
+          .get
+          .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
+          .get
+
+        connector.associatedCompaniesParameters(
+          *,
+          *
+        )(*) returns Future.successful(
+          AskOnePart(Period(LocalDate.now(), LocalDate.now()))
+        )
+
+        whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.AssociatedCompaniesController.onPageLoad(CheckMode)
+        }
+      }
+
+      "must go from AccountingPeriodPage to CheckYourAnswersPage if type of two associated companies did not change" in {
+        val userAnswers = UserAnswers("id")
+          .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.now(), None))
+          .get
+          .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, None))
+          .get
+          .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
+          .get
+
+        connector.associatedCompaniesParameters(
+          *,
+          *
+        )(*) returns Future.successful(
+          AskBothParts(Period(LocalDate.now(), LocalDate.now()), Period(LocalDate.now(), LocalDate.now()))
+        )
+
+        whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
+          result mustBe routes.CheckYourAnswersController.onPageLoad
+        }
+      }
+
+      "must return error when navigating to next page on AccountingPeriodPage if periods not present" in {
+        val userAnswers = UserAnswers("id")
+
+        connector.associatedCompaniesParameters(
+          *,
+          *
+        )(*) returns Future.successful(AskOnePart(Period(LocalDate.now(), LocalDate.now())))
+        val caught =
+          intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
+            navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)
+          }
+        caught.getMessage mustBe "Accounting period data is not available"
       }
     }
   }
