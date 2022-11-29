@@ -182,7 +182,7 @@ class TwoAssociatedCompaniesController @Inject() (
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(TwoAssociatedCompaniesPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
-                  nextPage <- navigator.nextPage(TwoAssociatedCompaniesPage, mode, updatedAnswers)
+                  nextPage       <- navigator.nextPage(TwoAssociatedCompaniesPage, mode, updatedAnswers)
                 } yield Redirect(nextPage)
             }
         )

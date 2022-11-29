@@ -182,7 +182,7 @@ class AssociatedCompaniesController @Inject() (
                        .flatMap(_.remove(TwoAssociatedCompaniesPage))
 
                  })
-      _ <- sessionRepository.set(updated)
+      _        <- sessionRepository.set(updated)
       nextPage <- navigator.nextPage(AssociatedCompaniesPage, mode, updated)
     } yield Redirect(associatedCompaniesParameter match {
       case AskBothParts(_, _) if value.associatedCompanies == AssociatedCompanies.Yes =>

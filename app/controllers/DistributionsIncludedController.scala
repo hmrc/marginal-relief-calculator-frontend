@@ -99,7 +99,7 @@ class DistributionsIncludedController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(DistributionsIncludedPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-              nextPage <- navigator.nextPage(DistributionsIncludedPage, mode, updatedAnswers)
+              nextPage       <- navigator.nextPage(DistributionsIncludedPage, mode, updatedAnswers)
             } yield Redirect(nextPage)
         )
     }

@@ -95,7 +95,7 @@ class DistributionController @Inject() (
                       }
                     )
                 )
-              _ <- sessionRepository.set(updatedAnswers)
+              _        <- sessionRepository.set(updatedAnswers)
               nextPage <- navigator.nextPage(DistributionPage, mode, updatedAnswers)
             } yield Redirect(nextPage)
         )

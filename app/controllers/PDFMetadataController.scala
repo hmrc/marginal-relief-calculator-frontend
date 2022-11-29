@@ -112,7 +112,7 @@ class PDFMetadataController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFMetadataPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-              nextPage <- navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers)
+              nextPage       <- navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers)
             } yield Redirect(nextPage)
         )
   }
