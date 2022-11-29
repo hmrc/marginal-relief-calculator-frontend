@@ -258,12 +258,7 @@ class MarginalReliefCalculatorConnectorImplSpec
           wireMockServer.stubFor(
             WireMock
               .get(
-                s"/ask-params/associated-companies?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd&profit=$profit&${exemptDistributions
-                    .map(
-                      "exemptDistributions" +
-                        "=" + _
-                    )
-                    .getOrElse("")}"
+                s"/ask-params/associated-companies?accountingPeriodStart=$accountingPeriodStart&accountingPeriodEnd=$accountingPeriodEnd"
               )
               .willReturn(aResponse().withBody(Json.toJson(associatedCompaniesParameter).toString))
           )
@@ -271,9 +266,7 @@ class MarginalReliefCalculatorConnectorImplSpec
           val result: AssociatedCompaniesParameter = marginalReliefCalculatorConnector
             .associatedCompaniesParameters(
               accountingPeriodStart,
-              accountingPeriodEnd,
-              profit,
-              exemptDistributions
+              accountingPeriodEnd
             )
             .futureValue
 

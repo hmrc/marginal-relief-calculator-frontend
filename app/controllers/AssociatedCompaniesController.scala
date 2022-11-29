@@ -97,11 +97,7 @@ class AssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                            request.taxableProfit,
-                                            request.distributionsIncluded
-                                              .flatMap(_.distributionsIncludedAmount)
-                                              .map(_.toDouble)
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault
                                           )
         result <- ifAskAssociatedCompaniesThen(
                     associatedCompaniesParameter,
@@ -126,11 +122,7 @@ class AssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                            request.taxableProfit,
-                                            request.distributionsIncluded
-                                              .flatMap(_.distributionsIncludedAmount)
-                                              .map(_.toDouble)
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault
                                           )
         result <- boundedForm
                     .fold(
