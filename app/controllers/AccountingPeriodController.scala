@@ -92,8 +92,9 @@ class AccountingPeriodController @Inject() (
               for {
                 updatedAnswers <- updatedAnswers(request, form)
                 _              <- sessionRepository.set(updatedAnswers)
+                nextPage <- navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
               } yield Redirect(
-                navigator.nextPage(AccountingPeriodPage, mode, updatedAnswers)
+                nextPage
               )
             }
         )

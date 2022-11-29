@@ -29,6 +29,7 @@ import play.api.data.Form
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AssociatedCompaniesView
 
@@ -139,7 +140,7 @@ class AssociatedCompaniesController @Inject() (
                               badRequestWithError(boundedForm, _, errorKey, mode)(request.request)
                             )
                           case None =>
-                            updateAndRedirect(value, associatedCompaniesParameter, mode)(request.userAnswers)
+                            updateAndRedirect(value, associatedCompaniesParameter, mode, request.userAnswers)
                         }
                     )
       } yield result
@@ -164,10 +165,9 @@ class AssociatedCompaniesController @Inject() (
   private def updateAndRedirect(
     value: AssociatedCompaniesForm,
     associatedCompaniesParameter: AssociatedCompaniesParameter,
-    mode: Mode
-  )(implicit
+    mode: Mode,
     userAnswers: UserAnswers
-  ) =
+  )(implicit headerCarrier: HeaderCarrier) =
     for {
       updated <- Future.fromTry(value.associatedCompanies match {
                    case AssociatedCompanies.Yes => userAnswers.set(AssociatedCompaniesPage, value)
@@ -183,11 +183,12 @@ class AssociatedCompaniesController @Inject() (
 
                  })
       _ <- sessionRepository.set(updated)
+      nextPage <- navigator.nextPage(AssociatedCompaniesPage, mode, updated)
     } yield Redirect(associatedCompaniesParameter match {
       case AskBothParts(_, _) if value.associatedCompanies == AssociatedCompanies.Yes =>
         routes.TwoAssociatedCompaniesController.onPageLoad(mode)
       case _ =>
-        navigator.nextPage(AssociatedCompaniesPage, mode, updated)
+        nextPage
     })
 
   private def validateRequiredFields(
