@@ -17,13 +17,19 @@
 package navigation
 
 import com.google.inject.{ Inject, Singleton }
+import connectors.MarginalReliefCalculatorConnector
+import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk }
 import controllers.routes
+import forms.{ AssociatedCompaniesForm, TwoAssociatedCompaniesForm }
 import models.{ Mode, UserAnswers, _ }
 import pages._
 import play.api.mvc.Call
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class Navigator @Inject() () {
+class Navigator @Inject() (connector: MarginalReliefCalculatorConnector) (implicit executionContext: ExecutionContext) {
 
   private val normalRoutes: Page => UserAnswers => Call = {
     case AccountingPeriodPage =>
@@ -50,9 +56,47 @@ class Navigator @Inject() () {
       _ => routes.IndexController.onPageLoad
   }
 
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case DistributionPage => distributionsChangeRoute
-    case _                => _ => routes.CheckYourAnswersController.onPageLoad
+  private def checkRouteMap(implicit headerCarrier: HeaderCarrier): Page => UserAnswers => Future[Call] = {
+    case AccountingPeriodPage => accountingPeriodChangeRoute
+    case DistributionPage => userAnswers => Future.successful(distributionsChangeRoute(userAnswers))
+    case _                => _ => Future.successful(routes.CheckYourAnswersController.onPageLoad)
+  }
+
+  private def accountingPeriodChangeRoute(answers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] = {
+    answers.get(AccountingPeriodPage).map { accountingPeriodForm =>
+      connector.associatedCompaniesParameters(
+        accountingPeriodForm.accountingPeriodStartDate,
+        accountingPeriodForm.accountingPeriodEndDateOrDefault
+      ).map {
+          case DontAsk =>
+            resetAssociatedCompanies(answers)
+            routes.CheckYourAnswersController.onPageLoad
+          case AskBothParts(period1, period2) =>
+            val twoAssociatedCompaniesExist = answers.get(TwoAssociatedCompaniesPage).exists {
+              case TwoAssociatedCompaniesForm(one, two) => one.nonEmpty && two.nonEmpty
+            }
+            if(twoAssociatedCompaniesExist) routes.CheckYourAnswersController.onPageLoad
+            else {
+              resetAssociatedCompanies(answers)
+              routes.AssociatedCompaniesController.onPageLoad(CheckMode)
+            }
+          case AskFull | AskOnePart(_) =>
+            val onlyOneAssociatedCompanyExists = answers.get(AssociatedCompaniesPage)
+              .exists(_.associatedCompaniesCount.nonEmpty)
+            if(onlyOneAssociatedCompanyExists) routes.CheckYourAnswersController.onPageLoad
+            else {
+              resetAssociatedCompanies(answers)
+              routes.AssociatedCompaniesController.onPageLoad(CheckMode)
+            }
+      }
+    }.getOrElse(throw new RuntimeException("Accounting period data is not available"))
+  }
+
+  private def resetAssociatedCompanies(answers: UserAnswers) = {
+    val twoAssociatedCompaniesForm = TwoAssociatedCompaniesForm(None, None)
+    answers.set(TwoAssociatedCompaniesPage, twoAssociatedCompaniesForm)
+    val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.No, None)
+    answers.set(AssociatedCompaniesPage, associatedCompaniesForm)
   }
 
   def distributionsNextRoute(answers: UserAnswers): Call =
@@ -69,10 +113,10 @@ class Navigator @Inject() () {
       case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] = mode match {
     case NormalMode =>
-      normalRoutes(page)(userAnswers)
+      Future.successful(normalRoutes(page)(userAnswers))
     case CheckMode =>
-      checkRouteMap(page)(userAnswers)
+      checkRouteMap(headerCarrier)(page)(userAnswers)
   }
 }
