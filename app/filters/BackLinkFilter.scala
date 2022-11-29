@@ -47,7 +47,8 @@ class BackLinkFilter(
     routes.IndexController.onPageLoad.path,
     routes.TaxableProfitController.onPageLoad(NormalMode).path,
     routes.PDFMetadataController.onPageLoad().path,
-    routes.PDFController.onPageLoad().path
+    routes.PDFController.onPageLoad().path,
+    routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).path
   )
 
   override def apply(f: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] =

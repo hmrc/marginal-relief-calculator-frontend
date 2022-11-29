@@ -341,7 +341,9 @@ twoAssociatedCompanies.numberOfAssociatedCompaniesBetween = Number of associated
 twoAssociatedCompanies.accountingPeriodCovers2Years = Your accounting period covers 2 financial years with different sets of Marginal Relief limits.
 twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave = How many active associated companies did you have?
 
-pdf.title = Save or print your calculation
+pdf.title = Print or save your calculation
+pdf.print = Print your full calculation
+pdf.save = Save as a PDF
 pdf.logoTitle = HM Revenue & Customs
 pdf.previewTitle = Marginal Relief for Corporation Tax results
 pdf.companyName = Company name
@@ -358,8 +360,6 @@ pdfMetaData.heading = Add company details before you print or save your calculat
 pdfMetaData.companyname.label = Company name (optional)
 pdfMetaData.utr.label = Unique Tax Reference (optional)
 pdfMetaData.companyname.error.length = Company name must be 160 characters or less.
-pdfMetaData.utr.error.length = Unique Tax Reference must be 15 characters or less.
+pdfMetaData.utr.error.length = Unique Tax Reference must be 10 characters.
 pdfMetaData.utr.error.nonNumeric = Enter a valid Unique Tax Reference. For example, 1234567891
-pdfMetaData.utr.error.greater.than.15 = Unique Tax Reference must be 15 characters or less
-
-exitSurvey.exit.link = Leave feedback on this service (opens in new tab).
+pdfMetaData.utr.error.greater.than.15 = Unique Tax Reference must be 10 characters.
