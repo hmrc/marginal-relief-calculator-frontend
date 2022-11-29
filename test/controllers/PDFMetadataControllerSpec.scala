@@ -144,7 +144,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         running(application) {
           val request =
             FakeRequest(POST, pDFMetadataRoute)
-              .withFormUrlEncodedBody(("companyName", "name"), ("utr", "12345"))
+              .withFormUrlEncodedBody(("companyName", "name"), ("utr", "1234567891"))
 
           val result = route(application, request).value
 

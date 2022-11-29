@@ -25,7 +25,9 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   implicit val noShrinkString: Shrink[String] = Shrink.shrinkAny
   val longUTR = 1234567890L
+  val nineCharUTR = 99999999L
   val over10LongUTR = 1234567890123L
+  val under10LongUTR = 0L
   val validPDFMetadataFormGenerator: Gen[PDFMetadataForm] = for {
 
     companyName <- option(stringsWithMaxLength(160))
@@ -34,12 +36,17 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   val invalidCompanyName: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- longBetween(0, longUTR)
+    utr           <- longBetween(1000000000L,longUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
-  val invalidLengthUTR: Gen[PDFMetadataForm] = for {
+  val invalidLengthAboveUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
     utr         <- longBetween(longUTR, over10LongUTR)
+  } yield PDFMetadataForm(Some(companyName), Some(utr))
+
+  val invalidLengthBelowUTR: Gen[PDFMetadataForm] = for {
+    companyName <- stringsWithMaxLength(160)
+    utr <- longBetween(under10LongUTR, nineCharUTR)
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val invalidCharUTR = for {
@@ -86,7 +93,17 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     }
 
     "should return error when utr length is over 10" in {
-      forAll(invalidLengthUTR) { invalid =>
+      forAll(invalidLengthAboveUTR) { invalid =>
+        val result =
+          form.bind(
+            (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
+          )
+        result.errors mustBe List(FormError("utr", Seq("pdfMetaData.utr.error.length")))
+      }
+    }
+
+    "should return error when utr length is under 10" in {
+      forAll(invalidLengthBelowUTR) { invalid =>
         val result =
           form.bind(
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
