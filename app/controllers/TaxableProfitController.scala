@@ -82,7 +82,8 @@ class TaxableProfitController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(TaxableProfitPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TaxableProfitPage, mode, updatedAnswers))
+              nextPage       <- navigator.nextPage(TaxableProfitPage, mode, updatedAnswers)
+            } yield Redirect(nextPage)
         )
     }
 }

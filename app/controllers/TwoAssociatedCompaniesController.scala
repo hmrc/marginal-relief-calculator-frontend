@@ -104,11 +104,7 @@ class TwoAssociatedCompaniesController @Inject() (
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
-                                            request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                            request.taxableProfit,
-                                            request.distributionsIncluded
-                                              .flatMap(_.distributionsIncludedAmount)
-                                              .map(_.toDouble)
+                                            request.accountingPeriod.accountingPeriodEndDateOrDefault
                                           )
         result <-
           ifAskAssocAskBothPartsThen(
@@ -157,11 +153,7 @@ class TwoAssociatedCompaniesController @Inject() (
               associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                                 .associatedCompaniesParameters(
                                                   request.accountingPeriod.accountingPeriodStartDate,
-                                                  request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                                  request.taxableProfit,
-                                                  request.distributionsIncluded
-                                                    .flatMap(_.distributionsIncludedAmount)
-                                                    .map(_.toDouble)
+                                                  request.accountingPeriod.accountingPeriodEndDateOrDefault
                                                 )
               result <-
                 ifAskAssocAskBothPartsThen(
@@ -177,11 +169,7 @@ class TwoAssociatedCompaniesController @Inject() (
                   associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                                     .associatedCompaniesParameters(
                                                       request.accountingPeriod.accountingPeriodStartDate,
-                                                      request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                                      request.taxableProfit,
-                                                      request.distributionsIncluded
-                                                        .flatMap(_.distributionsIncludedAmount)
-                                                        .map(_.toDouble)
+                                                      request.accountingPeriod.accountingPeriodEndDateOrDefault
                                                     )
                   result <-
                     ifAskAssocAskBothPartsThen(
@@ -194,7 +182,8 @@ class TwoAssociatedCompaniesController @Inject() (
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.set(TwoAssociatedCompaniesPage, value))
                   _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(TwoAssociatedCompaniesPage, mode, updatedAnswers))
+                  nextPage       <- navigator.nextPage(TwoAssociatedCompaniesPage, mode, updatedAnswers)
+                } yield Redirect(nextPage)
             }
         )
     }

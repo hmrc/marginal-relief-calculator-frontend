@@ -71,9 +71,7 @@ class CheckYourAnswersControllerSpec
 
       mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
-        accountingPeriodEnd = LocalDate.ofEpochDay(1),
-        1.0,
-        Some(1)
+        accountingPeriodEnd = LocalDate.ofEpochDay(1)
       )(*) returns Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
@@ -115,9 +113,7 @@ class CheckYourAnswersControllerSpec
 
       mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
-        accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1),
-        1.0,
-        Some(1)
+        accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
       )(*) returns Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
