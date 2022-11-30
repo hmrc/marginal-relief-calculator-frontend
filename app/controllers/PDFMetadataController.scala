@@ -38,6 +38,7 @@ class PDFMetadataController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  PDFRequiredDataAction: PDFRequiredDataAction,
   formProvider: PDFMetadataFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: PDFMetadataView
@@ -46,54 +47,7 @@ class PDFMetadataController @Inject() (
 
   private val form = formProvider()
 
-  case class PDFMetadataPageRequiredParams[A](
-    accountingPeriod: AccountingPeriodForm,
-    taxableProfit: Int,
-    distribution: Distribution,
-    distributionsIncluded: Option[DistributionsIncludedForm],
-    associatedCompanies: Option[AssociatedCompaniesForm],
-    request: Request[A],
-    userId: String,
-    userAnswers: UserAnswers
-  ) extends WrappedRequest[A](request)
-  private val requireDomainData = new ActionRefiner[DataRequest, PDFMetadataPageRequiredParams] {
-    override protected def refine[A](
-      request: DataRequest[A]
-    ): Future[Either[Result, PDFMetadataPageRequiredParams[A]]] =
-      Future.successful {
-        (
-          request.userAnswers.get(AccountingPeriodPage),
-          request.userAnswers.get(TaxableProfitPage),
-          request.userAnswers.get(DistributionPage),
-          request.userAnswers.get(DistributionsIncludedPage),
-          request.userAnswers.get(AssociatedCompaniesPage)
-        ) match {
-          case (
-                Some(accPeriod),
-                Some(taxableProfit),
-                Some(distribution),
-                maybeDistributionsIncluded,
-                maybeAssociatedCompanies
-              ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
-            Right(
-              PDFMetadataPageRequiredParams(
-                accPeriod,
-                taxableProfit,
-                distribution,
-                maybeDistributionsIncluded,
-                maybeAssociatedCompanies,
-                request,
-                request.userId,
-                request.userAnswers
-              )
-            )
-          case _ => Left(Redirect(routes.JourneyRecoveryController.onPageLoad()))
-        }
-      }
-    override protected def executionContext: ExecutionContext = ec
-  }
-
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData) {
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen PDFRequiredDataAction) {
     implicit request =>
       val preparedForm = request.userAnswers.get(PDFMetadataPage) match {
         case None        => form
@@ -102,7 +56,7 @@ class PDFMetadataController @Inject() (
       Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async {
     implicit request =>
       form
         .bindFromRequest()
