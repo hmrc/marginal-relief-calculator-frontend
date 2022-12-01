@@ -55,6 +55,20 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
     case TwoAssociatedCompaniesPage =>
       _ => routes.CheckYourAnswersController.onPageLoad
 
+    case PDFAddCompanyDetailsPage =>
+      answers =>
+        val details = answers
+          .get(PDFAddCompanyDetailsPage)
+          .map(details => details.pdfAddCompanyDetails)
+          .getOrElse(PDFAddCompanyDetails.Yes)
+        details match {
+          case PDFAddCompanyDetails.Yes =>
+            routes.PDFMetadataController.onPageLoad()
+          case PDFAddCompanyDetails.No =>
+            routes.PDFController.onPageLoad()
+
+        }
+
     case _ =>
       _ => routes.IndexController.onPageLoad
   }

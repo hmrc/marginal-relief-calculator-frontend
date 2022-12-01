@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ AskBothParts, AskOnePart, DontAsk, Period }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm }
 import pages.{ DistributionPage, _ }
 import models._
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -95,6 +95,30 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           )
         ) { result =>
           result mustBe routes.AssociatedCompaniesController.onPageLoad(NormalMode)
+        }
+      }
+
+      "must go from PDFAddCompanyDetailsPage to PDFMetaData page if answered yes" in {
+        whenReady(
+          navigator.nextPage(
+            PDFAddCompanyDetailsPage,
+            NormalMode,
+            UserAnswers("id").set(PDFAddCompanyDetailsPage, PDFAddCompanyDetailsForm(PDFAddCompanyDetails.Yes)).get
+          )
+        ) { result =>
+          result mustBe routes.PDFMetadataController.onPageLoad()
+        }
+      }
+
+      "must go from PDFAddCompanyDetailsPage to Pdf page if answered no" in {
+        whenReady(
+          navigator.nextPage(
+            PDFAddCompanyDetailsPage,
+            NormalMode,
+            UserAnswers("id").set(PDFAddCompanyDetailsPage, PDFAddCompanyDetailsForm(PDFAddCompanyDetails.No)).get
+          )
+        ) { result =>
+          result mustBe routes.PDFController.onPageLoad()
         }
       }
 

@@ -22,7 +22,7 @@ import connectors.sharedmodel.{ CalculatorResult, FYConfig }
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{ Distribution, UserAnswers }
+import models.{ Distribution, PDFAddCompanyDetails, UserAnswers }
 import pages._
 import play.api.http.HttpEntity
 import play.api.i18n.{ I18nSupport, MessagesApi }
@@ -77,7 +77,8 @@ class PDFController @Inject() (
           request.userAnswers.get(DistributionsIncludedPage),
           request.userAnswers.get(AssociatedCompaniesPage),
           request.userAnswers.get(PDFMetadataPage),
-          request.userAnswers.get(TwoAssociatedCompaniesPage)
+          request.userAnswers.get(TwoAssociatedCompaniesPage),
+          request.userAnswers.get(PDFAddCompanyDetailsPage)
         ) match {
           case (
                 Some(accPeriod),
@@ -86,7 +87,8 @@ class PDFController @Inject() (
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
                 maybePdfMetadata,
-                maybeTwoAssociatedCompanies
+                maybeTwoAssociatedCompanies,
+                maybeAddCompanyDetails
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
               PDFPageRequiredParams(
@@ -95,7 +97,9 @@ class PDFController @Inject() (
                 distribution,
                 maybeDistributionsIncluded,
                 maybeAssociatedCompanies,
-                maybePdfMetadata,
+                if (maybeAddCompanyDetails.exists(_.pdfAddCompanyDetails == PDFAddCompanyDetails.Yes))
+                  maybePdfMetadata
+                else None,
                 maybeTwoAssociatedCompanies,
                 request,
                 request.userId,
