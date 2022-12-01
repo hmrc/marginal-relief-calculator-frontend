@@ -18,16 +18,15 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions.IdentifierAction
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, BaseController, MessagesControllerComponents}
 
 import javax.inject.Inject
 
-class FeedbackSurveyController @Inject()(identify: IdentifierAction,
-                                         implicit val appConfig: FrontendAppConfig) extends BaseController {
+class FeedbackSurveyController @Inject() (identify: IdentifierAction, implicit val appConfig: FrontendAppConfig, override val controllerComponents: MessagesControllerComponents)
+    extends BaseController {
 
   def redirectToExitSurvey: Action[AnyContent] = identify { implicit request =>
-    Redirect("https://www.tax.service.gov.uk/feedback/mrc").withNewSession
+    Redirect(appConfig.exitSurveyUrl).withNewSession
   }
 
-  override protected def controllerComponents: ControllerComponents = ???
 }
