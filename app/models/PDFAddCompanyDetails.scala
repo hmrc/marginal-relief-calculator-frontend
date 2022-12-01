@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit request: Request[_], messages: Messages)
-<h2 class="govuk-heading-m">@messages("resultsPage.printOrSave")</h2>
-<p class="govuk-body">@messages("resultsPage.addReferenceBeforePrinting")</p>
-<p class="govuk-body"><a href="@routes.PDFAddCompanyDetailsController.onPageLoad().url" class="govuk-link">@messages("resultsPage.getACopyOfResults")</a></p>
-<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+package models
+
+sealed trait PDFAddCompanyDetails
+
+object PDFAddCompanyDetails extends Enumerable.Implicits {
+
+  case object Yes extends WithName("yes") with PDFAddCompanyDetails
+  case object No extends WithName("no") with PDFAddCompanyDetails
+
+  val values: Seq[PDFAddCompanyDetails] = Seq(
+    Yes,
+    No
+  )
+
+  implicit val enumerable: Enumerable[PDFAddCompanyDetails] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+}
