@@ -17,13 +17,12 @@
 package controllers
 
 import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataFormProvider }
-import models.requests.DataRequest
-import models.{ Distribution, NormalMode, UserAnswers }
+import forms.PDFMetadataFormProvider
+import models.NormalMode
 import navigation.Navigator
 import pages._
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PDFMetadataView
@@ -56,8 +55,8 @@ class PDFMetadataController @Inject() (
       Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async {
-    implicit request =>
+  def onSubmit(): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async { implicit request =>
       form
         .bindFromRequest()
         .fold(
@@ -69,5 +68,5 @@ class PDFMetadataController @Inject() (
               nextPage       <- navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers)
             } yield Redirect(nextPage)
         )
-  }
+    }
 }

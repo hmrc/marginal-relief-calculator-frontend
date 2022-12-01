@@ -27,20 +27,21 @@ import javax.inject.Inject
 import scala.concurrent.{ ExecutionContext, Future }
 
 case class PDFMetadataPageRequiredParams[A](
-                                             accountingPeriod: AccountingPeriodForm,
-                                             taxableProfit: Int,
-                                             distribution: Distribution,
-                                             distributionsIncluded: Option[DistributionsIncludedForm],
-                                             associatedCompanies: Option[AssociatedCompaniesForm],
-                                             request: Request[A],
-                                             userId: String,
-                                             userAnswers: UserAnswers
-                                           ) extends WrappedRequest[A](request)
+  accountingPeriod: AccountingPeriodForm,
+  taxableProfit: Int,
+  distribution: Distribution,
+  distributionsIncluded: Option[DistributionsIncludedForm],
+  associatedCompanies: Option[AssociatedCompaniesForm],
+  request: Request[A],
+  userId: String,
+  userAnswers: UserAnswers
+) extends WrappedRequest[A](request)
 
-class PDFRequiredDataAction @Inject() (implicit val executionContext: ExecutionContext) extends ActionRefiner[DataRequest, PDFMetadataPageRequiredParams] {
+class PDFRequiredDataAction @Inject() (implicit val executionContext: ExecutionContext)
+    extends ActionRefiner[DataRequest, PDFMetadataPageRequiredParams] {
   override protected def refine[A](
-                                    request: DataRequest[A]
-                                  ): Future[Either[Result, PDFMetadataPageRequiredParams[A]]] =
+    request: DataRequest[A]
+  ): Future[Either[Result, PDFMetadataPageRequiredParams[A]]] =
     Future.successful {
       (
         request.userAnswers.get(AccountingPeriodPage),
@@ -50,12 +51,12 @@ class PDFRequiredDataAction @Inject() (implicit val executionContext: ExecutionC
         request.userAnswers.get(AssociatedCompaniesPage)
       ) match {
         case (
-          Some(accPeriod),
-          Some(taxableProfit),
-          Some(distribution),
-          maybeDistributionsIncluded,
-          maybeAssociatedCompanies
-          ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
+              Some(accPeriod),
+              Some(taxableProfit),
+              Some(distribution),
+              maybeDistributionsIncluded,
+              maybeAssociatedCompanies
+            ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
           Right(
             PDFMetadataPageRequiredParams(
               accPeriod,

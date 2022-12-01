@@ -17,10 +17,9 @@
 package forms
 
 import forms.mappings.Mappings
-import models.{ DistributionsIncluded, PDFAddCompanyDetails }
+import models.PDFAddCompanyDetails
 import play.api.data.Form
 import play.api.data.Forms.mapping
-import utils.ConstraintsUtils.ONE_BILLION
 
 import javax.inject.Inject
 
@@ -29,8 +28,8 @@ class PDFAddCompanyDetailsFormProvider @Inject() extends Mappings {
     Form {
       mapping(
         "pdfAddCompanyDetails" -> enumerable[PDFAddCompanyDetails](
-          "distributionsIncluded.error.required",
-          "distributionsIncluded.error.invalid"
+          "pdfAddCompanyDetails.error.required",
+          "pdfAddCompanyDetails.error.invalid"
         )
       )(PDFAddCompanyDetailsForm.apply)(PDFAddCompanyDetailsForm.unapply)
     }

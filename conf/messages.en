@@ -354,8 +354,13 @@ pdf.legalDeclarationTitle = HMRC legal declaration
 pdf.legalDeclaration = HM Revenue and Customs cannot be held liable for incorrect output from this calculator. Correct information can only result from this calculator if correct details are entered
 pdf.page = Page {0} of {1}
 
+pdfAddCompanyDetails.title = Do you want to add company details to your results?
+pdfAddCompanyDetails.heading = Do you want to add company details to your results?
+pdfAddCompanyDetails.info = You will get a document that shows today’s date and time of completion, your answers and your result. This is for your records only, HMRC will not use these details.
+pdfAddCompanyDetails.error.required = Select whether you’d like to add company details or not.
+pdfAddCompanyDetails.error.invalid = Select whether you’d like to add company details or not.
+
 pdfMetaData.title = Add company details before you print or save your calculation
-pdfMetaData.info = You will get a document that shows today’s date and time of completion, your answers and your result. This is for your records only, HMRC will not use these details.
 pdfMetaData.heading = Add company details before you print or save your calculation
 pdfMetaData.companyname.label = Company name (optional)
 pdfMetaData.utr.label = Unique Tax Reference (optional)

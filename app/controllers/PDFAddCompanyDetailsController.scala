@@ -31,24 +31,26 @@ import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class PDFAddCompanyDetailsController @Inject() (override val messagesApi: MessagesApi,
-                                                val controllerComponents:MessagesControllerComponents,
-                                                sessionRepository: SessionRepository,
-                                                navigator: Navigator,
-                                                identify: IdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                PDFRequiredDataAction: PDFRequiredDataAction,
-                                                formProvider: PDFAddCompanyDetailsFormProvider,
-                                                view: PDFAddCompanyDetailsView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class PDFAddCompanyDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
+  sessionRepository: SessionRepository,
+  navigator: Navigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  PDFRequiredDataAction: PDFRequiredDataAction,
+  formProvider: PDFAddCompanyDetailsFormProvider,
+  view: PDFAddCompanyDetailsView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form = formProvider()
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen PDFRequiredDataAction) {
     implicit request =>
       val preparedForm = request.userAnswers.get(PDFAddCompanyDetailsPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
       Ok(view(preparedForm, NormalMode))
@@ -62,8 +64,8 @@ class PDFAddCompanyDetailsController @Inject() (override val messagesApi: Messag
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFAddCompanyDetailsPage, value))
-              _ <- sessionRepository.set(updatedAnswers)
-              nextPage <- navigator.nextPage(PDFAddCompanyDetailsPage, NormalMode, updatedAnswers)
+              _              <- sessionRepository.set(updatedAnswers)
+              nextPage       <- navigator.nextPage(PDFAddCompanyDetailsPage, NormalMode, updatedAnswers)
             } yield Redirect(nextPage)
         )
   }

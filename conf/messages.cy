@@ -319,8 +319,14 @@ pdf.legalDeclaration=Ni all Cyllid a Thollau EF fod yn atebol dros allbwn anghyw
 pdf.page1=Tudalen 1 o 3
 pdf.page2=Tudalen 2 o 3
 pdf.page3=Tudalen 3 o 3
+
+pdfAddCompanyDetails.title=
+pdfAddCompanyDetails.heading=
+pdfAddCompanyDetails.info=Cewch ddogfen sy’n dangos dyddiad heddiw a’r amser cwblhau, ynghyd â’ch atebion a’ch canlyniad. Mae hyn at eich cofnodion yn unig – ni fydd CThEF yn defnyddio’r manylion hyn.
+pdfAddCompanyDetails.error.required=
+pdfAddCompanyDetails.error.invalid=
+
 pdfMetaData.title=Ychwanegu manylion y cwmni at eich canlyniadau
-pdfMetaData.info=Cewch ddogfen sy’n dangos dyddiad heddiw a’r amser cwblhau, ynghyd â’ch atebion a’ch canlyniad. Mae hyn at eich cofnodion yn unig – ni fydd CThEF yn defnyddio’r manylion hyn.
 pdfMetaData.heading=Ychwanegu manylion y cwmni at eich canlyniadau
 pdfMetaData.companyname.label=Enw’r cwmni (dewisol)
 pdfMetaData.utr.label=Cyfeirnod Unigryw y Trethdalwr (dewisol)
