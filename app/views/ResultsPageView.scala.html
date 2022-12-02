@@ -38,7 +38,7 @@
 
     @titleAndBanner.html
 
-    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies)
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies, utils.ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(accountingPeriodForm.accountingPeriodEndDateOrDefault))
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
 

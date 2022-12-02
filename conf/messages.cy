@@ -167,7 +167,7 @@ resultsPage.corporationTaxTable.hidden=Tabl dadansoddol o’r rhwymedigaeth Tret
 resultsPage.getACopyOfResults=Cael copi o’r canlyniadau hyn
 resultsPage.addReferenceBeforePrinting=Gallwch hefyd ychwanegu manylion cyfeirnodau at y ddogfen hon cyn ei hargraffu.
 resultsPage.printOrSave=Argraffu neu gadw’ch cyfrifiad
-
+resultsPage.calculationDisclaimer =
 
 fullResultsPage.heading=Cyfrifiad ar gyfer Rhyddhad Ffiniol llawn yn fanwl
 fullResultsPage.howItsCalculated=Sut mae’n cael ei gyfrifo

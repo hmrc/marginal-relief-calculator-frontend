@@ -52,7 +52,8 @@ object ResultsPageHelper extends ViewHelper {
     distributions: Int,
     associatedCompanies: Int,
     displayCoversFinancialYears: Boolean = false,
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
+    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
+    displayCalcDisclaimer: Boolean
   )(implicit messages: Messages): Html =
     HtmlFormat.fill(
       immutable.Seq(
@@ -109,6 +110,11 @@ object ResultsPageHelper extends ViewHelper {
                 }
                 .body
             else "",
+            if (displayCalcDisclaimer)
+              p(messages("resultsPage.calculationDisclaimer"))
+            else {
+              ""
+            },
             hr.body
           ).mkString
         )
