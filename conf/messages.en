@@ -282,7 +282,7 @@ taxableProfit.hint = Must be entered as a whole number. For example, 70000
 distribution.title = Did your company receive any distributions?
 distribution.heading = Did your company receive any distributions?
 distribution.listHeading = Distributions include:
-distribution.listItem1 = dividends from an investment you made
+distribution.listItem1 = dividends from an investment your company made
 distribution.listItem2 = distributions of assets
 distribution.listItem3 = amounts treated as a distribution on the transfer of assets or liabilities
 distribution.listItem4 = the repayment of share capital
@@ -296,7 +296,7 @@ distribution.errorsummary = There is a problem.
 
 distributionsIncluded.title = Do any distributions need to be included with your profits?
 distributionsIncluded.heading = Do any distributions need to be included with your profits?
-distributionsIncluded.listHeading = To calculate your Marginal Relief accurately you must tell us about any distributions you receive from unrelated, unconnected companies. Distributions include:
+distributionsIncluded.listHeading = To calculate your Marginal Relief accurately you must tell us about any distributions you receive from non-group, unconnected companies. Distributions include:
 distributionsIncluded.listItem1 = dividends from an investment your company made
 distributionsIncluded.listItem2 = assets. For example, property or separate businesses
 distributionsIncluded.listItem3 = repayment of share capital through the transfer of cash or fixed assets
