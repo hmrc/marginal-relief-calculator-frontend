@@ -21,7 +21,7 @@ import forms.DateUtils.DateOps
 import forms.{ AccountingPeriodForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import utils.{ CurrencyUtils, DateUtils, PercentageUtils }
+import utils.{ CurrencyUtils, DateUtils, PercentageUtils, ShowCalculatorDisclaimerUtils }
 import views.helpers.FullResultsPageHelper.{ marginalReliefFormula, nonTabCalculationResultsTable, showMarginalReliefExplanation }
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
@@ -260,7 +260,8 @@ object PDFViewHelper extends ViewHelper {
           distributions,
           associatedCompanies,
           false,
-          twoAssociatedCompanies
+          twoAssociatedCompanies,
+          ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(accountingPeriodForm.accountingPeriodEndDateOrDefault)
         )}
          |       </div>
          |       </div>

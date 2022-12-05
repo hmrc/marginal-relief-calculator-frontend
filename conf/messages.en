@@ -176,6 +176,7 @@ resultsPage.corporationTaxTable.hidden = Corporation tax liability breakdown tab
 resultsPage.getACopyOfResults = Get a copy of these results
 resultsPage.addReferenceBeforePrinting = Add optional company details before you print or save your calculation.
 resultsPage.printOrSave = Print or save your calculation
+resultsPage.calculationDisclaimer = These results are based on current Corporation Tax rates and Marginal Relief limits and are subject to future changes.
 
 fullResultsPage.heading = Full Marginal Relief calculation in detail
 fullResultsPage.howItsCalculated = How it''s calculated
