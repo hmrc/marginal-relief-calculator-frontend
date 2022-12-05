@@ -124,7 +124,7 @@ accountingPeriodEndDate.change.hidden = End date
 
 accountingPeriodIrrelevant.title = You''re not eligible for Marginal Relief
 accountingPeriodIrrelevant.heading = You''re not eligible for Marginal Relief
-accountingPeriodIrrelevant.body = Your accounting period is before the 1 April 2023 start date for Marginal Relief.
+accountingPeriodIrrelevant.body = Your accounting period ends before the 1 April 2023 start date for Marginal Relief.
 accountingPeriodIrrelevant.guidance = Read more about Marginal Relief guidance
 accountingPeriodIrrelevant.restart = Restart calculation
 
