@@ -57,7 +57,7 @@ index.guidance.corporationTaxGuidance=Arweiniad ar Ryddhad Ffiniol
 index.guidance.corporationTaxRatesAndReliefs=Cyfraddau a rhyddhadau Treth Gorfforaeth
 index.guidance.requirements.item1=dyddiadau dechrau a dod i ben cyfnod cyfrifyddu’ch cwmni
 index.guidance.requirements.item2=cyfanswm elw trethadwy eich cwmni
-index.guidance.requirements.item3=unrhyw {0}ddosbarthiadau{1} o gwmnïau anghysylltiedig, amherthnasol
+index.guidance.requirements.item3=index.guidance.requirements.item3
 index.guidance.requirements.item4=manylion unrhyw {0}gwmni anghysylltiedig{1}
 checkYourAnswers.title=Gwirio’ch atebion
 checkYourAnswers.heading=Gwirio’ch atebion
@@ -118,7 +118,7 @@ accountingPeriodEndDate.error.invalid=Nodwch ddyddiad dod i ben dilys ar gyfer y
 accountingPeriodEndDate.change.hidden=Dyddiad dod i ben
 accountingPeriodIrrelevant.title=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol
 accountingPeriodIrrelevant.heading=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol
-accountingPeriodIrrelevant.body=Mae’ch cyfnod cyfrifyddu cyn dyddiad dechrau’r Rhyddhad Ffiniol sef 1 Ebrill 2023.
+accountingPeriodIrrelevant.body=accountingPeriodIrrelevant.body
 accountingPeriodIrrelevant.guidance=Darllenwch ragor am yr arweiniad ar Ryddhad Ffiniol
 accountingPeriodIrrelevant.restart=Ailddechrau’r cyfrifiad
 resultsPage.title=Canlyniadau’r Rhyddhad Ffiniol
@@ -167,7 +167,7 @@ resultsPage.corporationTaxTable.hidden=Tabl dadansoddol o’r rhwymedigaeth Tret
 resultsPage.getACopyOfResults=Cael copi o’r canlyniadau hyn
 resultsPage.addReferenceBeforePrinting=Gallwch hefyd ychwanegu manylion cyfeirnodau at y ddogfen hon cyn ei hargraffu.
 resultsPage.printOrSave=Argraffu neu gadw’ch cyfrifiad
-resultsPage.calculationDisclaimer =
+resultsPage.calculationDisclaimer = resultsPage.calculationDisclaimer
 
 fullResultsPage.heading=Cyfrifiad ar gyfer Rhyddhad Ffiniol llawn yn fanwl
 fullResultsPage.howItsCalculated=Sut mae’n cael ei gyfrifo
@@ -191,16 +191,7 @@ fullResultsPage.marginalReliefNotAvailable=Nid oedd Rhyddhad Ffiniol ar gael ym 
 fullResultsPage.marginalReliefFormula=Y fformiwla ar gyfer Rhyddhad Ffiniol yw:
 fullResultsPage.marginalReliefFormula.description=(Terfyn uchaf wedi’i addasu - elw trethadwy gan gynnwys dosbarthiadau) × (elw trethadwy ÷ elw trethadwy gan gynnwys dosbarthiadau) × (ffracsiwn Rhyddhad Ffiniol)
 fullResultsPage.whatIsMarginalRateFraction=Beth yw’r ffracsiwn Rhyddhad Ffiniol?
-fullResultsPage.details.standardFraction=Y ffracsiwn safonol yw’r gwahaniaeth rhwng y brif gyfradd a’r gyfradd ffiniol a fynegir fel ffracsiwn.
-fullResultsPage.details.standardFractionExample=Er enghraifft, y gwahaniaeth rhwng y gyfradd ffiniol o 26.5% o’i chymharu â’r brif gyfradd o 25% yw 1.5% = 3 ÷ 200
-fullResultsPage.details.examples.1=£62,500 - £9,500 =
-fullResultsPage.details.examples.1.ans=£53,000
-fullResultsPage.details.examples.2=£250,000 - £50,000 =
-fullResultsPage.details.examples.2.ans=£200,000
-fullResultsPage.details.examples.3=£53,000 ÷ £200,000 =
-fullResultsPage.details.examples.3.ans=26.50%
-fullResultsPage.details.examples.4=53,000 ÷ 200,000 = 26.5% o gyfradd ffiniol
-fullResultsPage.details.examples.3.rate=cyfradd ffiniol
+fullResultsPage.details.standardFraction=fullResultsPage.details.standardFraction
 fullResultsPage.calculation=Cyfrifiad
 fullResultsPage.result=Canlyniad
 fullResultsPage.whatToDoNext=Yr hyn i’w wneud nesaf
@@ -211,15 +202,15 @@ fullResultsPage.financialYear.adjustedUpperLimit=Terfyn uchaf addasedig
 fullResultsPage.financialYear.adjustedLowerLimit=Terfyn isaf addasedig
 fullResultsPage.lowerLimit=terfyn isaf
 fullResultsPage.variables=Elfennau newidiol y cyfrifiad
-fullResultsPage.details.whatIsMarginalRate=Enghraifft o gyfrifo cyfradd ffiniol
-fullResultsPage.details.smallProfitRate=Cyfradd elw bychan o
-fullResultsPage.details.smallProfitRateNumber=19%
-fullResultsPage.details.mainProfitRate=Y brif gyfradd o
-fullResultsPage.details.mainProfitRateNumber=25%
-fullResultsPage.details.lowerLimitRate=Y terfyn isaf yw £50,000 × 19% =
-fullResultsPage.details.lowerLimitRateNumber=£9,500
-fullResultsPage.details.upperLimitRate=Y terfyn uchaf yw £250,000 × 25% =
-fullResultsPage.details.upperLimitRateNumber=£62,500
+fullResultsPage.details.whatIsMarginalRate=fullResultsPage.details.whatIsMarginalRate
+fullResultsPage.details.1=fullResultsPage.details.1
+fullResultsPage.details.2=fullResultsPage.details.2
+fullResultsPage.details.3.less=fullResultsPage.details.3.less
+fullResultsPage.details.3=fullResultsPage.details.3
+fullResultsPage.details.4.equals=fullResultsPage.details.4.equals
+fullResultsPage.details.4=fullResultsPage.details.4
+fullResultsPage.details.5=fullResultsPage.details.5
+fullResultsPage.details.6=fullResultsPage.details.6
 
 
 fullResultsPage.notEligibleAboveUpperLimit.1=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol oherwydd bod eich elw trethadwy gan gynnwys dosbarthiadau o
@@ -243,7 +234,7 @@ associatedCompanies.heading=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig?
 associatedCompanies.heading.between=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig rhwng {0} a {1}?
 associatedCompanies.warning=Peidiwch â chynnwys y cwmni rydych yn cyfrifo Rhyddhad Ffiniol amdano yn eich ateb. Bydd gwneud hynny yn arwain at ganlyniad anghywir.
 associatedCompanies.detailsTitle=Beth yw cwmnïau cysylltiedig?
-associatedCompanies.detailsHtml=<p>Ystyrir bod cwmni’n gysylltiedig ag un arall os yw’r canlynol yn wir:</p><ul class="govuk-list govuk-list--bullet"><li>mae gan un o’r cwmnïau reolaeth dros y llall</li><li>mae’r ddau gwmni wedi’u rheoli gan yr un cwmnïau neu’r un bobl</li></ul>
+associatedCompanies.detailsHtml=associatedCompanies.detailsHtml Minor change
 associatedCompanies.countLabel=Nodwch gwmnïau cysylltiedig yn unig
 associatedCompanies.countLabelBetween=Nodwch gwmnïau cysylltiedig ychwanegol rhwng {0} a {1}
 associatedCompanies.checkYourAnswersLabel=Nifer y cwmnïau cysylltiedig
@@ -269,10 +260,10 @@ taxableProfit.hint=Rhaid nodi rhif cyfan. Er enghraifft, 70000
 distribution.title=A gawsoch unrhyw ddosbarthiadau?
 distribution.heading=A gawsoch unrhyw ddosbarthiadau?
 distribution.listHeading=Mae dosbarthiadau’n cynnwys:
-distribution.listItem1=difidendau o fuddsoddiad a wnaethoch
+distribution.listItem1=distribution.listItem1 Minor Change
 distribution.listItem2=dosbarthu asedion
 distribution.listItem3=symiau a gafodd eu trin fel dosbarthiad wrth drosglwyddo asedion neu rwymedigaethau
-distribution.listItem4=ad-dalu cyfranddaliadau cyfalaf
+distribution.listItem4=distribution.listItem4 Minor change
 distribution.yes=Iawn
 distribution.no=Na
 distribution.checkYourAnswersLabel=A gawsoch unrhyw ddosbarthiadau?
@@ -282,8 +273,8 @@ distribution.change.hidden=Dosbarthu
 distribution.errorsummary=Mae problem wedi codi.
 distributionsIncluded.title=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
 distributionsIncluded.heading=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
-distributionsIncluded.listHeading=I gyfrifo’ch Rhyddhad Ffiniol yn gywir, mae’n rhaid i chi roi gwybod i ni am unrhyw ddosbarthiadau a gewch o gwmnïau anghysylltiedig, amherthnasol. Mae dosbarthiadau’n cynnwys:
-distributionsIncluded.listItem1=difidendau o fuddsoddiad a wnaethoch
+distributionsIncluded.listHeading=distributionsIncluded.listHeading Minor Change
+distributionsIncluded.listItem1=distributionsIncluded.listItem1
 distributionsIncluded.listItem2=asedion. Er enghraifft, eiddo neu fusnesau ar wahân
 distributionsIncluded.listItem3=ad-dalu cyfranddaliadau cyfalaf drwy drosglwyddo arian parod neu asedion sefydlog
 distributionsIncluded.detailsTitle=Dosbarthiadau na ddylech eu cynnwys
@@ -320,11 +311,11 @@ pdf.page1=Tudalen 1 o 3
 pdf.page2=Tudalen 2 o 3
 pdf.page3=Tudalen 3 o 3
 
-pdfAddCompanyDetails.title=
-pdfAddCompanyDetails.heading=
+pdfAddCompanyDetails.title=pdfAddCompanyDetails.title
+pdfAddCompanyDetails.heading=pdfAddCompanyDetails.heading
 pdfAddCompanyDetails.info=Cewch ddogfen sy’n dangos dyddiad heddiw a’r amser cwblhau, ynghyd â’ch atebion a’ch canlyniad. Mae hyn at eich cofnodion yn unig – ni fydd CThEF yn defnyddio’r manylion hyn.
-pdfAddCompanyDetails.error.required=
-pdfAddCompanyDetails.error.invalid=
+pdfAddCompanyDetails.error.required=pdfAddCompanyDetails.error.required
+pdfAddCompanyDetails.error.invalid=pdfAddCompanyDetails.error.invalid
 
 pdfMetaData.title=Ychwanegu manylion y cwmni at eich canlyniadau
 pdfMetaData.heading=Ychwanegu manylion y cwmni at eich canlyniadau
