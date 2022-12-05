@@ -202,32 +202,18 @@ fullResultsPage.marginalReliefNotAvailable = Marginal Relief was not available i
 fullResultsPage.marginalReliefFormula = Marginal Relief formula is:
 fullResultsPage.marginalReliefFormula.description = (Adjusted upper limit - taxable profit including distributions) × (taxable profit ÷ taxable profit including distributions) × (Marginal Relief fraction)
 fullResultsPage.whatIsMarginalRateFraction = What is the Marginal Relief fraction?
-fullResultsPage.details.standardFraction = The Marginal Relief fraction calculates the tax due for the lower and upper limits and is the difference between the main rate and the marginal rate expressed as a fraction.
-fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.5% compared with the main rate 25% is 1.5% = 3 ÷ 200
+fullResultsPage.details.standardFraction = The standard marginal relief fraction is the difference between the main rate and the marginal rate expressed as a fraction.
 fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
-fullResultsPage.details.smallProfitRate = Where the small profits rate is 19% and the main rate is 25%:
-fullResultsPage.details.examples.1 = £50,000 (lower limit) × 19% = £9,500
-fullResultsPage.details.examples.2 = £250,000 (upper limit) × 25% = £62,500
-fullResultsPage.details.examples.3 = £200,000 (the difference between lower and upper limits) × X% = £53,000
-fullResultsPage.details.examples.4 = 53,000 ÷ 200,000 = 26.5% marginal rate
+fullResultsPage.details.1 = Where the small profits rate is 19% and the main rate is 25%:
+fullResultsPage.details.2 = CT Payable on profits at the upper limit = £62,500 (£250,000 x 25%)
+fullResultsPage.details.3.less = Less
+fullResultsPage.details.3 = Less CT payable profits at the lower limit = £9,500 (£50,000 x 19%)
+fullResultsPage.details.4.equals = Equals
+fullResultsPage.details.4 = Tax payable on the difference of £200,000 = £53,000
+fullResultsPage.details.5 = The marginal rate is therefore 26.5% (£53,000 / £200,000)
+fullResultsPage.details.6 = The difference between the marginal rate of 26.5% and the main rate of 25% is 1.5% which is then expressed as 3/200.
 fullResultsPage.variables = Calculation variables
-fullResultsPage.details.standardFractionExample = For example, the difference between the marginal rate of 26.50% compared with the main rate 25% is 1.5% = 3 ÷ 200
-fullResultsPage.details.whatIsMarginalRate = Marginal rate calculation example
-fullResultsPage.details.smallProfitRate = Small profits rate of
-fullResultsPage.details.smallProfitRateNumber = 19%
-fullResultsPage.details.mainProfitRate = The main rate of
-fullResultsPage.details.mainProfitRateNumber = 25%
-fullResultsPage.details.lowerLimitRate = Lower limit is £50,000 × 19% =
-fullResultsPage.details.lowerLimitRateNumber = £9,500
-fullResultsPage.details.upperLimitRate = Upper limit is £250,000 × 25% =
-fullResultsPage.details.upperLimitRateNumber = £62,500
-fullResultsPage.details.examples.1 = £62,500 - £9,500 =
-fullResultsPage.details.examples.1.ans = £53,000
-fullResultsPage.details.examples.2 = £250,000 - £50,000 =
-fullResultsPage.details.examples.2.ans = £200,000
-fullResultsPage.details.examples.3 = £53,000 ÷ £200,000 =
-fullResultsPage.details.examples.3.ans = 26.50%
-fullResultsPage.details.examples.3.rate = marginal rate
+fullResultsPage.details.whatIsMarginalRate = What is marginal rate?
 fullResultsPage.calculation = Calculation
 fullResultsPage.result = Result
 fullResultsPage.notEligibleAboveUpperLimit.1 = You''re not eligible for Marginal Relief because your Taxable profit including distributions of

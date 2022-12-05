@@ -188,25 +188,15 @@ object FullResultsPageHelper extends ViewHelper {
       Details(
         summary = Text(messages("fullResultsPage.whatIsMarginalRateFraction")),
         content = HtmlContent(
-          s"""<p class="govuk-!-margin-0">${messages("fullResultsPage.details.standardFraction")}</p>
-             |    <p>${messages("fullResultsPage.details.standardFractionExample")}</p>
+          s"""<p class="">${messages("fullResultsPage.details.standardFraction")}</p>
              |    <p><b>${messages("fullResultsPage.details.whatIsMarginalRate")}</b></p>
-             |    <p>${messages("fullResultsPage.details.smallProfitRate")}
-             |      <strong>${messages("fullResultsPage.details.smallProfitRateNumber")}</strong><br/>
-             |        ${messages("fullResultsPage.details.mainProfitRate")}
-             |       <strong> ${messages("fullResultsPage.details.mainProfitRateNumber")}</strong><br>
-             |        ${messages("fullResultsPage.details.lowerLimitRate")}
-             |        <strong>${messages("fullResultsPage.details.lowerLimitRateNumber")}</strong><br/>
-             |        ${messages("fullResultsPage.details.upperLimitRate")}
-             |        <strong>${messages("fullResultsPage.details.upperLimitRateNumber")}</strong></p>
+             |    <p>${messages("fullResultsPage.details.1")}<br/>
+             |       ${messages("fullResultsPage.details.2")}<br/>
+             |       <i>${messages("fullResultsPage.details.3.less")}</i> ${messages("fullResultsPage.details.3")}<br/>
+             |       <i>${messages("fullResultsPage.details.4.equals")}</i> ${messages("fullResultsPage.details.4")}
              |    <p>
-             |        ${messages("fullResultsPage.details.examples.1")}
-             |       <strong> ${messages("fullResultsPage.details.examples.1.ans")}</strong><br/>
-             |        ${messages("fullResultsPage.details.examples.2")}
-             |        <strong>${messages("fullResultsPage.details.examples.2.ans")}</strong><br/>
-             |        ${messages("fullResultsPage.details.examples.3")}
-             |       <strong> ${messages("fullResultsPage.details.examples.3.ans")}</strong>
-             |        ${messages("fullResultsPage.details.examples.3.rate")} <br/>
+             |        ${messages("fullResultsPage.details.5")}<br/>
+             |        ${messages("fullResultsPage.details.6")}
              |    </p>""".stripMargin
         )
       )

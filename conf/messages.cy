@@ -191,16 +191,7 @@ fullResultsPage.marginalReliefNotAvailable=Nid oedd Rhyddhad Ffiniol ar gael ym 
 fullResultsPage.marginalReliefFormula=Y fformiwla ar gyfer Rhyddhad Ffiniol yw:
 fullResultsPage.marginalReliefFormula.description=(Terfyn uchaf wedi’i addasu - elw trethadwy gan gynnwys dosbarthiadau) × (elw trethadwy ÷ elw trethadwy gan gynnwys dosbarthiadau) × (ffracsiwn Rhyddhad Ffiniol)
 fullResultsPage.whatIsMarginalRateFraction=Beth yw’r ffracsiwn Rhyddhad Ffiniol?
-fullResultsPage.details.standardFraction=Y ffracsiwn safonol yw’r gwahaniaeth rhwng y brif gyfradd a’r gyfradd ffiniol a fynegir fel ffracsiwn.
-fullResultsPage.details.standardFractionExample=Er enghraifft, y gwahaniaeth rhwng y gyfradd ffiniol o 26.5% o’i chymharu â’r brif gyfradd o 25% yw 1.5% = 3 ÷ 200
-fullResultsPage.details.examples.1=£62,500 - £9,500 =
-fullResultsPage.details.examples.1.ans=£53,000
-fullResultsPage.details.examples.2=£250,000 - £50,000 =
-fullResultsPage.details.examples.2.ans=£200,000
-fullResultsPage.details.examples.3=£53,000 ÷ £200,000 =
-fullResultsPage.details.examples.3.ans=26.50%
-fullResultsPage.details.examples.4=53,000 ÷ 200,000 = 26.5% o gyfradd ffiniol
-fullResultsPage.details.examples.3.rate=cyfradd ffiniol
+fullResultsPage.details.standardFraction=fullResultsPage.details.standardFraction
 fullResultsPage.calculation=Cyfrifiad
 fullResultsPage.result=Canlyniad
 fullResultsPage.whatToDoNext=Yr hyn i’w wneud nesaf
@@ -211,15 +202,15 @@ fullResultsPage.financialYear.adjustedUpperLimit=Terfyn uchaf addasedig
 fullResultsPage.financialYear.adjustedLowerLimit=Terfyn isaf addasedig
 fullResultsPage.lowerLimit=terfyn isaf
 fullResultsPage.variables=Elfennau newidiol y cyfrifiad
-fullResultsPage.details.whatIsMarginalRate=Enghraifft o gyfrifo cyfradd ffiniol
-fullResultsPage.details.smallProfitRate=Cyfradd elw bychan o
-fullResultsPage.details.smallProfitRateNumber=19%
-fullResultsPage.details.mainProfitRate=Y brif gyfradd o
-fullResultsPage.details.mainProfitRateNumber=25%
-fullResultsPage.details.lowerLimitRate=Y terfyn isaf yw £50,000 × 19% =
-fullResultsPage.details.lowerLimitRateNumber=£9,500
-fullResultsPage.details.upperLimitRate=Y terfyn uchaf yw £250,000 × 25% =
-fullResultsPage.details.upperLimitRateNumber=£62,500
+fullResultsPage.details.whatIsMarginalRate=fullResultsPage.details.whatIsMarginalRate
+fullResultsPage.details.1=fullResultsPage.details.1
+fullResultsPage.details.2=fullResultsPage.details.2
+fullResultsPage.details.3.less=fullResultsPage.details.3.less
+fullResultsPage.details.3=fullResultsPage.details.3
+fullResultsPage.details.4.equals=fullResultsPage.details.4.equals
+fullResultsPage.details.4=fullResultsPage.details.4
+fullResultsPage.details.5=fullResultsPage.details.5
+fullResultsPage.details.6=fullResultsPage.details.6
 
 
 fullResultsPage.notEligibleAboveUpperLimit.1=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol oherwydd bod eich elw trethadwy gan gynnwys dosbarthiadau o
