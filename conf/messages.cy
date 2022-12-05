@@ -243,7 +243,7 @@ associatedCompanies.heading=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig?
 associatedCompanies.heading.between=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig rhwng {0} a {1}?
 associatedCompanies.warning=Peidiwch â chynnwys y cwmni rydych yn cyfrifo Rhyddhad Ffiniol amdano yn eich ateb. Bydd gwneud hynny yn arwain at ganlyniad anghywir.
 associatedCompanies.detailsTitle=Beth yw cwmnïau cysylltiedig?
-associatedCompanies.detailsHtml=<p>Ystyrir bod cwmni’n gysylltiedig ag un arall os yw’r canlynol yn wir:</p><ul class="govuk-list govuk-list--bullet"><li>mae gan un o’r cwmnïau reolaeth dros y llall</li><li>mae’r ddau gwmni wedi’u rheoli gan yr un cwmnïau neu’r un bobl</li></ul>
+associatedCompanies.detailsHtml=associatedCompanies.detailsHtml Minor change
 associatedCompanies.countLabel=Nodwch gwmnïau cysylltiedig yn unig
 associatedCompanies.countLabelBetween=Nodwch gwmnïau cysylltiedig ychwanegol rhwng {0} a {1}
 associatedCompanies.checkYourAnswersLabel=Nifer y cwmnïau cysylltiedig
