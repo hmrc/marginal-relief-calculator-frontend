@@ -207,7 +207,7 @@ fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
 fullResultsPage.details.1 = Where the small profits rate is 19% and the main rate is 25%:
 fullResultsPage.details.2 = CT Payable on profits at the upper limit = £62,500 (£250,000 x 25%)
 fullResultsPage.details.3.less = Less
-fullResultsPage.details.3 = Less CT payable profits at the lower limit = £9,500 (£50,000 x 19%)
+fullResultsPage.details.3 = CT payable profits at the lower limit = £9,500 (£50,000 x 19%)
 fullResultsPage.details.4.equals = Equals
 fullResultsPage.details.4 = Tax payable on the difference of £200,000 = £53,000
 fullResultsPage.details.5 = The marginal rate is therefore 26.5% (£53,000 / £200,000)
