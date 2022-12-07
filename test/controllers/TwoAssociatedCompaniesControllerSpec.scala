@@ -71,9 +71,7 @@ class TwoAssociatedCompaniesControllerSpec
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          None
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(askParameter)
 
         running(application) {
@@ -107,9 +105,7 @@ class TwoAssociatedCompaniesControllerSpec
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1),
-          1.0,
-          None
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )(*) returns Future.successful(askParameter)
 
         running(application) {
@@ -141,9 +137,7 @@ class TwoAssociatedCompaniesControllerSpec
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          None
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(askParameter)
 
         running(application) {
@@ -189,9 +183,7 @@ class TwoAssociatedCompaniesControllerSpec
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1),
-          1.0,
-          None
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )(*) returns Future.successful(askParameter)
 
         running(application) {
@@ -260,9 +252,7 @@ class TwoAssociatedCompaniesControllerSpec
 
           mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-            1.0,
-            None
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
           when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
 
@@ -314,9 +304,7 @@ class TwoAssociatedCompaniesControllerSpec
 
           mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-            1.0,
-            None
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
           when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
 
@@ -379,9 +367,7 @@ class TwoAssociatedCompaniesControllerSpec
 
           mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-            1.0,
-            None
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
           when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
 

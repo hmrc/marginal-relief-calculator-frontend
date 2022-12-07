@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import forms._
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -30,19 +30,19 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.PDFMetadataView
+import views.html.PDFAddCompanyDetailsView
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
+class PDFAddCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  private val formProvider = new PDFMetadataFormProvider()
+  private val formProvider = new PDFAddCompanyDetailsFormProvider()
   private val form = formProvider()
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
-  private val pDFMetadataRoute = routes.PDFMetadataController.onPageLoad().url
+  private val addCompanyDetailsRoute = routes.PDFAddCompanyDetailsController.onPageLoad().url
 
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, AccountingPeriodForm(epoch, Some(epoch.plusDays(1))))
@@ -73,38 +73,14 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, pDFMetadataRoute)
+          val request = FakeRequest(GET, addCompanyDetailsRoute)
 
           val result = route(application, request).value
 
-          val view = application.injector.instanceOf[PDFMetadataView]
+          val view = application.injector.instanceOf[PDFAddCompanyDetailsView]
 
           status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form)(
-            request,
-            messages(application)
-          ).toString.filterAndTrim
-        }
-      }
-
-      "must populate the view correctly on a GET when the question has previously been answered" in {
-
-        val StringUTR = "123456789112345L"
-
-        val userAnswers =
-          requiredAnswers.set(PDFMetadataPage, PDFMetadataForm(Some("name"), Some(StringUTR))).get
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        running(application) {
-          val request = FakeRequest(GET, pDFMetadataRoute)
-
-          val view = application.injector.instanceOf[PDFMetadataView]
-
-          val result = route(application, request).value
-
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form.fill(PDFMetadataForm(Some("name"), Some(StringUTR))))(
+          contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -116,7 +92,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val request = FakeRequest(GET, pDFMetadataRoute)
+          val request = FakeRequest(GET, addCompanyDetailsRoute)
 
           val result = route(application, request).value
 
@@ -146,8 +122,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            FakeRequest(POST, pDFMetadataRoute)
-              .withFormUrlEncodedBody(("companyName", "name"), ("utr", "1234567891"))
+            FakeRequest(POST, addCompanyDetailsRoute)
+              .withFormUrlEncodedBody(("pdfAddCompanyDetails", "yes"))
 
           val result = route(application, request).value
 
@@ -162,18 +138,18 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            FakeRequest(POST, pDFMetadataRoute)
+            FakeRequest(POST, addCompanyDetailsRoute)
               .withFormUrlEncodedBody("companyName" -> "A" * 161, "utr" -> "1" * 16)
 
           val boundForm = form
             .bind(Map("companyName" -> "A" * 161, "utr" -> "1" * 16))
 
-          val view = application.injector.instanceOf[PDFMetadataView]
+          val view = application.injector.instanceOf[PDFAddCompanyDetailsView]
 
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result).filterAndTrim mustEqual view(boundForm)(
+          contentAsString(result).filterAndTrim mustEqual view(boundForm, NormalMode)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -186,8 +162,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
         running(application) {
           val request =
-            FakeRequest(POST, pDFMetadataRoute)
-              .withFormUrlEncodedBody(("companyName", "name"), ("utr", "12345"))
+            FakeRequest(POST, addCompanyDetailsRoute)
+              .withFormUrlEncodedBody(("pdfAddCompanyDetails", "yes"))
 
           val result = route(application, request).value
 

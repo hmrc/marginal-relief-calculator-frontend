@@ -55,6 +55,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
   val invalidLengthBelowUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
     utr <- numericStringUnder
+
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val invalidCharUTR = for {

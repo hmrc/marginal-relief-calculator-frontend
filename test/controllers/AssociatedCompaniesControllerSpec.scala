@@ -65,9 +65,7 @@ class AssociatedCompaniesControllerSpec
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(AskFull)
 
         running(application) {
@@ -113,9 +111,7 @@ class AssociatedCompaniesControllerSpec
           .build()
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(AskFull)
 
         running(application) {
@@ -147,9 +143,7 @@ class AssociatedCompaniesControllerSpec
 
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
 
         running(application) {
@@ -201,9 +195,7 @@ class AssociatedCompaniesControllerSpec
           mock[MarginalReliefCalculatorConnector]
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(DontAsk)
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -223,9 +215,7 @@ class AssociatedCompaniesControllerSpec
           mock[MarginalReliefCalculatorConnector]
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
 
         val application = applicationBuilder(Some(requiredAnswers))
@@ -252,9 +242,7 @@ class AssociatedCompaniesControllerSpec
         when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
 
         val application =
@@ -295,9 +283,7 @@ class AssociatedCompaniesControllerSpec
         ) thenReturn Future.successful(true)
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
 
         val application =
@@ -333,9 +319,7 @@ class AssociatedCompaniesControllerSpec
         when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(
           AskBothParts(
             Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
@@ -383,9 +367,7 @@ class AssociatedCompaniesControllerSpec
           forAll(table) { (requestParams, associatedCompaniesParameter) =>
             mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
               accountingPeriodStart = LocalDate.ofEpochDay(0),
-              accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-              1.0,
-              Some(1)
+              accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
             )(*) returns Future.successful(associatedCompaniesParameter)
 
             val request =
@@ -416,9 +398,7 @@ class AssociatedCompaniesControllerSpec
           mock[MarginalReliefCalculatorConnector]
         mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1),
-          1.0,
-          Some(1)
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
         val application =
           applicationBuilder(Some(requiredAnswers))

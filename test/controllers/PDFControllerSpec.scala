@@ -20,10 +20,10 @@ import akka.stream.Materializer
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFMetadataPage, TaxableProfitPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -72,6 +72,13 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     .set(
       PDFMetadataPage,
       PDFMetadataForm(Some("company"), Some(utrString))
+    )
+    .get
+    .set(
+      PDFAddCompanyDetailsPage,
+      PDFAddCompanyDetailsForm(
+        PDFAddCompanyDetails.Yes
+      )
     )
     .get
 
