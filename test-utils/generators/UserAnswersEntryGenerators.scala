@@ -73,7 +73,7 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
   implicit lazy val arbitraryPDFMetadataForm: Arbitrary[PDFMetadataForm] = Arbitrary {
     for {
       companyName <- Gen.option(arbitrary[String])
-      utr         <- Gen.option(arbitrary[Long])
+      utr         <- Gen.option(arbitrary[String])
     } yield PDFMetadataForm(
       companyName,
       utr

@@ -37,12 +37,12 @@ class PDFViewHelperSpec extends SpecBase {
     2023 -> MarginalReliefConfig(2023, 50000, 250000, 0.19, 0.25, 0.015)
   )
 
-  val longUTR = 123456789112345L
+  val StringUTR = "123456789112345"
 
   private val accountingPeriodForm =
     AccountingPeriodForm(LocalDate.parse("2023-01-01"), Some(LocalDate.parse("2023-12-31")))
 
-  private val pdfMetadataForm = Option(PDFMetadataForm(Some("company"), Some(longUTR)))
+  private val pdfMetadataForm = Option(PDFMetadataForm(Some("company"), Some(StringUTR)))
 
   private val taxableProfit = 65000
   private val distributions = 0
@@ -139,7 +139,7 @@ class PDFViewHelperSpec extends SpecBase {
 
         val pageCount = "3"
 
-        val pdfMetadataForm = Option(PDFMetadataForm(Some(""), Some(longUTR)))
+        val pdfMetadataForm = Option(PDFMetadataForm(Some(""), Some(StringUTR)))
 
         pdfTableHtml(
           calculatorResult,
