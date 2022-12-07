@@ -120,16 +120,24 @@ class FullResultsPageController @Inject() (
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
                               )
         config <- getConfig(calculatorResult)
-      } yield Ok(
-        view(
-          calculatorResult,
-          request.accountingPeriod,
-          request.taxableProfit,
-          request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-          request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
-          config,
-          request.twoAssociatedCompanies
+      } yield {
+
+        val associatedCompanies = request.twoAssociatedCompanies match {
+          case Some(a) =>
+            Right(a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0))
+          case None => Left(request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0))
+        }
+
+        Ok(
+          view(
+            calculatorResult,
+            request.accountingPeriod,
+            request.taxableProfit,
+            request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
+            associatedCompanies,
+            config
+          )
         )
-      )
+      }
   }
 }

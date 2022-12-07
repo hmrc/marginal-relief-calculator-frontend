@@ -22,7 +22,7 @@ import forms.{ AccountingPeriodForm, PDFMetadataForm, TwoAssociatedCompaniesForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.{ CurrencyUtils, DateUtils, PercentageUtils, ShowCalculatorDisclaimerUtils }
-import views.helpers.FullResultsPageHelper.{ marginalReliefFormula, nonTabCalculationResultsTable, showMarginalReliefExplanation }
+import views.helpers.FullResultsPageHelper.{ marginalReliefFormula, nonTabCalculationResultsTable, showMarginalReliefExplanation, taxDetailsWithAssociatedCompanies }
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
 import java.time.Instant
@@ -32,14 +32,13 @@ object PDFViewHelper extends ViewHelper {
 
   def pdfTableHtml(
     calculatorResult: CalculatorResult,
-    associatedCompanies: Int,
+    associatedCompanies: Either[Int, (Int, Int)],
     taxableProfit: Int,
     distributions: Int,
     config: Map[Int, FYConfig],
     pdfMetadata: Option[PDFMetadataForm],
     accountingPeriodForm: AccountingPeriodForm,
-    now: Instant,
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
+    now: Instant
   )(implicit messages: Messages): Html =
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
@@ -52,12 +51,11 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now,
-            twoAssociatedCompanies
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(Seq(flatRate), associatedCompanies, taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies), taxableProfit, distributions, config),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -73,14 +71,12 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now,
-            twoAssociatedCompanies
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
-              Seq(flatRate1, flatRate2),
-              associatedCompanies,
+              taxDetailsWithAssociatedCompanies(Seq(flatRate1, flatRate2), associatedCompanies),
               taxableProfit,
               distributions,
               config
@@ -100,12 +96,11 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now,
-            twoAssociatedCompanies
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(Seq(m), associatedCompanies, taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(m), associatedCompanies), taxableProfit, distributions, config),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -121,12 +116,11 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now,
-            twoAssociatedCompanies
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(Seq(flatRate, m), associatedCompanies, taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(flatRate, m), associatedCompanies), taxableProfit, distributions, config),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -143,12 +137,11 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now,
-            twoAssociatedCompanies
+            now
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
                 ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(Seq(m, flatRate), associatedCompanies, taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(m, flatRate), associatedCompanies) , taxableProfit, distributions, config),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -164,18 +157,25 @@ object PDFViewHelper extends ViewHelper {
             taxableProfit,
             distributions,
             associatedCompanies,
-            now,
-            twoAssociatedCompanies
+            now
           )}
         ${pdfCorporationTaxHtml("4", calculatorResult)}
         ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(Seq(m1), associatedCompanies, taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(
+              associatedCompanies match {
+                case Left(a) => Seq(m1 -> a)
+                case Right((a1,a2)) => Seq(m1 -> a1)
+              }, taxableProfit, distributions, config),
             calculatorResult,
             accountingPeriodForm,
             "4"
           )}
         ${pdfDetailedCalculationHtmlWithoutHeader(
-            nonTabCalculationResultsTable(Seq(m2), associatedCompanies, taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(
+              associatedCompanies match {
+                case Left(a) => Seq(m2 -> a)
+                case Right((a1, a2)) => Seq(m2 -> a2)
+              }, taxableProfit, distributions, config),
             calculatorResult,
             accountingPeriodForm,
             "4"
@@ -226,9 +226,8 @@ object PDFViewHelper extends ViewHelper {
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
     distributions: Int,
-    associatedCompanies: Int,
-    now: Instant,
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm]
+    associatedCompanies: Either[Int, (Int, Int)],
+    now: Instant
   )(implicit messages: Messages): Html =
     Html(
       s"""<div class="print-document">
@@ -260,7 +259,6 @@ object PDFViewHelper extends ViewHelper {
           distributions,
           associatedCompanies,
           false,
-          twoAssociatedCompanies,
           ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(accountingPeriodForm.accountingPeriodEndDateOrDefault)
         )}
          |       </div>

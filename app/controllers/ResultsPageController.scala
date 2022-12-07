@@ -94,6 +94,11 @@ class ResultsPageController @Inject() (
 
   def onPageLoad: Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
+      val associatedCompanies = request.twoAssociatedCompanies match {
+        case Some(a) =>
+          Right(a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0))
+        case None => Left(request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0))
+      }
       marginalReliefCalculatorConnector
         .calculate(
           request.accountingPeriod.accountingPeriodStartDate,
@@ -111,8 +116,7 @@ class ResultsPageController @Inject() (
               request.accountingPeriod,
               request.taxableProfit,
               request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-              request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
-              request.twoAssociatedCompanies
+              associatedCompanies
             )
           )
         )

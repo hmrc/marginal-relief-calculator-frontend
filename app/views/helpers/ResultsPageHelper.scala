@@ -50,9 +50,8 @@ object ResultsPageHelper extends ViewHelper {
     accountingPeriodForm: AccountingPeriodForm,
     taxableProfit: Int,
     distributions: Int,
-    associatedCompanies: Int,
+    associatedCompanies: Either[Int, (Int, Int)],
     displayCoversFinancialYears: Boolean = false,
-    twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm],
     displayCalcDisclaimer: Boolean
   )(implicit messages: Messages): Html =
     HtmlFormat.fill(
@@ -82,16 +81,17 @@ object ResultsPageHelper extends ViewHelper {
                     key = messages("resultsPage.distributions").toKey,
                     value = Value(CurrencyUtils.format(distributions).toText)
                   ),
-                  if (twoAssociatedCompanies.isEmpty) {
+                  if (associatedCompanies.isLeft) {
                     SummaryListRow(
                       key = messages("resultsPage.associatedCompanies").toKey,
                       value = Value(associatedCompanies.toString.toText)
                     )
                   } else {
+                    val a = associatedCompanies.right.get
                     displayTwoAssociatedCompanies(
                       accountingPeriodForm,
-                      twoAssociatedCompanies.map(_.associatedCompaniesFY1Count).get,
-                      twoAssociatedCompanies.map(_.associatedCompaniesFY2Count).get
+                      a._1,
+                      a._2
                     )
                   }
                 ),
@@ -121,7 +121,7 @@ object ResultsPageHelper extends ViewHelper {
       )
     )
 
-  def displayTwoAssociatedCompanies(accountingPeriodForm: AccountingPeriodForm, year1: Option[Int], year2: Option[Int])(
+  def displayTwoAssociatedCompanies(accountingPeriodForm: AccountingPeriodForm, year1: Int, year2: Int)(
     implicit messages: Messages
   ) =
     SummaryListRow(
@@ -131,11 +131,11 @@ object ResultsPageHelper extends ViewHelper {
           s"""
              |${financialYear(accountingPeriodForm.accountingPeriodStartDate).toString} to ${(financialYear(
               accountingPeriodForm.accountingPeriodStartDate
-            ) + 1).toString}: ${year1.get}
+            ) + 1).toString}: ${year1}
              |<br/>
              |${financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault).toString} to ${(financialYear(
               accountingPeriodForm.accountingPeriodEndDateOrDefault
-            ) + 1).toString}: ${year2.get}""".stripMargin
+            ) + 1).toString}: ${year2}""".stripMargin
         )
       )
     )
