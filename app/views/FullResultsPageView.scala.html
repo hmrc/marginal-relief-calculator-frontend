@@ -36,7 +36,7 @@
 @layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
-    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, twoAssociatedCompanies)
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, twoAssociatedCompanies, false)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
     <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</span>
@@ -49,12 +49,7 @@
         @views.helpers.FullResultsPageHelper.hr
     }
 
-    <h2 class="govuk-heading-m">@messages("resultsPage.getACopyOfResults")</h2>
-    <p class="govuk-body"><a href="@routes.PDFMetadataController.onPageLoad().url" class="govuk-link">@messages("resultsPage.addReferenceBeforePrinting")</a></p>
-    <p class="govuk-body">
-        <a href="@routes.PDFController.onPageLoad().url" class="govuk-link">@messages("resultsPage.printOrSave")</a>
-    </p>
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    @templates.PrintResults()
 
     <h3 class="govuk-heading-s">@messages("fullResultsPage.whatToDoNext")</h3>
     <ul class="govuk-list govuk-list--bullet">

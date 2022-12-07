@@ -16,12 +16,24 @@
 
 package navigation
 
+import connectors.MarginalReliefCalculatorConnector
 import play.api.mvc.Call
 import pages._
 import models.{ Mode, UserAnswers }
+import repositories.SessionRepository
+import uk.gov.hmrc.http.HeaderCarrier
 
-class FakeNavigator(desiredRoute: Call) extends Navigator {
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
-    desiredRoute
+class FakeNavigator(
+  desiredRoute: Call,
+  connector: MarginalReliefCalculatorConnector,
+  sessionRepository: SessionRepository
+) extends Navigator(connector, sessionRepository) {
+
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers)(implicit
+    headerCarrier: HeaderCarrier
+  ): Future[Call] =
+    Future.successful(desiredRoute)
 }

@@ -16,31 +16,32 @@
 
 package controllers
 
-import controllers.actions._
-import forms.PDFMetadataFormProvider
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction, PDFRequiredDataAction }
+import forms.PDFAddCompanyDetailsFormProvider
 import models.NormalMode
 import navigation.Navigator
-import pages._
+import pages.PDFAddCompanyDetailsPage
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.PDFMetadataView
+import views.html.PDFAddCompanyDetailsView
 
-import javax.inject.Inject
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
-class PDFMetadataController @Inject() (
+@Singleton
+class PDFAddCompanyDetailsController @Inject() (
   override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   PDFRequiredDataAction: PDFRequiredDataAction,
-  formProvider: PDFMetadataFormProvider,
-  val controllerComponents: MessagesControllerComponents,
-  view: PDFMetadataView
+  formProvider: PDFAddCompanyDetailsFormProvider,
+  view: PDFAddCompanyDetailsView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -48,25 +49,24 @@ class PDFMetadataController @Inject() (
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData andThen requireData andThen PDFRequiredDataAction) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(PDFMetadataPage) match {
+      val preparedForm = request.userAnswers.get(PDFAddCompanyDetailsPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
-      Ok(view(preparedForm))
+      Ok(view(preparedForm, NormalMode))
   }
-
-  def onSubmit(): Action[AnyContent] =
-    (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async { implicit request =>
+  def onSubmit = (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async {
+    implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, NormalMode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFMetadataPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(PDFAddCompanyDetailsPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-              nextPage       <- navigator.nextPage(PDFMetadataPage, NormalMode, updatedAnswers)
+              nextPage       <- navigator.nextPage(PDFAddCompanyDetailsPage, NormalMode, updatedAnswers)
             } yield Redirect(nextPage)
         )
-    }
+  }
 }

@@ -98,9 +98,7 @@ class CheckYourAnswersController @Inject() (
       for {
         askAssociatedParameter <- marginalReliefCalculatorConnector.associatedCompaniesParameters(
                                     request.accountingPeriod.accountingPeriodStartDate,
-                                    request.accountingPeriod.accountingPeriodEndDateOrDefault,
-                                    request.taxableProfit,
-                                    request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).map(_.toDouble)
+                                    request.accountingPeriod.accountingPeriodEndDateOrDefault
                                   )
       } yield {
         val list = SummaryListViewModel(

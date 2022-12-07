@@ -342,7 +342,7 @@
             <div class="govuk-grid-column-two-thirds govuk-!-padding-left-0">
                 <div class="grid-row">
                     <div class="govuk-grid-column-full">
-                        @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies)
+                        @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies, utils.ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(accountingPeriodForm.accountingPeriodEndDateOrDefault))
                     </div>
                 </div>
             </div>
