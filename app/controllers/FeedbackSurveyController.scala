@@ -28,7 +28,7 @@ class FeedbackSurveyController @Inject() (
   override val controllerComponents: MessagesControllerComponents
 ) extends BaseController {
 
-  def redirectToExitSurvey: Action[AnyContent] = identify { implicit request =>
+  def redirectToExitSurvey: Action[AnyContent] = identify { _ =>
     Redirect(appConfig.exitSurveyUrl).withNewSession
   }
 
