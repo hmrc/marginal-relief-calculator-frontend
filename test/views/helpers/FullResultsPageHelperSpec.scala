@@ -43,7 +43,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
 
         FullResultsPageHelper
-          .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+          .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo """
                                       |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">
                                       |   fullResultsPage.forFinancialYear
@@ -97,7 +97,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
         val caught =
           intercept[RuntimeException] { // Result type: IndexOutOfBoundsException
-            FullResultsPageHelper.displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+            FullResultsPageHelper.displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           }
         caught.getMessage mustBe "Both financial years are flat rate"
       }
@@ -109,7 +109,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
 
         FullResultsPageHelper
-          .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+          .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo
           """
             |<div class="govuk-tabs" data-module="govuk-tabs">
@@ -211,7 +211,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
 
         FullResultsPageHelper
-          .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+          .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo
           """
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
@@ -263,7 +263,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
 
         FullResultsPageHelper
-          .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+          .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo
           """
             |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
@@ -328,7 +328,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
 
         FullResultsPageHelper
-          .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+          .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .toString
           .trimNewLines
           .contains("fullResultsPage.financialYear.fullCalculation") mustBe true
@@ -354,7 +354,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         )
 
         FullResultsPageHelper
-          .displayFullCalculationResult(calculatorResult, 1, 11, 111, config)
+          .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .toString
           .trimNewLines
           .contains("fullResultsPage.notEligibleBelowLowerLimit") mustBe true

@@ -140,17 +140,18 @@ object FullResultsPageHelper extends ViewHelper {
       val daysInAccountingPeriod = dual.year1.days + dual.year2.days
 
       dual.year1 -> dual.year2 match {
-        case (y1: MarginalRate, y2: MarginalRate) => tabDisplay(taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies), daysInAccountingPeriod)
+        case (y1: MarginalRate, y2: MarginalRate) =>
+          tabDisplay(taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies), daysInAccountingPeriod)
         case (y1: MarginalRate, y2: FlatRate) =>
           nonTabCalculationResultsTable(
-            taxDetailsWithAssociatedCompanies( Seq(y1, y2), associatedCompanies ),
+            taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
             config
           )
         case (y1: FlatRate, y2: MarginalRate) =>
           nonTabCalculationResultsTable(
-            taxDetailsWithAssociatedCompanies( Seq(y1, y2), associatedCompanies ),
+            taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
             config
@@ -161,7 +162,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     calculatorResult.fold(single =>
       nonTabCalculationResultsTable(
-        taxDetailsWithAssociatedCompanies( Seq(single.details), associatedCompanies ),
+        taxDetailsWithAssociatedCompanies(Seq(single.details), associatedCompanies),
         taxableProfit,
         distributions,
         config
@@ -169,12 +170,15 @@ object FullResultsPageHelper extends ViewHelper {
     )(dualResultTable)
   }
 
-  def taxDetailsWithAssociatedCompanies[T<:TaxDetails](taxDetails: Seq[T], associatedCompanies:Either[Int, (Int, Int)]):Seq[(T, Int)] = {
+  def taxDetailsWithAssociatedCompanies[T <: TaxDetails](
+    taxDetails: Seq[T],
+    associatedCompanies: Either[Int, (Int, Int)]
+  ): Seq[(T, Int)] =
     associatedCompanies match {
       case Left(associatedCompanies) => taxDetails.map(_ -> associatedCompanies)
-      case Right((associatedCompanies1, associatedCompanies2)) => (taxDetails.head , associatedCompanies1) +: taxDetails.tail.map(_ -> associatedCompanies2)
+      case Right((associatedCompanies1, associatedCompanies2)) =>
+        (taxDetails.head, associatedCompanies1) +: taxDetails.tail.map(_ -> associatedCompanies2)
     }
-  }
 
   def marginalReliefFormula(implicit messages: Messages): Html =
     Html(s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">${messages(

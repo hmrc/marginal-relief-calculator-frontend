@@ -17,7 +17,7 @@
 package views.helpers
 
 import connectors.sharedmodel._
-import forms.{ AccountingPeriodForm, TwoAssociatedCompaniesForm }
+import forms.AccountingPeriodForm
 import forms.DateUtils.{ DateOps, financialYear }
 import org.slf4j.{ Logger, LoggerFactory }
 import play.api.i18n.Messages
@@ -84,7 +84,7 @@ object ResultsPageHelper extends ViewHelper {
                   if (associatedCompanies.isLeft) {
                     SummaryListRow(
                       key = messages("resultsPage.associatedCompanies").toKey,
-                      value = Value(associatedCompanies.toString.toText)
+                      value = Value(associatedCompanies.left.get.toString.toText)
                     )
                   } else {
                     val a = associatedCompanies.right.get
@@ -121,8 +121,8 @@ object ResultsPageHelper extends ViewHelper {
       )
     )
 
-  def displayTwoAssociatedCompanies(accountingPeriodForm: AccountingPeriodForm, year1: Int, year2: Int)(
-    implicit messages: Messages
+  def displayTwoAssociatedCompanies(accountingPeriodForm: AccountingPeriodForm, year1: Int, year2: Int)(implicit
+    messages: Messages
   ) =
     SummaryListRow(
       key = messages("resultsPage.associatedCompanies").toKey,
@@ -131,11 +131,11 @@ object ResultsPageHelper extends ViewHelper {
           s"""
              |${financialYear(accountingPeriodForm.accountingPeriodStartDate).toString} to ${(financialYear(
               accountingPeriodForm.accountingPeriodStartDate
-            ) + 1).toString}: ${year1}
+            ) + 1).toString}: $year1
              |<br/>
              |${financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault).toString} to ${(financialYear(
               accountingPeriodForm.accountingPeriodEndDateOrDefault
-            ) + 1).toString}: ${year2}""".stripMargin
+            ) + 1).toString}: $year2""".stripMargin
         )
       )
     )

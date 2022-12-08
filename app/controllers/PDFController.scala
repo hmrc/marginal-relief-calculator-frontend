@@ -192,11 +192,10 @@ class PDFController @Inject() (
       } yield Map(dual.year1.year -> y1, dual.year2.year -> y2)
     )
 
-  private def getAssociatedCompanies(implicit request:PDFPageRequiredParams[AnyContent]) = {
+  private def getAssociatedCompanies(implicit request: PDFPageRequiredParams[AnyContent]) =
     request.twoAssociatedCompanies match {
       case Some(a) =>
-        Right(a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0))
+        Right((a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0)))
       case None => Left(request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0))
     }
-  }
 }

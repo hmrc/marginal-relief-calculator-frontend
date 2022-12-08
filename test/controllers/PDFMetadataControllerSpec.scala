@@ -182,7 +182,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
       "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         running(application) {
           val request =

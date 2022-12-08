@@ -18,7 +18,7 @@ package views.helpers
 
 import connectors.sharedmodel._
 import forms.DateUtils.DateOps
-import forms.{ AccountingPeriodForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
+import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.{ CurrencyUtils, DateUtils, PercentageUtils, ShowCalculatorDisclaimerUtils }
@@ -55,7 +55,12 @@ object PDFViewHelper extends ViewHelper {
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies), taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(
+              taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),
+              taxableProfit,
+              distributions,
+              config
+            ),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -100,7 +105,12 @@ object PDFViewHelper extends ViewHelper {
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(m), associatedCompanies), taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(
+              taxDetailsWithAssociatedCompanies(Seq(m), associatedCompanies),
+              taxableProfit,
+              distributions,
+              config
+            ),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -120,7 +130,12 @@ object PDFViewHelper extends ViewHelper {
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(flatRate, m), associatedCompanies), taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(
+              taxDetailsWithAssociatedCompanies(Seq(flatRate, m), associatedCompanies),
+              taxableProfit,
+              distributions,
+              config
+            ),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -141,7 +156,12 @@ object PDFViewHelper extends ViewHelper {
           )}
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
                 ${pdfDetailedCalculationHtml(
-            nonTabCalculationResultsTable(taxDetailsWithAssociatedCompanies(Seq(m, flatRate), associatedCompanies) , taxableProfit, distributions, config),
+            nonTabCalculationResultsTable(
+              taxDetailsWithAssociatedCompanies(Seq(m, flatRate), associatedCompanies),
+              taxableProfit,
+              distributions,
+              config
+            ),
             calculatorResult,
             accountingPeriodForm,
             "3"
@@ -163,9 +183,13 @@ object PDFViewHelper extends ViewHelper {
         ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
               associatedCompanies match {
-                case Left(a) => Seq(m1 -> a)
-                case Right((a1,a2)) => Seq(m1 -> a1)
-              }, taxableProfit, distributions, config),
+                case Left(a)         => Seq(m1 -> a)
+                case Right((a1, a2)) => Seq(m1 -> a1)
+              },
+              taxableProfit,
+              distributions,
+              config
+            ),
             calculatorResult,
             accountingPeriodForm,
             "4"
@@ -173,9 +197,13 @@ object PDFViewHelper extends ViewHelper {
         ${pdfDetailedCalculationHtmlWithoutHeader(
             nonTabCalculationResultsTable(
               associatedCompanies match {
-                case Left(a) => Seq(m2 -> a)
+                case Left(a)         => Seq(m2 -> a)
                 case Right((a1, a2)) => Seq(m2 -> a2)
-              }, taxableProfit, distributions, config),
+              },
+              taxableProfit,
+              distributions,
+              config
+            ),
             calculatorResult,
             accountingPeriodForm,
             "4"
