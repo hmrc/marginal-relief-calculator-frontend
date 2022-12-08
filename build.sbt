@@ -19,7 +19,7 @@ lazy val root = (project in file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(itSettings): _*)
   .settings(majorVersion := 0)
-  .settings(useSuperShell in ThisBuild := false)
+  .settings(ThisBuild / useSuperShell := false)
   .settings(
     scalaVersion := "2.12.10",
     PlayKeys.playDefaultPort := 7101,
