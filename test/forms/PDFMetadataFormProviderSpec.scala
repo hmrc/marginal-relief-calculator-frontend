@@ -24,27 +24,43 @@ import play.api.data.{ Form, FormError }
 class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   implicit val noShrinkString: Shrink[String] = Shrink.shrinkAny
-  val longUTR = 1234567890L
-  val over10LongUTR = 1234567890123L
+  val numericStringOver: Gen[String] = for {
+    i <- Gen.choose(math.pow(10, 10).toLong, math.pow(10, 11).toLong -1)
+  } yield i.toString
+
+  val numericString: Gen[String] = for {
+    i <- Gen.choose(math.pow(10, 9).toLong, math.pow(10, 10).toLong - 1)
+  } yield i.toString
+
+  val numericStringUnder: Gen[String] = for {
+    i <- Gen.choose(0,Math.pow(10, 9).toLong - 1)
+  } yield i.toString
+
   val validPDFMetadataFormGenerator: Gen[PDFMetadataForm] = for {
 
     companyName <- option(stringsWithMaxLength(160))
-    utr         <- option(longBetween(0, longUTR))
+    utr         <- option(numericString)
   } yield PDFMetadataForm(companyName, utr)
 
   val invalidCompanyName: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- longBetween(0, longUTR)
+    utr         <- numericString
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
-  val invalidLengthUTR: Gen[PDFMetadataForm] = for {
+  val invalidLengthAboveUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
-    utr         <- longBetween(over10LongUTR, Long.MaxValue)
+    utr         <- numericStringOver
+  } yield PDFMetadataForm(Some(companyName), Some(utr))
+
+  val invalidLengthBelowUTR: Gen[PDFMetadataForm] = for {
+    companyName <- stringsWithMaxLength(160)
+    utr <- numericStringUnder
+
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val invalidCharUTR = for {
     _companyName <- stringsWithMaxLength(10)
-    _utr         <- nonNumerics
+    _utr         <- stringsWithLength10
   } yield Map(
     "companyName" -> _companyName,
     "utr"         -> _utr.take(10)
@@ -52,7 +68,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   val invalidCompanyNameUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsLongerThan(160)
-    utr         <- longBetween(over10LongUTR, over10LongUTR * 2)
+    utr         <- numericStringOver
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
   private val form: Form[PDFMetadataForm] = new PDFMetadataFormProvider()()
@@ -86,7 +102,17 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     }
 
     "should return error when utr length is over 10" in {
-      forAll(invalidLengthUTR) { invalid =>
+      forAll(invalidLengthAboveUTR) { invalid =>
+        val result =
+          form.bind(
+            (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap
+          )
+        result.errors mustBe List(FormError("utr", Seq("pdfMetaData.utr.error.length")))
+      }
+    }
+
+    "should return error when utr length is under 10" in {
+      forAll(invalidLengthBelowUTR) { invalid =>
         val result =
           form.bind(
             (invalid.companyName.map("companyName" -> _).toList ++ invalid.utr.map("utr" -> _.toString).toList).toMap

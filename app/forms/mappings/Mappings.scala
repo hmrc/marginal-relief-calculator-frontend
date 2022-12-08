@@ -64,7 +64,7 @@ trait Mappings extends Formatters with Constraints {
     maxKey: String = "pdfMetaData.utr.error.length",
     maxLength: Int = 10,
     args: Seq[String] = Seq.empty
-  ): FieldMapping[Long] =
+  ): FieldMapping[String] =
     of(
       utrFormatter(
         requiredKey,
