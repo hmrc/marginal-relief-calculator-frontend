@@ -205,13 +205,13 @@ fullResultsPage.whatIsMarginalRateFraction = What is the Marginal Relief fractio
 fullResultsPage.details.standardFraction = The standard marginal relief fraction is the difference between the main rate and the marginal rate expressed as a fraction.
 fullResultsPage.details.whatIsMarginalRate = What is the marginal rate?
 fullResultsPage.details.1 = Where the small profits rate is 19% and the main rate is 25%:
-fullResultsPage.details.2 = CT Payable on profits at the upper limit = £62,500 (£250,000 x 25%)
+fullResultsPage.details.2 = Corporation Tax Payable on profits at the upper limit = £62,500 (£250,000 × 25%)
 fullResultsPage.details.3.less = Less
-fullResultsPage.details.3 = CT payable profits at the lower limit = £9,500 (£50,000 x 19%)
+fullResultsPage.details.3 = Corporation Tax payable profits at the lower limit = £9,500 (£50,000 × 19%)
 fullResultsPage.details.4.equals = Equals
 fullResultsPage.details.4 = Tax payable on the difference of £200,000 = £53,000
-fullResultsPage.details.5 = The marginal rate is therefore 26.5% (£53,000 / £200,000)
-fullResultsPage.details.6 = The difference between the marginal rate of 26.5% and the main rate of 25% is 1.5% which is then expressed as 3/200.
+fullResultsPage.details.5 = The marginal rate is therefore 26.5% (£53,000 ÷ £200,000)
+fullResultsPage.details.6 = The difference between the marginal rate of 26.5% and the main rate of 25% is 1.5% which is then expressed as 3÷200.
 fullResultsPage.variables = Calculation variables
 fullResultsPage.details.whatIsMarginalRate = What is marginal rate?
 fullResultsPage.calculation = Calculation
