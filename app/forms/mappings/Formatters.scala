@@ -200,11 +200,11 @@ trait Formatters {
           result         <- baseFormatter.bind(key, data)
           resultNoSpaces <- removeSpaceLineBreaks(result).asRight
           finalResult <- resultNoSpaces match {
-                           case s if s.length > maxLength    => Left(Seq(FormError(key, maxKey, args)))
-                           case s if s.length < maxLength    => Left(Seq(FormError(key, maxKey, args)))
-                           case s if !s.matches(utrFormat)    => Left(Seq(FormError(key, nonNumericKey, args)))
- //                          case s if Try(s.toString).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
-                           case s                            => s.toString.asRight
+                           case s if s.length > maxLength  => Left(Seq(FormError(key, maxKey, args)))
+                           case s if s.length < maxLength  => Left(Seq(FormError(key, maxKey, args)))
+                           case s if !s.matches(utrFormat) => Left(Seq(FormError(key, nonNumericKey, args)))
+                           //                          case s if Try(s.toString).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
+                           case s => s.toString.asRight
                          }
         } yield finalResult
 

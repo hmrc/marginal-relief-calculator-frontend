@@ -70,8 +70,8 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
 
   def stringsWithLength10: Gen[String] =
     for {
-      length <- choose(10,10)
-      chars <- listOfN(length, arbitrary[Char])
+      length <- choose(10, 10)
+      chars  <- listOfN(length, arbitrary[Char])
     } yield chars.mkString
 
   def decimals: Gen[String] =
