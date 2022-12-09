@@ -30,7 +30,7 @@
         govukButton: GovukButton
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Int, twoAssociatedCompanies: Option[TwoAssociatedCompaniesForm])(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)])(implicit request: Request[_], messages: Messages)
 
 @titleAndBanner = @{displayBanner(calculatorResult)}
 
@@ -38,7 +38,7 @@
 
     @titleAndBanner.html
 
-    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, twoAssociatedCompanies, utils.ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(accountingPeriodForm.accountingPeriodEndDateOrDefault))
+    @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, false, utils.ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(accountingPeriodForm.accountingPeriodEndDateOrDefault))
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.corporationTaxLiability")</h2>
 

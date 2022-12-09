@@ -33,14 +33,13 @@ object FullResultsPageHelper extends ViewHelper {
   private val govukDetails = new GovukDetails()
 
   def nonTabCalculationResultsTable(
-    taxDetails: Seq[TaxDetails],
-    associatedCompanies: Int,
+    taxDetailsWithAssociatedCompanies: Seq[(TaxDetails, Int)],
     taxableProfit: Int,
     distributions: Int,
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
-    val html = taxDetails.flatMap { td =>
+    val html = taxDetailsWithAssociatedCompanies.flatMap { case (td, associatedCompanies) =>
       val year = td.year
       val days = td.days
       td.fold { _ =>
@@ -87,7 +86,7 @@ object FullResultsPageHelper extends ViewHelper {
 
   def displayFullCalculationResult(
     calculatorResult: CalculatorResult,
-    associatedCompanies: Int,
+    associatedCompanies: Either[Int, (Int, Int)],
     taxableProfit: Int,
     distributions: Int,
     config: Map[Int, FYConfig]
@@ -103,7 +102,7 @@ object FullResultsPageHelper extends ViewHelper {
           )}</a>
            |    </li>""".stripMargin
 
-      def tabContent(marginalRate: MarginalRate) = {
+      def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
@@ -125,35 +124,34 @@ object FullResultsPageHelper extends ViewHelper {
            |  </div>""".stripMargin
       }
 
-      def tabDisplay(marginalRates: Seq[MarginalRate], daysInAccountingPeriod: Int) =
+      def tabDisplay(marginalRates: Seq[(MarginalRate, Int)], daysInAccountingPeriod: Int) =
         Html(s"""
                 |<div class="govuk-tabs" data-module="govuk-tabs">
                 |  <h2 class="govuk-tabs__title">
                 |    ${messages("fullResultsPage.financialYearResults")}
                 |  </h2>
                 |  <ul class="govuk-tabs__list">
-                |    ${marginalRates.map(_.year).map(tabBtn).mkString}
+                |    ${marginalRates.map(_._1.year).map(tabBtn).mkString}
                 |  </ul>
-                |  ${marginalRates.map(rate => tabContent(rate)).mkString}
+                |  ${marginalRates.map(rate => tabContent(rate._1, rate._2)).mkString}
                 |</div>
                 |""".stripMargin)
 
       val daysInAccountingPeriod = dual.year1.days + dual.year2.days
 
       dual.year1 -> dual.year2 match {
-        case (y1: MarginalRate, y2: MarginalRate) => tabDisplay(Seq(y1, y2), daysInAccountingPeriod)
+        case (y1: MarginalRate, y2: MarginalRate) =>
+          tabDisplay(taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies), daysInAccountingPeriod)
         case (y1: MarginalRate, y2: FlatRate) =>
           nonTabCalculationResultsTable(
-            Seq(y1, y2),
-            associatedCompanies,
+            taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
             config
           )
         case (y1: FlatRate, y2: MarginalRate) =>
           nonTabCalculationResultsTable(
-            Seq(y1, y2),
-            associatedCompanies,
+            taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
             config
@@ -164,14 +162,23 @@ object FullResultsPageHelper extends ViewHelper {
 
     calculatorResult.fold(single =>
       nonTabCalculationResultsTable(
-        Seq(single.details),
-        associatedCompanies,
+        taxDetailsWithAssociatedCompanies(Seq(single.details), associatedCompanies),
         taxableProfit,
         distributions,
         config
       )
     )(dualResultTable)
   }
+
+  def taxDetailsWithAssociatedCompanies[T <: TaxDetails](
+    taxDetails: Seq[T],
+    associatedCompanies: Either[Int, (Int, Int)]
+  ): Seq[(T, Int)] =
+    associatedCompanies match {
+      case Left(associatedCompanies) => taxDetails.map(_ -> associatedCompanies)
+      case Right((associatedCompanies1, associatedCompanies2)) =>
+        (taxDetails.head, associatedCompanies1) +: taxDetails.tail.map(_ -> associatedCompanies2)
+    }
 
   def marginalReliefFormula(implicit messages: Messages): Html =
     Html(s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">${messages(

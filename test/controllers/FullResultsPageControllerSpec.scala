@@ -68,7 +68,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
     )
     .get
 
-  private val twoAssociatedCompanies = TwoAssociatedCompaniesForm(Option(1), Option(2));
+  private val oneAssociatedCompany = Left(1)
+  private val twoAssociatedCompanies = Right((1, 2))
 
   "FullResultsPageController" - {
     "GET page" - {
@@ -139,9 +140,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
               accountingPeriodForm,
               1,
               1,
-              0,
+              twoAssociatedCompanies,
               config,
-              Option(twoAssociatedCompanies),
               request,
               messages(application)
             )
@@ -216,9 +216,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
             accountingPeriodForm,
             1,
             0,
-            1,
-            config,
-            None
+            oneAssociatedCompany,
+            config
           )(request, messages(application)).toString.filterAndTrim
         }
       }
@@ -289,9 +288,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
             accountingPeriodForm,
             1,
             0,
-            0,
-            config,
-            None
+            Left(0),
+            config
           )(request, messages(application)).toString.filterAndTrim
         }
       }

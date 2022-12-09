@@ -53,9 +53,8 @@ class ResultsPageHelperSpec extends SpecBase {
           ),
           1,
           11,
-          111,
+          Left(111),
           true,
-          None,
           false
         ).htmlFormat shouldMatchTo
           Jsoup
@@ -102,9 +101,8 @@ class ResultsPageHelperSpec extends SpecBase {
         ),
         1,
         11,
-        111,
+        Left(111),
         true,
-        None,
         true
       ).htmlFormat shouldMatchTo
         """<h2 class="govuk-heading-m" style="margin-bottom: 4px">resultsPage.yourDetails</h2>
@@ -149,9 +147,8 @@ class ResultsPageHelperSpec extends SpecBase {
         ),
         1,
         11,
-        111,
+        Left(111),
         false,
-        None,
         false
       ).htmlFormat shouldMatchTo
         """<h2 class="govuk-heading-m" style="margin-bottom: 4px">resultsPage.yourDetails</h2>

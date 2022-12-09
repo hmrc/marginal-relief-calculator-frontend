@@ -92,10 +92,9 @@ class PDFFileTemplateSpec extends SpecBase {
                 accountingPeriodForm,
                 1,
                 1,
-                1,
+                Left(1),
                 config,
                 now,
-                None,
                 request,
                 messages(application)
               )

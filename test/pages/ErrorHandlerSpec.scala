@@ -19,12 +19,10 @@ package pages
 import akka.http.scaladsl.model.StatusCodes
 import base.SpecBase
 import handlers.ErrorHandler
-import play.api.test.Helpers._
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsString, running, status }
-import views.html.ErrorTemplate
-import views.html.InternalServerErrorTemplate
+import play.api.test.Helpers._
+import views.html.{ ErrorTemplate, InternalServerErrorTemplate }
 
 class ErrorHandlerSpec extends SpecBase with MockitoSugar {
   "Error handler renders view" in {
