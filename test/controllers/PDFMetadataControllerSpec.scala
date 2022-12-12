@@ -104,7 +104,9 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form.fill(PDFMetadataForm(Some("name"), Some(StringUTR))))(
+          contentAsString(result).filterAndTrim mustEqual view(
+            form.fill(PDFMetadataForm(Some("name"), Some(StringUTR)))
+          )(
             request,
             messages(application)
           ).toString.filterAndTrim

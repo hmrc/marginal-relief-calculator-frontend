@@ -25,7 +25,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   implicit val noShrinkString: Shrink[String] = Shrink.shrinkAny
   val numericStringOver: Gen[String] = for {
-    i <- Gen.choose(math.pow(10, 10).toLong, math.pow(10, 11).toLong -1)
+    i <- Gen.choose(math.pow(10, 10).toLong, math.pow(10, 11).toLong - 1)
   } yield i.toString
 
   val numericString: Gen[String] = for {
@@ -33,7 +33,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
   } yield i.toString
 
   val numericStringUnder: Gen[String] = for {
-    i <- Gen.choose(0,Math.pow(10, 9).toLong - 1)
+    i <- Gen.choose(0, Math.pow(10, 9).toLong - 1)
   } yield i.toString
 
   val validPDFMetadataFormGenerator: Gen[PDFMetadataForm] = for {
@@ -54,7 +54,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
 
   val invalidLengthBelowUTR: Gen[PDFMetadataForm] = for {
     companyName <- stringsWithMaxLength(160)
-    utr <- numericStringUnder
+    utr         <- numericStringUnder
 
   } yield PDFMetadataForm(Some(companyName), Some(utr))
 
