@@ -46,6 +46,7 @@ class BackLinkFilter(
     routes.FullResultsPageController.onPageLoad().path,
     routes.IndexController.onPageLoad.path,
     routes.TaxableProfitController.onPageLoad(NormalMode).path,
+    routes.PDFAddCompanyDetailsController.onPageLoad().path(),
     routes.PDFMetadataController.onPageLoad().path,
     routes.PDFController.onPageLoad().path,
     routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).path
