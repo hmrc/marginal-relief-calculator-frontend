@@ -189,23 +189,26 @@ trait Formatters {
     maxKey: String,
     maxLength: Int,
     args: Seq[String] = Seq.empty
-  ): Formatter[Long] =
-    new Formatter[Long] {
+  ): Formatter[String] =
+    new Formatter[String] {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
+      private val utrFormat = "^[0-9 ]*$"
 
-      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Long] =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
         for {
           result         <- baseFormatter.bind(key, data)
           resultNoSpaces <- removeSpaceLineBreaks(result).asRight
           finalResult <- resultNoSpaces match {
-                           case s if s.length > maxLength    => Left(Seq(FormError(key, maxKey, args)))
-                           case s if Try(s.toLong).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
-                           case s                            => s.toLong.asRight
+                           case s if s.length > maxLength  => Left(Seq(FormError(key, maxKey, args)))
+                           case s if s.length < maxLength  => Left(Seq(FormError(key, maxKey, args)))
+                           case s if !s.matches(utrFormat) => Left(Seq(FormError(key, nonNumericKey, args)))
+                           //                          case s if Try(s.toString).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
+                           case s => s.toString.asRight
                          }
         } yield finalResult
 
-      override def unbind(key: String, value: Long) =
+      override def unbind(key: String, value: String) =
         baseFormatter.unbind(key, value.toString)
     }
 }

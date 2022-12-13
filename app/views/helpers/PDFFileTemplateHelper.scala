@@ -20,7 +20,7 @@ import connectors.sharedmodel._
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
+import views.helpers.FullResultsPageHelper.{ nonTabCalculationResultsTable, taxDetailsWithAssociatedCompanies }
 import views.helpers.PDFViewHelper.pdfFormulaAndNextHtml
 
 import scala.collection.immutable.Seq
@@ -30,7 +30,7 @@ object PDFFileTemplateHelper {
     calculatorResult: CalculatorResult,
     taxableProfit: Int,
     distributions: Int,
-    associatedCompanies: Int,
+    associatedCompanies: Either[Int, (Int, Int)],
     config: Map[Int, FYConfig],
     pageCount: Int,
     accountingPeriodForm: AccountingPeriodForm
@@ -43,8 +43,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
-                 Seq(flatRate),
-                 associatedCompanies,
+                 taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),
                  taxableProfit,
                  distributions,
                  config
@@ -62,8 +61,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
-                 Seq(flatRate1, flatRate2),
-                 associatedCompanies,
+                 taxDetailsWithAssociatedCompanies(Seq(flatRate1, flatRate2), associatedCompanies),
                  taxableProfit,
                  distributions,
                  config
@@ -80,8 +78,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
-                 Seq(marginalRate),
-                 associatedCompanies,
+                 taxDetailsWithAssociatedCompanies(Seq(marginalRate), associatedCompanies),
                  taxableProfit,
                  distributions,
                  config
@@ -99,8 +96,7 @@ object PDFFileTemplateHelper {
              |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
              |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
              |          ${nonTabCalculationResultsTable(
-              Seq(flatRate, marginalRate),
-              associatedCompanies,
+              taxDetailsWithAssociatedCompanies(Seq(flatRate, marginalRate), associatedCompanies),
               taxableProfit,
               distributions,
               config
@@ -118,8 +114,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
-                 Seq(marginalRate, flatRate),
-                 associatedCompanies,
+                 taxDetailsWithAssociatedCompanies(Seq(marginalRate, flatRate), associatedCompanies),
                  taxableProfit,
                  distributions,
                  config
@@ -137,8 +132,10 @@ object PDFFileTemplateHelper {
              |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
              |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
              |          ${nonTabCalculationResultsTable(
-              Seq(marginalRate1),
-              associatedCompanies,
+              associatedCompanies match {
+                case Left(a)         => Seq(marginalRate1 -> a)
+                case Right((a1, a2)) => Seq(marginalRate1 -> a1)
+              },
               taxableProfit,
               distributions,
               config
@@ -149,8 +146,10 @@ object PDFFileTemplateHelper {
              |<div class="pdf-page">
              |          <div class="grid-row">
              |            ${nonTabCalculationResultsTable(
-              Seq(marginalRate2),
-              associatedCompanies,
+              associatedCompanies match {
+                case Left(a)         => Seq(marginalRate2 -> a)
+                case Right((a1, a2)) => Seq(marginalRate2 -> a2)
+              },
               taxableProfit,
               distributions,
               config

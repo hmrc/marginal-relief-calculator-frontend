@@ -133,10 +133,9 @@ class PDFController @Inject() (
           request.accountingPeriod,
           request.taxableProfit,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-          request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
+          getAssociatedCompanies,
           config,
-          dateTime.currentInstant,
-          request.twoAssociatedCompanies
+          dateTime.currentInstant
         )
       )
     }
@@ -156,16 +155,16 @@ class PDFController @Inject() (
                               )
         config <- getConfig(calculatorResult)
       } yield {
+
         val html = pdfFileTemplate(
           request.pdfMetadata,
           calculatorResult,
           request.accountingPeriod,
           request.taxableProfit,
           request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-          request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0),
+          getAssociatedCompanies,
           config,
-          dateTime.currentInstant,
-          request.twoAssociatedCompanies
+          dateTime.currentInstant
         ).toString
         Ok.sendEntity(
           HttpEntity.Streamed(
@@ -192,4 +191,11 @@ class PDFController @Inject() (
         y2 <- marginalReliefCalculatorConnector.config(dual.year2.year)
       } yield Map(dual.year1.year -> y1, dual.year2.year -> y2)
     )
+
+  private def getAssociatedCompanies(implicit request: PDFPageRequiredParams[AnyContent]) =
+    request.twoAssociatedCompanies match {
+      case Some(a) =>
+        Right((a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0)))
+      case None => Left(request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0))
+    }
 }

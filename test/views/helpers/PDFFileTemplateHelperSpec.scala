@@ -51,7 +51,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         epoch.getYear -> FlatRateConfig(epoch.getYear, 0.19)
       )
       val calculatorResult = SingleResult(FlatRate(epoch.getYear, 1, 1, 1, 1, 1, 1), 1)
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldMatchTo
+      pdfHowItsCalculated(calculatorResult, 1, 1, Left(1), config, 3, accountingPeriodForm).htmlFormat shouldMatchTo
         """
           |<div class="pdf-page">
           |        <div class="grid-row">
@@ -75,7 +75,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
       )
       val calculatorResult =
         SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 1)), 1)
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, Left(1), config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -153,7 +153,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         MarginalRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 3)),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, Left(1), config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -233,7 +233,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         FlatRate(epoch.getYear + 1, 2, 2, 2, 2, 2, 2),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, Left(1), config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -264,7 +264,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         FlatRate(epoch.getYear + 1, 1, 1, 1, 1, 1, 1),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 3, accountingPeriodForm).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, Left(1), config, 3, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">
@@ -344,7 +344,7 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
         MarginalRate(epoch.getYear, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, FYRatio(2, 2)),
         1
       )
-      pdfHowItsCalculated(calculatorResult, 1, 1, 1, config, 4, accountingPeriodForm).htmlFormat shouldBe
+      pdfHowItsCalculated(calculatorResult, 1, 1, Left(1), config, 4, accountingPeriodForm).htmlFormat shouldBe
         """
           |<div class="pdf-page">
           |   <div class="grid-row">

@@ -89,10 +89,10 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
 
-        val longUTR = 123456789112345L
+        val StringUTR = "123456789112345L"
 
         val userAnswers =
-          requiredAnswers.set(PDFMetadataPage, PDFMetadataForm(Some("name"), Some(longUTR))).get
+          requiredAnswers.set(PDFMetadataPage, PDFMetadataForm(Some("name"), Some(StringUTR))).get
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -104,7 +104,9 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form.fill(PDFMetadataForm(Some("name"), Some(longUTR))))(
+          contentAsString(result).filterAndTrim mustEqual view(
+            form.fill(PDFMetadataForm(Some("name"), Some(StringUTR)))
+          )(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -147,7 +149,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         running(application) {
           val request =
             FakeRequest(POST, pDFMetadataRoute)
-              .withFormUrlEncodedBody(("companyName", "name"), ("utr", "12345"))
+              .withFormUrlEncodedBody(("companyName", "name"), ("utr", "1234567891"))
 
           val result = route(application, request).value
 
@@ -182,7 +184,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
       "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
         running(application) {
           val request =
