@@ -31,46 +31,34 @@ trait Constraints {
     }
 
   protected def minimumValue[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
+    minimumValueWithDynamicMessage(minimum, errorKey, minimum)
+
+  protected def minimumValueWithDynamicMessage[A](minimum: A, errorKey: String, args: Any*)(implicit
+    ev: Ordering[A]
+  ): Constraint[A] =
     Constraint { input =>
       import ev._
 
       if (input >= minimum) {
         Valid
       } else {
-        Invalid(errorKey, minimum)
-      }
-    }
-
-  protected def minimumValueWithDynamicMessage[A](minimum: A, errorKey: String, args:Any*)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input =>
-      import ev._
-
-      if (input >= minimum) {
-        Valid
-      } else {
-        Invalid(errorKey, args:_*)
+        Invalid(errorKey, args: _*)
       }
     }
 
   protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
+    maximumValueWithDynamicMessage(maximum, errorKey, maximum)
+
+  protected def maximumValueWithDynamicMessage[A](maximum: A, errorKey: String, args: Any*)(implicit
+    ev: Ordering[A]
+  ): Constraint[A] =
     Constraint { input =>
       import ev._
 
       if (input <= maximum) {
         Valid
       } else {
-        Invalid(errorKey, maximum)
-      }
-    }
-
-  protected def maximumValueWithDynamicMessage[A](maximum: A, errorKey: String, args: Any*)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input =>
-      import ev._
-
-      if (input <= maximum) {
-        Valid
-      } else {
-        Invalid(errorKey, args:_*)
+        Invalid(errorKey, args: _*)
       }
     }
 

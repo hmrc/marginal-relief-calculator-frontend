@@ -201,9 +201,11 @@ class TwoAssociatedCompaniesController @Inject() (
         )
     }
 
-  private def getForm(implicit request:TwoAssociatedCompaniesRequiredParams[AnyContent]) = {
-    formProvider(financialYear(request.accountingPeriod.accountingPeriodStartDate), financialYear(request.accountingPeriod.accountingPeriodEndDateOrDefault))
-  }
+  private def getForm(implicit request: TwoAssociatedCompaniesRequiredParams[AnyContent]) =
+    formProvider(
+      financialYear(request.accountingPeriod.accountingPeriodStartDate),
+      financialYear(request.accountingPeriod.accountingPeriodEndDateOrDefault)
+    )
   private def badRequestWithError(
     accountingPeriod: AccountingPeriodForm,
     form: Form[TwoAssociatedCompaniesForm],

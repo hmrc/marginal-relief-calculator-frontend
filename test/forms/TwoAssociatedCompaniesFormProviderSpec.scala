@@ -24,7 +24,7 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
 
   implicit val noShrink: Shrink[Int] = Shrink.shrinkAny
 
-  val form = new TwoAssociatedCompaniesFormProvider()()
+  val form = new TwoAssociatedCompaniesFormProvider()(1, 2)
 
   "TwoAssociatedCompaniesFormProvider" - {
 
@@ -62,8 +62,12 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
 
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("associatedCompaniesFY1Count", List("error.lessThanZero"), List(0)),
-          FormError("associatedCompaniesFY2Count", List("error.lessThanZero"), List(0))
+          FormError(
+            "associatedCompaniesFY1Count",
+            List("twoAssociatedCompanies.error.lessThanZero"),
+            List(0, "1", "2")
+          ),
+          FormError("associatedCompaniesFY2Count", List("twoAssociatedCompanies.error.lessThanZero"), List(0, "2", "3"))
         )
       }
     }
@@ -76,8 +80,16 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
           )
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("associatedCompaniesFY1Count", List("error.greaterThan99"), List(99)),
-          FormError("associatedCompaniesFY2Count", List("error.greaterThan99"), List(99))
+          FormError(
+            "associatedCompaniesFY1Count",
+            List("twoAssociatedCompanies.error.greaterThan99"),
+            List(99, "1", "2")
+          ),
+          FormError(
+            "associatedCompaniesFY2Count",
+            List("twoAssociatedCompanies.error.greaterThan99"),
+            List(99, "2", "3")
+          )
         )
       }
     }
