@@ -68,6 +68,13 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
     }
   }
 
+  "minimumValueWithDynamicMessage" - {
+    "must return errors with arguments" in {
+      val result = minimumValueWithDynamicMessage(1, "error.min", 1, 2, 3).apply(0)
+      result mustEqual Invalid("error.min", 1, 2, 3)
+    }
+  }
+
   "maximumValue" - {
 
     "must return Valid for a number less than the threshold" in {
@@ -83,6 +90,13 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
     "must return Invalid for a number above the threshold" in {
       val result = maximumValue(1, "error.max").apply(2)
       result mustEqual Invalid("error.max", 1)
+    }
+  }
+
+  "maximumValueWithDynamicMessage" - {
+    "must return errors with arguments" in {
+      val result = maximumValueWithDynamicMessage(1, "error.max", 1, 2, 3).apply(2)
+      result mustEqual Invalid("error.max", 1, 2, 3)
     }
   }
 

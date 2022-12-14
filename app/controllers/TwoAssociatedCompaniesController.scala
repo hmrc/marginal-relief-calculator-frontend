@@ -19,6 +19,7 @@ package controllers
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter }
 import controllers.actions._
+import forms.DateUtils.financialYear
 import forms._
 import models.requests.DataRequest
 import models.{ Distribution, Mode, UserAnswers }
@@ -47,8 +48,6 @@ class TwoAssociatedCompaniesController @Inject() (
   marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
-
-  private val form = formProvider()
 
   case class TwoAssociatedCompaniesRequiredParams[A](
     accountingPeriod: AccountingPeriodForm,
@@ -100,6 +99,7 @@ class TwoAssociatedCompaniesController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
+      val form = getForm
       for {
         associatedCompaniesParameter <- marginalReliefCalculatorConnector
                                           .associatedCompaniesParameters(
@@ -144,7 +144,7 @@ class TwoAssociatedCompaniesController @Inject() (
 
   def onSubmit(mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
-      val boundedForm = form
+      val boundedForm = getForm
         .bindFromRequest()
       boundedForm
         .fold(
@@ -201,6 +201,11 @@ class TwoAssociatedCompaniesController @Inject() (
         )
     }
 
+  private def getForm(implicit request: TwoAssociatedCompaniesRequiredParams[AnyContent]) =
+    formProvider(
+      financialYear(request.accountingPeriod.accountingPeriodStartDate),
+      financialYear(request.accountingPeriod.accountingPeriodEndDateOrDefault)
+    )
   private def badRequestWithError(
     accountingPeriod: AccountingPeriodForm,
     form: Form[TwoAssociatedCompaniesForm],
