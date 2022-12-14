@@ -100,8 +100,8 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
           form.bind(Map("associatedCompaniesFY1Count" -> value, "associatedCompaniesFY2Count" -> value))
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("associatedCompaniesFY1Count", List("twoAssociatedCompanies.error.wholeNumber")),
-          FormError("associatedCompaniesFY2Count", List("twoAssociatedCompanies.error.wholeNumber"))
+          FormError("associatedCompaniesFY1Count", List("twoAssociatedCompanies.error.wholeNumber"), Seq("1", "2")),
+          FormError("associatedCompaniesFY2Count", List("twoAssociatedCompanies.error.wholeNumber"), Seq("2", "3"))
         )
       }
     }
@@ -112,8 +112,8 @@ class TwoAssociatedCompaniesFormProviderSpec extends IntFieldBehaviours {
           form.bind(Map("associatedCompaniesFY1Count" -> value, "associatedCompaniesFY2Count" -> value))
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("associatedCompaniesFY1Count", List("twoAssociatedCompanies.error.nonNumeric")),
-          FormError("associatedCompaniesFY2Count", List("twoAssociatedCompanies.error.nonNumeric"))
+          FormError("associatedCompaniesFY1Count", List("twoAssociatedCompanies.error.nonNumeric"), Seq("1", "2")),
+          FormError("associatedCompaniesFY2Count", List("twoAssociatedCompanies.error.nonNumeric"), Seq("2", "3"))
         )
       }
     }

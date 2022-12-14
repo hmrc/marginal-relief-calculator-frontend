@@ -19,6 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ AskBothParts, Period }
+import forms.DateUtils.financialYear
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
 import models.{ AssociatedCompanies, Distribution, NormalMode }
 import org.mockito.Mockito.when
@@ -287,6 +288,10 @@ class TwoAssociatedCompaniesControllerSpec
         )
 
         forAll(table) { (_, accountingPeriodForm) =>
+          val form = formProvider(
+            financialYear(accountingPeriodForm.accountingPeriodStartDate),
+            financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault)
+          )
           val askParameter = AskBothParts(
             Period(
               accountingPeriodForm.accountingPeriodStartDate,
