@@ -224,10 +224,7 @@ object ResultsPageHelper extends ViewHelper {
     } else if (marginalRateOutsideOfThresholdBounds(m1) && marginalRateOutsideOfThresholdBounds(m2)) {
       adjustedProfitAboveAndBelowThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
     } else {
-      val message =
-        "Marginal relief was 0, however adjusted profits for one year was below lower threshold and the other year was above upper threshold"
-      logger.error(message)
-      throw new UnsupportedOperationException(message)
+      adjustedProfitAboveAndBelowThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
     }
   }
 
