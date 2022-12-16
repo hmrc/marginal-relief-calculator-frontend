@@ -1,58 +1,58 @@
 @*
- * Copyright 2022 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
+* Copyright 2022 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 
 @import controllers.routes
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 
 @this(
-    layout: templates.Layout,
-    govukInsetText : GovukInsetText,
-    govukButton: GovukButton,
-    govukBreadcrumbs : GovukBreadcrumbs
+layout: templates.Layout,
+govukInsetText : GovukInsetText,
+govukButton: GovukButton,
+govukBreadcrumbs : GovukBreadcrumbs
 )
 
 @()(implicit request: Request[_], messages: Messages)
 
 @breadCrumbs = {
-    @govukBreadcrumbs(Breadcrumbs(
-        items = Seq(
-            BreadcrumbsItem(
-                content = Text(messages("site.home")),
-                href = Some("https://www.gov.uk")
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("site.corporationTax")),
-                href = Some("https://www.gov.uk/topic/business-tax/corporation-tax")
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("site.marginalReliefForCorporationTax")),
-                href = Some("https://www.gov.uk/guidance/corporation-tax-marginal-relief")
-            )
-        ),
-        collapseOnMobile = true
-    ))
+@govukBreadcrumbs(Breadcrumbs(
+items = Seq(
+BreadcrumbsItem(
+content = Text(messages("site.home")),
+href = Some("https://www.gov.uk")
+),
+BreadcrumbsItem(
+content = Text(messages("site.corporationTax")),
+href = Some("https://www.gov.uk/topic/business-tax/corporation-tax")
+),
+BreadcrumbsItem(
+content = Text(messages("site.marginalReliefForCorporationTax")),
+href = Some("https://www.gov.uk/guidance/corporation-tax-marginal-relief")
+)
+),
+collapseOnMobile = true
+))
 }
 
 @layout(
-    pageTitle    = titleNoForm(messages("index.title")),
-    showBackLink = false,
-    mainContentLayout = Some(new templates.FullMainContent().render(_)),
-    breadCrumbs = Some(breadCrumbs),
-    timeout = false
+pageTitle    = titleNoForm(messages("index.title")),
+showBackLink = false,
+mainContentLayout = Some(new templates.FullMainContent().render(_)),
+breadCrumbs = Some(breadCrumbs),
+timeout = false
 ) {
 
 <div class="govuk-width-container">
@@ -69,7 +69,7 @@
             </ul>
 
             @govukInsetText(InsetText(
-                content = Text(messages("index.guidance.inset"))
+            content = Text(messages("index.guidance.inset"))
             ))
 
             <h2 class="govuk-heading-m">@messages("index.guidance.beforeYouStart")</h2>
@@ -80,13 +80,13 @@
                 <li>@messages("index.guidance.requirements.item1")</li>
                 <li>@messages("index.guidance.requirements.item2")</li>
                 <li>@Html(messages("index.guidance.requirements.item3","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm15120' class='govuk-link'>","</a>"))</li>
-                <li>@Html(messages("index.guidance.requirements.item4","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm03570' class='govuk-link'>","</a>"))</li>
+                <li>@Html(messages("index.guidance.requirements.item4","<a href='https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm03940' class='govuk-link'>","</a>"))</li>
             </ul>
 
             @govukButton(Button(
-                href = Some(routes.IndexController.onStart.url),
-                isStartButton = true,
-                content = Text(messages("site.start"))
+            href = Some(routes.IndexController.onStart.url),
+            isStartButton = true,
+            content = Text(messages("site.start"))
             ))
         </div>
         <div class="govuk-grid-column-one-third">
@@ -97,17 +97,17 @@
                 <nav role="navigation" aria-labelledby="subsection-title">
                     <ul class="govuk-list govuk-!-font-size-16">
                         <li>
-                            <a class="govuk-link" href="#">
+                            <a class="govuk-link" href="https://www.gov.uk/guidance/corporation-tax-marginal-relief">
                                 @messages("index.guidance.mrcTaxGuidance")
                             </a>
                         </li>
                         <li>
-                            <a class="govuk-link" href="#">
+                            <a class="govuk-link" href="https://www.gov.uk/guidance/corporate-tax">
                                 @messages("index.guidance.corporationTaxGuidance")
                             </a>
                         </li>
                         <li>
-                            <a class="govuk-link" href="#">
+                            <a class="govuk-link" href="https://www.gov.uk/corporation-tax-rates">
                                 @messages("index.guidance.corporationTaxRatesAndReliefs")
                             </a>
                         </li>
