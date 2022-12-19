@@ -183,7 +183,7 @@ resultsPage.corporationTaxTable.hidden=Tabl dadansoddol o’r rhwymedigaeth Tret
 resultsPage.getACopyOfResults=Cael copi o’r canlyniadau hyn
 resultsPage.addReferenceBeforePrinting=Gallwch hefyd ychwanegu manylion cyfeirnodau at y ddogfen hon cyn ei hargraffu.
 resultsPage.printOrSave=Argraffu neu gadw’ch cyfrifiad
-resultsPage.calculationDisclaimer = Mae’r canlyniadau hyn yn seiliedig ar gyfraddau Treth Gorfforaeth cyfredol a therfynau Rhyddhad Ymylol ac yn agored i newidiadau yn y dyfodol.
+resultsPage.calculationDisclaimer = Mae'r canlyniadau hyn yn seiliedig ar gyfraddau Treth Gorfforaeth cyfredol a therfynau Rhyddhad Ymylol ac yn agored i newidiadau yn y dyfodol.
 
 fullResultsPage.heading=Cyfrifiad ar gyfer Rhyddhad Ffiniol llawn yn fanwl
 fullResultsPage.howItsCalculated=Sut mae’n cael ei gyfrifo
@@ -210,8 +210,8 @@ fullResultsPage.marginalReliefNotAvailable=Nid oedd Rhyddhad Ffiniol ar gael ym 
 fullResultsPage.marginalReliefFormula=Y fformiwla ar gyfer Rhyddhad Ffiniol yw:
 fullResultsPage.marginalReliefFormula.description=(Terfyn uchaf wedi’i addasu - elw trethadwy gan gynnwys dosbarthiadau) × (elw trethadwy ÷ elw trethadwy gan gynnwys dosbarthiadau) × (ffracsiwn Rhyddhad Ffiniol)
 fullResultsPage.whatIsMarginalRateFraction=Beth yw’r ffracsiwn Rhyddhad Ffiniol?
-fullResultsPage.details.standardFraction=Y ffracsiwn rhyddhad ymylol safonol yw’r gwahaniaeth rhwng y brif gyfradd a’r gyfradd ymylol a fynegir fel ffracsiwn.
-fullResultsPage.details.whatIsMarginalRate=Beth yw’r gyfradd ymylol?
+fullResultsPage.details.standardFraction=Y ffracsiwn rhyddhad ymylol safonol yw'r gwahaniaeth rhwng y brif gyfradd a'r gyfradd ymylol a fynegir fel ffracsiwn.
+fullResultsPage.details.whatIsMarginalRate=Beth yw'r gyfradd ymylol?
 fullResultsPage.details.1 = Lle mae’r gyfradd elw bach yn 19% a’r brif gyfradd yn 25%:
 fullResultsPage.details.2 = Treth Gorfforaeth yn Daladwy ar elw ar y terfyn uchaf = £62,500 (£250,000 × 25%)
 fullResultsPage.details.3.less = Llai
@@ -219,7 +219,7 @@ fullResultsPage.details.3 = Elw Treth Gorfforaeth sy’n daladwy ar y terfyn isa
 fullResultsPage.details.4.equals = Yn gyfartal
 fullResultsPage.details.4 = Treth yn daladwy ar y gwahaniaeth o £200,000 = £53,000
 fullResultsPage.details.5 = Y gyfradd ymylol felly yw 26.5% (£53,000 ÷ £200,000)
-fullResultsPage.details.6 = Y gwahaniaeth rhwng y gyfradd ymylol o 26.5% a’r brif gyfradd o 25% yw 1.5% a fynegir wedyn fel 3÷200.
+fullResultsPage.details.6 = Y gwahaniaeth rhwng y gyfradd ymylol o 26.5% a'r brif gyfradd o 25% yw 1.5% a fynegir wedyn fel 3÷200.
 fullResultsPage.variables=Elfennau newidiol y cyfrifiad
 fullResultsPage.details.whatIsMarginalRate=Beth yw cyfradd ymylol?
 fullResultsPage.calculation=Cyfrifiad
@@ -233,7 +233,7 @@ fullResultsPage.taxableProfit=Elw trethadwy
 fullResultsPage.taxableProfit.daysAllocated=Diwrnodau wedi’u neilltuo i bob blwyddyn ariannol
 fullResultsPage.taxableProfit.distributions=Dosbarthiadau
 fullResultsPage.taxableProfit.profitAndDistributions=Elw trethadwy gan gynnwys dosbarthiadau
-fullResultsPage.calculationTableCaption=Mae hwn yn dabl sy’n disgrifio’ch cyfrifiad Rhyddhad Ymylol yn fanwl.
+fullResultsPage.calculationTableCaption=Mae hwn yn dabl sy'n disgrifio'ch cyfrifiad Rhyddhad Ymylol yn fanwl.
 fullResultsPage.tableSummary=Tabl yw hwn sy’n disgrifio’ch cyfrifiad o elw trethadwy’n fanwl.
 fullResultsPage.taxableProfitTableScrollableLabel=Tabl o’r elw trethadwy
 fullResultsPage.taxableProfitTable.hidden=Tabl o’r elw trethadwy
@@ -248,7 +248,7 @@ associatedCompanies.heading=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig?
 associatedCompanies.heading.between=A oedd gan eich cwmni unrhyw gwmnïau cysylltiedig rhwng {0} a {1}?
 associatedCompanies.warning=Peidiwch â chynnwys y cwmni rydych yn cyfrifo Rhyddhad Ffiniol amdano yn eich ateb. Bydd gwneud hynny yn arwain at ganlyniad anghywir.
 associatedCompanies.detailsTitle=Beth yw cwmnïau cysylltiedig?
-associatedCompanies.detailsHtml=<p>Ystyrir bod cwmni yn gysylltiedig ag un arall os:</p><ul class="govuk-list govuk-list--bullet"><li>mae gan un o’r cwmnïau reolaeth ar y llall</li><li> >rheolir y ddau gwmni gan yr un person neu bersonau</li></ul>
+associatedCompanies.detailsHtml=<p>Ystyrir bod cwmni yn gysylltiedig ag un arall os:</p><ul class="govuk-list govuk-list--bullet"><li>mae gan un o'r cwmnïau reolaeth ar y llall</li><li> >rheolir y ddau gwmni gan yr un person neu bersonau</li></ul>
 associatedCompanies.countLabel=Nodwch gwmnïau cysylltiedig yn unig
 associatedCompanies.countLabelBetween=Nodwch gwmnïau cysylltiedig ychwanegol rhwng {0} a {1}
 associatedCompanies.checkYourAnswersLabel=Nifer y cwmnïau cysylltiedig
@@ -290,7 +290,7 @@ distribution.errorsummary=Mae problem wedi codi.
 
 distributionsIncluded.title=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
 distributionsIncluded.heading=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
-distributionsIncluded.listHeading = Er mwyn cyfrifo’ch Rhyddhad Ymylol yn gywir rhaid i chi ddweud wrthym am unrhyw ddosraniadau a gewch gan gwmnïau nad ydynt yn perthyn i’r grŵp, nad ydynt yn gysylltiedig. Mae dosbarthiadau yn cynnwys:
+distributionsIncluded.listHeading = Er mwyn cyfrifo'ch Rhyddhad Ymylol yn gywir rhaid i chi ddweud wrthym am unrhyw ddosraniadau a gewch gan gwmnïau nad ydynt yn perthyn i'r grŵp, nad ydynt yn gysylltiedig. Mae dosbarthiadau yn cynnwys:
 distributionsIncluded.listItem1 = difidendau o fuddsoddiad a wnaeth eich cwmni
 distributionsIncluded.listItem2=asedion. Er enghraifft, eiddo neu fusnesau ar wahân
 distributionsIncluded.listItem3=ad-dalu cyfranddaliadau cyfalaf drwy drosglwyddo arian parod neu asedion sefydlog
@@ -317,14 +317,14 @@ session.expired.heading=Mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarw
 session.expired.body=Nid ydych wedi nodi unrhyw fanylion ar gyfer {0} o funudau, felly rydym wedi clirio’ch gwybodaeth.
 session.expired.btn.restart=Dechrau eto
 
-errorInternal.title=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth.
-errorInternal.heading=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth.
+errorInternal.title=Mae'n ddrwg gennym, mae problem gyda'r gwasanaeth.
+errorInternal.heading=Mae'n ddrwg gennym, mae problem gyda'r gwasanaeth.
 errorInternal.message1=Ceisiwch eto yn nes ymlaen.
-errorInternal.message2=Nid ydym wedi arbed unrhyw un o’ch atebion. Pan fydd y gwasanaeth ar gael, bydd yn rhaid i chi ddechrau eto.
+errorInternal.message2=Nid ydym wedi arbed unrhyw un o'ch atebion. Pan fydd y gwasanaeth ar gael, bydd yn rhaid i chi ddechrau eto.
 
 twoAssociatedCompanies.checkYourAnswersLabel = Nifer y cwmnïau cysylltiedig ar gyfer blwyddyn ariannol {0} i {1}
-twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Rhowch rif sy’n fwy na 0 yn o leiaf un o’ch atebion
-twoAssociatedCompanies.error.enterAtLeastOneAnswer = Rhowch rif ar gyfer o leiaf un o’ch atebion
+twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Rhowch rif sy'n fwy na 0 yn o leiaf un o'ch atebion
+twoAssociatedCompanies.error.enterAtLeastOneAnswer = Rhowch rif ar gyfer o leiaf un o'ch atebion
 twoAssociatedCompanies.error.nonNumeric = Rhowch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
 twoAssociatedCompanies.error.required = Rhowch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
 twoAssociatedCompanies.error.wholeNumber = Rhowch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
