@@ -63,7 +63,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
     _utr         <- stringsWithLength10
   } yield Map(
     "companyName" -> _companyName,
-    "utr"         -> _utr.take(10)
+    "utr"         -> _utr
   )
 
   val invalidCompanyNameUTR: Gen[PDFMetadataForm] = for {
