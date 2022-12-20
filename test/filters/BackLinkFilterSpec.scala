@@ -211,6 +211,17 @@ class BackLinkFilterSpec
       )
     }
 
+    "should not remove the head of the visitedLinks list, when back=true and visitedLinks list unavailable" in {
+      val Some(result) = route(
+        app,
+        FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period?back=true")
+      )
+      status(result) shouldBe Status.OK
+      visitedLinksFromSession(result) shouldBe Some(
+        List()
+      )
+    }
+
     "should not remove the head of the visitedLinks list, when back=true and source is a change page" in {
       val Some(result) = route(
         app,
