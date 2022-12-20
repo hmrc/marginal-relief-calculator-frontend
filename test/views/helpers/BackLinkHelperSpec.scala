@@ -38,6 +38,12 @@ class BackLinkHelperSpec extends AnyFreeSpec with Matchers {
       backLinkOrDefault("/", NormalMode) shouldBe "/?back=true"
     }
 
+    "should return default path when session visited links is empty" in {
+      implicit val request: RequestHeader = FakeRequest(GET, "/")
+        .withSession("visitedLinks" -> Json.toJson(List(): List[String]).toString)
+      backLinkOrDefault("/", NormalMode) shouldBe "/?back=true"
+    }
+
     "should return head value of the tail from the visited links list, when it has 2 or more values" in {
       implicit val request: RequestHeader = FakeRequest(GET, "/")
         .withSession("visitedLinks" -> Json.toJson(List("/path-2", "/path-1")).toString)
