@@ -62,27 +62,24 @@ index.guidance.requirements.item1=dyddiadau dechrau a dod i ben cyfnod cyfrifydd
 index.guidance.requirements.item2=cyfanswm elw trethadwy eich cwmni
 index.guidance.requirements.item3={0}dosbarthiadau{1} o gwmnïau anghysylltiedig, amherthnasol
 index.guidance.requirements.item4=manylion unrhyw {0}gwmni anghysylltiedig{1}
+
 checkYourAnswers.title=Gwirio’ch atebion
 checkYourAnswers.heading=Gwirio’ch atebion
 checkYourAnswers.continue=Cyfrifo’r Rhyddhad Ffiniol
 journeyRecovery.continue.title=Mae rhywbeth wedi mynd o’i le
+
 journeyRecovery.continue.heading=Mae rhywbeth wedi mynd o’i le
 journeyRecovery.continue.guidance=Roedd yn rhaid i ni glirio’r holl ddata a nodoch. Bydd yn rhaid i chi ddechrau’ch cyfrifiad eto.
 journeyRecovery.startAgain.title=Mae rhywbeth wedi mynd o’i le
 journeyRecovery.startAgain.heading=Mae rhywbeth wedi mynd o’i le
 journeyRecovery.startAgain.guidance=Roedd yn rhaid i ni glirio’r holl ddata a nodoch. Bydd yn rhaid i chi ddechrau’ch cyfrifiad eto.
+
 signedOut.title=Er eich diogelwch, gwnaethom eich allgofnodi
 signedOut.heading=Er eich diogelwch, gwnaethom eich allgofnodi
 signedOut.guidance=Ni wnaethom gadw’ch atebion.
+
 unauthorised.title=Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading=Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
-
-inputScreen.title=inputScreen
-inputScreen.heading=inputScreen
-inputScreen.checkYourAnswersLabel=inputScreen
-inputScreen.error.required=Nodwch inputScreen
-inputScreen.error.length=Mae’n rhaid i’r InputScreen fod yn 100 o gymeriadau neu lai
-inputScreen.change.hidden=InputScreen
 
 accountingPeriod.title=Beth yw dyddiadau’ch cyfnod cyfrifyddu?
 accountingPeriod.heading=Beth yw dyddiadau’ch cyfnod cyfrifyddu?
@@ -121,6 +118,7 @@ accountingPeriodEndDate.error.required.two=Mae’n rhaid i’r dyddiad dod i ben
 accountingPeriodEndDate.error.required=Mae’n rhaid i’r dyddiad dod i ben gynnwys {0}
 accountingPeriodEndDate.error.invalid=Nodwch ddyddiad dod i ben dilys ar gyfer y cyfnod cyfrifyddu, fel 27 3 2023
 accountingPeriodEndDate.change.hidden=Dyddiad dod i ben
+
 accountingPeriodIrrelevant.title=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol
 accountingPeriodIrrelevant.heading=Nid ydych yn gymwys ar gyfer Rhyddhad Ffiniol
 accountingPeriodIrrelevant.body=Mae’ch cyfnod cyfrifyddu yn dod i ben cyn dyddiad dechrau’r Rhyddhad Ffiniol sef 1 Ebrill 2023.
@@ -272,7 +270,7 @@ taxableProfit.hint=Rhaid nodi rhif cyfan. Er enghraifft, 70000
 distribution.title=A gawsoch unrhyw ddosbarthiadau?
 distribution.heading=A gawsoch unrhyw ddosbarthiadau?
 distribution.listHeading=Mae dosbarthiadau’n cynnwys:
-distribution.listItem1=distribution.difidendau o fuddsoddiad a wnaeth eich cwmni
+distribution.listItem1=difidendau o fuddsoddiad a wnaeth eich cwmni
 distribution.listItem2=dosbarthu asedion
 distribution.listItem3=symiau a gafodd eu trin fel dosbarthiad wrth drosglwyddo asedion neu rwymedigaethau
 distribution.listItem4=bonysau yn dilyn ad-dalu cyfranddaliadau cyfalaf
@@ -322,9 +320,6 @@ pdf.aboutThisResult=Ynglŷn â’r canlyniad hwn
 pdf.dataOfResult=Dyddiad y canlyniad
 pdf.legalDeclarationTitle=Datganiad cyfreithiol CThEF
 pdf.legalDeclaration=Ni all Cyllid a Thollau EF fod yn atebol dros allbwn anghywir o’r gyfrifiannell hon. Dim ond os caiff manylion cywir eu nodi y gall y gyfrifiannell hon roi gwybodaeth gywir.
-pdf.page1=Tudalen 1 o 3
-pdf.page2=Tudalen 2 o 3
-pdf.page3=Tudalen 3 o 3
 pdf.page = Tudalen {0} o {1}
 pdf.print = Argraffu’ch cyfrifiad llawn
 pdf.save = Cadw fel PDF
@@ -341,9 +336,8 @@ pdfMetaData.companyname.label=Enw’r cwmni (dewisol)
 pdfMetaData.utr.label=Cyfeirnod Unigryw y Trethdalwr (dewisol)
 pdfMetaData.companyname.error.length=Mae’n rhaid i enw’r cwmni fod yn 160 o gymeriadau neu lai.
 pdfMetaData.utr.error.length=Mae’n rhaid i Gyfeirnod Unigryw y Trethdalwr fod yn 10 o gymeriadau.
-pDFMetaData.utr.error.nonNumeric = Nodwch Gyfeirnod Unigryw y Trethdalwr sy’n ddilys. Er enghraifft, 1234567891
-pDFmetaData.utr.error.greater.than.15 = Mae’n rhaid i’r UTR fod yn 15 o gymeriadau neu lai.
-pdfMetadata.info = Cewch ddogfen sy’n dangos dyddiad heddiw a’r amser cwblhau, ynghyd â’ch atebion a’ch canlyniad. Mae hyn at eich cofnodion yn unig, ni fydd CThEF yn defnyddio’r manylion hyn
+pdfMetaData.utr.error.nonNumeric = Nodwch Gyfeirnod Unigryw y Trethdalwr sy’n ddilys. Er enghraifft, 1234567891
+pdfMetaData.utr.error.greater.than.15 = Mae’n rhaid i’r UTR fod yn 15 o gymeriadau neu lai.
 
 twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Nodwch rif sy’n fwy na 0 yn o leiaf un o’ch atebion
 twoAssociatedCompanies.error.enterAtLeastOneAnswer = Nodwch rif ar gyfer o leiaf un o’ch atebion
@@ -351,8 +345,8 @@ twoAssociatedCompanies.error.nonNumeric = Nodwch rif dilys ar gyfer eich cwmnïa
 twoAssociatedCompanies.error.required = Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
 twoAssociatedCompanies.error.wholeNumber = Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
 twoAssociatedCompanies.error.outOfRange = Nodwch rif rhwng 1 a 99
-twoAssociatedCompanies.error.greaterThan99 = Nodwch rif rhwng 1 a 99
-twoAssociatedCompanies.error.lessThanZero = Nodwch rif rhwng 1 a 99
+twoAssociatedCompanies.error.greaterThan99 = twoAssociatedCompanies.error.greaterThan99
+twoAssociatedCompanies.error.lessThanZero = twoAssociatedCompanies.error.lessThanZero
 twoAssociatedCompanies.change.hidden = Dau gwmni cysylltiedig
 twoAssociatedCompanies.associatedCompanies = Cwmnïau cysylltiedig
 twoAssociatedCompanies.financialYearFromTo = Blwyddyn ariannol {0} i {1}
