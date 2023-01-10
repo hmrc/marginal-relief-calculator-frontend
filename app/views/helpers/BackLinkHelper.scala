@@ -30,7 +30,8 @@ object BackLinkHelper {
         (request.session.get(BackLinkFilter.visitedLinks) match {
           case Some(value) =>
             val backLinks = Json.parse(value).as[List[String]]
-            backLinks.tail.headOption.getOrElse(defaultPath)
+            val tail = if (backLinks.nonEmpty) backLinks.tail else List()
+            tail.headOption.getOrElse(defaultPath)
           case None => defaultPath
         }) + "?back=true"
     }

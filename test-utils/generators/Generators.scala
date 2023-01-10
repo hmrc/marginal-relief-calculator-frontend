@@ -71,7 +71,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def stringsWithLength10: Gen[String] =
     for {
       length <- choose(10, 10)
-      chars  <- listOfN(length, arbitrary[Char])
+      chars  <- listOfN(length, alphaChar)
     } yield chars.mkString
 
   def decimals: Gen[String] =
@@ -106,7 +106,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def stringsWithMaxLength(maxLength: Int): Gen[String] =
     for {
       length <- choose(1, maxLength)
-      chars  <- listOfN(length, arbitrary[Char])
+      chars  <- listOfN(length, alphaChar)
     } yield chars.mkString
 
   def stringsLongerThan(minLength: Int): Gen[String] = for {

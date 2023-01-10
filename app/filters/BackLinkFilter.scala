@@ -46,6 +46,7 @@ class BackLinkFilter(
     routes.FullResultsPageController.onPageLoad().path,
     routes.IndexController.onPageLoad.path,
     routes.TaxableProfitController.onPageLoad(NormalMode).path,
+    routes.PDFAddCompanyDetailsController.onPageLoad().path(),
     routes.PDFMetadataController.onPageLoad().path,
     routes.PDFController.onPageLoad().path,
     routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).path
@@ -66,7 +67,9 @@ class BackLinkFilter(
         if (isRefererChangePage) {
           visitedLinks
         } else {
-          visitedLinks.tail
+          if (visitedLinks.nonEmpty)
+            visitedLinks.tail
+          else visitedLinks
         }
       } else {
         if (visitedLinks.headOption.contains(rh.path)) visitedLinks else rh.path :: visitedLinks

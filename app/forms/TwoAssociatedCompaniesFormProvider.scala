@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[TwoAssociatedCompaniesForm] =
+  def apply(year1: Int, year2: Int): Form[TwoAssociatedCompaniesForm] =
     Form(
       mapping(
         "associatedCompaniesFY1Count" ->
@@ -32,16 +32,48 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
             int(
               "twoAssociatedCompanies.error.required",
               "twoAssociatedCompanies.error.wholeNumber",
-              "twoAssociatedCompanies.error.nonNumeric"
-            ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
+              "twoAssociatedCompanies.error.nonNumeric",
+              Seq(year1.toString, (year1 + 1).toString)
+            ).verifying(
+              minimumValueWithDynamicMessage(
+                0,
+                "twoAssociatedCompanies.error.lessThanZero",
+                0,
+                year1.toString,
+                (year1 + 1).toString
+              ),
+              maximumValueWithDynamicMessage(
+                99,
+                "twoAssociatedCompanies.error.greaterThan99",
+                99,
+                year1.toString,
+                (year1 + 1).toString
+              )
+            )
           ),
         "associatedCompaniesFY2Count" ->
           optional(
             int(
               "twoAssociatedCompanies.error.required",
               "twoAssociatedCompanies.error.wholeNumber",
-              "twoAssociatedCompanies.error.nonNumeric"
-            ).verifying(minimumValue(0, "error.lessThanZero"), maximumValue(99, "error.greaterThan99"))
+              "twoAssociatedCompanies.error.nonNumeric",
+              Seq(year2.toString, (year2 + 1).toString)
+            ).verifying(
+              minimumValueWithDynamicMessage(
+                0,
+                "twoAssociatedCompanies.error.lessThanZero",
+                0,
+                year2.toString,
+                (year2 + 1).toString
+              ),
+              maximumValueWithDynamicMessage(
+                99,
+                "twoAssociatedCompanies.error.greaterThan99",
+                99,
+                year2.toString,
+                (year2 + 1).toString
+              )
+            )
           )
       )(TwoAssociatedCompaniesForm.apply)(TwoAssociatedCompaniesForm.unapply)
     )

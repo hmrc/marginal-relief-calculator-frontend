@@ -37,7 +37,7 @@
 @layout(
     pageTitle = titleNoForm(messages("pdf.title")),
     mainContentLayout = Some(new templates.FullMainContent().render(_)),
-    backLink = BackLinkHelper.backLinkOrDefault(routes.PDFMetadataController.onPageLoad.path(), NormalMode)
+    backLink = BackLinkHelper.backLinkOrDefault(routes.PDFAddCompanyDetailsController.onPageLoad.path(), NormalMode)
 ) {
 <h1 class="govuk-heading-l">@messages("pdf.title")</h1>
 <div class="print-this govuk-!-margin-bottom-4">

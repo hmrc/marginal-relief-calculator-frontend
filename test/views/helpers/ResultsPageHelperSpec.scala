@@ -569,10 +569,15 @@ class ResultsPageHelperSpec extends SpecBase {
           MarginalRate(1971, 300, 30, 200, 30, 0, 1000, 10, 1010, 100, 500, 100, FYRatio(100, 365)),
           1
         )
-        val result = intercept[UnsupportedOperationException] {
-          displayBanner(calculatorResult)
-        }
-        result.getMessage mustBe "Marginal relief was 0, however adjusted profits for one year was below lower threshold and the other year was above upper threshold"
+
+        displayBanner(calculatorResult).title shouldMatchTo messages("resultsPage.marginalReliefNotEligible")
+        displayBanner(calculatorResult).html.htmlFormat shouldMatchTo
+          govukPanel(
+            Panel(
+              title = Text(messages("resultsPage.marginalReliefNotEligible")),
+              content = Text(messages("resultsPage.yourProfitsAndDistributionsAboveAndBelowMarginalReliefLimit"))
+            )
+          ).htmlFormat
       }
     }
   }
