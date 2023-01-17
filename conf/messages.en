@@ -303,6 +303,7 @@ distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributi
 distributionsIncludedAmount.error.required = Enter an amount for your received distributions.
 distributionsIncluded.change.hidden = Distributions Included
 distributionsIncluded.emptyValue = None
+distributionsIncluded.label = Included distributions
 
 session.expired.title = Session expired
 session.expired.heading = Your session has ended due to inactivity

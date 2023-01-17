@@ -305,6 +305,7 @@ distributionsIncludedAmount.error.nonNumeric=Nodwch swm o ddyraniadau dilys a ga
 distributionsIncludedAmount.error.required=Nodwch swm ar gyfer eich dosbarthiadau a gafwyd
 distributionsIncluded.change.hidden=Dosbarthiadau wedi’u cynnwys
 distributionsIncluded.emptyValue=Dim
+distributionsIncluded.label=distributionsIncluded.label
 
 session.expired.title=Mae’r sesiwn wedi dod i ben
 session.expired.heading=Mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch
