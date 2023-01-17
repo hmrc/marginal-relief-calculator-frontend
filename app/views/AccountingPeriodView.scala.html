@@ -29,12 +29,24 @@
 
 @(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@*Need to change this if accountingPeriod.error.day welsh translation changed*@
+@errorMap = @{
+    Map(
+        "day" -> "day",
+        "month" -> "month",
+        "year" -> "year",
+        "Diwrnod" -> "day",
+        "mis" -> "month",
+        "Blwyddyn" -> "year")
+}
+
 @layout(pageTitle = title(form, messages("accountingPeriod.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.IndexController.onPageLoad.path(), mode)) {
     @formHelper(action = routes.AccountingPeriodController.onSubmit(mode)) {
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(
                 ErrorSummaryViewModel(
-                  form
+                  form,
+                  errorLinkOverrides = form.errors.map(e => e.key -> s"${e.key}${e.args.headOption.map(x => errorMap(x.toString)).map("." + _).getOrElse(".day")}").toMap
                 )
             )
         }
