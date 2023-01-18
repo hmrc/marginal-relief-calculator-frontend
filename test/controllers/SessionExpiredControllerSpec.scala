@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.Configuration
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.{ SessionExpiredView, SignOutView }
@@ -27,9 +26,6 @@ class SessionExpiredControllerSpec extends SpecBase with MockitoSugar {
   "SessionExpiredController renders view" in {
     val application = applicationBuilder(None).build()
     running(application) {
-
-      val config = application.injector.instanceOf[Configuration]
-      val timeoutSeconds = config.get[Long]("timeout-dialog.timeout")
       val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad().url)
       val result = route(application, request).value
 
@@ -37,7 +33,7 @@ class SessionExpiredControllerSpec extends SpecBase with MockitoSugar {
 
       val view = application.injector.instanceOf[SessionExpiredView]
 
-      contentAsString(result).filterAndTrim mustEqual view(timeoutSeconds)(
+      contentAsString(result).filterAndTrim mustEqual view()(
         request,
         messages(application)
       ).toString.filterAndTrim

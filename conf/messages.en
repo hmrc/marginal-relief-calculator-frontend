@@ -307,7 +307,6 @@ distributionsIncluded.label = Included distributions
 
 session.expired.title = For your security, we deleted your answers
 session.expired.heading = For your security, we deleted your answers
-session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information.
 session.expired.btn.restart = Start again
 
 session.signOut.title = You deleted your answers

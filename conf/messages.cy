@@ -309,7 +309,6 @@ distributionsIncluded.label=distributionsIncluded.label
 
 session.expired.title=Er eich diogelwch, gwnaethom ddileu’ch atebion
 session.expired.heading=Er eich diogelwch, gwnaethom ddileu’ch atebion
-session.expired.body=Nid ydych wedi nodi unrhyw fanylion ar gyfer {0} o funudau, felly rydym wedi clirio’ch gwybodaeth.
 session.expired.btn.restart=Dechrau eto
 
 session.signOut.title=Rydych wedi dileu’ch atebion
