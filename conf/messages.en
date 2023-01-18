@@ -23,10 +23,10 @@ date.day = Day
 date.month = Month
 date.year = Year
 
-timeout.title = Your session will expire soon
+timeout.title = Your answers will be deleted soon
 timeout.message = For your security, we will delete your answers in
 timeout.keepAlive = Continue
-timeout.signOut = Start again
+timeout.signOut = Delete your answers
 
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer.
@@ -305,10 +305,14 @@ distributionsIncluded.change.hidden = Distributions Included
 distributionsIncluded.emptyValue = None
 distributionsIncluded.label = Included distributions
 
-session.expired.title = Session expired
-session.expired.heading = Your session has ended due to inactivity
+session.expired.title = For your security, we deleted your answers
+session.expired.heading = For your security, we deleted your answers
 session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information.
 session.expired.btn.restart = Start again
+
+session.signOut.title = You deleted your answers
+session.signOut.heading = You deleted your answers
+session.signOut.btn.restart = Start again
 
 errorInternal.title = Sorry, there is a problem with the service.
 errorInternal.heading = Sorry, there is a problem with the service.

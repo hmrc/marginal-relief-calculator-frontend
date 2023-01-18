@@ -20,10 +20,10 @@ site.visuallyHiddenErrorMessage=Gwall
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn
-timeout.title=Bydd eich sesiwn yn dod i ben yn fuan
+timeout.title=timeout.title
 timeout.message=Er eich diogelwch, byddwn yn dileu’ch atebion cyn pen
 timeout.keepAlive=Yn eich blaen
-timeout.signOut=Dechrau eto
+timeout.signOut=Dileu’ch atebion
 
 error.browser.title.prefix=Gwall:
 error.boolean=Rhowch ateb
@@ -307,10 +307,14 @@ distributionsIncluded.change.hidden=Dosbarthiadau wedi’u cynnwys
 distributionsIncluded.emptyValue=Dim
 distributionsIncluded.label=distributionsIncluded.label
 
-session.expired.title=Mae’r sesiwn wedi dod i ben
-session.expired.heading=Mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch
+session.expired.title=Er eich diogelwch, gwnaethom ddileu’ch atebion
+session.expired.heading=Er eich diogelwch, gwnaethom ddileu’ch atebion
 session.expired.body=Nid ydych wedi nodi unrhyw fanylion ar gyfer {0} o funudau, felly rydym wedi clirio’ch gwybodaeth.
 session.expired.btn.restart=Dechrau eto
+
+session.signOut.title=Rydych wedi dileu’ch atebion
+session.signOut.heading=Rydych wedi dileu’ch atebion
+session.signOut.btn.restart=Dechrau eto
 
 pdf.title=Argraffu neu gadw’ch cyfrifiad
 pdf.logoTitle=Cyllid a Thollau EF

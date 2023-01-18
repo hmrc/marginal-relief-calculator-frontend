@@ -22,16 +22,14 @@
  config:Configuration
 )
 
-@(timeoutSeconds:Long)(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm("session.expired.title"), timeout = false, showBackLink = false) {
- <h1 class="govuk-heading-xl">@messages("session.expired.heading")</h1>
-
- <p class="govuk-body">@messages("session.expired.body", Math.round(timeoutSeconds / 60))</p>
+@layout(pageTitle = titleNoForm("session.signOut.title"), timeout = false, showBackLink = false) {
+ <h1 class="govuk-heading-xl">@messages("session.signOut.heading")</h1>
 
  @govukButton(Button(
   href = Some(routes.IndexController.onPageLoad.url),
   isStartButton = true,
-  content = Text(messages("session.expired.btn.restart"))
+  content = Text(messages("session.signOut.btn.restart"))
  ))
 }
