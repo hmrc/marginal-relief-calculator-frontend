@@ -327,11 +327,11 @@ pdf.page = Tudalen {0} o {1}
 pdf.print = Argraffu’ch cyfrifiad llawn
 pdf.save = Cadw fel PDF
 
-pdfAddCompanyDetails.title=pdfAddCompanyDetails.title
-pdfAddCompanyDetails.heading=pdfAddCompanyDetails.heading
+pdfAddCompanyDetails.title=A ydych am ychwanegu manylion y cwmni i’ch canlyniadau?
+pdfAddCompanyDetails.heading=A ydych am ychwanegu manylion y cwmni i’ch canlyniadau?
 pdfAddCompanyDetails.info=Cewch ddogfen sy’n dangos dyddiad heddiw a’r amser cwblhau, ynghyd â’ch atebion a’ch canlyniad. Mae hyn at eich cofnodion yn unig – ni fydd CThEF yn defnyddio’r manylion hyn.
-pdfAddCompanyDetails.error.required=pdfAddCompanyDetails.error.required
-pdfAddCompanyDetails.error.invalid=pdfAddCompanyDetails.error.invalid
+pdfAddCompanyDetails.error.required=Dewiswch a ydych am ychwanegu manylion y cwmni at eich canlyniadau neu beidio.
+pdfAddCompanyDetails.error.invalid=Dewiswch a ydych am ychwanegu manylion y cwmni at eich canlyniadau neu beidio.
 
 pdfMetaData.title=Ychwanegu manylion y cwmni cyn i chi argraffu neu gadw eich cyfrifiad
 pdfMetaData.heading=Ychwanegu manylion y cwmni cyn i chi argraffu neu gadw eich cyfrifiad
@@ -348,8 +348,8 @@ twoAssociatedCompanies.error.nonNumeric = Nodwch rif dilys ar gyfer eich cwmnïa
 twoAssociatedCompanies.error.required = Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
 twoAssociatedCompanies.error.wholeNumber = Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig. Er enghraifft, 1
 twoAssociatedCompanies.error.outOfRange = Nodwch rif rhwng 1 a 99
-twoAssociatedCompanies.error.greaterThan99 = twoAssociatedCompanies.error.greaterThan99
-twoAssociatedCompanies.error.lessThanZero = twoAssociatedCompanies.error.lessThanZero
+twoAssociatedCompanies.error.greaterThan99 = Nodwch rif sy’n is na {0} neu sy’n hafal iddo ar gyfer blwyddyn ariannol {1} i {2} CThEF.
+twoAssociatedCompanies.error.lessThanZero = Nodwch swm sy’n fwy na {0} neu sy’n hafal iddo ar gyfer blwyddyn ariannol {1} i {2} CThEF.
 twoAssociatedCompanies.change.hidden = Dau gwmni cysylltiedig
 twoAssociatedCompanies.associatedCompanies = Cwmnïau cysylltiedig
 twoAssociatedCompanies.financialYearFromTo = Blwyddyn ariannol {0} i {1}
