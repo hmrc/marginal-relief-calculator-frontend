@@ -255,7 +255,6 @@ associatedCompanies.change.hidden=Cwmnïau cysylltiedig
 
 taxableProfit.title=Faint yw elw trethadwy’ch cwmni?
 taxableProfit.heading=Faint yw elw trethadwy’ch cwmni?
-taxableProfit.heading.screenReader=Faint yw elw trethadwy eich cwmni mewn punnoedd?
 taxableProfit.label=Swm yr elw
 taxableProfit.checkYourAnswersLabel=Elw’r cwmni
 taxableProfit.error.required=Nodwch swm ar gyfer eich elw trethadwy
