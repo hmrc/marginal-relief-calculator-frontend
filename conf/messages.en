@@ -23,10 +23,10 @@ date.day = Day
 date.month = Month
 date.year = Year
 
-timeout.title = Your session will expire soon
+timeout.title = Your answers will be deleted soon
 timeout.message = For your security, we will delete your answers in
 timeout.keepAlive = Continue
-timeout.signOut = Start again
+timeout.signOut = Delete your answers
 
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer.
@@ -257,13 +257,13 @@ taxableProfit.heading.screenReader = How much is your company''s taxable profit 
 taxableProfit.label = Profit amount
 taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits.
-taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, 70000.
-taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, 70000.
+taxableProfit.error.nonNumeric = Enter a valid taxable profit. For example, £70000.
+taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable profits. Enter a whole number. For example, £70000.
 taxableProfit.change.hidden = Company''s profit
 taxableProfit.chargeableProfitsOnCTR = These are the chargeable profits for Corporation Tax on your Company Tax Return.
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
 taxableProfit.youCanFindYourCompanyProfitVia = You can find your company''s profit via your accountant or accounting software
-taxableProfit.hint = Must be entered as a whole number. For example, 70000
+taxableProfit.hint = Must be entered as a whole number. For example, £70000
 
 distribution.title = Did your company receive any distributions?
 distribution.heading = Did your company receive any distributions?
@@ -294,20 +294,25 @@ distributionsIncluded.option1Value = yes
 distributionsIncluded.option1Label = Yes
 distributionsIncluded.option2Value = no
 distributionsIncluded.option2Label = No
-distributionsIncluded.amountLabel = Must be entered as a whole number. For example, 1300.
+distributionsIncluded.amountLabel = Must be entered as a whole number. For example, £1300.
 distributionsIncluded.checkYourAnswersLabel = Distributions included
 distributionsIncluded.error.required = Select whether you received distributions or not.
 distributionsIncluded.error.invalid = Select whether you received distributions or not.
-distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, 70000.
-distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, 70000.
+distributionsIncludedAmount.error.doNotUseDecimals = Do not use decimal points. Enter a whole number. For example, £70000.
+distributionsIncludedAmount.error.nonNumeric = Enter a valid received distributions amount. For example, £70000.
 distributionsIncludedAmount.error.required = Enter an amount for your received distributions.
 distributionsIncluded.change.hidden = Distributions Included
 distributionsIncluded.emptyValue = None
+distributionsIncluded.label = Included distributions
 
-session.expired.title = Session expired
-session.expired.heading = Your session has ended due to inactivity
+session.expired.title = For your security, we deleted your answers
+session.expired.heading = For your security, we deleted your answers
 session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information.
 session.expired.btn.restart = Start again
+
+session.signOut.title = You deleted your answers
+session.signOut.heading = You deleted your answers
+session.signOut.btn.restart = Start again
 
 errorInternal.title = Sorry, there is a problem with the service.
 errorInternal.heading = Sorry, there is a problem with the service.
