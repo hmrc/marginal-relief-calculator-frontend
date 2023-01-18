@@ -253,7 +253,6 @@ associatedCompanies.change.hidden = Associated Companies
 
 taxableProfit.title = How much is your company''s taxable profit?
 taxableProfit.heading = How much is your company''s taxable profit?
-taxableProfit.heading.screenReader = How much is your company''s taxable profit in pounds?
 taxableProfit.label = Profit amount
 taxableProfit.checkYourAnswersLabel = Company''s profit
 taxableProfit.error.required = Enter an amount for your taxable profits.
@@ -307,7 +306,6 @@ distributionsIncluded.label = Included distributions
 
 session.expired.title = For your security, we deleted your answers
 session.expired.heading = For your security, we deleted your answers
-session.expired.body = You have not entered any details for {0} minutes, so we''ve cleared your information.
 session.expired.btn.restart = Start again
 
 session.signOut.title = You deleted your answers

@@ -255,7 +255,6 @@ associatedCompanies.change.hidden=Cwmnïau cysylltiedig
 
 taxableProfit.title=Faint yw elw trethadwy’ch cwmni?
 taxableProfit.heading=Faint yw elw trethadwy’ch cwmni?
-taxableProfit.heading.screenReader=Faint yw elw trethadwy eich cwmni mewn punnoedd?
 taxableProfit.label=Swm yr elw
 taxableProfit.checkYourAnswersLabel=Elw’r cwmni
 taxableProfit.error.required=Nodwch swm ar gyfer eich elw trethadwy
@@ -309,7 +308,6 @@ distributionsIncluded.label=distributionsIncluded.label
 
 session.expired.title=Er eich diogelwch, gwnaethom ddileu’ch atebion
 session.expired.heading=Er eich diogelwch, gwnaethom ddileu’ch atebion
-session.expired.body=Nid ydych wedi nodi unrhyw fanylion ar gyfer {0} o funudau, felly rydym wedi clirio’ch gwybodaeth.
 session.expired.btn.restart=Dechrau eto
 
 session.signOut.title=Rydych wedi dileu’ch atebion
