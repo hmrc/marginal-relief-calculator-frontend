@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages
+@import play.api.Configuration
 
-import models.Distribution
-import pages.behaviours.PageBehaviours
+@this(
+ layout: templates.Layout,
+ govukButton: GovukButton,
+ config:Configuration
+)
 
-class DistributionSpec extends PageBehaviours {
+@()(implicit request: Request[_], messages: Messages)
 
-  "DistributionPage" - {
+@layout(pageTitle = titleNoForm("session.signOut.title"), timeout = false, showBackLink = false) {
+ <h1 class="govuk-heading-xl">@messages("session.signOut.heading")</h1>
 
-    beRetrievable[Distribution](DistributionPage)
-
-    beSettable[Distribution](DistributionPage)
-
-    beRemovable[Distribution](DistributionPage)
-  }
+ @govukButton(Button(
+  href = Some(routes.IndexController.onPageLoad.url),
+  isStartButton = true,
+  content = Text(messages("session.signOut.btn.restart"))
+ ))
 }

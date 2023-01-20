@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,10 @@
 package controllers
 
 import controllers.actions.{ DataRetrievalAction, IdentifierAction }
-import play.api.Configuration
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.SessionExpiredView
+import views.html.{ SessionExpiredView, SignOutView }
 
 import javax.inject.Inject
 
@@ -31,10 +30,13 @@ class SessionExpiredController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   view: SessionExpiredView,
-  config: Configuration
+  signOutView: SignOutView
 ) extends FrontendBaseController with I18nSupport {
   def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
-    val timeoutSeconds = config.get[Long]("timeout-dialog.timeout")
-    Ok(view(timeoutSeconds))
+    Ok(view())
+  }
+
+  def signOut: Action[AnyContent] = (identify andThen getData) { implicit request =>
+    Ok(signOutView())
   }
 }

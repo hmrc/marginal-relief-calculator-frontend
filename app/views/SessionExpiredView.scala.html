@@ -1,5 +1,5 @@
 @*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,10 @@
  config:Configuration
 )
 
-@(timeoutSeconds:Long)(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("session.expired.title"), timeout = false, showBackLink = false) {
+@layout(pageTitle = titleNoForm("session.expired.title"), timeout = false, showBackLink = false) {
  <h1 class="govuk-heading-xl">@messages("session.expired.heading")</h1>
-
- <p class="govuk-body">@messages("session.expired.body", Math.round(timeoutSeconds / 60))</p>
 
  @govukButton(Button(
   href = Some(routes.IndexController.onPageLoad.url),

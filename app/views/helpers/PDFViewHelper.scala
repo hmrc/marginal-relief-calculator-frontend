@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -294,7 +294,7 @@ object PDFViewHelper extends ViewHelper {
          |       </div>
          |<div class="govuk-grid-column-one-third govuk-!-padding-right-0">
          |<div class="about-results">
-         |<h2 class="govuk-heading-s about-results-border">${messages("pdf.aboutThisResult")}</h3>
+         |<h2 class="govuk-heading-s about-results-border">${messages("pdf.aboutThisResult")}</h2>
          | <h3 class="govuk-heading-xs">${messages("pdf.dataOfResult")}</h3>
          | <p class="govuk-body about-results-border">${Html(DateUtils.formatInstantUTC(now))}</p>
          | <h3 class="govuk-heading-xs">${messages("pdf.legalDeclarationTitle")}</h3>
