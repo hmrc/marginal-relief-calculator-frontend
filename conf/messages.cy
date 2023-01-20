@@ -20,7 +20,7 @@ site.visuallyHiddenErrorMessage=Gwall
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn
-timeout.title=timeout.title
+timeout.title=Caiff eich atebion eu dileu cyn hir
 timeout.message=Er eich diogelwch, byddwn yn dileu’ch atebion cyn pen
 timeout.keepAlive=Yn eich blaen
 timeout.signOut=Dileu’ch atebion
@@ -304,7 +304,7 @@ distributionsIncludedAmount.error.nonNumeric=Nodwch swm o ddyraniadau dilys a ga
 distributionsIncludedAmount.error.required=Nodwch swm ar gyfer eich dosbarthiadau a gafwyd
 distributionsIncluded.change.hidden=Dosbarthiadau wedi’u cynnwys
 distributionsIncluded.emptyValue=Dim
-distributionsIncluded.label=distributionsIncluded.label
+distributionsIncluded.label=Dosbarthiadau sydd wedi’u cynnwys
 
 session.expired.title=Er eich diogelwch, gwnaethom ddileu’ch atebion
 session.expired.heading=Er eich diogelwch, gwnaethom ddileu’ch atebion
