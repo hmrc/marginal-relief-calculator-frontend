@@ -56,6 +56,10 @@
         <li>@messages("fullResultsPage.completeYourCorporationTaxReturn")</li>
         <li>@messages("fullResultsPage.payYourCorporationTaxBy") <b>@accountingPeriodForm.accountingPeriodEndDateOrDefault.plusMonths(9).plusDays(1).formatDateFull</b>.</li>
     </ul>
+    <p class="govuk-body">
+        <a class="govuk-link" href="@routes.FeedbackSurveyController.redirectToExitSurvey" target="_blank">@messages("exitSurvey.exit.link")</a>
+    </p>
+    <br/>
 
     @govukButton(
         Button(

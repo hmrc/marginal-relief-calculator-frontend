@@ -357,3 +357,5 @@ twoAssociatedCompanies.numberOfAssociatedCompaniesBetween = Nifer y cwmnïau cys
 twoAssociatedCompanies.accountingPeriodCovers2Years = Mae eich cyfnod cyfrifyddu yn cwmpasu 2 flynedd ariannol gyda setiau gwahanol o derfynau ar gyfer Rhyddhad Ffiniol.
 twoAssociatedCompanies.howManyAssociatedCompaniesDidYouHave = Faint o gwmnïau cysylltiedig gweithredol oedd gennych chi?
 twoAssociatedCompanies.checkYourAnswersLabel = Nifer y cwmnïau cysylltiedig ar gyfer blwyddyn ariannol {0} i {1}
+
+exitSurvey.exit.link = Gadewch adborth ar y gwasanaeth hwn (yn agor tab newydd).
