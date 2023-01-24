@@ -52,10 +52,16 @@ class LocalDateFormatter(
       args
     )
 
+    def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
+      int.bind(key, data) match {
+        case Right(value) if value < 1 => Left(List(FormError(key, "accountingPeriodEndDate.error.invalid")))
+        case value                     => value
+      }
+
     for {
-      day   <- int.bind(s"$key.day", data)
-      month <- int.bind(s"$key.month", data)
-      year  <- int.bind(s"$key.year", data)
+      day   <- bind(s"$key.day", data)
+      month <- bind(s"$key.month", data)
+      year  <- bind(s"$key.year", data)
       date  <- toDate(key, day, month, year)
     } yield date
   }
