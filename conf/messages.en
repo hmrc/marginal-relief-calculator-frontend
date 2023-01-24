@@ -261,7 +261,7 @@ taxableProfit.error.doNotUseDecimals = Do not use decimal points for taxable pro
 taxableProfit.change.hidden = Company''s profit
 taxableProfit.chargeableProfitsOnCTR = These are the chargeable profits for Corporation Tax on your Company Tax Return.
 taxableProfit.whereCanIFindMyCompanyTaxProfit = Where can I find my company''s taxable profit?
-taxableProfit.youCanFindYourCompanyProfitVia = You can find your company''s profit via your accountant or accounting software
+taxableProfit.youCanFindYourCompanyProfitVia = You can find your company''s profit via your accountant or accounting software.
 taxableProfit.hint = Must be entered as a whole number. For example, £70000
 
 distribution.title = Did your company receive any distributions?

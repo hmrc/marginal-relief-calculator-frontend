@@ -263,7 +263,7 @@ taxableProfit.error.doNotUseDecimals=Peidiwch â defnyddio pwyntiau degol ar gyf
 taxableProfit.change.hidden=Elw’r cwmni
 taxableProfit.chargeableProfitsOnCTR=Dyma’r elw taladwy ar gyfer Treth Gorfforaeth ar eich Ffurflen Dreth y Cwmni.
 taxableProfit.whereCanIFindMyCompanyTaxProfit=Ble y gallaf ddod o hyd i elw trethadwy fy nghwmni?
-taxableProfit.youCanFindYourCompanyProfitVia=Gallwch ddod o hyd i elw’r cwmni drwy’ch cyfrifydd neu’ch meddalwedd gyfrifyddu
+taxableProfit.youCanFindYourCompanyProfitVia=Gallwch ddod o hyd i elw’r cwmni drwy’ch cyfrifydd neu’ch meddalwedd gyfrifyddu.
 taxableProfit.hint=Rhaid nodi rhif cyfan. Er enghraifft, £70000
 
 distribution.title=A gawsoch unrhyw ddosbarthiadau?
