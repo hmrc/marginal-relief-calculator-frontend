@@ -29,7 +29,7 @@ class FeedbackSurveyController @Inject() (
 ) extends BaseController {
 
   def redirectToExitSurvey: Action[AnyContent] = identify { _ =>
-    Redirect(appConfig.exitSurveyUrl).withNewSession
+    Redirect(appConfig.exitSurveyUrl)
   }
 
 }
