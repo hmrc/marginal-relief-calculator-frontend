@@ -75,6 +75,33 @@ class AccountingPeriodFormProviderSpec extends DateBehaviours with SpecBase {
       }
     }
 
+    "return error when accounting period value contains number < 1" in {
+      def data = Seq(
+        s"accountingPeriodStartDate.day"   -> "1",
+        s"accountingPeriodStartDate.month" -> "1",
+        s"accountingPeriodStartDate.year"  -> "2023",
+        s"accountingPeriodEndDate.day"     -> "30",
+        s"accountingPeriodEndDate.month"   -> "12",
+        s"accountingPeriodEndDate.year"    -> "2023"
+      )
+      (0 to 5).map { index =>
+        val key = data(index)._1.split("\\.").head
+        val set1 = data.updated(index, data(index)._1 -> "0").toMap
+        val set2 = data.updated(index, data(index)._1 -> "-1").toMap
+        val result1 = form.bind(set1)
+        val result2 = form.bind(set2)
+        result1.hasErrors mustBe true
+        result2.hasErrors mustBe true
+        result1.errors mustBe Seq(
+          FormError(key, List("accountingPeriodEndDate.error.invalid"))
+        )
+        result2.errors mustBe Seq(
+          FormError(key, List("accountingPeriodEndDate.error.invalid"))
+        )
+      }
+
+    }
+
     "return error when accounting period is more than a year" in {
       val dates = for {
         startDate <- datesBetween(
