@@ -19,8 +19,6 @@ package config
 import com.google.inject.{ Inject, Singleton }
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.RequestHeader
-import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
@@ -28,8 +26,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val host: String = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
 
-  private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
+  // private val contactHost = configuration.get[String]("contact-frontend.host")
+  // private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
 
   // def feedbackUrl(implicit request: RequestHeader): String = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
 
