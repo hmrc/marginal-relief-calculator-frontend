@@ -78,7 +78,7 @@ class PDFViewHelperSpec extends SpecBase {
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
-              nonTabCalculationResultsTable(Seq(flatRate -> 0), taxableProfit, distributions, config),
+              nonTabCalculationResultsTable(calculatorResult, Seq(flatRate -> 0), taxableProfit, distributions, config),
               calculatorResult,
               accountingPeriodForm,
               pageCount
@@ -112,6 +112,7 @@ class PDFViewHelperSpec extends SpecBase {
              ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
              ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(
+                calculatorResult,
                 Seq(marginalRate -> 0),
                 taxableProfit,
                 distributions,
@@ -160,6 +161,7 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(
+                calculatorResult,
                 Seq(flatRate1 -> 0, flatRate2 -> 0),
                 taxableProfit,
                 distributions,
@@ -205,6 +207,7 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(
+                calculatorResult,
                 Seq(marginalRate -> 0, flatRate -> 0),
                 taxableProfit,
                 distributions,
@@ -250,6 +253,7 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(
+                calculatorResult,
                 Seq(flatRate -> 0, marginalRate -> 0),
                 taxableProfit,
                 distributions,
@@ -295,6 +299,7 @@ class PDFViewHelperSpec extends SpecBase {
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
               nonTabCalculationResultsTable(
+                calculatorResult,
                 Seq(marginalRate1 -> 0),
                 taxableProfit,
                 distributions,
@@ -306,6 +311,7 @@ class PDFViewHelperSpec extends SpecBase {
             )}
         ${pdfDetailedCalculationHtmlWithoutHeader(
               nonTabCalculationResultsTable(
+                calculatorResult,
                 Seq(marginalRate2 -> 0),
                 taxableProfit,
                 distributions,

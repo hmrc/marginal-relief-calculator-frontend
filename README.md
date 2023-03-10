@@ -7,25 +7,22 @@ The codebase uses the [scaffolding service](https://github.com/hmrc/hmrc-fronten
 
 ## Running in DEV mode
 
-To run the service you need the following installed: `Java 1.8`, `Mongo 4.0.25`, `sbt 1.7.1`
-
-To start the service locally, execute the following command
-
-```$ sbt -jvm-debug DEBUG_PORT run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
-@@ -13,6 +16,8 @@ To run locally using Service Manager
-
+To start the service locally using service manager, use `sm2 --start MARGINAL_RELIEF_CALCULATOR_FRONTEND`
+For a functioning frontend, it also needs following services to be running locally. They can be started via service manager using
 ```
-sm --start MARGINAL_RELIEF_CALCULATOR_BACKEND
+sm2 --start DATASTREAM
+sm2 --start MARGINAL_RELIEF_CALCULATOR_BACKEND
 ```
 
-```
-sm --start DATASTREAM
-```
+### From source code on your local machine
+Prior to starting the service from source, make sure the instance running in service manager is stopped. This can be done by running `sm2 --stop MARGINAL_RELIEF_CALCULATOR_FRONTEND`.
 
-```
-sm --start MARGINAL_RELIEF_CALCULATOR
-```
-This starts Marginal Relief Calculator (frontend) and all its dependencies
+To run the service locally from source code, you need the following installed: `Java 1.8`, `Mongo 4.0.25`, `sbt 1.7.1`
+
+```$ sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
+
+To debug the locally running application from IDE, use `jvm-debug` sbt option and run
+```$ sbt run -jvm-debug 5005 -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
 
 ## Starting the calculation journey (QA env)
 
