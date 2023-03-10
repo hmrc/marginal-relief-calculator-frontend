@@ -56,6 +56,7 @@ object PDFViewHelper extends ViewHelper {
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
+              calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),
               taxableProfit,
               distributions,
@@ -81,6 +82,7 @@ object PDFViewHelper extends ViewHelper {
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
+              calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(flatRate1, flatRate2), associatedCompanies),
               taxableProfit,
               distributions,
@@ -106,6 +108,7 @@ object PDFViewHelper extends ViewHelper {
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
+              calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(m), associatedCompanies),
               taxableProfit,
               distributions,
@@ -131,6 +134,7 @@ object PDFViewHelper extends ViewHelper {
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
              ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
+              calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(flatRate, m), associatedCompanies),
               taxableProfit,
               distributions,
@@ -157,6 +161,7 @@ object PDFViewHelper extends ViewHelper {
                 ${pdfCorporationTaxHtml("3", calculatorResult)}
                 ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
+              calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(m, flatRate), associatedCompanies),
               taxableProfit,
               distributions,
@@ -182,6 +187,7 @@ object PDFViewHelper extends ViewHelper {
         ${pdfCorporationTaxHtml("4", calculatorResult)}
         ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
+              calculatorResult,
               associatedCompanies match {
                 case Left(a)         => Seq(m1 -> a)
                 case Right((a1, a2)) => Seq(m1 -> a1)
@@ -196,6 +202,7 @@ object PDFViewHelper extends ViewHelper {
           )}
         ${pdfDetailedCalculationHtmlWithoutHeader(
             nonTabCalculationResultsTable(
+              calculatorResult,
               associatedCompanies match {
                 case Left(a)         => Seq(m2 -> a)
                 case Right((a1, a2)) => Seq(m2 -> a2)

@@ -33,6 +33,7 @@ object FullResultsPageHelper extends ViewHelper {
   private val govukDetails = new GovukDetails()
 
   def nonTabCalculationResultsTable(
+    calculatorResult: CalculatorResult,
     taxDetailsWithAssociatedCompanies: Seq[(TaxDetails, Int)],
     taxableProfit: Int,
     distributions: Int,
@@ -71,6 +72,7 @@ object FullResultsPageHelper extends ViewHelper {
             )
           ),
           displayFullFinancialYearTable(
+            calculatorResult,
             marginal,
             associatedCompanies,
             taxableProfit,
@@ -115,6 +117,7 @@ object FullResultsPageHelper extends ViewHelper {
             styles = "margin-bottom: 4px;"
           )}
            |    ${displayFullFinancialYearTable(
+            calculatorResult,
             marginalRate,
             associatedCompanies,
             taxableProfit,
@@ -144,6 +147,7 @@ object FullResultsPageHelper extends ViewHelper {
           tabDisplay(taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies), daysInAccountingPeriod)
         case (y1: MarginalRate, y2: FlatRate) =>
           nonTabCalculationResultsTable(
+            calculatorResult,
             taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
@@ -151,6 +155,7 @@ object FullResultsPageHelper extends ViewHelper {
           )
         case (y1: FlatRate, y2: MarginalRate) =>
           nonTabCalculationResultsTable(
+            calculatorResult,
             taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
@@ -162,6 +167,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     calculatorResult.fold(single =>
       nonTabCalculationResultsTable(
+        calculatorResult,
         taxDetailsWithAssociatedCompanies(Seq(single.details), associatedCompanies),
         taxableProfit,
         distributions,
@@ -212,6 +218,7 @@ object FullResultsPageHelper extends ViewHelper {
   private def isFiveStepMarginalRate(marginalRate: MarginalRate) = marginalRate.marginalRelief > 0
 
   private def displayFullFinancialYearTable(
+    calculatorResult: CalculatorResult,
     marginalRate: MarginalRate,
     associatedCompanies: Int,
     taxableProfit: Int,
@@ -230,7 +237,8 @@ object FullResultsPageHelper extends ViewHelper {
 
     val days = marginalRate.fyRatio.numerator.toInt
 
-    val daysInAccountingPeriod = marginalRate.fyRatio.denominator
+    val daysInAP = calculatorResult.totalDays
+    val daysInAPForAdjustedUL = marginalRate.fyRatio.denominator
 
     val upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)
 
@@ -284,7 +292,7 @@ object FullResultsPageHelper extends ViewHelper {
         TableRow(content =
           Text(
             s"${if (isProfitsAboveLowerThreshold) upperThresholdText
-              else lowerThresholdText} × ($daysString ÷ $daysInAccountingPeriod $daysMsg) ÷ $pointOneCompaniesCalcText"
+              else lowerThresholdText} × ($daysString ÷ $daysInAPForAdjustedUL $daysMsg) ÷ $pointOneCompaniesCalcText"
           )
         ),
         TableRow(content =
@@ -299,9 +307,7 @@ object FullResultsPageHelper extends ViewHelper {
       Seq(
         boldRow("2"),
         TableRow(content = Text(messages("fullResultsPage.financialYear.taxableProfit"))),
-        TableRow(content =
-          Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInAccountingPeriod $daysMsg)")
-        ),
+        TableRow(content = Text(s"${CurrencyUtils.format(taxableProfit)} × ($daysString ÷ $daysInAP $daysMsg)")),
         TableRow(content = Text(CurrencyUtils.format(marginalRate.adjustedProfit)))
       ),
       Seq(
@@ -310,7 +316,7 @@ object FullResultsPageHelper extends ViewHelper {
         TableRow(content =
           Text(
             s"(${CurrencyUtils.format(taxableProfit)} + ${CurrencyUtils
-                .format(distributions)}) × ($daysString ÷ $daysInAccountingPeriod $daysMsg)"
+                .format(distributions)}) × ($daysString ÷ $daysInAP $daysMsg)"
           )
         ),
         TableRow(content = Text(CurrencyUtils.format(taxableProfitIncludingDistributions)))

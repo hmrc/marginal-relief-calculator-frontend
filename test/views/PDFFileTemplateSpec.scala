@@ -60,7 +60,7 @@ class PDFFileTemplateSpec extends SpecBase {
           1,
           1,
           1,
-          FYRatio(1, 1)
+          FYRatio(1, 2)
         ),
         MarginalRate(
           accountingPeriodForm.accountingPeriodStartDate.getYear,
@@ -75,7 +75,7 @@ class PDFFileTemplateSpec extends SpecBase {
           1,
           1,
           1,
-          FYRatio(1, 1)
+          FYRatio(1, 2)
         ),
         1
       )
@@ -580,19 +580,19 @@ class PDFFileTemplateSpec extends SpecBase {
        |        <tr class="govuk-table__row">
        |         <th scope="row" class="govuk-table__header"><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
        |         <td class="govuk-table__cell">Adjusted lower limit</td>
-       |         <td class="govuk-table__cell">£50,000 lower limit × (1 day ÷ 1 days) ÷ (1 associated company + 1 original company)</td>
+       |         <td class="govuk-table__cell">£50,000 lower limit × (1 day ÷ 2 days) ÷ (1 associated company + 1 original company)</td>
        |         <td class="govuk-table__cell">£1</td>
        |        </tr>
        |        <tr class="govuk-table__row">
        |         <th scope="row" class="govuk-table__header"><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
        |         <td class="govuk-table__cell">Taxable profit</td>
-       |         <td class="govuk-table__cell">£1 × (1 day ÷ 1 days)</td>
+       |         <td class="govuk-table__cell">£1 × (1 day ÷ 2 days)</td>
        |         <td class="govuk-table__cell">£1</td>
        |        </tr>
        |        <tr class="govuk-table__row">
        |         <th scope="row" class="govuk-table__header"><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
        |         <td class="govuk-table__cell">Taxable profit including distributions</td>
-       |         <td class="govuk-table__cell">(£1 + £1) × (1 day ÷ 1 days)</td>
+       |         <td class="govuk-table__cell">(£1 + £1) × (1 day ÷ 2 days)</td>
        |         <td class="govuk-table__cell">£1</td>
        |        </tr>
        |        <tr class="govuk-table__row">
@@ -632,19 +632,19 @@ class PDFFileTemplateSpec extends SpecBase {
        |        <tr class="govuk-table__row">
        |         <th scope="row" class="govuk-table__header"><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
        |         <td class="govuk-table__cell">Adjusted lower limit</td>
-       |         <td class="govuk-table__cell">£50,000 lower limit × (1 day ÷ 1 days) ÷ (1 associated company + 1 original company)</td>
+       |         <td class="govuk-table__cell">£50,000 lower limit × (1 day ÷ 2 days) ÷ (1 associated company + 1 original company)</td>
        |         <td class="govuk-table__cell">£1</td>
        |        </tr>
        |        <tr class="govuk-table__row">
        |         <th scope="row" class="govuk-table__header"><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
        |         <td class="govuk-table__cell">Taxable profit</td>
-       |         <td class="govuk-table__cell">£1 × (1 day ÷ 1 days)</td>
+       |         <td class="govuk-table__cell">£1 × (1 day ÷ 2 days)</td>
        |         <td class="govuk-table__cell">£1</td>
        |        </tr>
        |        <tr class="govuk-table__row">
        |         <th scope="row" class="govuk-table__header"><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
        |         <td class="govuk-table__cell">Taxable profit including distributions</td>
-       |         <td class="govuk-table__cell">(£1 + £1) × (1 day ÷ 1 days)</td>
+       |         <td class="govuk-table__cell">(£1 + £1) × (1 day ÷ 2 days)</td>
        |         <td class="govuk-table__cell">£1</td>
        |        </tr>
        |        <tr class="govuk-table__row">

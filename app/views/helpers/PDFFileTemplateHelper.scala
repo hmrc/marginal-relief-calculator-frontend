@@ -43,6 +43,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
+                 calculatorResult,
                  taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),
                  taxableProfit,
                  distributions,
@@ -61,6 +62,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
+                 calculatorResult,
                  taxDetailsWithAssociatedCompanies(Seq(flatRate1, flatRate2), associatedCompanies),
                  taxableProfit,
                  distributions,
@@ -78,6 +80,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
+                 calculatorResult,
                  taxDetailsWithAssociatedCompanies(Seq(marginalRate), associatedCompanies),
                  taxableProfit,
                  distributions,
@@ -96,6 +99,7 @@ object PDFFileTemplateHelper {
              |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
              |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
              |          ${nonTabCalculationResultsTable(
+              calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(flatRate, marginalRate), associatedCompanies),
               taxableProfit,
               distributions,
@@ -114,6 +118,7 @@ object PDFFileTemplateHelper {
                 |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
                 |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
                 |          ${nonTabCalculationResultsTable(
+                 calculatorResult,
                  taxDetailsWithAssociatedCompanies(Seq(marginalRate, flatRate), associatedCompanies),
                  taxableProfit,
                  distributions,
@@ -132,6 +137,7 @@ object PDFFileTemplateHelper {
              |          <h2 class="govuk-heading-l">${messages("fullResultsPage.howItsCalculated")}</h2>
              |          <p class="govuk-body">${messages("fullResultsPage.marginalReliefForAccountingPeriod")}</p>
              |          ${nonTabCalculationResultsTable(
+              calculatorResult,
               associatedCompanies match {
                 case Left(a)         => Seq(marginalRate1 -> a)
                 case Right((a1, a2)) => Seq(marginalRate1 -> a1)
@@ -146,6 +152,7 @@ object PDFFileTemplateHelper {
              |<div class="pdf-page">
              |          <div class="grid-row">
              |            ${nonTabCalculationResultsTable(
+              calculatorResult,
               associatedCompanies match {
                 case Left(a)         => Seq(marginalRate2 -> a)
                 case Right((a1, a2)) => Seq(marginalRate2 -> a2)

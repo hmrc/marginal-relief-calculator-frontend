@@ -374,13 +374,13 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |               <tr class="govuk-table__row">
           |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
-          |                  <td class="govuk-table__cell"  >£1 × (1 fullResultsPage.day.singular ÷ 1 fullResultsPage.day.plural)</td>
+          |                  <td class="govuk-table__cell"  >£1 × (1 fullResultsPage.day.singular ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
           |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
-          |                  <td class="govuk-table__cell"  >(£1 + £1) × (1 fullResultsPage.day.singular ÷ 1 fullResultsPage.day.plural)</td>
+          |                  <td class="govuk-table__cell"  >(£1 + £1) × (1 fullResultsPage.day.singular ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
@@ -427,13 +427,13 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |               <tr class="govuk-table__row">
           |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
-          |                  <td class="govuk-table__cell"  >£1 × (2 fullResultsPage.day.plural ÷ 2 fullResultsPage.day.plural)</td>
+          |                  <td class="govuk-table__cell"  >£1 × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
           |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
-          |                  <td class="govuk-table__cell"  >(£1 + £1) × (2 fullResultsPage.day.plural ÷ 2 fullResultsPage.day.plural)</td>
+          |                  <td class="govuk-table__cell"  >(£1 + £1) × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
