@@ -19,7 +19,7 @@ class SessionRepositorySpec
     extends AnyFreeSpec with Matchers with DefaultPlayMongoRepositorySupport[UserAnswers] with ScalaFutures
     with IntegrationPatience with OptionValues with MockitoSugar {
 
-  private val instant = Instant.now
+  private val instant = Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
   private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
 
   private val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
