@@ -340,7 +340,7 @@ pdfMetaData.utr.label=Cyfeirnod Unigryw y Trethdalwr (dewisol)
 pdfMetaData.companyname.error.length=Mae’n rhaid i enw’r cwmni fod yn 160 o gymeriadau neu lai.
 pdfMetaData.utr.error.length=Mae’n rhaid i Gyfeirnod Unigryw y Trethdalwr fod yn 10 o gymeriadau.
 pdfMetaData.utr.error.nonNumeric = Nodwch Gyfeirnod Unigryw y Trethdalwr sy’n ddilys. Er enghraifft, 1234567891
-pdfMetaData.utr.error.greater.than.15 = Mae’n rhaid i’r UTR fod yn 15 o gymeriadau neu lai.
+pdfMetaData.utr.error.greater.than.15 = Mae’n rhaid i Gyfeirnod Unigryw y Trethdalwr fod yn 10 o gymeriadau.
 
 twoAssociatedCompanies.error.enterAtLeastOneValueGreaterThan0 = Nodwch rif sy’n fwy na 0 yn o leiaf un o’ch atebion
 twoAssociatedCompanies.error.enterAtLeastOneAnswer = Nodwch rif ar gyfer o leiaf un o’ch atebion
