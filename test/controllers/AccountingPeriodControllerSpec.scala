@@ -177,7 +177,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual 400
-        contentAsString(result) must include("Enter a valid start date for the accounting period, like 27 3 2023")
+        contentAsString(result) must include("The start date for the accounting period must be a real date")
       }
     }
 
