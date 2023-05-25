@@ -46,7 +46,7 @@ error.greaterThanOneBillion = Enter an amount lower than or equal to 1,000,000,0
 error.greaterThan99 = Enter a number lower than or equal to 99.
 error.lessThanOne = Enter an amount greater than 0.
 error.lessThanZero = Enter an amount greater than or equal to 0.
-error.outOfRange = Enter an amount between {0} and {1}.
+error.outOfRange = The amount must be between {0} and {1}
 
 index.title = Calculate Marginal Relief for Corporation Tax
 index.heading = Calculate Marginal Relief for Corporation Tax
