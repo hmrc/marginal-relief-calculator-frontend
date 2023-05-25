@@ -41,7 +41,7 @@ error.required=Nodwch werth
 error.summary.title=Mae problem wedi codi
 error.greaterThanOneBillion=Nodwch swm sy’n is na 1,000,000,000 neu’n hafal iddo
 error.greaterThan99=Nodwch rif sy’n is na 99 neu’n hafal iddo
-error.lessThanOne=Nodwch swm sy’n fwy na 0
+error.lessThanOne=Mae’n rhaid i’r elw trethadwy fod yn fwy na 0
 error.lessThanZero=Nodwch swm sy’n fwy na 0 neu sy’n hafal iddo.
 error.outOfRange=Nodwch swm rhwng {0} ac {1}
 
