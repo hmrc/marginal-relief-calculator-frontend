@@ -248,7 +248,7 @@ associatedCompanies.error.required = Select whether you have associated companie
 associatedCompanies.error.invalid = Select whether you have associated companies or not.
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1.
 associatedCompaniesCount.error.nonNumeric = Enter a valid number for your associated companies.
-associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1.
+associatedCompaniesCount.error.required = Enter the number of associated companies, like 1
 associatedCompanies.change.hidden = Associated Companies
 
 taxableProfit.title = How much is your company''s taxable profit?
