@@ -107,7 +107,7 @@ accountingPeriodStartDate.title = Start date
 accountingPeriodStartDate.heading = Start date
 accountingPeriodStartDate.hint = For example, 27 3 2023
 accountingPeriodStartDate.checkYourAnswersLabel = Start date
-accountingPeriodStartDate.error.required.all = Enter a start date for the accounting period (End date can be left blank as it's not compulsory)
+accountingPeriodStartDate.error.required.all = Enter a start date for the accounting period (End date can be left blank as it''s not compulsory)
 accountingPeriodStartDate.error.required.two = The start date must include {0} and {1}
 accountingPeriodStartDate.error.required = The start date must include {0}
 accountingPeriodStartDate.error.invalid = The start date for the accounting period must be a real date
@@ -247,7 +247,7 @@ associatedCompanies.checkYourAnswersLabel = Number of associated companies
 associatedCompanies.error.required = Select whether you have associated companies or not.
 associatedCompanies.error.invalid = Select whether you have associated companies or not.
 associatedCompaniesCount.error.wholeNumber = Do not use decimal points. Enter a whole number. For example, 1.
-associatedCompaniesCount.error.nonNumeric = Enter a valid number for your associated companies.
+associatedCompaniesCount.error.nonNumeric = The number of associated companies must be a number, like 1
 associatedCompaniesCount.error.required = Enter the number of associated companies you have. For example, 1.
 associatedCompanies.change.hidden = Associated Companies
 

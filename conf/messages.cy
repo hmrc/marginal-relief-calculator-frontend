@@ -249,7 +249,7 @@ associatedCompanies.checkYourAnswersLabel=Nifer y cwmnïau cysylltiedig
 associatedCompanies.error.required=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompanies.error.invalid=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompaniesCount.error.wholeNumber=Peidiwch â defnyddio pwyntiau degol. Nodwch rif cyfan. Er enghraifft, 1
-associatedCompaniesCount.error.nonNumeric=Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig.
+associatedCompaniesCount.error.nonNumeric=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn rhif, megis 1
 associatedCompaniesCount.error.required=Nodwch y nifer o gwmnïau cysylltiedig sydd gennych. Er enghraifft, 1
 associatedCompanies.change.hidden=Cwmnïau cysylltiedig
 
