@@ -274,8 +274,7 @@ distribution.listItem4 = bonus issues following the repayment of share capital
 distribution.yes = Yes
 distribution.no = No
 distribution.checkYourAnswersLabel = Did your company receive any distributions?
-distribution.error.required = Select whether you received distributions or not.
-distribution.error.invalid = Select whether you received distributions or not.
+distribution.error.required = Select whether distributions need to be included in your profits or not
 distribution.change.hidden = Distribution
 distribution.errorsummary = There is a problem.
 

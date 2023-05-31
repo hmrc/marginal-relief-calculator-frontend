@@ -276,8 +276,7 @@ distribution.listItem4=bonysau yn dilyn ad-dalu cyfranddaliadau cyfalaf
 distribution.yes=Iawn
 distribution.no=Na
 distribution.checkYourAnswersLabel=A gawsoch unrhyw ddosbarthiadau?
-distribution.error.required=Dewiswch a gawsoch ddosbarthiadau ai peidio
-distribution.error.invalid=Dewiswch a gawsoch ddosbarthiadau ai peidio
+distribution.error.required=Dewiswch a oes angen cynnwys dosbarthiadau yn eich elw ai peidio
 distribution.change.hidden=Dosbarthu
 distribution.errorsummary=Mae problem wedi codi.
 
