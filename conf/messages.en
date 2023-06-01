@@ -356,8 +356,8 @@ pdfMetaData.heading = Add company details before you print or save your calculat
 pdfMetaData.companyname.label = Company name (optional)
 pdfMetaData.utr.label = Unique Taxpayer Reference (optional)
 pdfMetaData.companyname.error.length = Company name must be 160 characters or less.
-pdfMetaData.utr.error.length = Unique Taxpayer Reference must be 10 characters.
+pdfMetaData.utr.error.length = Unique Taxpayer Reference must be 10 characters
 pdfMetaData.utr.error.nonNumeric = Enter a valid Unique Taxpayer Reference. For example, 1234567891
-pdfMetaData.utr.error.greater.than.15 = Unique Taxpayer Reference must be 10 characters.
+pdfMetaData.utr.error.greater.than.15 = Unique Taxpayer Reference must be 10 characters
 
 exitSurvey.exit.link = Leave feedback on this service (opens in new tab).
