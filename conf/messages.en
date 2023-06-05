@@ -46,7 +46,7 @@ error.greaterThanOneBillion = Enter an amount lower than or equal to 1,000,000,0
 error.greaterThan99 = Enter a number lower than or equal to 99.
 error.lessThanOne = Enter an amount greater than 0.
 error.lessThanZero = Enter an amount greater than or equal to 0.
-error.outOfRange = Enter an amount between {0} and {1}.
+error.outOfRange = The amount must be between {0} and {1}
 
 index.title = Calculate Marginal Relief for Corporation Tax
 index.heading = Calculate Marginal Relief for Corporation Tax
@@ -102,7 +102,7 @@ accountingPeriod.accountingPeriodCannotBeLongerThan12M=Your accounting period ca
 accountingPeriod.whereCanIFindMyAccPeriodDates=Where can I find my accounting period dates?
 accountingPeriod.yourAccPeriodDatesFoundOnForm=Your accounting period dates are found on the ''notice to deliver a Company Tax Return'' form (CT603) sent to your company.
 accountingPeriod.error.startShouldBeBeforeEnd = The accounting period end date must be after the start date
-accountingPeriod.error.periodIsMoreThanAYear = The accounting period end date must be less than or equal to a full year from the start date.
+accountingPeriod.error.periodIsMoreThanAYear = The accounting period end date must be less than or equal to a full year from the start date
 accountingPeriodStartDate.title = Start date
 accountingPeriodStartDate.heading = Start date
 accountingPeriodStartDate.hint = For example, 27 3 2023
