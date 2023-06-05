@@ -37,7 +37,7 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
             "error.outOfRange",
             "distributionsIncludedAmount.error.doNotUseDecimals",
             "distributionsIncludedAmount.error.nonNumeric",
-            "error.lessThanOne",
+            "distributionsIncludedAmount.error.lessThanOne",
             "error.greaterThanOneBillion",
             1,
             ONE_BILLION
