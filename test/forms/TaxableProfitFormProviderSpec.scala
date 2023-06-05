@@ -73,7 +73,7 @@ class TaxableProfitFormProviderSpec extends WholeAmountFieldBehaviours {
       )
       result.hasErrors mustBe true
       result.errors mustBe Seq(
-        FormError("value", "error.lessThanOne")
+        FormError("value", "taxableProfit.error.lessThanOne")
       )
     }
   }

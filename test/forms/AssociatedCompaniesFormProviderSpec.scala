@@ -64,7 +64,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
             form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> integer.toString))
           result.hasErrors mustBe true
           result.errors mustBe Seq(
-            FormError(associatedCompaniesCountKey, List("error.lessThanOne"), List(1))
+            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.lessThanOne"), List(1))
           )
         }
       }
