@@ -277,9 +277,9 @@ distribution.yes = Yes
 distribution.no = No
 distribution.checkYourAnswersLabel = Did your company receive any distributions?
 distribution.error.required = Select whether distributions need to be included in your profits or not
+distribution.error.invalid = Select whether you received distributions or not
 distribution.change.hidden = Distribution
 distribution.errorsummary = There is a problem.
-
 distributionsIncluded.title = Do any distributions need to be included with your profits?
 distributionsIncluded.heading = Do any distributions need to be included with your profits?
 distributionsIncluded.listHeading = To calculate your Marginal Relief accurately you must tell us about any distributions you receive from non-group, unconnected companies. Distributions include:
