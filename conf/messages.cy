@@ -251,7 +251,7 @@ associatedCompanies.error.invalid=Dewiswch a oes gennych gwmnïau cysylltiedig a
 associatedCompaniesCount.error.lessThanOne=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn fwy na 0
 associatedCompaniesCount.error.wholeNumber=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn rhif cyfan, megis 1
 associatedCompaniesCount.error.nonNumeric=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn rhif, megis 1
-associatedCompaniesCount.error.required=Nodwch y nifer o gwmnïau cysylltiedig sydd gennych. Er enghraifft, 1
+associatedCompaniesCount.error.required=Nodwch nifer y cwmnïau cysylltiedig, megis 1
 associatedCompanies.change.hidden=Cwmnïau cysylltiedig
 
 taxableProfit.title=Faint yw elw trethadwy’ch cwmni?
