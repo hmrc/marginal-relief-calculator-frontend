@@ -43,7 +43,8 @@ trait DateFluency {
       fieldset: Fieldset
     )(implicit messages: Messages): DateInput = {
 
-      val errorClass = if (errorMessage(field).isDefined) "govuk-input--error" else ""
+      val errorClass: String => String = fieldKey =>
+        if (field.error.exists(_.args.contains(fieldKey))) "govuk-input--error" else ""
 
       val items = Seq(
         InputItem(
@@ -51,7 +52,7 @@ trait DateFluency {
           name = s"${field.name}.day",
           value = field("day").value,
           label = Some(messages("date.day")),
-          classes = s"govuk-input--width-2 $errorClass".trim,
+          classes = s"govuk-input--width-2 ${errorClass("day")}".trim,
           attributes = Map("maxlength" -> "2")
         ),
         InputItem(
@@ -59,7 +60,7 @@ trait DateFluency {
           name = s"${field.name}.month",
           value = field("month").value,
           label = Some(messages("date.month")),
-          classes = s"govuk-input--width-2 $errorClass".trim,
+          classes = s"govuk-input--width-2 ${errorClass("month")}".trim,
           attributes = Map("maxlength" -> "2")
         ),
         InputItem(
@@ -67,7 +68,7 @@ trait DateFluency {
           name = s"${field.name}.year",
           value = field("year").value,
           label = Some(messages("date.year")),
-          classes = s"govuk-input--width-4 $errorClass".trim,
+          classes = s"govuk-input--width-2 ${errorClass("year")}".trim,
           attributes = Map("maxlength" -> "4")
         )
       )
