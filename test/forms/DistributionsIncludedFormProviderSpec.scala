@@ -82,7 +82,7 @@ class DistributionsIncludedFormProviderSpec extends OptionFieldBehaviours with W
         val result = form.bind(buildDataMap(DistributionsIncluded.Yes, "distributionsIncludedAmount" -> 0.toString))
         result.hasErrors mustBe true
         result.errors mustBe Seq(
-          FormError("distributionsIncludedAmount", "error.lessThanOne")
+          FormError("distributionsIncludedAmount", "distributionsIncludedAmount.error.lessThanOne")
         )
       }
     }
