@@ -31,7 +31,7 @@ class TaxableProfitFormProvider @Inject() extends Mappings {
         "error.outOfRange",
         "taxableProfit.error.doNotUseDecimals",
         "taxableProfit.error.nonNumeric",
-        "error.lessThanOne",
+        "taxableProfit.error.lessThanOne",
         "error.greaterThanOneBillion",
         1,
         ONE_BILLION

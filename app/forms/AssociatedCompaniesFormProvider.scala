@@ -41,7 +41,10 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
               "associatedCompaniesCount.error.required",
               "associatedCompaniesCount.error.wholeNumber",
               "associatedCompaniesCount.error.nonNumeric"
-            ).verifying(minimumValue(1, "error.lessThanOne"), maximumValue(99, "error.greaterThan99"))
+            ).verifying(
+              minimumValue(1, "associatedCompaniesCount.error.lessThanOne"),
+              maximumValue(99, "error.greaterThan99")
+            )
           )
         )
       )((v1, v2) => AssociatedCompaniesForm(v1, v2.flatten))(form =>
