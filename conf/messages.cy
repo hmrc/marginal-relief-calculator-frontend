@@ -250,7 +250,7 @@ associatedCompanies.error.required=Dewiswch a oes gennych gwmnïau cysylltiedig 
 associatedCompanies.error.invalid=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompaniesCount.error.wholeNumber=Peidiwch â defnyddio pwyntiau degol. Nodwch rif cyfan. Er enghraifft, 1
 associatedCompaniesCount.error.nonNumeric=Nodwch rif dilys ar gyfer eich cwmnïau cysylltiedig.
-associatedCompaniesCount.error.required=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn rhif cyfan, megis 1
+associatedCompaniesCount.error.required=Nodwch nifer y cwmnïau cysylltiedig, megis 1
 associatedCompanies.change.hidden=Cwmnïau cysylltiedig
 
 taxableProfit.title=Faint yw elw trethadwy’ch cwmni?
