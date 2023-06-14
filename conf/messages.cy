@@ -286,7 +286,7 @@ distributionsIncluded.title=A oes angen cynnwys unrhyw ddosbarthiadau yn eich el
 distributionsIncluded.heading=A oes angen cynnwys unrhyw ddosbarthiadau yn eich elw?
 distributionsIncluded.listHeading=I gyfrifo’ch Rhyddhad Ffiniol yn gywir, mae’n rhaid i chi roi gwybod i ni am unrhyw ddosbarthiadau a gewch o gwmnïau anghysylltiedig, nad ydynt mewn grŵp. Mae dosbarthiadau’n cynnwys:
 distributionsIncluded.listItem1=difidendau o fuddsoddiad a wnaeth eich cwmni
-distributionsIncluded.listItem2=asedion. Er enghraifft, eiddo neu fusnesau ar wahân
+distributionsIncluded.listItem2=asedion, megis eiddo neu fusnesau ar wahân 
 distributionsIncluded.listItem3=ad-dalu cyfranddaliadau cyfalaf drwy drosglwyddo arian parod neu asedion sefydlog
 distributionsIncluded.detailsTitle=Dosbarthiadau na ddylech eu cynnwys
 distributionsIncluded.detailsHtml=<p>Peidiwch â chynnwys dosbarthiadau y mae’ch cwmni’n eu cael o gwmni cysylltiedig yn yr un berchnogaeth o 51%. Er enghraifft:</p><ul class="govuk-list govuk-list--bullet"><li>is-gwmni o 51% o’ch cwmni</li><li>cwmni y mae’ch cwmni’n is-gwmni o 51% ohono</li></ul>
