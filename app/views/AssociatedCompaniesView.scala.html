@@ -49,7 +49,7 @@
         @AssociatedCompaniesViewHelper.heading(associatedCompaniesParameter)
 
         @govukWarningText(WarningText(
-            iconFallbackText = messages("site.warning"),
+            iconFallbackText = Some(messages("site.warning")),
             content = Text(messages("associatedCompanies.warning"))
         ))
 
