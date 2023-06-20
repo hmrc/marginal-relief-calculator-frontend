@@ -68,7 +68,7 @@ trait DateFluency {
           name = s"${field.name}.year",
           value = field("year").value,
           label = Some(messages("date.year")),
-          classes = s"govuk-input--width-2 ${errorClass("year")}".trim,
+          classes = s"govuk-input--width-4 ${errorClass("year")}".trim,
           attributes = Map("maxlength" -> "4")
         )
       )
