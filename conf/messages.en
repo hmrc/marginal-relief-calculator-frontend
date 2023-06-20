@@ -284,7 +284,7 @@ distributionsIncluded.title = Do any distributions need to be included with your
 distributionsIncluded.heading = Do any distributions need to be included with your profits?
 distributionsIncluded.listHeading = To calculate your Marginal Relief accurately you must tell us about any distributions you receive from non-group, unconnected companies. Distributions include:
 distributionsIncluded.listItem1 = dividends from an investment your company made
-distributionsIncluded.listItem2 = assets. For example, property or separate businesses
+distributionsIncluded.listItem2 = assets, such as property or separate businesses
 distributionsIncluded.listItem3 = repayment of share capital through the transfer of cash or fixed assets
 distributionsIncluded.detailsTitle = Distributions you should not include
 distributionsIncluded.detailsHtml = <p>Do not include distributions that your company receives from an associated company in the same 51% ownership. For example:</p><ul class="govuk-list govuk-list--bullet"><li>a 51% subsidiary of your company</li><li>a company of which your company is a 51% subsidiary</li></ul>
