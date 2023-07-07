@@ -18,25 +18,26 @@ package connectors
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
-import com.github.tomakehurst.wiremock.client.WireMock.{ verify => _, _ }
-import com.github.tomakehurst.wiremock.client.{ ResponseDefinitionBuilder, WireMock }
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, verify => _}
+import com.github.tomakehurst.wiremock.client.{ResponseDefinitionBuilder, WireMock}
 import com.typesafe.config.ConfigFactory
 import config.FrontendAppConfig
-import connectors.sharedmodel._
+import connectors.sharedmodel.{AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, CalculatorResult, DontAsk, DualResult, FYConfig, FYRatio, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, Period, SingleResult}
 import org.mockito.MockitoSugar
-import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.time.SpanSugar.convertIntToGrainOfTime
 import play.api.Configuration
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.hooks.HttpHook
-import uk.gov.hmrc.http.test.{ HttpClientSupport, WireMockSupport }
-import uk.gov.hmrc.http.{ GatewayTimeoutException, HeaderCarrier, HttpClient, UpstreamErrorResponse }
+import uk.gov.hmrc.http.test.{HttpClientSupport, WireMockSupport}
+import uk.gov.hmrc.http.{GatewayTimeoutException, HeaderCarrier, HttpClient, UpstreamErrorResponse}
 
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.{ Duration, _ }
+import scala.concurrent.duration.Duration
 
 class MarginalReliefCalculatorConnectorImplSpec
     extends AnyFreeSpec with Matchers with WireMockSupport with MockitoSugar with ScalaFutures with IntegrationPatience

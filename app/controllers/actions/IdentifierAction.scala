@@ -19,12 +19,12 @@ package controllers.actions
 import com.google.inject.Inject
 import controllers.routes
 import models.requests.IdentifierRequest
-import play.api.mvc.Results._
-import play.api.mvc._
+import play.api.mvc.Results.Redirect
+import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParsers, Request, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction
     extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]

@@ -16,19 +16,19 @@
 
 package controllers
 
-import controllers.actions._
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction, PDFRequiredDataAction}
 import forms.PDFMetadataFormProvider
 import models.NormalMode
 import navigation.Navigator
-import pages._
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
+import pages.PDFMetadataPage
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PDFMetadataView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class PDFMetadataController @Inject() (
   override val messagesApi: MessagesApi,

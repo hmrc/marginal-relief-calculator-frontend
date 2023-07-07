@@ -17,9 +17,9 @@
 package forms.mappings
 
 import models.Enumerable
-import utils.StringUtils._
 import play.api.data.format.Formatter
 import play.api.data.{ FormError, Mapping }
+import utils.StringUtils.removeSpaceLineBreaks
 
 import scala.util.Try
 import scala.util.control.Exception.nonFatalCatch

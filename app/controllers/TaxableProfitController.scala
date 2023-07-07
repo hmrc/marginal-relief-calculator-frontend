@@ -17,19 +17,19 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions._
-import forms.{ AccountingPeriodForm, TaxableProfitFormProvider }
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, TaxableProfitFormProvider}
 import models.requests.DataRequest
-import models.{ Mode, UserAnswers }
+import models.{Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ AccountingPeriodPage, TaxableProfitPage }
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc._
+import pages.{AccountingPeriodPage, TaxableProfitPage}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TaxableProfitView
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class TaxableProfitController @Inject() (
   override val messagesApi: MessagesApi,

@@ -18,9 +18,10 @@ package controllers
 
 import base.SpecBase
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.OK
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import views.html.{ SessionExpiredView, SignOutView }
+import play.api.test.Helpers.{GET, contentAsString, defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty}
+import views.html.{SessionExpiredView, SignOutView}
 
 class SessionExpiredControllerSpec extends SpecBase with MockitoSugar {
   "SessionExpiredController renders view" in {

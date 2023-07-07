@@ -18,23 +18,23 @@ package controllers
 
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
-import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm}
 import models.requests.DataRequest
-import models.{ AssociatedCompanies, Distribution, Mode, UserAnswers }
+import models.{AssociatedCompanies, Distribution, Mode, UserAnswers}
 import navigation.Navigator
-import org.slf4j.{ Logger, LoggerFactory }
-import pages._
+import org.slf4j.{Logger, LoggerFactory}
+import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
 import play.api.data.Form
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc._
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AssociatedCompaniesView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class AssociatedCompaniesController @Inject() (
   override val messagesApi: MessagesApi,

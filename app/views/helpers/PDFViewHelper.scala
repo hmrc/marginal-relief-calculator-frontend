@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import connectors.sharedmodel._
+import connectors.sharedmodel.{CalculatorResult, DualResult, FYConfig, FlatRate, MarginalRate, SingleResult}
 import forms.DateUtils.DateOps
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages

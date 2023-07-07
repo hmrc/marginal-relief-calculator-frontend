@@ -17,18 +17,18 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import controllers.actions._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
-import models.{ Distribution, UserAnswers }
-import pages._
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc._
+import models.{Distribution, UserAnswers}
+import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ResultsPageController @Inject() (
   override val messagesApi: MessagesApi,

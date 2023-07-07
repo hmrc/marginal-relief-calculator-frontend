@@ -18,18 +18,19 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ AskBothParts, Period }
+import connectors.sharedmodel.{AskBothParts, Period}
 import forms.DateUtils.financialYear
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
-import models.{ AssociatedCompanies, Distribution, NormalMode }
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider}
+import models.{AssociatedCompanies, Distribution, NormalMode}
 import org.mockito.Mockito.when
-import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
 import org.scalatest.prop.TableDrivenPropertyChecks
-import pages._
+import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
 import play.api.data.FormError
+import play.api.http.Status.{BAD_REQUEST, OK, SEE_OTHER}
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.{GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded}
 import repositories.SessionRepository
 import views.html.TwoAssociatedCompaniesView
 

@@ -20,9 +20,10 @@ import base.SpecBase
 import forms.AccountingPeriodForm
 import models.NormalMode
 import pages.AccountingPeriodPage
+import play.api.http.Status.{OK, SEE_OTHER}
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.{GET, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 import views.html.IndexView

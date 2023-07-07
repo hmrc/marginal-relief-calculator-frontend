@@ -16,12 +16,12 @@
 
 package views.helpers
 
-import utils.FormatUtils._
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel.{DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult}
 import play.api.i18n.Messages
-import play.api.test.Helpers._
+import play.api.test.Helpers.stubMessages
+import utils.FormatUtils.{HtmlFormat, StringFormat}
 
 import java.time.LocalDate
 

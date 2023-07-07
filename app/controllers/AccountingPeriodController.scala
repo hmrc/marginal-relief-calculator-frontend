@@ -16,22 +16,22 @@
 
 package controllers
 
-import controllers.actions._
-import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider }
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AccountingPeriodFormProvider}
 import models.requests.OptionalDataRequest
-import models.{ Mode, UserAnswers }
+import models.{Mode, UserAnswers}
 import navigation.Navigator
-import org.slf4j.{ Logger, LoggerFactory }
+import org.slf4j.{Logger, LoggerFactory}
 import pages.AccountingPeriodPage
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents, RequestHeader }
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, RequestHeader}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
+import views.html.{AccountingPeriodView, IrrelevantPeriodView}
 
 import java.time.LocalDate
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class AccountingPeriodController @Inject() (
   override val messagesApi: MessagesApi,

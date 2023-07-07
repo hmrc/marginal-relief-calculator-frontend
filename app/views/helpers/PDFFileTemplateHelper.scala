@@ -16,11 +16,11 @@
 
 package views.helpers
 
-import connectors.sharedmodel._
+import connectors.sharedmodel.{CalculatorResult, DualResult, FYConfig, FlatRate, MarginalRate, SingleResult}
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import views.helpers.FullResultsPageHelper.{ nonTabCalculationResultsTable, taxDetailsWithAssociatedCompanies }
+import views.helpers.FullResultsPageHelper.{nonTabCalculationResultsTable, taxDetailsWithAssociatedCompanies}
 import views.helpers.PDFViewHelper.pdfFormulaAndNextHtml
 
 import scala.collection.immutable.Seq

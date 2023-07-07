@@ -16,15 +16,16 @@
 
 package viewmodels.checkAnswers
 
-import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter, DontAsk }
+import connectors.sharedmodel.{AskBothParts, AssociatedCompaniesParameter, DontAsk}
 import controllers.routes
-import forms.{ AccountingPeriodForm, DateUtils }
-import models.{ CheckMode, UserAnswers }
-import pages.{ AccountingPeriodPage, TwoAssociatedCompaniesPage }
+import forms.{AccountingPeriodForm, DateUtils}
+import models.{CheckMode, UserAnswers}
+import pages.{AccountingPeriodPage, TwoAssociatedCompaniesPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ Key, SummaryListRow }
-import viewmodels.govuk.summarylist._
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow}
+import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.summarylist.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
 import viewmodels.implicits._
 
 object TwoAssociatedCompaniesSummary {
