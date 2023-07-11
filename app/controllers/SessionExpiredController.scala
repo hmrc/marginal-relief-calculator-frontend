@@ -32,11 +32,11 @@ class SessionExpiredController @Inject() (
   view: SessionExpiredView,
   signOutView: SignOutView
 ) extends FrontendBaseController with I18nSupport {
-  def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(view())
   }
 
-  def signOut: Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def signOut(): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(signOutView())
   }
 }

@@ -30,7 +30,7 @@
     <p class="govuk-body">
         @govukButton(
             Button(
-                href = Some(routes.IndexController.onPageLoad.url),
+                href = Some(routes.IndexController.onPageLoad().url),
                 isStartButton = true,
                 content = Text(messages("session.expired.btn.restart"))
             )

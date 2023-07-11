@@ -81,18 +81,14 @@ object ResultsPageHelper extends ViewHelper {
                     key = messages("resultsPage.distributions").toKey,
                     value = Value(CurrencyUtils.format(distributions).toText)
                   ),
-                  if (associatedCompanies.isLeft) {
-                    SummaryListRow(
-                      key = messages("resultsPage.associatedCompanies").toKey,
-                      value = Value(associatedCompanies.left.get.toString.toText)
-                    )
-                  } else {
-                    val a = associatedCompanies.right.get
-                    displayTwoAssociatedCompanies(
-                      accountingPeriodForm,
-                      a._1,
-                      a._2
-                    )
+                  associatedCompanies match {
+                    case Left(value) =>
+                      SummaryListRow(
+                        key = messages("resultsPage.associatedCompanies").toKey,
+                        value = Value(value.toString.toText)
+                      )
+                    case Right(value) =>
+                      displayTwoAssociatedCompanies(accountingPeriodForm, value._1, value._2)
                   }
                 ),
                 classes = "govuk-summary-list--no-border"
@@ -330,7 +326,7 @@ object ResultsPageHelper extends ViewHelper {
               rows = Seq(
                 Seq(
                   TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                  TableRow(content = HtmlContent(s"""${details.days.toString} $screenReaderText"""))
+                  TableRow(content = HtmlContent(s"""${details.days.toString} ${screenReaderText()}"""))
                 ),
                 Seq(
                   TableRow(content =
@@ -403,15 +399,15 @@ object ResultsPageHelper extends ViewHelper {
                 Seq(
                   TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
                   TableRow(
-                    content = HtmlContent(s"""${year1.days.toString} $screenReaderText"""),
+                    content = HtmlContent(s"""${year1.days.toString} ${screenReaderText()}"""),
                     classes = "govuk-table__cell--numeric"
                   ),
                   TableRow(
-                    content = HtmlContent(s"""${year2.days.toString} $screenReaderText"""),
+                    content = HtmlContent(s"""${year2.days.toString} ${screenReaderText()}"""),
                     classes = "govuk-table__cell--numeric"
                   ),
                   TableRow(
-                    content = HtmlContent(s"""${d.totalDays.toString} $screenReaderText"""),
+                    content = HtmlContent(s"""${d.totalDays.toString} ${screenReaderText()}"""),
                     classes = "govuk-table__cell--numeric"
                   )
                 ),
@@ -511,7 +507,7 @@ object ResultsPageHelper extends ViewHelper {
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                TableRow(content = HtmlContent(s"""${s.details.days.toString} $screenReaderText"""))
+                TableRow(content = HtmlContent(s"""${s.details.days.toString} ${screenReaderText()}"""))
               ),
               if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
                 Seq(
@@ -542,15 +538,15 @@ object ResultsPageHelper extends ViewHelper {
           Seq(
             TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
             TableRow(
-              content = HtmlContent(s"""${d.year1.days.toString} $screenReaderText"""),
+              content = HtmlContent(s"""${d.year1.days.toString} ${screenReaderText()}"""),
               classes = "govuk-table__cell--numeric"
             ),
             TableRow(
-              content = HtmlContent(s"""${d.year2.days.toString} $screenReaderText"""),
+              content = HtmlContent(s"""${d.year2.days.toString} ${screenReaderText()}"""),
               classes = "govuk-table__cell--numeric"
             ),
             TableRow(
-              content = HtmlContent(s"""${(d.year1.days + d.year2.days).toString} $screenReaderText"""),
+              content = HtmlContent(s"""${(d.year1.days + d.year2.days).toString} ${screenReaderText()}"""),
               classes = "govuk-table__cell--numeric"
             )
           )
@@ -704,7 +700,7 @@ object ResultsPageHelper extends ViewHelper {
       )}""")
   }
 
-  def screenReaderText()(implicit messages: Messages) = Html(
+  def screenReaderText()(implicit messages: Messages): Html = Html(
     s"""<span class="sr-only">${messages("resultsPage.days")}</span>"""
   )
   def isFlatRateOnly(calculatorResult: CalculatorResult): Boolean =

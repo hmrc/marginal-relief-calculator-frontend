@@ -114,7 +114,7 @@ package object models {
     }
 
     def remove(path: JsPath): JsResult[JsValue] =
-      (path.path, jsValue) match {
+      ((path.path, jsValue): @unchecked) match {
         case (Nil, _)                                                                 => JsError("path cannot be empty")
         case ((n: KeyPathNode) :: Nil, value: JsObject) if value.keys.contains(n.key) => JsSuccess(value - n.key)
         case ((n: KeyPathNode) :: Nil, value: JsObject) if !value.keys.contains(n.key) =>

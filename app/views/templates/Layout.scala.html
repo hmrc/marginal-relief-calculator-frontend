@@ -46,11 +46,11 @@
         @hmrcTimeoutDialog(TimeoutDialog(
             timeout             = Some(appConfig.timeout),
             countdown           = Some(appConfig.countdown),
-            keepAliveUrl        = Some(routes.KeepAliveController.keepAlive.url),
+            keepAliveUrl        = Some(routes.KeepAliveController.keepAlive().url),
             keepAliveButtonText = Some(messages("timeout.keepAlive")),
-            signOutUrl          = Some(routes.SessionExpiredController.signOut.url),
+            signOutUrl          = Some(routes.SessionExpiredController.signOut().url),
             signOutButtonText   = Some(messages("timeout.signOut")),
-            timeoutUrl          = Some(routes.SessionExpiredController.onPageLoad.url),
+            timeoutUrl          = Some(routes.SessionExpiredController.onPageLoad().url),
             title               = Some(messages("timeout.title")),
             message             = Some(messages("timeout.message"))
         ))
@@ -98,7 +98,7 @@
     pageTitle   = Some(pageTitle),
     headBlock   = Some(head),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl  = Some(routes.IndexController.onPageLoad.url),
+        serviceUrl  = Some(routes.IndexController.onPageLoad().url),
         signOutUrl  = None
     )),
     beforeContentBlock = Some(beforeContent),

@@ -41,7 +41,7 @@ class IndexControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.IndexController.onPageLoad.url)
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
 
           val result = route(application, request).value
 
@@ -62,7 +62,7 @@ class IndexControllerSpec extends SpecBase {
         val sessionRepository = application.injector.instanceOf[SessionRepository]
 
         running(application) {
-          val request = FakeRequest(GET, routes.IndexController.onStart.url)
+          val request = FakeRequest(GET, routes.IndexController.onStart().url)
             .withSession(SessionKeys.sessionId -> "test-session-id")
 
           val result = route(application, request).value
@@ -85,7 +85,7 @@ class IndexControllerSpec extends SpecBase {
         val sessionRepository = application.injector.instanceOf[SessionRepository]
 
         running(application) {
-          val request = FakeRequest(GET, routes.IndexController.onStart.url)
+          val request = FakeRequest(GET, routes.IndexController.onStart().url)
             .withSession(SessionKeys.sessionId -> "test-session-id")
 
           val result = route(application, request).value

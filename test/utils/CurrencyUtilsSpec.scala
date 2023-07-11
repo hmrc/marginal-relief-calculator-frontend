@@ -18,14 +18,14 @@ package utils
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.prop.{ TableDrivenPropertyChecks, TableFor2 }
 import utils.CurrencyUtils.{ decimalFormat, format }
 import utils.NumberUtils.roundUp
 
 class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenPropertyChecks {
   "roundUp" - {
     "should round up values" in {
-      val table = Table(
+      val table: TableFor2[BigDecimal, Double] = Table(
         ("input", "expected"),
         (BigDecimal(0), 0),
         (BigDecimal(1), 1),

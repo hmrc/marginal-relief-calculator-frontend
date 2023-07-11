@@ -84,7 +84,7 @@ timeout = false
             </ul>
 
             @govukButton(Button(
-            href = Some(routes.IndexController.onStart.url),
+            href = Some(routes.IndexController.onStart().url),
             isStartButton = true,
             content = Text(messages("site.start"))
             ))

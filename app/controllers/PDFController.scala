@@ -140,8 +140,8 @@ class PDFController @Inject() (
       )
     }
 
-  def downloadPdf: Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
-    implicit request =>
+  def downloadPdf(): Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
         calculatorResult <- marginalReliefCalculatorConnector
                               .calculate(
@@ -178,7 +178,7 @@ class PDFController @Inject() (
           )
         )
       }
-  }
+    }
 
   private def getConfig(calculatorResult: CalculatorResult)(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
     calculatorResult.fold(single =>

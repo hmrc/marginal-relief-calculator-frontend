@@ -28,7 +28,7 @@
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("pdfMetaData.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.PDFAddCompanyDetailsController.onPageLoad.path(), NormalMode)) {
+@layout(pageTitle = title(form, messages("pdfMetaData.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.PDFAddCompanyDetailsController.onPageLoad().path(), NormalMode)) {
 
     @formHelper(action = routes.PDFMetadataController.onSubmit()) {
 

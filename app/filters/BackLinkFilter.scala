@@ -38,13 +38,13 @@ class BackLinkFilter(
 
   private val supportedPages = Set(
     routes.AccountingPeriodController.onPageLoad(NormalMode).path,
-    routes.CheckYourAnswersController.onPageLoad.path,
+    routes.CheckYourAnswersController.onPageLoad().path,
     routes.DistributionController.onPageLoad(NormalMode).path,
     routes.DistributionsIncludedController.onPageLoad(NormalMode).path,
     routes.AssociatedCompaniesController.onPageLoad(NormalMode).path,
     routes.ResultsPageController.onPageLoad().path,
     routes.FullResultsPageController.onPageLoad().path,
-    routes.IndexController.onPageLoad.path,
+    routes.IndexController.onPageLoad().path,
     routes.TaxableProfitController.onPageLoad(NormalMode).path,
     routes.PDFAddCompanyDetailsController.onPageLoad().path(),
     routes.PDFMetadataController.onPageLoad().path,

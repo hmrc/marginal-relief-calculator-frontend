@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit messages: Messages)
 <h2 class="govuk-heading-m">@messages("resultsPage.printOrSave")</h2>
 <p class="govuk-body">@messages("resultsPage.addReferenceBeforePrinting")</p>
 <p class="govuk-body"><a href="@routes.PDFAddCompanyDetailsController.onPageLoad().url" class="govuk-link">@messages("resultsPage.getACopyOfResults")</a></p>

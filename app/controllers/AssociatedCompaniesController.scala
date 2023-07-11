@@ -210,7 +210,7 @@ class AssociatedCompaniesController @Inject() (
     a match {
       case DontAsk =>
         logger.info("Associated companies ask parameter is 'DontAsk'. Redirecting to CheckYourAnswers page")
-        Future.successful(Redirect(routes.CheckYourAnswersController.onPageLoad.url))
+        Future.successful(Redirect(routes.CheckYourAnswersController.onPageLoad().url))
       case p: AskAssociatedCompaniesParameter => f(p)
     }
 }
