@@ -39,10 +39,10 @@ error.non_numeric=Rhowch werth gan ddefnyddio rhifau yn unig
 error.number=Nodwch rif dilys
 error.required=Nodwch werth
 error.summary.title=Mae problem wedi codi
-error.greaterThanOneBillion=Nodwch Mae’n rhaid i’r swm fod rhwng 1 a 1,000,000,000
+error.greaterThanOneBillion=Mae’n rhaid i’r swm fod rhwng 1 a 1,000,000,000
 error.greaterThan99=Nodwch rif sy’n is na 99 neu’n hafal iddo
 error.lessThanOne=Nodwch swm sy’n fwy na 0
-error.lessThanZero=Nodwch swm sy’n fwy na 0 neu sy’n hafal iddo.
+error.lessThanZero=Nodwch swm sy’n fwy na 0 neu sy’n hafal iddo
 error.outOfRange=Mae’n rhaid i’r swm fod rhwng {0} a {1}
 
 index.title=Cyfrifo Rhyddhad Ffiniol ar gyfer Treth Gorfforaeth
