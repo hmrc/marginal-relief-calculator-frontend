@@ -91,15 +91,16 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
+  sealed case class KeyRange(minKey: String, maxKey: String)
+  sealed case class ValueRange(minValue: Int, maxValue: Int)
+
   private[mappings] def wholeAmountFormatter(
     requiredKey: String,
     outOfRangeKey: String,
     doNotUseDecimalsKey: String,
     nonNumericKey: String,
-    minKey: String,
-    maxKey: String,
-    minValue: Int,
-    maxValue: Int,
+    keyRange: KeyRange,
+    valueRange: ValueRange,
     args: Seq[String] = Seq.empty
   ): Formatter[Int] =
     new Formatter[Int] {
@@ -128,11 +129,11 @@ trait Formatters {
                          case s if !s.matches(WholeNumber) =>
                            Left(Seq(FormError(key, nonNumericKey)))
                          case s if s.matches(WholeNumber) && Try(s.toInt).isFailure =>
-                           Left(Seq(FormError(key, outOfRangeKey, Seq(minValue, maxValue))))
-                         case s if s.toInt < minValue =>
-                           Left(Seq(FormError(key, minKey)))
-                         case s if s.toInt > maxValue =>
-                           Left(Seq(FormError(key, maxKey)))
+                           Left(Seq(FormError(key, outOfRangeKey, Seq(valueRange.minValue, valueRange.maxValue))))
+                         case s if s.toInt < valueRange.minValue =>
+                           Left(Seq(FormError(key, keyRange.minKey)))
+                         case s if s.toInt > valueRange.maxValue =>
+                           Left(Seq(FormError(key, keyRange.maxKey)))
                          case s => Right(s.toInt)
                        }
       } yield finalResult

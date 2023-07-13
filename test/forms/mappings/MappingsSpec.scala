@@ -281,7 +281,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
     "must not bind when value is lower than the given range" in {
       val testForm: Form[Int] =
         Form(
-          "value" -> wholeAmount(minValue = 1, maxValue = 100)
+          "value" -> wholeAmount(valueRange= ValueRange(minValue = 1, maxValue = 100))
         )
       val result = testForm.bind(Map("value" -> "-1"))
       result.errors must contain(FormError("value", "error.lowerThanMin"))
@@ -290,7 +290,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
     "must not bind when value is greater than the given range" in {
       val testForm: Form[Int] =
         Form(
-          "value" -> wholeAmount(minValue = 1, maxValue = 100)
+          "value" -> wholeAmount(valueRange= ValueRange(minValue = 1, maxValue = 100))
         )
       val result = testForm.bind(Map("value" -> "101"))
       result.errors must contain(FormError("value", "error.greaterThanMax"))
