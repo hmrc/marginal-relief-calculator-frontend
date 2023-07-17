@@ -29,7 +29,7 @@
 @import java.time.Instant
 @this()
 
-@(pdfMetadata: Option[PDFMetadataForm], calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)], config:Map[Int,FYConfig], currentInstant: Instant)(implicit request: Request[_], messages: Messages)
+@(pdfMetadata: Option[PDFMetadataForm], calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)], config:Map[Int,FYConfig], currentInstant: Instant)(implicit messages: Messages)
 @pageCount = @{
   numberOfPages(calculatorResult)
 }

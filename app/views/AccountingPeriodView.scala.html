@@ -40,7 +40,7 @@
         "blwyddyn" -> "year")
 }
 
-@layout(pageTitle = title(form, messages("accountingPeriod.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.IndexController.onPageLoad.path(), mode)) {
+@layout(pageTitle = title(form, messages("accountingPeriod.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.IndexController.onPageLoad().path(), mode)) {
     @formHelper(action = routes.AccountingPeriodController.onSubmit(mode)) {
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(

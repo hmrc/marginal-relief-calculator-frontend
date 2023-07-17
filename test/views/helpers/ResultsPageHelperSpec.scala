@@ -606,7 +606,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""6 $screenReaderText"""))
+                    TableRow(content = HtmlContent(s"""6 ${screenReaderText()}"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -642,7 +642,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""365 $screenReaderText"""))
+                    TableRow(content = HtmlContent(s"""365 ${screenReaderText()}"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief"))),
@@ -686,7 +686,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""365 $screenReaderText"""))
+                    TableRow(content = HtmlContent(s"""365 ${screenReaderText()}"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiability"))),
@@ -733,15 +733,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -793,15 +793,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -853,15 +853,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -913,15 +913,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToEachFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -976,7 +976,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""6 $screenReaderText"""))
+                    TableRow(content = HtmlContent(s"""6 ${screenReaderText()}"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
@@ -1011,7 +1011,7 @@ class ResultsPageHelperSpec extends SpecBase {
                 rows = Seq(
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                    TableRow(content = HtmlContent(s"""365 $screenReaderText"""))
+                    TableRow(content = HtmlContent(s"""365 ${screenReaderText()}"""))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
@@ -1061,15 +1061,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -1120,15 +1120,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -1185,15 +1185,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -1244,15 +1244,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -1305,15 +1305,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -1365,15 +1365,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),
@@ -1425,15 +1425,15 @@ class ResultsPageHelperSpec extends SpecBase {
                   Seq(
                     TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""100 $screenReaderText"""),
+                      content = HtmlContent(s"""100 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = HtmlContent(s"""200 $screenReaderText"""),
+                      content = HtmlContent(s"""200 ${screenReaderText()}"""),
                       classes = "govuk-table__cell--numeric"
                     )
                   ),

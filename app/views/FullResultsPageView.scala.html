@@ -33,7 +33,7 @@
 
 @(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)], config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad.path(), NormalMode)) {
+@layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad().path(), NormalMode)) {
 
     <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, false)
@@ -63,7 +63,7 @@
 
     @govukButton(
         Button(
-            href = Some(routes.IndexController.onPageLoad.url),
+            href = Some(routes.IndexController.onPageLoad().url),
             isStartButton = true,
             content = Text(messages("resultsPage.runAnotherCalculation"))
         )

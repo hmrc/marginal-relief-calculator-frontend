@@ -29,7 +29,8 @@ class BackLinkHelperSpec extends AnyFreeSpec with Matchers {
   "backLinkOrDefault" - {
     "should return check your answers path in CheckMode" in {
       implicit val request: RequestHeader = FakeRequest(GET, "/")
-      backLinkOrDefault("/", CheckMode) shouldBe controllers.routes.CheckYourAnswersController.onPageLoad
+      backLinkOrDefault("/", CheckMode) shouldBe controllers.routes.CheckYourAnswersController
+        .onPageLoad()
         .path()
     }
 

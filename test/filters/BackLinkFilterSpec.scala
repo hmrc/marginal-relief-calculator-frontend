@@ -128,15 +128,21 @@ class BackLinkFilterSpec
   "BackLinkFilter" - {
 
     "should not add to session attribute visitedLinks for POST request" in {
-      val Some(result) = route(app, FakeRequest(Helpers.POST, "/marginal-relief-calculator"))
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe None
+      val maybeResult = route(app, FakeRequest(Helpers.POST, "/marginal-relief-calculator"))
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe None
+      }
     }
 
     "should not add to session attribute visitedLinks for GET request, for unsupported pages" in {
-      val Some(result) = route(app, FakeRequest(Helpers.GET, "/marginal-relief-calculator/unsupported"))
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe None
+      val maybeResult = route(app, FakeRequest(Helpers.GET, "/marginal-relief-calculator/unsupported"))
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe None
+      }
     }
 
     "should add to session attribute visitedLinks for GET request of all supported pages" in {
@@ -146,7 +152,10 @@ class BackLinkFilterSpec
           routes.AccountingPeriodController.onPageLoad(NormalMode).path,
           List(routes.AccountingPeriodController.onPageLoad(NormalMode).path)
         ),
-        (routes.CheckYourAnswersController.onPageLoad.path, List(routes.CheckYourAnswersController.onPageLoad.path)),
+        (
+          routes.CheckYourAnswersController.onPageLoad().path,
+          List(routes.CheckYourAnswersController.onPageLoad().path)
+        ),
         (
           routes.DistributionController.onPageLoad(NormalMode).path,
           List(routes.DistributionController.onPageLoad(NormalMode).path)
@@ -161,7 +170,7 @@ class BackLinkFilterSpec
         ),
         (routes.ResultsPageController.onPageLoad().path, List(routes.ResultsPageController.onPageLoad().path)),
         (routes.FullResultsPageController.onPageLoad().path, List(routes.FullResultsPageController.onPageLoad().path)),
-        (routes.IndexController.onPageLoad.path, List(routes.IndexController.onPageLoad.path)),
+        (routes.IndexController.onPageLoad().path, List(routes.IndexController.onPageLoad().path)),
         (
           routes.TaxableProfitController.onPageLoad(NormalMode).path,
           List(routes.TaxableProfitController.onPageLoad(NormalMode).path)
@@ -170,27 +179,33 @@ class BackLinkFilterSpec
         (routes.PDFController.onPageLoad().path, List(routes.PDFController.onPageLoad().path))
       )
       forAll(table) { (path, expected) =>
-        val Some(result) = route(app, FakeRequest(Helpers.GET, path))
-        status(result) shouldBe Status.OK
-        visitedLinksFromSession(result) shouldBe Some(expected)
+        val maybeResult = route(app, FakeRequest(Helpers.GET, path))
+        maybeResult should not be None
+        maybeResult.map { result =>
+          status(result) shouldBe Status.OK
+          visitedLinksFromSession(result) shouldBe Some(expected)
+        }
       }
     }
 
     "should update session attribute visitedLinks if there it exists" in {
-      val Some(result) = route(
+      val maybeResult = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period").withSession(
           "visitedLinks" -> Json.toJson(List("/marginal-relief-calculator")).toString
         )
       )
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(
-        List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
-      )
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe Some(
+          List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+        )
+      }
     }
 
     "should remove the head of the visitedLinks list, when back=true and source isn't a change page" in {
-      val Some(result) = route(
+      val maybeResult = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period?back=true")
           .withSession(
@@ -205,25 +220,29 @@ class BackLinkFilterSpec
               .toString
           )
       )
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(
-        List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
-      )
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe Some(
+          List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+        )
+      }
     }
 
     "should not remove the head of the visitedLinks list, when back=true and visitedLinks list unavailable" in {
-      val Some(result) = route(
+      val maybeResult = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period?back=true")
       )
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(
-        List()
-      )
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe Some(List())
+      }
     }
 
     "should not remove the head of the visitedLinks list, when back=true and source is a change page" in {
-      val Some(result) = route(
+      val maybeResult = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/check-your-answers?back=true")
           .withHeaders("Referer" -> "/marginal-relief-calculator/change-associated-companies")
@@ -241,20 +260,23 @@ class BackLinkFilterSpec
               .toString
           )
       )
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(
-        List(
-          "/marginal-relief-calculator/associated-companies",
-          "/marginal-relief-calculator/distribution",
-          "/marginal-relief-calculator/taxable-profit",
-          "/marginal-relief-calculator/accounting-period",
-          "/marginal-relief-calculator"
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe Some(
+          List(
+            "/marginal-relief-calculator/associated-companies",
+            "/marginal-relief-calculator/distribution",
+            "/marginal-relief-calculator/taxable-profit",
+            "/marginal-relief-calculator/accounting-period",
+            "/marginal-relief-calculator"
+          )
         )
-      )
+      }
     }
 
     "should not update visitedLinks if the head is already the current path" in {
-      val Some(result) = route(
+      val maybeResult = route(
         app,
         FakeRequest(Helpers.GET, "/marginal-relief-calculator/accounting-period")
           .withSession(
@@ -263,10 +285,13 @@ class BackLinkFilterSpec
               .toString
           )
       )
-      status(result) shouldBe Status.OK
-      visitedLinksFromSession(result) shouldBe Some(
-        List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
-      )
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.OK
+        visitedLinksFromSession(result) shouldBe Some(
+          List("/marginal-relief-calculator/accounting-period", "/marginal-relief-calculator")
+        )
+      }
     }
   }
 

@@ -206,7 +206,7 @@ class AssociatedCompaniesControllerSpec
           val request = FakeRequest(GET, associatedCompaniesRoute)
           val result = route(application, request).value
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
+          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
         }
       }
 
@@ -258,7 +258,7 @@ class AssociatedCompaniesControllerSpec
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
+          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
         }
       }
 
@@ -306,7 +306,7 @@ class AssociatedCompaniesControllerSpec
           val result = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad.url
+          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
         }
       }
 

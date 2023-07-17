@@ -92,7 +92,7 @@ class ResultsPageController @Inject() (
     override protected def executionContext: ExecutionContext = ec
   }
 
-  def onPageLoad: Action[AnyContent] =
+  def onPageLoad(): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       val associatedCompanies = request.twoAssociatedCompanies match {
         case Some(a) =>

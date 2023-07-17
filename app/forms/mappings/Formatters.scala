@@ -16,7 +16,6 @@
 
 package forms.mappings
 
-import cats.syntax.either._
 import models.Enumerable
 import utils.StringUtils._
 import play.api.data.format.Formatter
@@ -50,17 +49,16 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
         baseFormatter
           .bind(key, data)
-          .right
           .flatMap {
             case "true"  => Right(true)
             case "false" => Right(false)
             case _       => Left(Seq(FormError(key, invalidKey, args)))
           }
 
-      def unbind(key: String, value: Boolean) = Map(key -> value.toString)
+      def unbind(key: String, value: Boolean): Map[String, String] = Map(key -> value.toString)
     }
 
   private[mappings] def intFormatter(
@@ -75,12 +73,10 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
-          .right
           .map(removeSpaceLineBreaks(_).replace(",", ""))
-          .right
           .flatMap {
             case s if s.matches(decimalRegexp) =>
               Left(Seq(FormError(key, wholeNumberKey, args)))
@@ -91,7 +87,7 @@ trait Formatters {
                 .map(_ => Seq(FormError(key, nonNumericKey, args)))
           }
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Int): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
 
@@ -118,30 +114,30 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = for {
         result <- baseFormatter.bind(key, data)
         resultWithoutPoundSymbol <-
-          (if (result.startsWith("£")) result.substring(1) else result).asRight[Seq[FormError]]
+          Right(if (result.startsWith("£")) result.substring(1) else result)
         resultWithoutTrailingZeroesAfterDecimal <-
-          resultWithoutPoundSymbol.replaceAll(TrailingZeroesAfterDecimal, "").asRight[Seq[FormError]]
-        resultWithoutCommas <- (resultWithoutTrailingZeroesAfterDecimal match {
+          Right(resultWithoutPoundSymbol.replaceAll(TrailingZeroesAfterDecimal, ""))
+        resultWithoutCommas <- Right(resultWithoutTrailingZeroesAfterDecimal match {
                                  case s if s.matches(AmountWithCommas) => s.replace(",", "")
                                  case other                            => other
-                               }).asRight[Seq[FormError]]
+                               })
         resultWithoutSpaces = removeSpaceLineBreaks(resultWithoutCommas)
         finalResult <- resultWithoutSpaces match {
                          case s if s.matches(DecimalRegexp) =>
-                           Seq(FormError(key, doNotUseDecimalsKey, args)).asLeft[Int]
+                           Left(Seq(FormError(key, doNotUseDecimalsKey, args)))
                          case s if !s.matches(WholeNumber) =>
-                           Seq(FormError(key, nonNumericKey)).asLeft[Int]
+                           Left(Seq(FormError(key, nonNumericKey)))
                          case s if s.matches(WholeNumber) && Try(s.toInt).isFailure =>
-                           Seq(FormError(key, outOfRangeKey, Seq(minValue, maxValue))).asLeft[Int]
+                           Left(Seq(FormError(key, outOfRangeKey, Seq(minValue, maxValue))))
                          case s if s.toInt < minValue =>
-                           Seq(FormError(key, minKey)).asLeft[Int]
+                           Left(Seq(FormError(key, minKey)))
                          case s if s.toInt > maxValue =>
-                           Seq(FormError(key, maxKey)).asLeft[Int]
-                         case s => s.toInt.asRight[Seq[FormError]]
+                           Left(Seq(FormError(key, maxKey)))
+                         case s => Right(s.toInt)
                        }
       } yield finalResult
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Int): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
 
@@ -153,7 +149,7 @@ trait Formatters {
       private val baseFormatter = stringFormatter(requiredKey, args)
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], A] =
-        baseFormatter.bind(key, data).right.flatMap { str =>
+        baseFormatter.bind(key, data).flatMap { str =>
           ev.withName(str)
             .map(Right.apply)
             .getOrElse(Left(Seq(FormError(key, invalidKey, args))))
@@ -173,10 +169,8 @@ trait Formatters {
       conditionField
         .bind(data)
         .toOption match {
-        case Some(value) if condition(value) =>
-          field.bind(data).map(Some(_))
-        case _ =>
-          None.asRight[Seq[FormError]]
+        case Some(value) if condition(value) => field.bind(data).map(Some(_))
+        case _                               => Right(None)
       }
 
     override def unbind(key: String, value: Option[A]): Map[String, String] =
@@ -198,17 +192,17 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
         for {
           result         <- baseFormatter.bind(key, data)
-          resultNoSpaces <- removeSpaceLineBreaks(result).asRight
+          resultNoSpaces <- Right(removeSpaceLineBreaks(result))
           finalResult <- resultNoSpaces match {
                            case s if s.length > maxLength  => Left(Seq(FormError(key, maxKey, args)))
                            case s if s.length < maxLength  => Left(Seq(FormError(key, maxKey, args)))
                            case s if !s.matches(utrFormat) => Left(Seq(FormError(key, nonNumericKey, args)))
                            //                          case s if Try(s.toString).isFailure => Left(Seq(FormError(key, nonNumericKey, args)))
-                           case s => s.toString.asRight
+                           case s => Right(s)
                          }
         } yield finalResult
 
-      override def unbind(key: String, value: String) =
-        baseFormatter.unbind(key, value.toString)
+      override def unbind(key: String, value: String): Map[String, String] =
+        baseFormatter.unbind(key, value)
     }
 }

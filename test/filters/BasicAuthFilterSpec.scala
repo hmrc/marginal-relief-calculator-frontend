@@ -81,39 +81,47 @@ class BasicAuthFilterSpec
   ".apply should" - {
 
     "request WWW-authentication if authorization header is not present" in {
-      val Some(result) = route(app, FakeRequest(GET, "/"))
-
-      status(result) shouldBe Status.UNAUTHORIZED
-      header(HeaderNames.WWW_AUTHENTICATE, result) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
+      val maybeResult = route(app, FakeRequest(GET, "/"))
+      maybeResult should not be None
+      maybeResult.map { result =>
+        status(result) shouldBe Status.UNAUTHORIZED
+        header(HeaderNames.WWW_AUTHENTICATE, result) shouldBe Some(s"""Basic realm="Marginal Relief Calculator Test"""")
+      }
     }
 
     "request WWW-authentication if incorrect username sent in authorization header" in {
-      val Some(wrongUsrResult) =
+      val maybeWrongUsrResult =
         route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectUsernameAuthHeader))
-
-      status(wrongUsrResult) shouldBe Status.UNAUTHORIZED
-      header(HeaderNames.WWW_AUTHENTICATE, wrongUsrResult) shouldBe Some(
-        s"""Basic realm="Marginal Relief Calculator Test""""
-      )
+      maybeWrongUsrResult should not be None
+      maybeWrongUsrResult.map { wrongUsrResult =>
+        status(wrongUsrResult) shouldBe Status.UNAUTHORIZED
+        header(HeaderNames.WWW_AUTHENTICATE, wrongUsrResult) shouldBe Some(
+          s"""Basic realm="Marginal Relief Calculator Test""""
+        )
+      }
     }
     "request WWW-authentication if incorrect password sent in authorization header" in {
-      val Some(wrongPassResult) =
+      val maybeWrongPassResult =
         route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> incorrectPasswordAuthHeader))
-
-      status(wrongPassResult) shouldBe Status.UNAUTHORIZED
-      header(HeaderNames.WWW_AUTHENTICATE, wrongPassResult) shouldBe Some(
-        s"""Basic realm="Marginal Relief Calculator Test""""
-      )
+      maybeWrongPassResult should not be None
+      maybeWrongPassResult.map { wrongPassResult =>
+        status(wrongPassResult) shouldBe Status.UNAUTHORIZED
+        header(HeaderNames.WWW_AUTHENTICATE, wrongPassResult) shouldBe Some(
+          s"""Basic realm="Marginal Relief Calculator Test""""
+        )
+      }
     }
 
     "continue if username and password are correct in authorization header" in {
-      val Some(result) = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> correctAuthHeader))
-      status(result) shouldBe Status.NOT_FOUND
+      val result = route(app, FakeRequest(GET, "/").withHeaders("Authorization" -> correctAuthHeader))
+      result should not be None
+      result.map(status) shouldBe Some(Status.NOT_FOUND)
     }
 
     "continue if path is /ping/ping" in {
-      val Some(result) = route(app, FakeRequest(GET, "/ping/ping"))
-      status(result) shouldBe Status.OK
+      val result = route(app, FakeRequest(GET, "/ping/ping"))
+      result should not be None
+      result.map(status) shouldBe Some(Status.OK)
     }
   }
 
