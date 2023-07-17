@@ -38,93 +38,50 @@ object FullResultsPageHelper extends ViewHelper {
     taxDetailsWithAssociatedCompanies: Seq[(TaxDetails, Int)],
     taxableProfit: Int,
     distributions: Int,
-    config: Map[Int, FYConfig]
-  )(implicit messages: Messages): Html = {
+    config: Map[Int, FYConfig])(implicit messages: Messages): Html = {
 
-    val html = taxDetailsWithAssociatedCompanies.flatMap { case (td, associatedCompanies) =>
+    val html = taxDetailsWithAssociatedCompanies.flatMap {
+      case (td, associatedCompanies) =>
       val year = td.year
       val days = td.days
-      td.fold { _ =>
-        Seq(
-          h3(
-            messages(
-              "fullResultsPage.forFinancialYear",
-              year.toString,
-              (year + 1).toString,
-              days
-            )
-          ),
-          p(
-            messages(
-              "fullResultsPage.marginalReliefNotAvailable",
-              year.toString,
-              (year + 1).toString
-            )
-          )
-        )
+      td.fold { _ => Seq(
+        h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+        p(messages("fullResultsPage.marginalReliefNotAvailable", year.toString, (year + 1).toString)))
       } { marginal =>
         Seq(
-          h3(
-            messages(
-              "fullResultsPage.forFinancialYear",
-              year.toString,
-              (year + 1).toString,
-              days
-            )
-          ),
-          displayFullFinancialYearTable(
-            calculatorResult,
-            marginal,
-            associatedCompanies,
-            taxableProfit,
-            distributions,
-            config
-          )
-        )
+          h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+          displayFullFinancialYearTable(calculatorResult, marginal, associatedCompanies, taxableProfit, distributions, config))
       }
     }
 
     HtmlFormat.fill(html)
   }
 
-  def displayFullCalculationResult(
-    calculatorResult: CalculatorResult,
-    associatedCompanies: Either[Int, (Int, Int)],
-    taxableProfit: Int,
-    distributions: Int,
-    config: Map[Int, FYConfig]
-  )(implicit messages: Messages): Html = {
+  def tabBtn(year: Int)(implicit messages: Messages): String = {
+    s"""<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+       |      <a class="govuk-tabs__tab" href="#year$year">${messages(
+        "site.from.to",
+        year.toString,
+      (year + 1).toString
+    )}</a>
+     |    </li>""".stripMargin
+  }
+
+  def displayFullCalculationResult(calculatorResult: CalculatorResult, associatedCompanies: Either[Int, (Int, Int)],
+    taxableProfit: Int, distributions: Int, config: Map[Int, FYConfig])(implicit messages: Messages): Html = {
 
     def dualResultTable(dual: DualResult) = {
-      def tabBtn(year: Int) =
-        s"""<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-           |      <a class="govuk-tabs__tab" href="#year$year">${messages(
-            "site.from.to",
-            year.toString,
-            (year + 1).toString
-          )}</a>
-           |    </li>""".stripMargin
 
       def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
-            text = messages(
-              "fullResultsPage.forFinancialYear",
-              year.toString,
-              (year + 1).toString,
-              marginalRate.days
-            ),
+            text = messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, marginalRate.days),
             styles = "margin-bottom: 4px;"
           )}
-           |    ${displayFullFinancialYearTable(
-            calculatorResult,
-            marginalRate,
-            associatedCompanies,
-            taxableProfit,
-            distributions,
-            config
-          )}
+           |    ${displayFullFinancialYearTable(calculatorResult, marginalRate, associatedCompanies, taxableProfit,
+                distributions, config)
+           }
            |  </div>""".stripMargin
       }
 
@@ -147,33 +104,18 @@ object FullResultsPageHelper extends ViewHelper {
         case (y1: MarginalRate, y2: MarginalRate) =>
           tabDisplay(taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies), daysInAccountingPeriod)
         case (y1: MarginalRate, y2: FlatRate) =>
-          nonTabCalculationResultsTable(
-            calculatorResult,
-            taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
-            taxableProfit,
-            distributions,
-            config
-          )
+          nonTabCalculationResultsTable(calculatorResult, taxDetailsWithAssociatedCompanies(
+            Seq(y1, y2), associatedCompanies), taxableProfit, distributions, config)
         case (y1: FlatRate, y2: MarginalRate) =>
-          nonTabCalculationResultsTable(
-            calculatorResult,
-            taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
-            taxableProfit,
-            distributions,
-            config
-          )
+          nonTabCalculationResultsTable(calculatorResult, taxDetailsWithAssociatedCompanies(
+            Seq(y1, y2), associatedCompanies), taxableProfit, distributions, config)
         case _ => throw new RuntimeException("Both financial years are flat rate")
       }
     }
 
     calculatorResult.fold(single =>
-      nonTabCalculationResultsTable(
-        calculatorResult,
-        taxDetailsWithAssociatedCompanies(Seq(single.details), associatedCompanies),
-        taxableProfit,
-        distributions,
-        config
-      )
+      nonTabCalculationResultsTable(calculatorResult, taxDetailsWithAssociatedCompanies(
+        Seq(single.details), associatedCompanies), taxableProfit, distributions, config)
     )(dualResultTable)
   }
 
@@ -218,14 +160,8 @@ object FullResultsPageHelper extends ViewHelper {
 
   private def isFiveStepMarginalRate(marginalRate: MarginalRate) = marginalRate.marginalRelief > 0
 
-  private def displayFullFinancialYearTable(
-    calculatorResult: CalculatorResult,
-    marginalRate: MarginalRate,
-    associatedCompanies: Int,
-    taxableProfit: Int,
-    distributions: Int,
-    config: Map[Int, FYConfig]
-  )(implicit messages: Messages): Html = {
+  private def displayFullFinancialYearTable(calculatorResult: CalculatorResult, marginalRate: MarginalRate, associatedCompanies: Int,
+    taxableProfit: Int, distributions: Int, config: Map[Int, FYConfig])(implicit messages: Messages): Html = {
 
     val yearConfig = config(marginalRate.year) match {
       case x: FlatRateConfig       => throw new RuntimeException("Configuration is flat where it should be marginal")

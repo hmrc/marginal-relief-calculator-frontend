@@ -80,54 +80,30 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
   }
 
   private def accountingPeriodChangeRoute(answers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] = {
+    val needToProcessNextPage = answers.get(AssociatedCompaniesPage).forall(_.associatedCompanies == AssociatedCompanies.Yes)
 
-    val needToProcessNextPage =
-      answers.get(AssociatedCompaniesPage).forall(_.associatedCompanies == AssociatedCompanies.Yes)
-
-    def processNextPage = answers
-      .get(AccountingPeriodPage)
-      .map { accountingPeriodForm =>
-        connector
-          .associatedCompaniesParameters(
-            accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodForm.accountingPeriodEndDateOrDefault
-          )
-          .flatMap {
-            case DontAsk =>
-              resetAssociatedCompanies(answers).map { _ =>
-                routes.CheckYourAnswersController.onPageLoad()
-              }
-
+    def processNextPage = answers.get(AccountingPeriodPage).map {
+      accountingPeriodForm => connector.associatedCompaniesParameters(
+        accountingPeriodForm.accountingPeriodStartDate, accountingPeriodForm.accountingPeriodEndDateOrDefault).flatMap {
+            case DontAsk => resetAssociatedCompanies(answers).map { _ =>routes.CheckYourAnswersController.onPageLoad() }
             case AskBothParts(period1, period2) =>
-              val twoAssociatedCompaniesExist =
-                answers.get(TwoAssociatedCompaniesPage).exists { case TwoAssociatedCompaniesForm(one, two) =>
-                  one.nonEmpty && two.nonEmpty
+              val twoAssociatedCompaniesExist = answers.get(TwoAssociatedCompaniesPage).exists {
+                case TwoAssociatedCompaniesForm(one, two) => one.nonEmpty && two.nonEmpty
                 }
-              if (twoAssociatedCompaniesExist)
-                Future.successful(
-                  routes.CheckYourAnswersController.onPageLoad()
-                )
-              else {
-                resetAssociatedCompanies(answers).map { _ =>
-                  routes.AssociatedCompaniesController.onPageLoad(CheckMode)
-                }
+              if (twoAssociatedCompaniesExist) {
+                Future.successful(routes.CheckYourAnswersController.onPageLoad())
+              } else {
+                resetAssociatedCompanies(answers).map { _ => routes.AssociatedCompaniesController.onPageLoad(CheckMode) }
               }
             case AskFull | AskOnePart(_) =>
-              val onlyOneAssociatedCompanyExists = answers
-                .get(AssociatedCompaniesPage)
-                .exists(_.associatedCompaniesCount.nonEmpty)
-              if (onlyOneAssociatedCompanyExists)
-                Future.successful(
-                  routes.CheckYourAnswersController.onPageLoad()
-                )
-              else {
-                resetAssociatedCompanies(answers).map { _ =>
-                  routes.AssociatedCompaniesController.onPageLoad(CheckMode)
-                }
+              val onlyOneAssociatedCompanyExists = answers.get(AssociatedCompaniesPage).exists(_.associatedCompaniesCount.nonEmpty)
+              if (onlyOneAssociatedCompanyExists) {
+                Future.successful(routes.CheckYourAnswersController.onPageLoad())
+              } else {
+                resetAssociatedCompanies(answers).map { _ => routes.AssociatedCompaniesController.onPageLoad(CheckMode) }
               }
           }
-      }
-      .getOrElse(throw new RuntimeException("Accounting period data is not available"))
+      }.getOrElse(throw new RuntimeException("Accounting period data is not available"))
 
     if (needToProcessNextPage) {
       processNextPage

@@ -29,50 +29,23 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
       mapping(
         "associatedCompaniesFY1Count" ->
           optional(
-            int(
-              "twoAssociatedCompanies.error.required",
-              "twoAssociatedCompanies.error.wholeNumber",
-              "twoAssociatedCompanies.error.nonNumeric",
-              Seq(year1.toString, (year1 + 1).toString)
-            ).verifying(
-              minimumValueWithDynamicMessage(
-                0,
-                "twoAssociatedCompanies.error.lessThanZero",
-                0,
-                year1.toString,
-                (year1 + 1).toString
-              ),
-              maximumValueWithDynamicMessage(
-                99,
-                "twoAssociatedCompanies.error.greaterThan99",
-                99,
-                year1.toString,
-                (year1 + 1).toString
-              )
+            int(requiredKey = "twoAssociatedCompanies.error.required",
+                wholeNumberKey = "twoAssociatedCompanies.error.wholeNumber",
+                nonNumericKey = "twoAssociatedCompanies.error.nonNumeric",
+                args = Seq(year1.toString, (year1 + 1).toString)).verifying(
+              minimumValueWithDynamicMessage(0, "twoAssociatedCompanies.error.lessThanZero", 0, year1.toString, (year1 + 1).toString),
+              maximumValueWithDynamicMessage(99, "twoAssociatedCompanies.error.greaterThan99", 99, year1.toString, (year1 + 1).toString)
             )
           ),
         "associatedCompaniesFY2Count" ->
           optional(
-            int(
-              "twoAssociatedCompanies.error.required",
-              "twoAssociatedCompanies.error.wholeNumber",
-              "twoAssociatedCompanies.error.nonNumeric",
-              Seq(year2.toString, (year2 + 1).toString)
+            int(requiredKey = "twoAssociatedCompanies.error.required",
+                wholeNumberKey = "twoAssociatedCompanies.error.wholeNumber",
+                nonNumericKey = "twoAssociatedCompanies.error.nonNumeric",
+                args = Seq(year2.toString, (year2 + 1).toString)
             ).verifying(
-              minimumValueWithDynamicMessage(
-                0,
-                "twoAssociatedCompanies.error.lessThanZero",
-                0,
-                year2.toString,
-                (year2 + 1).toString
-              ),
-              maximumValueWithDynamicMessage(
-                99,
-                "twoAssociatedCompanies.error.greaterThan99",
-                99,
-                year2.toString,
-                (year2 + 1).toString
-              )
+              minimumValueWithDynamicMessage(0, "twoAssociatedCompanies.error.lessThanZero", 0, year2.toString, (year2 + 1).toString),
+              maximumValueWithDynamicMessage(99, "twoAssociatedCompanies.error.greaterThan99", 99, year2.toString, (year2 + 1).toString)
             )
           )
       )(TwoAssociatedCompaniesForm.apply)(TwoAssociatedCompaniesForm.unapply)
