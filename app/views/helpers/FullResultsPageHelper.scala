@@ -16,13 +16,12 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ CalculatorResult, DualResult, FYConfig, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, TaxDetails }
+import connectors.sharedmodel._
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
-import uk.gov.hmrc.govukfrontend.views.Aliases.{ Details, Table }
+import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{ HtmlContent, Text }
-import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{ HeadCell, TableRow }
+import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
 import views.helpers.ResultsPageHelper.replaceTableHeader
 
