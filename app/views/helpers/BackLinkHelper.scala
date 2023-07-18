@@ -25,7 +25,7 @@ object BackLinkHelper {
   def backLinkOrDefault(defaultPath: String, mode: Mode)(implicit request: RequestHeader): String =
     mode match {
       case CheckMode =>
-        controllers.routes.CheckYourAnswersController.onPageLoad.path()
+        controllers.routes.CheckYourAnswersController.onPageLoad().path()
       case NormalMode =>
         (request.session.get(BackLinkFilter.visitedLinks) match {
           case Some(value) =>

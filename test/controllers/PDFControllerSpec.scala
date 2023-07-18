@@ -24,6 +24,7 @@ import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsInclu
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage }
+import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -149,6 +150,24 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
             .filterAndTrim
         }
       }
+
+      "must render redirect to recovery controller when all data is not available" in {
+        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
+          mock[MarginalReliefCalculatorConnector]
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[DateTime].toInstance(fakeDateTime))
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, pdfViewRoute)
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+          header(HeaderNames.LOCATION, result) mustBe Some(routes.JourneyRecoveryController.onPageLoad().url)
+        }
+      }
+
       "must render pdf page when all data is available for dual year" in {
         val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
           mock[MarginalReliefCalculatorConnector]

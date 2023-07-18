@@ -76,7 +76,7 @@ class CheckYourAnswersControllerSpec
       implicit val msgs: Messages = messages(application)
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -118,7 +118,7 @@ class CheckYourAnswersControllerSpec
       implicit val msgs: Messages = messages(application)
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -145,7 +145,7 @@ class CheckYourAnswersControllerSpec
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -165,7 +165,7 @@ class CheckYourAnswersControllerSpec
       ).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad.url)
+        val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad().url)
 
         val result = route(application, request).value
 

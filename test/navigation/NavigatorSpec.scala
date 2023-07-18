@@ -138,7 +138,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
 
         case object UnknownPage extends Page
         whenReady(navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id"))) { result =>
-          result mustBe routes.IndexController.onPageLoad
+          result mustBe routes.IndexController.onPageLoad()
         }
       }
     }
@@ -155,7 +155,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
             UserAnswers("id")
           )
         ) { result =>
-          result mustBe routes.CheckYourAnswersController.onPageLoad
+          result mustBe routes.CheckYourAnswersController.onPageLoad()
         }
       }
 
@@ -170,7 +170,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
       "must go from distribution to CheckYourAnswers" in {
         val userAnswers = UserAnswers("id").set(DistributionPage, Distribution.No).success.value
         whenReady(navigator.nextPage(DistributionPage, CheckMode, userAnswers)) { result =>
-          result mustBe routes.CheckYourAnswersController.onPageLoad
+          result mustBe routes.CheckYourAnswersController.onPageLoad()
         }
       }
 
@@ -216,7 +216,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
         )
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
-          result mustBe routes.CheckYourAnswersController.onPageLoad
+          result mustBe routes.CheckYourAnswersController.onPageLoad()
         }
       }
 
@@ -233,7 +233,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
         )(*) returns Future.successful(AskOnePart(Period(LocalDate.now(), LocalDate.now())))
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
-          result mustBe routes.CheckYourAnswersController.onPageLoad
+          result mustBe routes.CheckYourAnswersController.onPageLoad()
         }
       }
 
@@ -275,7 +275,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
         )
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
-          result mustBe routes.CheckYourAnswersController.onPageLoad
+          result mustBe routes.CheckYourAnswersController.onPageLoad()
         }
       }
 

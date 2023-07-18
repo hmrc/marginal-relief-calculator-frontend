@@ -84,9 +84,7 @@ class AccountingPeriodSummarySpec extends AnyFreeSpec with Matchers {
               messages(
                 "site.from.to",
                 epoch.formatDate,
-                Some(epoch.plusDays(1).formatDate) + {
-                  ".</br>" + messages("accountingPeriod.defaultedEndDateMessage")
-                }
+                s"${epoch.plusDays(1).formatDate}.</br>${messages("accountingPeriod.defaultedEndDateMessage")}"
               )
             )
           ),

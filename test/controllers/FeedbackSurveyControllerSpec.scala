@@ -25,7 +25,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 class FeedbackSurveyControllerSpec extends SpecBase with MockitoSugar {
-  val app: Application = applicationBuilder().build
+  val app: Application = applicationBuilder().build()
   val config: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   "Feedback Survey Controller" - {

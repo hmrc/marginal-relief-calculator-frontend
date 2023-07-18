@@ -27,7 +27,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
       val application = applicationBuilder(Some(emptyUserAnswers)).build()
       running(application) {
         val languageController = application.injector.instanceOf[LanguageSwitchController]
-        languageController.fallbackURL mustBe routes.IndexController.onPageLoad.url
+        languageController.fallbackURL mustBe routes.IndexController.onPageLoad().url
       }
     }
   }

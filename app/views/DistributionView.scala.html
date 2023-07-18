@@ -29,7 +29,7 @@
 
 @layout(pageTitle = title(form, messages("distribution.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.TaxableProfitController.onPageLoad(NormalMode).path(), mode)) {
 
-    @formHelper(action = routes.DistributionController.onSubmit(mode), 'autoComplete -> "off") {
+    @formHelper(action = routes.DistributionController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("distribution" -> "value_0")))

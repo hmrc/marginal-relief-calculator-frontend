@@ -256,13 +256,13 @@ object FullResultsPageHelper extends ViewHelper {
     val daysMsg = messages("fullResultsPage.day.plural")
 
     val daysString = days match {
-      case 1 => days + s" $dayMsg"
-      case _ => days + s" $daysMsg"
+      case 1 => s"$days $dayMsg"
+      case _ => s"$days $daysMsg"
     }
 
     val associatedCompaniesText = associatedCompanies match {
-      case 1 => 1 + " " + messages("fullResultsPage.associatedCompany.singular")
-      case x => x + " " + messages("fullResultsPage.associatedCompany.plural")
+      case 1 => s"1 ${messages("fullResultsPage.associatedCompany.singular")}"
+      case x => s"$x ${messages("fullResultsPage.associatedCompany.plural")}"
     }
 
     val originalCompanyMsg = messages("fullResultsPage.oneOriginalCompany")
@@ -271,7 +271,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     val fraction = {
       val f = DecimalToFractionUtils.toFraction(yearConfig.marginalReliefFraction)
-      f.numerator + " ÷ " + f.denominator
+      s"${f.numerator} ÷ ${f.denominator}"
     }
 
     val taxableProfitIncludingDistributions = marginalRate.adjustedAugmentedProfit

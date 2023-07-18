@@ -47,13 +47,13 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
       _ => routes.AssociatedCompaniesController.onPageLoad(NormalMode)
 
     case AssociatedCompaniesPage =>
-      _ => routes.CheckYourAnswersController.onPageLoad
+      _ => routes.CheckYourAnswersController.onPageLoad()
 
     case PDFMetadataPage =>
       _ => routes.PDFController.onPageLoad()
 
     case TwoAssociatedCompaniesPage =>
-      _ => routes.CheckYourAnswersController.onPageLoad
+      _ => routes.CheckYourAnswersController.onPageLoad()
 
     case PDFAddCompanyDetailsPage =>
       answers =>
@@ -70,13 +70,13 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
         }
 
     case _ =>
-      _ => routes.IndexController.onPageLoad
+      _ => routes.IndexController.onPageLoad()
   }
 
   private def checkRouteMap(implicit headerCarrier: HeaderCarrier): Page => UserAnswers => Future[Call] = {
     case AccountingPeriodPage => accountingPeriodChangeRoute
     case DistributionPage     => userAnswers => Future.successful(distributionsChangeRoute(userAnswers))
-    case _                    => _ => Future.successful(routes.CheckYourAnswersController.onPageLoad)
+    case _                    => _ => Future.successful(routes.CheckYourAnswersController.onPageLoad())
   }
 
   private def accountingPeriodChangeRoute(answers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] = {
@@ -95,7 +95,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
           .flatMap {
             case DontAsk =>
               resetAssociatedCompanies(answers).map { _ =>
-                routes.CheckYourAnswersController.onPageLoad
+                routes.CheckYourAnswersController.onPageLoad()
               }
 
             case AskBothParts(period1, period2) =>
@@ -105,7 +105,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
                 }
               if (twoAssociatedCompaniesExist)
                 Future.successful(
-                  routes.CheckYourAnswersController.onPageLoad
+                  routes.CheckYourAnswersController.onPageLoad()
                 )
               else {
                 resetAssociatedCompanies(answers).map { _ =>
@@ -118,7 +118,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
                 .exists(_.associatedCompaniesCount.nonEmpty)
               if (onlyOneAssociatedCompanyExists)
                 Future.successful(
-                  routes.CheckYourAnswersController.onPageLoad
+                  routes.CheckYourAnswersController.onPageLoad()
                 )
               else {
                 resetAssociatedCompanies(answers).map { _ =>
@@ -132,7 +132,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
     if (needToProcessNextPage) {
       processNextPage
     } else {
-      Future.successful(routes.CheckYourAnswersController.onPageLoad)
+      Future.successful(routes.CheckYourAnswersController.onPageLoad())
     }
   }
 
@@ -154,7 +154,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
   def distributionsChangeRoute(answers: UserAnswers): Call =
     answers.get(DistributionPage) match {
       case Some(Distribution.Yes) => routes.DistributionsIncludedController.onPageLoad(CheckMode)
-      case Some(Distribution.No)  => routes.CheckYourAnswersController.onPageLoad
+      case Some(Distribution.No)  => routes.CheckYourAnswersController.onPageLoad()
       case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
 

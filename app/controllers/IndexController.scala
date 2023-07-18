@@ -36,11 +36,11 @@ class IndexController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData) { implicit request =>
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData) { implicit request =>
     Ok(view())
   }
 
-  def onStart: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  def onStart(): Action[AnyContent] = (identify andThen getData).async { implicit request =>
     for {
       updatedAnswers <- Future.successful(request.userAnswers match {
                           case Some(answers) =>

@@ -19,19 +19,15 @@ package views
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
 import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig }
-import controllers.routes
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import org.jsoup.Jsoup
-import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, running }
+import play.api.test.Helpers.running
 import utils.DateUtils
 import views.html.PDFFileTemplate
 
 import java.time.{ Instant, LocalDate }
 
 class PDFFileTemplateSpec extends SpecBase {
-
-  private val request = FakeRequest(GET, routes.PDFController.onPageLoad().url)
 
   private val config = Map(
     2023 -> MarginalReliefConfig(2023, 50000, 250000, 0.19, 0.25, 0.015)
@@ -95,7 +91,6 @@ class PDFFileTemplateSpec extends SpecBase {
                 Left(1),
                 config,
                 now,
-                request,
                 messages(application)
               )
               .toString
