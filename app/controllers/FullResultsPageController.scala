@@ -17,20 +17,21 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ CalculatorResult, FYConfig }
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import connectors.sharedmodel.{CalculatorResult, FYConfig}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
-import models.{ Distribution, UserAnswers }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import models.{Distribution, UserAnswers}
+import pages._
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import providers.CalculationConfigProvider
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class FullResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
@@ -39,21 +40,10 @@ class FullResultsPageController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: FullResultsPageView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
+  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector,
+  calculationConfigProvider: CalculationConfigProvider
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
-
-  private def getConfig(calculatorResult: CalculatorResult)(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
-    calculatorResult.fold(single =>
-      marginalReliefCalculatorConnector
-        .config(single.details.year)
-        .map(config => Map(single.details.year -> config))
-    )(dual =>
-      for {
-        y1 <- marginalReliefCalculatorConnector.config(dual.year1.year)
-        y2 <- marginalReliefCalculatorConnector.config(dual.year2.year)
-      } yield Map(dual.year1.year -> y1, dual.year2.year -> y2)
-    )
 
   case class FullResultsPageRequiredParams[A](
     accountingPeriod: AccountingPeriodForm,
@@ -119,7 +109,7 @@ class FullResultsPageController @Inject() (
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
                               )
-        config <- getConfig(calculatorResult)
+        config <- calculationConfigProvider.getAllConfigs(calculatorResult)
       } yield {
 
         val associatedCompanies = request.twoAssociatedCompanies match {
