@@ -58,6 +58,6 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
         case AskOnePart(Period(start, end)) =>
           messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
       },
-      classes = "govuk-heading-l"
+      classes = "govuk-heading-xl"
     )
 }

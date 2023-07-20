@@ -94,7 +94,7 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
 
   "heading" - {
     "should be Associated companies when AskAssociatedCompaniesParameter is AskFull" in {
-      AssociatedCompaniesViewHelper.heading(AskFull) shouldBe h1("Associated companies", classes = "govuk-heading-l")
+      AssociatedCompaniesViewHelper.heading(AskFull) shouldBe h1("Associated companies", classes = "govuk-heading-xl")
     }
 
     "should be Associated companies when AskAssociatedCompaniesParameter is AskBothParts" in {
@@ -103,13 +103,13 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
         )
-      ) shouldBe h1("Associated companies", classes = "govuk-heading-l")
+      ) shouldBe h1("Associated companies", classes = "govuk-heading-xl")
     }
 
     "should be Associated companies when AskAssociatedCompaniesParameter is AskOnePart" in {
       AssociatedCompaniesViewHelper.heading(
         AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)))
-      ) shouldBe h1("Associated companies between 1 January 1970 and 2 January 1970", classes = "govuk-heading-l")
+      ) shouldBe h1("Associated companies between 1 January 1970 and 2 January 1970", classes = "govuk-heading-xl")
     }
   }
 }
