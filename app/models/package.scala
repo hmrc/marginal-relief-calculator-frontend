@@ -117,16 +117,20 @@ package object models {
       ((path.path, jsValue): @unchecked) match {
         case (Nil, _)                                                                 => JsError("path cannot be empty")
         case ((n: KeyPathNode) :: Nil, value: JsObject) if value.keys.contains(n.key) => JsSuccess(value - n.key)
-        case ((n: KeyPathNode) :: Nil, value: JsObject) if !value.keys.contains(n.key) => JsError("cannot find value at path")
+        case ((n: KeyPathNode) :: Nil, value: JsObject) if !value.keys.contains(n.key) =>
+          JsError("cannot find value at path")
         case ((n: IdxPathNode) :: Nil, value: JsArray) => removeIndexNode(n, value)
-        case ((_: KeyPathNode) :: Nil, _) => JsError(s"cannot remove a key on $jsValue")
-        case (first :: second :: rest, oldValue) => Reads.optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
+        case ((_: KeyPathNode) :: Nil, _)              => JsError(s"cannot remove a key on $jsValue")
+        case (first :: second :: rest, oldValue) =>
+          Reads
+            .optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
             .reads(oldValue)
-            .flatMap { opt: Option[JsValue] => opt.map(JsSuccess(_)).getOrElse(matchSecond(second)).flatMap {
-                  _.remove(JsPath(second :: rest)).flatMap { newValue =>
-                    oldValue.set(JsPath(first :: Nil), newValue)
-                  }
+            .flatMap { opt: Option[JsValue] =>
+              opt.map(JsSuccess(_)).getOrElse(matchSecond(second)).flatMap {
+                _.remove(JsPath(second :: rest)).flatMap { newValue =>
+                  oldValue.set(JsPath(first :: Nil), newValue)
                 }
+              }
             }
       }
   }

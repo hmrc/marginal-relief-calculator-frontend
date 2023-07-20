@@ -56,7 +56,7 @@ class EndLocalDateFormatter(
     }
   }
 
-  def format(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
+  def format(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] =
     formatDate(key, data) match {
       case Left(errors) =>
         Left(errors.map(_.copy(key = key, args = args)))
@@ -69,5 +69,4 @@ class EndLocalDateFormatter(
           case _ => Right(endDate)
         }
     }
-  }
 }
