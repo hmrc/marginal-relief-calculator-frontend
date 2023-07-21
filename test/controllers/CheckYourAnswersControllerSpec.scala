@@ -19,16 +19,16 @@ package controllers
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.AskFull
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage}
-import play.api.http.Status.{OK, SEE_OTHER}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
+import play.api.http.Status.{ OK, SEE_OTHER }
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty}
-import viewmodels.checkAnswers.{AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionSummary, TaxableProfitSummary, TwoAssociatedCompaniesSummary}
+import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty }
+import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionSummary, TaxableProfitSummary, TwoAssociatedCompaniesSummary }
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 

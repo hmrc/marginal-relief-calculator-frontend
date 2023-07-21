@@ -23,13 +23,13 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.FakeRequest
 import com.typesafe.config.ConfigFactory
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
-import play.api.http.{DefaultHttpFilters, HeaderNames, HttpFilters, Status}
+import play.api.http.{ DefaultHttpFilters, HeaderNames, HttpFilters, Status }
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.SessionCookieBaker
-import play.api.test.Helpers.{GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty}
-import play.api.{Application, Configuration}
+import play.api.test.Helpers.{ GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty }
+import play.api.{ Application, Configuration }
 
 import scala.concurrent.ExecutionContext
 

@@ -16,8 +16,8 @@
 
 package generators
 
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
-import org.scalacheck.{Arbitrary, Gen}
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import org.scalacheck.{ Arbitrary, Gen }
 
 trait ModelGenerators {
 

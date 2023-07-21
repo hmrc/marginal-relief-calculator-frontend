@@ -18,7 +18,7 @@ package navigation
 
 import connectors.MarginalReliefCalculatorConnector
 import play.api.mvc.Call
-import models.{Mode, UserAnswers}
+import models.{ Mode, UserAnswers }
 import pages.Page
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier

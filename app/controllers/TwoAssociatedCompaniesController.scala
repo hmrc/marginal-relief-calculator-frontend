@@ -17,23 +17,23 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{AskBothParts, AssociatedCompaniesParameter}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter }
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
 import forms.DateUtils.financialYear
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
 import models.requests.DataRequest
-import models.{Distribution, Mode, UserAnswers}
+import models.{ Distribution, Mode, UserAnswers }
 import navigation.Navigator
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TwoAssociatedCompaniesView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class TwoAssociatedCompaniesController @Inject() (
   override val messagesApi: MessagesApi,

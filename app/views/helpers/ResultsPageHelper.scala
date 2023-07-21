@@ -16,20 +16,20 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult, TaxDetails}
+import connectors.sharedmodel.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult, TaxDetails }
 import forms.AccountingPeriodForm
-import forms.DateUtils.{DateOps, financialYear}
-import org.slf4j.{Logger, LoggerFactory}
+import forms.DateUtils.{ DateOps, financialYear }
+import org.slf4j.{ Logger, LoggerFactory }
 import play.api.i18n.Messages
-import play.twirl.api.{Html, HtmlFormat}
-import uk.gov.hmrc.govukfrontend.views.Aliases.{HtmlContent, SummaryListRow, Table, Text, Value}
+import play.twirl.api.{ Html, HtmlFormat }
+import uk.gov.hmrc.govukfrontend.views.Aliases.{ HtmlContent, SummaryListRow, Table, Text, Value }
 import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-import uk.gov.hmrc.govukfrontend.views.html.components.{GovukPanel, GovukSummaryList, GovukTable}
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummaryList, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.panel.Panel
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, TableRow}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{ HeadCell, TableRow }
 import utils.NumberUtils.roundUp
-import utils.{CurrencyUtils, PercentageUtils}
+import utils.{ CurrencyUtils, PercentageUtils }
 import views.html.templates.BannerPanel
 
 import scala.collection.immutable

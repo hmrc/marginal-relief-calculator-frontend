@@ -16,10 +16,10 @@
 
 package models
 
-import org.scalatest.{EitherValues, OptionValues}
+import org.scalatest.{ EitherValues, OptionValues }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.{Format, JsPath, JsString, Json, JsonValidationError, Reads, Writes}
+import play.api.libs.json.{ Format, JsPath, JsString, Json, JsonValidationError, Reads, Writes }
 
 object EnumerableSpec {
 

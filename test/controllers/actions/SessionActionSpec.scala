@@ -17,10 +17,10 @@
 package controllers.actions
 
 import base.SpecBase
-import play.api.http.Status.{OK, SEE_OTHER}
-import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
+import play.api.http.Status.{ OK, SEE_OTHER }
+import play.api.mvc.{ Action, AnyContent, BodyParsers, Results }
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{defaultAwaitTimeout, redirectLocation, running, status}
+import play.api.test.Helpers.{ defaultAwaitTimeout, redirectLocation, running, status }
 import uk.gov.hmrc.http.SessionKeys
 
 import scala.concurrent.ExecutionContext.Implicits.global

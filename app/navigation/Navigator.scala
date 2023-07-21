@@ -16,18 +16,18 @@
 
 package navigation
 
-import com.google.inject.{Inject, Singleton}
+import com.google.inject.{ Inject, Singleton }
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{AskBothParts, AskFull, AskOnePart, DontAsk}
+import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk }
 import controllers.routes
 import forms.TwoAssociatedCompaniesForm
-import models.{AssociatedCompanies, CheckMode, Distribution, Mode, NormalMode, PDFAddCompanyDetails, UserAnswers}
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, Page, TaxableProfitPage, TwoAssociatedCompaniesPage}
+import models.{ AssociatedCompanies, CheckMode, Distribution, Mode, NormalMode, PDFAddCompanyDetails, UserAnswers }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, Page, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.mvc.Call
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, sessionRepository: SessionRepository)(implicit

@@ -21,8 +21,8 @@ import base.SpecBase
 import handlers.ErrorHandler
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, contentAsString, defaultAwaitTimeout, running, status}
-import views.html.{ErrorTemplate, InternalServerErrorTemplate}
+import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, running, status }
+import views.html.{ ErrorTemplate, InternalServerErrorTemplate }
 
 class ErrorHandlerSpec extends SpecBase with MockitoSugar {
   "Error handler renders view" in {

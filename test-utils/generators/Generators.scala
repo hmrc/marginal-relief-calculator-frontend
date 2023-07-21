@@ -17,10 +17,10 @@
 package generators
 
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen.{alphaChar, alphaStr, choose, listOfN, const}
-import org.scalacheck.{Gen, Shrink}
+import org.scalacheck.Gen.{ alphaChar, alphaStr, choose, const, listOfN }
+import org.scalacheck.{ Gen, Shrink }
 
-import java.time.{Instant, LocalDate, ZoneOffset}
+import java.time.{ Instant, LocalDate, ZoneOffset }
 
 trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 

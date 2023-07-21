@@ -17,8 +17,7 @@
 package forms
 
 import models.PDFAddCompanyDetails
-import play.api.libs.json.{Format, Json}
-
+import play.api.libs.json.{ Format, Json }
 
 final case class PDFAddCompanyDetailsForm(
   pdfAddCompanyDetails: PDFAddCompanyDetails

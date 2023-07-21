@@ -27,8 +27,8 @@ import pages.{ AccountingPeriodPage, TwoAssociatedCompaniesPage }
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import viewmodels.govuk.all.FluentActionItem
-import viewmodels.govuk.summarylist.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
-import viewmodels.implicits.{stringToKey, stringToText}
+import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
+import viewmodels.implicits.{ stringToKey, stringToText }
 
 import java.time.LocalDate
 

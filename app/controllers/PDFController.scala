@@ -18,25 +18,25 @@ package controllers
 
 import akka.stream.scaladsl.StreamConverters
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{CalculatorResult, FYConfig}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm}
+import connectors.sharedmodel.{ CalculatorResult, FYConfig }
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{Distribution, PDFAddCompanyDetails, UserAnswers}
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
+import models.{ Distribution, PDFAddCompanyDetails, UserAnswers }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.http.HttpEntity
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest}
+import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{DateTime, PDFGenerator}
-import views.html.{PDFFileTemplate, PDFView}
+import utils.{ DateTime, PDFGenerator }
+import views.html.{ PDFFileTemplate, PDFView }
 
 import java.io.ByteArrayInputStream
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class PDFController @Inject() (
   override val messagesApi: MessagesApi,

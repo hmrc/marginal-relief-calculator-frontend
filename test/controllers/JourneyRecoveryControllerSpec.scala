@@ -19,9 +19,9 @@ package controllers
 import base.SpecBase
 import play.api.http.Status.OK
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, contentAsString, defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty}
+import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, route, running, status, writeableOf_AnyContentAsEmpty }
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
-import views.html.{JourneyRecoveryContinueView, JourneyRecoveryStartAgainView}
+import views.html.{ JourneyRecoveryContinueView, JourneyRecoveryStartAgainView }
 
 class JourneyRecoveryControllerSpec extends SpecBase {
 

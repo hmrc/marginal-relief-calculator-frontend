@@ -18,22 +18,22 @@ package controllers
 
 import base.SpecBase
 import connectors.MarginalReliefCalculatorConnector
-import forms.{AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm}
-import models.{AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers }
+import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage}
-import play.api.http.Status.{OK, SEE_OTHER}
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
+import play.api.http.Status.{ OK, SEE_OTHER }
 import play.api.i18n.Messages
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded}
+import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
-import views.html.{AccountingPeriodView, IrrelevantPeriodView}
+import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 
 import java.time.LocalDate
 import scala.concurrent.Future

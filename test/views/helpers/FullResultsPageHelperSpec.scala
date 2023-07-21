@@ -18,10 +18,10 @@ package views.helpers
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult}
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
-import utils.FormatUtils.{HtmlFormat, StringFormat}
+import utils.FormatUtils.{ HtmlFormat, StringFormat }
 
 import java.time.LocalDate
 

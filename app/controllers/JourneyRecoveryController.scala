@@ -20,15 +20,15 @@ import controllers.actions.IdentifierAction
 import models.requests.IdentifierRequest
 import org.slf4j.LoggerFactory
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{ Action, AnyContent, MessagesControllerComponents }
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
-import uk.gov.hmrc.play.bootstrap.binders.{OnlyRelative, RedirectUrl}
+import uk.gov.hmrc.play.bootstrap.binders.{ OnlyRelative, RedirectUrl }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{JourneyRecoveryContinueView, JourneyRecoveryStartAgainView}
+import views.html.{ JourneyRecoveryContinueView, JourneyRecoveryStartAgainView }
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class JourneyRecoveryController @Inject() (
   val controllerComponents: MessagesControllerComponents,

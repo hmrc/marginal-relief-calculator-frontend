@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 import controllers.routes
 import forms.AccountingPeriodForm
 import forms.DateUtils.DateOps
-import models.{CheckMode, UserAnswers}
+import models.{ CheckMode, UserAnswers }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import pages.AccountingPeriodPage
@@ -26,8 +26,8 @@ import play.api.i18n.Messages
 import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import viewmodels.govuk.all.FluentActionItem
-import viewmodels.govuk.summarylist.{ActionItemViewModel, SummaryListRowViewModel, ValueViewModel}
-import viewmodels.implicits.{stringToKey, stringToText}
+import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
+import viewmodels.implicits.{ stringToKey, stringToText }
 
 import java.time.LocalDate
 

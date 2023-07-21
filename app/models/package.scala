@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import play.api.libs.json.{IdxPathNode, JsArray, JsError, JsObject, JsPath, JsResult, JsSuccess, JsValue, Json, KeyPathNode, Reads, RecursiveSearch}
+import play.api.libs.json.{ IdxPathNode, JsArray, JsError, JsObject, JsPath, JsResult, JsSuccess, JsValue, Json, KeyPathNode, Reads, RecursiveSearch }
 
 package object models {
 
