@@ -17,19 +17,20 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsFormProvider }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode }
-import navigation.{ FakeNavigator, Navigator }
+import forms._
+import models.{AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
+import pages._
+import play.api.Application
+import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
+import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import providers.AssociatedCompaniesParametersProvider
 import repositories.SessionRepository
 import views.html.PDFAddCompanyDetailsView
 
@@ -38,10 +39,10 @@ import scala.concurrent.Future
 
 class PDFAddCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  private val formProvider = new PDFAddCompanyDetailsFormProvider()
-  private val form = formProvider()
+  private val formProvider: PDFAddCompanyDetailsFormProvider = new PDFAddCompanyDetailsFormProvider()
+  private val form: Form[PDFAddCompanyDetailsForm] = formProvider()
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
   private val addCompanyDetailsRoute = routes.PDFAddCompanyDetailsController.onPageLoad().url
 
@@ -70,15 +71,12 @@ class PDFAddCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
 
     "onPageLoad" - {
       "must return OK and the correct view for a GET" in {
-
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
+        val application: Application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
         running(application) {
           val request = FakeRequest(GET, addCompanyDetailsRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[PDFAddCompanyDetailsView]
+          val result: Future[Result] = route(application, request).value
+          val view: PDFAddCompanyDetailsView = application.injector.instanceOf[PDFAddCompanyDetailsView]
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
@@ -89,13 +87,11 @@ class PDFAddCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
       }
 
       "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
-        val application = applicationBuilder(userAnswers = None).build()
+        val application: Application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
           val request = FakeRequest(GET, addCompanyDetailsRoute)
-
-          val result = route(application, request).value
+          val result: Future[Result] = route(application, request).value
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
@@ -106,17 +102,15 @@ class PDFAddCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
     "onSubmit" - {
 
       "must redirect to the next page when valid data is submitted" in {
-
-        val mockSessionRepository = mock[SessionRepository]
-
-        val mockConnector = mock[MarginalReliefCalculatorConnector]
+        val mockSessionRepository: SessionRepository = mock[SessionRepository]
+        val mockParametersProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
+              bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParametersProvider, mockSessionRepository)),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()

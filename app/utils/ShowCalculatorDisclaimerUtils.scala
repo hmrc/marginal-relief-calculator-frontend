@@ -19,6 +19,11 @@ package utils
 import java.time.{ LocalDate, Month }
 
 object ShowCalculatorDisclaimerUtils {
+  implicit class DateOps(date: LocalDate) {
+    def isEqualOrAfter(another: LocalDate): Boolean =
+      date.equals(another) || date.isAfter(another)
+  }
+
   def showCalculatorDisclaimer(periodEnd: LocalDate): Boolean = {
     val curFinancialYear = financialYearEnd(LocalDate.now()).getYear - 1
     val calcFinancialYear = financialYearEnd(periodEnd).getYear - 1

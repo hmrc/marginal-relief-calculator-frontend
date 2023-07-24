@@ -17,7 +17,6 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{CalculatorResult, FYConfig}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
@@ -26,7 +25,6 @@ import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import providers.CalculationConfigProvider
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 

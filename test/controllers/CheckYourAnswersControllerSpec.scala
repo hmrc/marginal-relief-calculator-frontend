@@ -17,18 +17,17 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.AskFull
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
-import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
-import play.api.http.Status.{ OK, SEE_OTHER }
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm}
+import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
+import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import pages._
 import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty }
-import viewmodels.checkAnswers.{ AccountingPeriodSummary, AssociatedCompaniesSummary, DistributionSummary, TaxableProfitSummary, TwoAssociatedCompaniesSummary }
+import play.api.test.Helpers._
+import providers.AssociatedCompaniesParametersProvider
+import viewmodels.checkAnswers._
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
 
@@ -63,14 +62,13 @@ class CheckYourAnswersControllerSpec
 
     "must return OK and the correct view for a GET" in {
 
-      val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-        mock[MarginalReliefCalculatorConnector]
+      val mockParametersProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
 
       val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-        .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParametersProvider))
         .build()
 
-      mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+      mockParametersProvider.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
         accountingPeriodEnd = LocalDate.ofEpochDay(1)
       )(*) returns Future.successful(AskFull)
@@ -105,14 +103,14 @@ class CheckYourAnswersControllerSpec
         .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), None))
         .get
 
-      val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-        mock[MarginalReliefCalculatorConnector]
+      val mockParametersProvider: AssociatedCompaniesParametersProvider =
+        mock[AssociatedCompaniesParametersProvider]
 
       val application = applicationBuilder(userAnswers = Some(answers))
-        .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParametersProvider))
         .build()
 
-      mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+      mockParametersProvider.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
         accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
       )(*) returns Future.successful(AskFull)

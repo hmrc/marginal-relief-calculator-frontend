@@ -17,20 +17,20 @@
 package controllers
 
 import com.google.inject.Inject
-import connectors.MarginalReliefCalculatorConnector
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
-import models.{ Distribution, UserAnswers }
+import models.{Distribution, UserAnswers}
 import pages._
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import providers.AssociatedCompaniesParametersProvider
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers._
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
@@ -39,7 +39,7 @@ class CheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
+  associatedCompaniesParametersProvider: AssociatedCompaniesParametersProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -96,7 +96,7 @@ class CheckYourAnswersController @Inject() (
   def onPageLoad(): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        askAssociatedParameter <- marginalReliefCalculatorConnector.associatedCompaniesParameters(
+        askAssociatedParameter <- associatedCompaniesParametersProvider.associatedCompaniesParameters(
                                     request.accountingPeriod.accountingPeriodStartDate,
                                     request.accountingPeriod.accountingPeriodEndDateOrDefault
                                   )
