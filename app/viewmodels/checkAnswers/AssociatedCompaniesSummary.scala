@@ -22,7 +22,7 @@ import models.{ CheckMode, UserAnswers }
 import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.All.FluentActionItem
 import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
 import viewmodels.implicits._
 

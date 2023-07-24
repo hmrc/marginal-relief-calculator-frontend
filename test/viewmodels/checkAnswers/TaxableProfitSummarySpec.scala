@@ -23,7 +23,7 @@ import org.scalatest.matchers.should.Matchers
 import pages.TaxableProfitPage
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.All.FluentActionItem
 import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
 import viewmodels.implicits.{ stringToKey, stringToText }
 

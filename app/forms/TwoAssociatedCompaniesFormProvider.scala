@@ -30,10 +30,10 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
         "associatedCompaniesFY1Count" ->
           optional(
             int(
-              "twoAssociatedCompanies.error.required",
-              "twoAssociatedCompanies.error.wholeNumber",
-              "twoAssociatedCompanies.error.nonNumeric",
-              Seq(year1.toString, (year1 + 1).toString)
+              requiredKey = "twoAssociatedCompanies.error.required",
+              wholeNumberKey = "twoAssociatedCompanies.error.wholeNumber",
+              nonNumericKey = "twoAssociatedCompanies.error.nonNumeric",
+              args = Seq(year1.toString, (year1 + 1).toString)
             ).verifying(
               minimumValueWithDynamicMessage(
                 0,
@@ -54,10 +54,10 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
         "associatedCompaniesFY2Count" ->
           optional(
             int(
-              "twoAssociatedCompanies.error.required",
-              "twoAssociatedCompanies.error.wholeNumber",
-              "twoAssociatedCompanies.error.nonNumeric",
-              Seq(year2.toString, (year2 + 1).toString)
+              requiredKey = "twoAssociatedCompanies.error.required",
+              wholeNumberKey = "twoAssociatedCompanies.error.wholeNumber",
+              nonNumericKey = "twoAssociatedCompanies.error.nonNumeric",
+              args = Seq(year2.toString, (year2 + 1).toString)
             ).verifying(
               minimumValueWithDynamicMessage(
                 0,

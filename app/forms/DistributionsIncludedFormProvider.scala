@@ -37,10 +37,8 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
             "error.outOfRange",
             "distributionsIncludedAmount.error.doNotUseDecimals",
             "distributionsIncludedAmount.error.nonNumeric",
-            "distributionsIncludedAmount.error.lessThanOne",
-            "error.greaterThanOneBillion",
-            1,
-            ONE_BILLION
+            KeyRange("distributionsIncludedAmount.error.lessThanOne", "error.greaterThanOneBillion"),
+            ValueRange(1, ONE_BILLION)
           ).withPrefix("distributionsIncludedAmount"),
           enumerable[DistributionsIncluded]().withPrefix("distributionsIncluded"),
           _ == DistributionsIncluded.Yes

@@ -38,10 +38,8 @@ trait Mappings extends Formatters with Constraints {
     outOfRangeKey: String = "error.outOfRange",
     doNotUseDecimalsKey: String = "error.wholeNumber",
     nonNumericKey: String = "error.nonNumeric",
-    minKey: String = "error.lowerThanMin",
-    maxKey: String = "error.greaterThanMax",
-    minValue: Int = Integer.MIN_VALUE,
-    maxValue: Int = Integer.MAX_VALUE,
+    keyRange: KeyRange = KeyRange("error.lowerThanMin", "error.greaterThanMax"),
+    valueRange: ValueRange = ValueRange(Integer.MIN_VALUE, Integer.MAX_VALUE),
     args: Seq[String] = Seq.empty
   ): FieldMapping[Int] =
     of(
@@ -50,10 +48,8 @@ trait Mappings extends Formatters with Constraints {
         outOfRangeKey,
         doNotUseDecimalsKey,
         nonNumericKey,
-        minKey,
-        maxKey,
-        minValue,
-        maxValue,
+        keyRange,
+        valueRange,
         args
       )
     )

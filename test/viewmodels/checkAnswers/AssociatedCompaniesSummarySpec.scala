@@ -26,7 +26,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.All.FluentActionItem
 import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
 import viewmodels.implicits.{ stringToKey, stringToText }
 

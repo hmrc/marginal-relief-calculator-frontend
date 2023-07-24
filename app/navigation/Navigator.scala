@@ -80,7 +80,6 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
   }
 
   private def accountingPeriodChangeRoute(answers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] = {
-
     val needToProcessNextPage =
       answers.get(AssociatedCompaniesPage).forall(_.associatedCompanies == AssociatedCompanies.Yes)
 
@@ -94,33 +93,25 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
           )
           .flatMap {
             case DontAsk =>
-              resetAssociatedCompanies(answers).map { _ =>
-                routes.CheckYourAnswersController.onPageLoad()
-              }
-
+              resetAssociatedCompanies(answers).map(_ => routes.CheckYourAnswersController.onPageLoad())
             case AskBothParts(period1, period2) =>
               val twoAssociatedCompaniesExist =
                 answers.get(TwoAssociatedCompaniesPage).exists { case TwoAssociatedCompaniesForm(one, two) =>
                   one.nonEmpty && two.nonEmpty
                 }
-              if (twoAssociatedCompaniesExist)
-                Future.successful(
-                  routes.CheckYourAnswersController.onPageLoad()
-                )
-              else {
+              if (twoAssociatedCompaniesExist) {
+                Future.successful(routes.CheckYourAnswersController.onPageLoad())
+              } else {
                 resetAssociatedCompanies(answers).map { _ =>
                   routes.AssociatedCompaniesController.onPageLoad(CheckMode)
                 }
               }
             case AskFull | AskOnePart(_) =>
-              val onlyOneAssociatedCompanyExists = answers
-                .get(AssociatedCompaniesPage)
-                .exists(_.associatedCompaniesCount.nonEmpty)
-              if (onlyOneAssociatedCompanyExists)
-                Future.successful(
-                  routes.CheckYourAnswersController.onPageLoad()
-                )
-              else {
+              val onlyOneAssociatedCompanyExists =
+                answers.get(AssociatedCompaniesPage).exists(_.associatedCompaniesCount.nonEmpty)
+              if (onlyOneAssociatedCompanyExists) {
+                Future.successful(routes.CheckYourAnswersController.onPageLoad())
+              } else {
                 resetAssociatedCompanies(answers).map { _ =>
                   routes.AssociatedCompaniesController.onPageLoad(CheckMode)
                 }

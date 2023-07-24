@@ -46,18 +46,7 @@ class EndLocalDateFormatter(
 
     fields.count(_._2.isDefined) match {
       case 3 =>
-        formatDate(key, data) match {
-          case Left(errors) =>
-            Left(errors.map(_.copy(key = key, args = args)))
-          case Right(endDate) =>
-            formatDate(startDateId, data).toOption match {
-              case Some(startDate) if endDate.isEqualOrBefore(startDate) =>
-                Left(List(FormError(key, "accountingPeriod.error.startShouldBeBeforeEnd")))
-              case Some(startDate) if endDate.isAfter(startDate.plusYears(1).minusDays(1)) =>
-                Left(List(FormError(key, "accountingPeriod.error.periodIsMoreThanAYear")))
-              case _ => Right(endDate)
-            }
-        }
+        format(key, data)
       case 2 =>
         Left(List(FormError(key, requiredKey, missingFields ++ args)))
       case 1 =>
@@ -66,4 +55,18 @@ class EndLocalDateFormatter(
         Left(List(FormError(key, allRequiredKey, args)))
     }
   }
+
+  def format(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] =
+    formatDate(key, data) match {
+      case Left(errors) =>
+        Left(errors.map(_.copy(key = key, args = args)))
+      case Right(endDate) =>
+        formatDate(startDateId, data).toOption match {
+          case Some(startDate) if endDate.isEqualOrBefore(startDate) =>
+            Left(List(FormError(key, "accountingPeriod.error.startShouldBeBeforeEnd")))
+          case Some(startDate) if endDate.isAfter(startDate.plusYears(1).minusDays(1)) =>
+            Left(List(FormError(key, "accountingPeriod.error.periodIsMoreThanAYear")))
+          case _ => Right(endDate)
+        }
+    }
 }

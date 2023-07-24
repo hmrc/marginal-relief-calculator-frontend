@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import play.api.libs.json.{ IdxPathNode, JsArray, JsError, JsObject, JsPath, JsResult, JsSuccess, JsValue, Json, KeyPathNode, Reads, RecursiveSearch }
+import play.api.libs.json._
 
 package object models {
 
@@ -126,25 +126,22 @@ package object models {
             .optionNoError(Reads.at[JsValue](JsPath(first :: Nil)))
             .reads(oldValue)
             .flatMap { opt: Option[JsValue] =>
-              opt
-                .map(JsSuccess(_))
-                .getOrElse {
-                  second match {
-                    case _: KeyPathNode =>
-                      JsSuccess(Json.obj())
-                    case _: IdxPathNode =>
-                      JsSuccess(Json.arr())
-                    case _: RecursiveSearch =>
-                      JsError("recursive search is not supported")
-                  }
+              opt.map(JsSuccess(_)).getOrElse(matchSecond(second)).flatMap {
+                _.remove(JsPath(second :: rest)).flatMap { newValue =>
+                  oldValue.set(JsPath(first :: Nil), newValue)
                 }
-                .flatMap {
-                  _.remove(JsPath(second :: rest)).flatMap { newValue =>
-                    oldValue.set(JsPath(first :: Nil), newValue)
-                  }
-                }
+              }
             }
       }
+  }
+
+  private def matchSecond(second: PathNode) = second match {
+    case _: KeyPathNode =>
+      JsSuccess(Json.obj())
+    case _: IdxPathNode =>
+      JsSuccess(Json.arr())
+    case _: RecursiveSearch =>
+      JsError("recursive search is not supported")
   }
   // $COVERAGE-ON$
 }

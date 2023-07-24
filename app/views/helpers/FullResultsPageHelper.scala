@@ -15,14 +15,13 @@
  */
 
 package views.helpers
-
-import connectors.sharedmodel.{ CalculatorResult, DualResult, FYConfig, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, TaxDetails }
+//
+import connectors.sharedmodel._
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
-import uk.gov.hmrc.govukfrontend.views.Aliases.{ Details, Table }
+import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{ HtmlContent, Text }
-import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{ HeadCell, TableRow }
+import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
 import views.helpers.ResultsPageHelper.replaceTableHeader
 
@@ -46,32 +45,12 @@ object FullResultsPageHelper extends ViewHelper {
       val days = td.days
       td.fold { _ =>
         Seq(
-          h3(
-            messages(
-              "fullResultsPage.forFinancialYear",
-              year.toString,
-              (year + 1).toString,
-              days
-            )
-          ),
-          p(
-            messages(
-              "fullResultsPage.marginalReliefNotAvailable",
-              year.toString,
-              (year + 1).toString
-            )
-          )
+          h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+          p(messages("fullResultsPage.marginalReliefNotAvailable", year.toString, (year + 1).toString))
         )
       } { marginal =>
         Seq(
-          h3(
-            messages(
-              "fullResultsPage.forFinancialYear",
-              year.toString,
-              (year + 1).toString,
-              days
-            )
-          ),
+          h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
           displayFullFinancialYearTable(
             calculatorResult,
             marginal,
@@ -87,6 +66,15 @@ object FullResultsPageHelper extends ViewHelper {
     HtmlFormat.fill(html)
   }
 
+  def tabBtn(year: Int)(implicit messages: Messages): String =
+    s"""<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+       |      <a class="govuk-tabs__tab" href="#year$year">${messages(
+        "site.from.to",
+        year.toString,
+        (year + 1).toString
+      )}</a>
+       |    </li>""".stripMargin
+
   def displayFullCalculationResult(
     calculatorResult: CalculatorResult,
     associatedCompanies: Either[Int, (Int, Int)],
@@ -96,25 +84,12 @@ object FullResultsPageHelper extends ViewHelper {
   )(implicit messages: Messages): Html = {
 
     def dualResultTable(dual: DualResult) = {
-      def tabBtn(year: Int) =
-        s"""<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-           |      <a class="govuk-tabs__tab" href="#year$year">${messages(
-            "site.from.to",
-            year.toString,
-            (year + 1).toString
-          )}</a>
-           |    </li>""".stripMargin
 
       def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
            |    ${h2(
-            text = messages(
-              "fullResultsPage.forFinancialYear",
-              year.toString,
-              (year + 1).toString,
-              marginalRate.days
-            ),
+            text = messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, marginalRate.days),
             styles = "margin-bottom: 4px;"
           )}
            |    ${displayFullFinancialYearTable(
