@@ -27,9 +27,10 @@ import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import play.api.http.{ DefaultHttpFilters, HeaderNames, HttpFilters, Status }
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc._
+import play.api.mvc.SessionCookieBaker
 import play.api.test.Helpers.{ GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty }
 import play.api.{ Application, Configuration }
+
 import scala.concurrent.ExecutionContext
 
 object BasicAuthFilterSpec {

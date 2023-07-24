@@ -21,8 +21,8 @@ import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk }
 import controllers.routes
 import forms.TwoAssociatedCompaniesForm
-import models.{ Mode, UserAnswers, _ }
-import pages._
+import models.{ AssociatedCompanies, CheckMode, Distribution, Mode, NormalMode, PDFAddCompanyDetails, UserAnswers }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, Page, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.mvc.Call
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier

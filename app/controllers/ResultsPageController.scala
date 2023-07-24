@@ -17,13 +17,13 @@
 package controllers
 
 import connectors.MarginalReliefCalculatorConnector
-import controllers.actions._
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
 import models.{ Distribution, UserAnswers }
-import pages._
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc._
+import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 

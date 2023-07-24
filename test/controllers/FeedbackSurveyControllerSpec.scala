@@ -22,7 +22,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.Application
 import play.api.http.Status
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.{ GET, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty }
 
 class FeedbackSurveyControllerSpec extends SpecBase with MockitoSugar {
   val app: Application = applicationBuilder().build()

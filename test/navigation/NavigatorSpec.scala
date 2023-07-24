@@ -21,8 +21,8 @@ import controllers.routes
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ AskBothParts, AskOnePart, DontAsk, Period }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm }
-import pages.{ DistributionPage, _ }
-import models._
+import models.{ AssociatedCompanies, CheckMode, Distribution, NormalMode, PDFAddCompanyDetails, UserAnswers }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, Page, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.SessionRepository

@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import play.api.i18n.Lang
-import play.api.test.Helpers._
+import play.api.test.Helpers.running
 
 class LanguageSwitchControllerSpec extends SpecBase {
 

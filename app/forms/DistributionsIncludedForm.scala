@@ -16,7 +16,7 @@
 
 package forms
 
-import play.api.libs.json.{ Format, _ }
+import play.api.libs.json.{ Format, Json }
 import models.DistributionsIncluded
 
 final case class DistributionsIncludedForm(

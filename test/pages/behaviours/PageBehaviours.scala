@@ -25,7 +25,7 @@ import org.scalatest.{ OptionValues, TryValues }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import pages.QuestionPage
-import play.api.libs.json._
+import play.api.libs.json.Format
 
 trait PageBehaviours
     extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues with TryValues {

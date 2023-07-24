@@ -20,7 +20,7 @@ import forms.AccountingPeriodForm
 import org.scalacheck.Arbitrary
 
 import java.time.LocalDate
-import org.scalacheck.Arbitrary._
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class AccountingPeriodPageSpec extends PageBehaviours {

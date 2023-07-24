@@ -16,8 +16,8 @@
 
 package generators
 
-import org.scalacheck.Arbitrary._
-import org.scalacheck.Gen._
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen.{ alphaChar, alphaStr, choose, const, listOfN }
 import org.scalacheck.{ Gen, Shrink }
 
 import java.time.{ Instant, LocalDate, ZoneOffset }

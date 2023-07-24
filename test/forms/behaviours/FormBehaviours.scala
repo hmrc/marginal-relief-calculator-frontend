@@ -18,7 +18,7 @@ package forms.behaviours
 
 import play.api.data.Form
 import forms.FormSpec
-import models._
+import models.{ Field, Invalid, Required }
 
 trait FormBehaviours extends FormSpec {
 

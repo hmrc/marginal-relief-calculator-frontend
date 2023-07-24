@@ -17,13 +17,13 @@
 package views.helpers
 
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel._
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, SingleResult }
 import forms.AccountingPeriodForm
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.i18n.Messages
 import play.api.test.Helpers.{ stubMessages, stubMessagesApi }
-import utils.FormatUtils._
+import utils.FormatUtils.{ HtmlFormat, StringFormat }
 import views.helpers.PDFFileTemplateHelper.pdfHowItsCalculated
 
 import java.time.LocalDate

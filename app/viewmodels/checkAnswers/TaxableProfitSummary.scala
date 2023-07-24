@@ -22,7 +22,8 @@ import pages.TaxableProfitPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.CurrencyUtils
-import viewmodels.govuk.summarylist._
+import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
 import viewmodels.implicits._
 
 object TaxableProfitSummary {

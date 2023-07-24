@@ -25,7 +25,8 @@ import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukErrorMessage, GovukHint, GovukInput, GovukLabel }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-import viewmodels.govuk.input.{ InputViewModel, _ }
+import viewmodels.govuk.all.FluentInput
+import viewmodels.govuk.input.InputViewModel
 
 import java.time.LocalDate
 

@@ -17,12 +17,11 @@
 package generators
 
 import forms.{ AssociatedCompaniesForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
-import models.{ AssociatedCompanies, _ }
-import org.scalacheck.Arbitrary.{ arbitrary, _ }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{ Arbitrary, Gen }
-import pages._
 import play.api.libs.json.{ JsValue, Json }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
 

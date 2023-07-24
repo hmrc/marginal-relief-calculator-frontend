@@ -24,10 +24,11 @@ import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsInclu
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage }
+import play.api.http.Status.{ OK, SEE_OTHER }
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.{ GET, contentAsBytes, contentAsString, defaultAwaitTimeout, header, headers, route, running, status, writeableOf_AnyContentAsEmpty }
 import utils.{ DateTime, FakeDateTime }
 import views.html.PDFView
 

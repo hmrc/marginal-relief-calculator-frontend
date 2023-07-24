@@ -16,9 +16,9 @@
 
 package forms
 
+import forms.DateUtils.{ DateOps, financialYear }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import forms.DateUtils._
 
 import java.time.LocalDate
 

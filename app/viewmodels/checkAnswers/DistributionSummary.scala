@@ -21,7 +21,8 @@ import models.{ CheckMode, Distribution, UserAnswers }
 import pages.{ DistributionPage, DistributionsIncludedPage }
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
+import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
 import viewmodels.implicits._
 
 import java.text.NumberFormat

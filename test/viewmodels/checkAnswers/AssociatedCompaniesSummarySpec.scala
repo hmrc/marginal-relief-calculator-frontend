@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import connectors.sharedmodel._
+import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
 import controllers.routes
 import forms.AssociatedCompaniesForm
 import models.{ AssociatedCompanies, CheckMode, UserAnswers }
@@ -26,8 +26,9 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 import pages.AssociatedCompaniesPage
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import viewmodels.govuk.summarylist._
-import viewmodels.implicits._
+import viewmodels.govuk.all.FluentActionItem
+import viewmodels.govuk.summarylist.{ ActionItemViewModel, SummaryListRowViewModel, ValueViewModel }
+import viewmodels.implicits.{ stringToKey, stringToText }
 
 import java.time.LocalDate
 

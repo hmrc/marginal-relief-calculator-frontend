@@ -16,14 +16,16 @@
 
 package views.helpers
 
-import connectors.sharedmodel._
-import forms.DateUtils._
+import connectors.sharedmodel.{ AskAssociatedCompaniesParameter, AskBothParts, AskFull, AskOnePart, Period }
+import forms.DateUtils.DateOps
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukInput, _ }
-import viewmodels.govuk.input.{ InputViewModel, _ }
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukErrorMessage, GovukHint, GovukInput, GovukLabel }
+import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
+import viewmodels.govuk.all.FluentInput
+import viewmodels.govuk.input.InputViewModel
 
 object AssociatedCompaniesViewHelper extends ViewHelper {
 

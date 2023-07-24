@@ -23,12 +23,13 @@ import forms.AccountingPeriodForm
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.Helpers
-import uk.gov.hmrc.govukfrontend.views.Aliases._
+import uk.gov.hmrc.govukfrontend.views.Aliases.{ HeadCell, Panel, Table }
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{ HtmlContent, Text }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
+import utils.FormatUtils.{ HtmlFormat, StringFormat }
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails, isFlatRateOnly, replaceTableHeader, screenReaderText }
 import views.html.templates.BannerPanel
-import utils.FormatUtils._
 
 import java.time.LocalDate
 
