@@ -17,7 +17,6 @@
 package controllers
 
 import akka.stream.scaladsl.StreamConverters
-import connectors.MarginalReliefCalculatorConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
@@ -26,7 +25,7 @@ import pages._
 import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.CalculationConfigProvider
+import providers.{CalculationConfigProvider, CalculatorProvider}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{DateTime, PDFGenerator}
 import views.html.{PDFFileTemplate, PDFView}
@@ -45,10 +44,10 @@ class PDFController @Inject() (
   requireData: DataRequiredAction,
   view: PDFView,
   pdfFileTemplate: PDFFileTemplate,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector,
   dateTime: DateTime,
   pdfGenerator: PDFGenerator,
-  calculationConfigProvider: CalculationConfigProvider
+  calculationConfigProvider: CalculationConfigProvider,
+  calculatorProvider: CalculatorProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -115,7 +114,7 @@ class PDFController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        calculatorResult <- marginalReliefCalculatorConnector
+        calculatorResult <- calculatorProvider
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
@@ -143,7 +142,7 @@ class PDFController @Inject() (
   def downloadPdf(): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        calculatorResult <- marginalReliefCalculatorConnector
+        calculatorResult <- calculatorProvider
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,

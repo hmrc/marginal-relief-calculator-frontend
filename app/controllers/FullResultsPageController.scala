@@ -16,7 +16,6 @@
 
 package controllers
 
-import connectors.MarginalReliefCalculatorConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
@@ -24,7 +23,7 @@ import models.{Distribution, UserAnswers}
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.CalculationConfigProvider
+import providers.{CalculationConfigProvider, CalculatorProvider}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 
@@ -38,8 +37,8 @@ class FullResultsPageController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: FullResultsPageView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector,
-  calculationConfigProvider: CalculationConfigProvider
+  calculationConfigProvider: CalculationConfigProvider,
+  calculatorProvider: CalculatorProvider
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -97,7 +96,7 @@ class FullResultsPageController @Inject() (
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
     implicit request =>
       for {
-        calculatorResult <- marginalReliefCalculatorConnector
+        calculatorResult <- calculatorProvider
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,

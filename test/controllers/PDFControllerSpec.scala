@@ -18,21 +18,20 @@ package controllers
 
 import akka.stream.Materializer
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
-import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage }
-import play.api.http.Status.{ OK, SEE_OTHER }
+import connectors.sharedmodel.{DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm}
+import models.{AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails}
+import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage}
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsBytes, contentAsString, defaultAwaitTimeout, header, headers, route, running, status, writeableOf_AnyContentAsEmpty }
-import utils.{ DateTime, FakeDateTime }
+import play.api.test.Helpers._
+import providers.{CalculationConfigProvider, CalculatorProvider}
+import utils.{DateTime, FakeDateTime}
 import views.html.PDFView
 
-import java.time.{ LocalDate, ZoneOffset }
+import java.time.{LocalDate, ZoneOffset}
 import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
@@ -87,11 +86,12 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
   "PDFController" - {
     "GET /pdf" - {
       "must render pdf page when all data is available for single year" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorProvider: CalculatorProvider = mock[CalculatorProvider]
+        val mockConfigProvider: CalculationConfigProvider = mock[CalculationConfigProvider]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+          .overrides(bind[CalculationConfigProvider].toInstance(mockConfigProvider))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -114,9 +114,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigProvider.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorProvider.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -153,10 +153,10 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
       }
 
       "must render redirect to recovery controller when all data is not available" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorProvider: CalculatorProvider =
+          mock[CalculatorProvider]
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -170,11 +170,12 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
       }
 
       "must render pdf page when all data is available for dual year" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorProvider: CalculatorProvider = mock[CalculatorProvider]
+        val mockConfigProvider: CalculationConfigProvider = mock[CalculationConfigProvider]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+          .overrides(bind[CalculationConfigProvider].toInstance(mockConfigProvider))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -212,9 +213,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigProvider.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorProvider.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -253,11 +254,12 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
 
     "GET - /pdf-save" - {
       "should download the calculation details PDF" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorProvider: CalculatorProvider = mock[CalculatorProvider]
+        val mockConfigProvider: CalculationConfigProvider = mock[CalculationConfigProvider]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+          .overrides(bind[CalculationConfigProvider].toInstance(mockConfigProvider))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -280,9 +282,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigProvider.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorProvider.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
