@@ -24,7 +24,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukErrorMessage, GovukHint, GovukInput, GovukLabel }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
-import viewmodels.govuk.all.FluentInput
+import viewmodels.govuk.All.FluentInput
 import viewmodels.govuk.input.InputViewModel
 
 object AssociatedCompaniesViewHelper extends ViewHelper {
