@@ -14,26 +14,9 @@
  * limitations under the License.
  */
 
-package connectors.sharedmodel
+import cats.data.ValidatedNel
+import config.ConfigError
 
-import julienrf.json.derived
-import play.api.libs.json.{ OFormat, __ }
-
-sealed trait FYConfig {
-  def year: Int
-  def mainRate: Double
+package object calculator {
+  type CalculatorValidationResult[A] = ValidatedNel[ConfigError, A]
 }
-
-object FYConfig {
-  implicit val format: OFormat[FYConfig] = derived.flat.oformat[FYConfig]((__ \ "type").format[String])
-}
-
-case class FlatRateConfig(year: Int, mainRate: Double) extends FYConfig
-case class MarginalReliefConfig(
-  year: Int,
-  lowerThreshold: Int,
-  upperThreshold: Int,
-  smallProfitRate: Double,
-  mainRate: Double,
-  marginalReliefFraction: Double
-) extends FYConfig

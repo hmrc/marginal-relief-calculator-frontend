@@ -27,7 +27,7 @@ import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -46,7 +46,7 @@ class AssociatedCompaniesController @Inject() (
   formProvider: AssociatedCompaniesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: AssociatedCompaniesView,
-  associatedCompaniesParametersProvider: AssociatedCompaniesParametersProvider
+  associatedCompaniesParameterService: AssociatedCompaniesParameterService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -95,7 +95,7 @@ class AssociatedCompaniesController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        associatedCompaniesParameter <- associatedCompaniesParametersProvider
+        associatedCompaniesParameter <- associatedCompaniesParameterService
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
                                             request.accountingPeriod.accountingPeriodEndDateOrDefault
@@ -120,7 +120,7 @@ class AssociatedCompaniesController @Inject() (
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       val boundedForm = form.bindFromRequest()
       for {
-        associatedCompaniesParameter <- associatedCompaniesParametersProvider
+        associatedCompaniesParameter <- associatedCompaniesParameterService
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
                                             request.accountingPeriod.accountingPeriodEndDateOrDefault

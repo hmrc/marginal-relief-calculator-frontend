@@ -24,8 +24,9 @@ import java.time.LocalDate
 sealed trait AssociatedCompaniesParameter
 
 object AssociatedCompaniesParameter {
-  implicit val format: OFormat[AssociatedCompaniesParameter] =
-    derived.flat.oformat[AssociatedCompaniesParameter]((__ \ "type").format[String])
+  implicit val format: OFormat[AssociatedCompaniesParameter] = derived.flat.oformat[AssociatedCompaniesParameter](
+    (__ \ "type").format[String]
+  )
 }
 
 case class Period(start: LocalDate, end: LocalDate)
@@ -38,5 +39,4 @@ case object DontAsk extends AssociatedCompaniesParameter
 sealed trait AskAssociatedCompaniesParameter
 case object AskFull extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
 case class AskOnePart(period: Period) extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
-case class AskBothParts(period1: Period, period2: Period)
-    extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
+case class AskBothParts(period1: Period, period2: Period) extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter

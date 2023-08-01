@@ -27,7 +27,7 @@ import pages._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TwoAssociatedCompaniesView
@@ -45,7 +45,7 @@ class TwoAssociatedCompaniesController @Inject() (
   formProvider: TwoAssociatedCompaniesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TwoAssociatedCompaniesView,
-  associatedCompaniesParametersProvider: AssociatedCompaniesParametersProvider
+  associatedCompaniesParametersProvider: AssociatedCompaniesParameterService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 

@@ -26,7 +26,7 @@ import play.api.i18n.Messages
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import viewmodels.checkAnswers._
 import viewmodels.govuk.SummaryListFluency
 import views.html.CheckYourAnswersView
@@ -62,13 +62,13 @@ class CheckYourAnswersControllerSpec
 
     "must return OK and the correct view for a GET" in {
 
-      val mockParametersProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+      val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
       val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-        .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParametersProvider))
+        .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
         .build()
 
-      mockParametersProvider.associatedCompaniesParameters(
+      mockParameterService.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
         accountingPeriodEnd = LocalDate.ofEpochDay(1)
       )(*) returns Future.successful(AskFull)
@@ -103,14 +103,14 @@ class CheckYourAnswersControllerSpec
         .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), None))
         .get
 
-      val mockParametersProvider: AssociatedCompaniesParametersProvider =
-        mock[AssociatedCompaniesParametersProvider]
+      val mockParameterService: AssociatedCompaniesParameterService =
+        mock[AssociatedCompaniesParameterService]
 
       val application = applicationBuilder(userAnswers = Some(answers))
-        .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParametersProvider))
+        .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
         .build()
 
-      mockParametersProvider.associatedCompaniesParameters(
+      mockParameterService.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
         accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
       )(*) returns Future.successful(AskFull)

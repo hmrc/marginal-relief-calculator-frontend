@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package providers
+package services
 
 import cats.data.Validated
 import config.{ConfigMissingError, FrontendAppConfig}
@@ -27,8 +27,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class CalculationConfigProvider @Inject()(connector: MarginalReliefCalculatorConnector, appConfig: FrontendAppConfig)
-                                         (implicit ec: ExecutionContext) extends Logging {
+class CalculationConfigService @Inject()(connector: MarginalReliefCalculatorConnector, appConfig: FrontendAppConfig)
+                                        (implicit ec: ExecutionContext) extends Logging {
 
   def getConfig(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig] = if (appConfig.reworkEnabled) {
     logger.info(message = "Retrieving config from configuration file")

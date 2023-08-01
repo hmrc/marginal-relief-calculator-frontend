@@ -23,7 +23,7 @@ import models.{Distribution, UserAnswers}
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.CalculatorProvider
+import services.CalculatorService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
@@ -37,7 +37,7 @@ class ResultsPageController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: ResultsPageView,
-  calculatorProvider: CalculatorProvider
+  calculatorService: CalculatorService
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -99,7 +99,7 @@ class ResultsPageController @Inject() (
           Right((a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0)))
         case None => Left(request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0))
       }
-      calculatorProvider
+      calculatorService
         .calculate(
           request.accountingPeriod.accountingPeriodStartDate,
           request.accountingPeriod.accountingPeriodEndDateOrDefault,

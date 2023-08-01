@@ -29,7 +29,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.PDFMetadataView
 
@@ -132,7 +132,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
       "must redirect to the next page when valid data is submitted" in {
         val mockSessionRepository = mock[SessionRepository]
-        val mockParametersProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -141,7 +141,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
             .overrides(
               bind[Navigator].toInstance(new FakeNavigator(
                 desiredRoute = onwardRoute,
-                associatedCompaniesParametersProvider = mockParametersProvider,
+                associatedCompaniesParameterService = mockParameterService,
                 sessionRepository = mockSessionRepository
               )),
               bind[SessionRepository].toInstance(mockSessionRepository)

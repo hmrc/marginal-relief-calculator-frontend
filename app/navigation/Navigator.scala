@@ -20,17 +20,17 @@ import com.google.inject.{Inject, Singleton}
 import connectors.sharedmodel.{AskBothParts, AskFull, AskOnePart, DontAsk}
 import controllers.routes
 import forms.TwoAssociatedCompaniesForm
-import models.{Mode, UserAnswers, _}
+import models._
 import pages._
 import play.api.mvc.Call
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Navigator @Inject()(associatedCompaniesParametersProvider: AssociatedCompaniesParametersProvider,
+class Navigator @Inject()(associatedCompaniesParameterService: AssociatedCompaniesParameterService,
                           sessionRepository: SessionRepository)(implicit
   executionContext: ExecutionContext
 ) {
@@ -88,7 +88,7 @@ class Navigator @Inject()(associatedCompaniesParametersProvider: AssociatedCompa
     def processNextPage = answers
       .get(AccountingPeriodPage)
       .map { accountingPeriodForm =>
-        associatedCompaniesParametersProvider
+        associatedCompaniesParameterService
           .associatedCompaniesParameters(
             accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodForm.accountingPeriodEndDateOrDefault

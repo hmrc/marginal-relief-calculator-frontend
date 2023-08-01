@@ -19,7 +19,7 @@ package navigation
 import models.{Mode, UserAnswers}
 import pages._
 import play.api.mvc.Call
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -27,9 +27,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class FakeNavigator(desiredRoute: Call,
-                    associatedCompaniesParametersProvider: AssociatedCompaniesParametersProvider,
+                    associatedCompaniesParameterService: AssociatedCompaniesParameterService,
                     sessionRepository: SessionRepository) extends Navigator(
-  associatedCompaniesParametersProvider = associatedCompaniesParametersProvider,
+  associatedCompaniesParameterService = associatedCompaniesParameterService,
   sessionRepository = sessionRepository
 ) {
 

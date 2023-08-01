@@ -24,7 +24,7 @@ import models.{Distribution, UserAnswers}
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.checkAnswers._
 import viewmodels.govuk.summarylist._
@@ -39,7 +39,7 @@ class CheckYourAnswersController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: CheckYourAnswersView,
-  associatedCompaniesParametersProvider: AssociatedCompaniesParametersProvider
+  associatedCompaniesParameterService: AssociatedCompaniesParameterService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -96,7 +96,7 @@ class CheckYourAnswersController @Inject() (
   def onPageLoad(): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        askAssociatedParameter <- associatedCompaniesParametersProvider.associatedCompaniesParameters(
+        askAssociatedParameter <- associatedCompaniesParameterService.associatedCompaniesParameters(
                                     request.accountingPeriod.accountingPeriodStartDate,
                                     request.accountingPeriod.accountingPeriodEndDateOrDefault
                                   )

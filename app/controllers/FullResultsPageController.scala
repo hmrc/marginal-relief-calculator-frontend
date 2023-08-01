@@ -23,7 +23,7 @@ import models.{Distribution, UserAnswers}
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.{CalculationConfigProvider, CalculatorProvider}
+import services.{CalculationConfigService, CalculatorService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 
@@ -31,14 +31,14 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FullResultsPageController @Inject() (
-  override val messagesApi: MessagesApi,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  val controllerComponents: MessagesControllerComponents,
-  view: FullResultsPageView,
-  calculationConfigProvider: CalculationConfigProvider,
-  calculatorProvider: CalculatorProvider
+                                            override val messagesApi: MessagesApi,
+                                            identify: IdentifierAction,
+                                            getData: DataRetrievalAction,
+                                            requireData: DataRequiredAction,
+                                            val controllerComponents: MessagesControllerComponents,
+                                            view: FullResultsPageView,
+                                            calculationConfigService: CalculationConfigService,
+                                            calculatorService: CalculatorService
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -96,7 +96,7 @@ class FullResultsPageController @Inject() (
   def onPageLoad: Action[AnyContent] = (identify andThen getData andThen requireData andThen requireDomainData).async {
     implicit request =>
       for {
-        calculatorResult <- calculatorProvider
+        calculatorResult <- calculatorService
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
@@ -106,7 +106,7 @@ class FullResultsPageController @Inject() (
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY1Count),
                                 request.twoAssociatedCompanies.flatMap(_.associatedCompaniesFY2Count)
                               )
-        config <- calculationConfigProvider.getAllConfigs(calculatorResult)
+        config <- calculationConfigService.getAllConfigs(calculatorResult)
       } yield {
 
         val associatedCompanies = request.twoAssociatedCompanies match {

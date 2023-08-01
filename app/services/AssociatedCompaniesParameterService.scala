@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package providers
+package services
 
 import cats.data.ValidatedNel
 import cats.syntax.apply._
@@ -23,15 +23,15 @@ import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import play.api.Logging
 import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
-import utils.ShowCalculatorDisclaimerUtils.{DateOps, financialYearEnd}
+import utils.ShowCalculatorDisclaimerUtils.{financialYearEnd, getFinancialYearForDate}
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class AssociatedCompaniesParametersProvider @Inject() (connector: MarginalReliefCalculatorConnector,
-                                                       appConfig: FrontendAppConfig) extends Logging {
+class AssociatedCompaniesParameterService @Inject()(connector: MarginalReliefCalculatorConnector,
+                                                    appConfig: FrontendAppConfig) extends Logging {
 
   type ParameterConfigResult = ValidatedNel[ConfigMissingError, AssociatedCompaniesParameter]
 
@@ -41,38 +41,30 @@ class AssociatedCompaniesParametersProvider @Inject() (connector: MarginalRelief
     def findConfig: Int => ValidatedNel[ConfigMissingError, FYConfig] =
       appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
 
+    val year1: Int = getFinancialYearForDate(accountingPeriodStart)
+    val year2: Int = getFinancialYearForDate(accountingPeriodEnd)
+
+    val fyr1Config: ValidatedNel[ConfigMissingError, FYConfig] = findConfig(year1)
+    val fyr2Config: ValidatedNel[ConfigMissingError, FYConfig] = findConfig(year2)
+
     val fyEndForAccountingPeriodStart: LocalDate = financialYearEnd(accountingPeriodStart)
 
-    if (fyEndForAccountingPeriodStart.isEqualOrAfter(accountingPeriodEnd)) {
-      val fy = fyEndForAccountingPeriodStart.minusYears(1).getYear
-      val maybeFYConfig = findConfig(fy)
+    def sameThresholds(config1: MarginalReliefConfig, config2: MarginalReliefConfig): Boolean =
+      config1.upperThreshold == config2.upperThreshold && config1.lowerThreshold == config2.lowerThreshold
 
-      maybeFYConfig.map {
-        case _: FlatRateConfig => DontAsk
-        case _: MarginalReliefConfig => AskFull
-      }
-    } else {
-      val fy1 = fyEndForAccountingPeriodStart.minusYears(1).getYear
-      val fy2 = fyEndForAccountingPeriodStart.getYear
-      val maybeFY1Config = findConfig(fy1)
-      val maybeFY2Config = findConfig(fy2)
-
-      (maybeFY1Config, maybeFY2Config).mapN {
-        case (_: FlatRateConfig, _: FlatRateConfig) => DontAsk
-        case (c1: MarginalReliefConfig, c2: MarginalReliefConfig) =>
-          if (c1.upperThreshold == c2.upperThreshold && c1.lowerThreshold == c2.lowerThreshold) {
-            AskFull
-          } else {
-            AskBothParts(
-              Period(accountingPeriodStart, fyEndForAccountingPeriodStart),
-              Period(fyEndForAccountingPeriodStart.plusDays(1), accountingPeriodEnd)
-            )
-          }
-        case (_: FlatRateConfig, _: MarginalReliefConfig) =>
-          AskOnePart(Period(fyEndForAccountingPeriodStart.plusDays(1), accountingPeriodEnd))
-        case (_: MarginalReliefConfig, _: FlatRateConfig) =>
-          AskOnePart(Period(accountingPeriodStart, fyEndForAccountingPeriodStart))
-      }
+    (fyr1Config, fyr2Config).mapN {
+      case (_: FlatRateConfig, _: FlatRateConfig) => DontAsk
+      case (c1: MarginalReliefConfig, c2: MarginalReliefConfig) if sameThresholds(config1 = c1, config2 = c2) => AskFull
+      case (_: MarginalReliefConfig, _: MarginalReliefConfig) => AskBothParts(
+        period1 = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart),
+        period2 = Period(start = fyEndForAccountingPeriodStart.plusDays(1), end = accountingPeriodEnd)
+      )
+      case (_: FlatRateConfig, _: MarginalReliefConfig) => AskOnePart(
+        period = Period(start = fyEndForAccountingPeriodStart.plusDays(1), end = accountingPeriodEnd)
+      )
+      case (_: MarginalReliefConfig, _: FlatRateConfig) => AskOnePart(
+        period = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart)
+      )
     }
   }
 
@@ -86,7 +78,7 @@ class AssociatedCompaniesParametersProvider @Inject() (connector: MarginalRelief
           throw new UnprocessableEntityException(
             "Failed to determined associated company parameters for given data: " + errors
               .map { case ConfigMissingError(year) =>
-                throw new UnprocessableEntityException(s"Configuration missing for financial year: $year")
+                new UnprocessableEntityException(s"Configuration missing for financial year: $year")
               }
               .toList
               .mkString(", ")

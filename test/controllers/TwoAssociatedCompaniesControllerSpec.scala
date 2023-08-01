@@ -29,7 +29,7 @@ import play.api.data.FormError
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.TwoAssociatedCompaniesView
 
@@ -65,13 +65,13 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
         )
-        val mockParameterProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        mockParameterProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(askParameter)
@@ -100,13 +100,13 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))
         )
-        val mockParameterProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(userAnswers = Some(answers))
-          .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        mockParameterProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )(*) returns Future.successful(askParameter)
@@ -133,14 +133,14 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
         )
 
-        val mockParameterProvider: AssociatedCompaniesParametersProvider =
-          mock[AssociatedCompaniesParametersProvider]
+        val mockParameterService: AssociatedCompaniesParameterService =
+          mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        mockParameterProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(askParameter)
@@ -181,12 +181,12 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))
         )
 
-        val mockParameterProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockParameterProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )(*) returns Future.successful(askParameter)
@@ -252,10 +252,10 @@ class TwoAssociatedCompaniesControllerSpec
           )
 
           val mockSessionRepository = mock[SessionRepository]
-          val mockParameterProvider: AssociatedCompaniesParametersProvider =
-            mock[AssociatedCompaniesParametersProvider]
+          val mockParameterService: AssociatedCompaniesParameterService =
+            mock[AssociatedCompaniesParameterService]
 
-          mockParameterProvider.associatedCompaniesParameters(
+          mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
@@ -265,7 +265,7 @@ class TwoAssociatedCompaniesControllerSpec
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
               .overrides(
                 bind[SessionRepository].toInstance(mockSessionRepository),
-                bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider)
+                bind[AssociatedCompaniesParameterService].toInstance(mockParameterService)
               )
               .build()
 
@@ -308,10 +308,10 @@ class TwoAssociatedCompaniesControllerSpec
           )
 
           val mockSessionRepository = mock[SessionRepository]
-          val mockParameterProvider: AssociatedCompaniesParametersProvider =
-            mock[AssociatedCompaniesParametersProvider]
+          val mockParameterService: AssociatedCompaniesParameterService =
+            mock[AssociatedCompaniesParameterService]
 
-          mockParameterProvider.associatedCompaniesParameters(
+          mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
@@ -321,7 +321,7 @@ class TwoAssociatedCompaniesControllerSpec
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
               .overrides(
                 bind[SessionRepository].toInstance(mockSessionRepository),
-                bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider)
+                bind[AssociatedCompaniesParameterService].toInstance(mockParameterService)
               )
               .build()
 
@@ -371,9 +371,9 @@ class TwoAssociatedCompaniesControllerSpec
           )
 
           val mockSessionRepository = mock[SessionRepository]
-          val mockParameterProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+          val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-          mockParameterProvider.associatedCompaniesParameters(
+          mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
@@ -383,7 +383,7 @@ class TwoAssociatedCompaniesControllerSpec
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
               .overrides(
                 bind[SessionRepository].toInstance(mockSessionRepository),
-                bind[AssociatedCompaniesParametersProvider].toInstance(mockParameterProvider)
+                bind[AssociatedCompaniesParameterService].toInstance(mockParameterService)
               )
               .build()
 

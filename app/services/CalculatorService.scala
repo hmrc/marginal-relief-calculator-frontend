@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package providers
+package services
 
-import calculator.MarginalReliefCalculator
+import calculator.{CalculatorValidationResult, MarginalReliefCalculator}
 import config.{ConfigMissingError, FrontendAppConfig}
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.CalculatorResult
@@ -28,9 +28,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class CalculatorProvider @Inject()(connector: MarginalReliefCalculatorConnector,
-                                   appConfig: FrontendAppConfig,
-                                   calculator: MarginalReliefCalculator) extends Logging {
+class CalculatorService @Inject()(connector: MarginalReliefCalculatorConnector,
+                                  appConfig: FrontendAppConfig,
+                                  calculator: MarginalReliefCalculator) extends Logging {
 
   def calculate(accountingPeriodStart: LocalDate,
                 accountingPeriodEnd: LocalDate,
@@ -42,11 +42,13 @@ class CalculatorProvider @Inject()(connector: MarginalReliefCalculatorConnector,
     if (appConfig.reworkEnabled) {
       logger.info("Using reworked calculation solution")
 
-      val result = calculator.compute(
+      val distributions: BigDecimal = BigDecimal(exemptDistributions.getOrElse(0.0))
+
+      val result: CalculatorValidationResult[CalculatorResult] = calculator.compute(
         accountingPeriodStart = accountingPeriodStart,
         accountingPeriodEnd = accountingPeriodEnd,
         profit = profit,
-        exemptDistributions = BigDecimal(exemptDistributions.getOrElse(0.0)),
+        exemptDistributions = distributions,
         associatedCompanies = associatedCompanies,
         associatedCompaniesFY1 = associatedCompaniesFY1,
         associatedCompaniesFY2 = associatedCompaniesFY2
@@ -57,9 +59,7 @@ class CalculatorProvider @Inject()(connector: MarginalReliefCalculatorConnector,
           throw new UnprocessableEntityException(
             "Failed to calculate marginal relief: " + errors
               .map { case ConfigMissingError(year) =>
-                throw new UnprocessableEntityException(
-                  s"Configuration missing for financial year: $year"
-                )
+                new UnprocessableEntityException(s"Configuration missing for financial year: $year")
               }
               .toList
               .mkString(", ")

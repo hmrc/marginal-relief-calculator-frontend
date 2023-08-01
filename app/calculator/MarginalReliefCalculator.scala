@@ -16,10 +16,9 @@
 
 package calculator
 
-import cats.data.ValidatedNel
 import cats.syntax.apply._
 import com.google.inject.{Inject, Singleton}
-import config.{ConfigError, ConfigMissingError, FrontendAppConfig}
+import config.{ConfigMissingError, FrontendAppConfig}
 import connectors.sharedmodel._
 import utils.DateUtils._
 import utils.ShowCalculatorDisclaimerUtils.{DateOps, financialYearEnd}
@@ -27,9 +26,7 @@ import utils.ShowCalculatorDisclaimerUtils.{DateOps, financialYearEnd}
 import java.time.LocalDate
 
 @Singleton
-class MarginalReliefCalculator @Inject() (appConfig: FrontendAppConfig) {
-  
-  type CalculatorValidationResult[A] = ValidatedNel[ConfigError, A]
+class MarginalReliefCalculator @Inject()(appConfig: FrontendAppConfig) {
 
   def compute(accountingPeriodStart: LocalDate,
               accountingPeriodEnd: LocalDate,

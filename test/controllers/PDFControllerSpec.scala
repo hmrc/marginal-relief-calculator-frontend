@@ -27,7 +27,7 @@ import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.{CalculationConfigProvider, CalculatorProvider}
+import services.{CalculationConfigService, CalculatorService}
 import utils.{DateTime, FakeDateTime}
 import views.html.PDFView
 
@@ -86,12 +86,12 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
   "PDFController" - {
     "GET /pdf" - {
       "must render pdf page when all data is available for single year" in {
-        val mockCalculatorProvider: CalculatorProvider = mock[CalculatorProvider]
-        val mockConfigProvider: CalculationConfigProvider = mock[CalculationConfigProvider]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
-          .overrides(bind[CalculationConfigProvider].toInstance(mockConfigProvider))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -114,9 +114,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigProvider.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorProvider.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -153,10 +153,10 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
       }
 
       "must render redirect to recovery controller when all data is not available" in {
-        val mockCalculatorProvider: CalculatorProvider =
-          mock[CalculatorProvider]
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -170,12 +170,12 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
       }
 
       "must render pdf page when all data is available for dual year" in {
-        val mockCalculatorProvider: CalculatorProvider = mock[CalculatorProvider]
-        val mockConfigProvider: CalculationConfigProvider = mock[CalculationConfigProvider]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
-          .overrides(bind[CalculationConfigProvider].toInstance(mockConfigProvider))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -213,9 +213,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigProvider.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorProvider.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -254,12 +254,12 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
 
     "GET - /pdf-save" - {
       "should download the calculation details PDF" in {
-        val mockCalculatorProvider: CalculatorProvider = mock[CalculatorProvider]
-        val mockConfigProvider: CalculationConfigProvider = mock[CalculationConfigProvider]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
-          .overrides(bind[CalculationConfigProvider].toInstance(mockConfigProvider))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -282,9 +282,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigProvider.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorProvider.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,

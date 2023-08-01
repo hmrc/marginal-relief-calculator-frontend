@@ -25,7 +25,7 @@ import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.CalculatorProvider
+import services.CalculatorService
 import views.html.ResultsPageView
 
 import java.time.LocalDate
@@ -59,15 +59,15 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
   "ResultsPageController" - {
     "GET page" - {
       "must render results when all required data is available in user answers" in {
-        val mockCalculatorProvider: CalculatorProvider =
-          mock[CalculatorProvider]
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
         val calculatorResult =
           SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
-        mockCalculatorProvider.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
           1.0,
@@ -101,8 +101,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       }
 
       "must redirect to Journey recovery if required params are missing in user answers" in {
-        val mockCalculatorProvider: CalculatorProvider =
-          mock[CalculatorProvider]
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
 
         val application = applicationBuilder(
           userAnswers = Some(
@@ -110,11 +110,11 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
               .set(AccountingPeriodPage, AccountingPeriodForm(epoch, Some(epoch.plusDays(1))))
               .get
           )
-        ).overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+        ).overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
         val calculatorResult =
           SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
-        mockCalculatorProvider.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
           1.0,
@@ -133,8 +133,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       }
 
       "must contain proper wording while accounting period covers 2 financial years" in {
-        val mockCalculatorProvider: CalculatorProvider =
-          mock[CalculatorProvider]
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
 
         val startDate = LocalDate.of(2023, 1, 1)
         val endDate = LocalDate.of(2023, 12, 31)
@@ -154,7 +154,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
                     AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
                   )
           } yield u5).toOption
-        ).overrides(bind[CalculatorProvider].toInstance(mockCalculatorProvider))
+        ).overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
 
         val calculatorResult =
@@ -163,7 +163,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
             FlatRate(2023, 1, 1, 1, 1, 1, 275),
             1
           )
-        mockCalculatorProvider.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = startDate,
           accountingPeriodEnd = endDate,
           1.0,

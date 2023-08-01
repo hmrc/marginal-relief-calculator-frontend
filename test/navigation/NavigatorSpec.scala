@@ -19,11 +19,11 @@ package navigation
 import base.SpecBase
 import connectors.sharedmodel.{AskBothParts, AskOnePart, DontAsk, Period}
 import forms.{AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm}
-import pages.{DistributionPage, _}
+import pages._
 import models._
 import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
 import play.api.inject.guice.GuiceApplicationBuilder
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import controllers.routes
@@ -37,9 +37,9 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
 
   val app: GuiceApplicationBuilder = applicationBuilder(None)
   val sessionRepository: SessionRepository = app.injector().instanceOf[SessionRepository]
-  val mockParametersProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+  val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-  val navigator = new Navigator(mockParametersProvider, sessionRepository)
+  val navigator = new Navigator(mockParameterService, sessionRepository)
 
   "Navigator" - {
 
@@ -186,7 +186,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        mockParametersProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = *,
           accountingPeriodEnd = *
         )(
@@ -210,7 +210,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        mockParametersProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = *,
           accountingPeriodEnd = *
         )(
@@ -229,7 +229,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        mockParametersProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = *,
           accountingPeriodEnd = *
         )(
@@ -252,7 +252,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
           .get
 
-        mockParametersProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = *,
           accountingPeriodEnd = *
         )(
@@ -275,7 +275,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
           .get
 
-        mockParametersProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = *,
           accountingPeriodEnd = *
         )(
@@ -295,7 +295,7 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
       "must return error when navigating to next page on AccountingPeriodPage if periods not present" in {
         val userAnswers = UserAnswers("id")
 
-        mockParametersProvider.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = *,
           accountingPeriodEnd = *
         )(

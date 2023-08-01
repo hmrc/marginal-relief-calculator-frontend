@@ -30,7 +30,7 @@ import play.api.inject.bind
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 import views.html.{AccountingPeriodView, IrrelevantPeriodView}
@@ -138,14 +138,14 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to the next page when valid data is submitted" in {
       val mockSessionRepository = mock[SessionRepository]
-      val mockParametersProvider: AssociatedCompaniesParametersProvider = mock[AssociatedCompaniesParametersProvider]
+      val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers.set(AccountingPeriodPage, validAnswer).get))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParametersProvider, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()

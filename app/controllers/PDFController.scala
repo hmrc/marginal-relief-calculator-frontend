@@ -25,7 +25,7 @@ import pages._
 import play.api.http.HttpEntity
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import providers.{CalculationConfigProvider, CalculatorProvider}
+import services.{CalculationConfigService, CalculatorService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{DateTime, PDFGenerator}
 import views.html.{PDFFileTemplate, PDFView}
@@ -37,17 +37,17 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PDFController @Inject() (
-  override val messagesApi: MessagesApi,
-  val controllerComponents: MessagesControllerComponents,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  view: PDFView,
-  pdfFileTemplate: PDFFileTemplate,
-  dateTime: DateTime,
-  pdfGenerator: PDFGenerator,
-  calculationConfigProvider: CalculationConfigProvider,
-  calculatorProvider: CalculatorProvider
+                                override val messagesApi: MessagesApi,
+                                val controllerComponents: MessagesControllerComponents,
+                                identify: IdentifierAction,
+                                getData: DataRetrievalAction,
+                                requireData: DataRequiredAction,
+                                view: PDFView,
+                                pdfFileTemplate: PDFFileTemplate,
+                                dateTime: DateTime,
+                                pdfGenerator: PDFGenerator,
+                                calculationConfigService: CalculationConfigService,
+                                calculatorService: CalculatorService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -114,7 +114,7 @@ class PDFController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        calculatorResult <- calculatorProvider
+        calculatorResult <- calculatorService
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
@@ -124,7 +124,7 @@ class PDFController @Inject() (
                                 None,
                                 None
                               )
-        config <- calculationConfigProvider.getAllConfigs(calculatorResult)
+        config <- calculationConfigService.getAllConfigs(calculatorResult)
       } yield Ok(
         view(
           request.pdfMetadata,
@@ -142,7 +142,7 @@ class PDFController @Inject() (
   def downloadPdf(): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        calculatorResult <- calculatorProvider
+        calculatorResult <- calculatorService
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
@@ -152,7 +152,7 @@ class PDFController @Inject() (
                                 None,
                                 None
                               )
-        config <- calculationConfigProvider.getAllConfigs(calculatorResult)
+        config <- calculationConfigService.getAllConfigs(calculatorResult)
       } yield {
 
         val html = pdfFileTemplate(

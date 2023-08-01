@@ -29,7 +29,7 @@ import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import providers.AssociatedCompaniesParametersProvider
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.DistributionView
 
@@ -90,14 +90,14 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
-      val mockParametersProvider = mock[AssociatedCompaniesParametersProvider]
+      val mockParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParametersProvider, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -117,14 +117,14 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted and Distribution No" in {
 
       val mockSessionRepository = mock[SessionRepository]
-      val mockParametersProvider = mock[AssociatedCompaniesParametersProvider]
+      val mockParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParametersProvider, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()

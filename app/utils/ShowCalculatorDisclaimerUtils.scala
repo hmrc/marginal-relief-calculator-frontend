@@ -27,8 +27,7 @@ object ShowCalculatorDisclaimerUtils {
   def showCalculatorDisclaimer(periodEnd: LocalDate): Boolean = {
     val curFinancialYear = financialYearEnd(LocalDate.now()).getYear - 1
     val calcFinancialYear = financialYearEnd(periodEnd).getYear - 1
-    if (calcFinancialYear > curFinancialYear + 1) true
-    else false
+    if (calcFinancialYear > curFinancialYear + 1) true else false
   }
 
   def financialYearEnd(date: LocalDate): LocalDate =
@@ -37,4 +36,6 @@ object ShowCalculatorDisclaimerUtils {
      } else {
        date.plusYears(1)
      }).withMonth(Month.MARCH.getValue).withDayOfMonth(31)
+
+  def getFinancialYearForDate(date: LocalDate): Int = if (date.getMonthValue <= 3) date.getYear else date.getYear + 1
 }

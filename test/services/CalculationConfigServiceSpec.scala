@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package providers
+package services
 
 import base.SpecBase
 import config.FrontendAppConfig
@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with FutureAwaits with DefaultAwaitTimeout {
+class CalculationConfigServiceSpec extends SpecBase with MockitoSugar with FutureAwaits with DefaultAwaitTimeout {
 
   trait Test {
     implicit val hc: HeaderCarrier = new HeaderCarrier()
@@ -38,7 +38,7 @@ class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with Futu
     val mockConnector: MarginalReliefCalculatorConnector = mock[MarginalReliefCalculatorConnector]
     val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
-    val mockCalculationConfigProvider: CalculationConfigProvider = new CalculationConfigProvider(
+    val mockCalculationConfigService: CalculationConfigService = new CalculationConfigService(
       connector = mockConnector, appConfig = mockConfig
     )
 
@@ -63,7 +63,7 @@ class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with Futu
       mockReworkEnabledFlag(result = false)
       mockConnectorConfigCall(year = 2020, result = Future.successful(dummyConfig2020))
 
-      val result: FYConfig = await(mockCalculationConfigProvider.getConfig(2020))
+      val result: FYConfig = await(mockCalculationConfigService.getConfig(2020))
       result mustBe dummyConfig2020
     }
 
@@ -71,7 +71,7 @@ class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with Futu
       mockReworkEnabledFlag(result = true)
       mockCalculatorConfig(CalculatorConfig(Seq(dummyConfig2020)))
 
-      val result: FYConfig = await(mockCalculationConfigProvider.getConfig(2020))
+      val result: FYConfig = await(mockCalculationConfigService.getConfig(2020))
       result mustBe dummyConfig2020
     }
 
@@ -79,7 +79,7 @@ class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with Futu
       mockReworkEnabledFlag(result = true)
       mockCalculatorConfig(CalculatorConfig(Seq.empty[FYConfig]))
 
-      def result: FYConfig = await(mockCalculationConfigProvider.getConfig(2020))
+      def result: FYConfig = await(mockCalculationConfigService.getConfig(2020))
       the [RuntimeException] thrownBy result must have message "Configuration for year 2020 is missing."
 
     }
@@ -104,7 +104,7 @@ class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with Futu
       mockCalculatorConfig(CalculatorConfig(Seq(dummyConfig2020)))
 
       val result: Map[Int, FYConfig] = await(
-        mockCalculationConfigProvider.getAllConfigs(dummyCalculator2020Result)
+        mockCalculationConfigService.getAllConfigs(dummyCalculator2020Result)
       )
 
       result mustBe Map(2020 -> dummyConfig2020)
@@ -137,7 +137,7 @@ class CalculationConfigProviderSpec extends SpecBase with MockitoSugar with Futu
       mockCalculatorConfig(CalculatorConfig(Seq(dummyConfig2020, dummyConfig2021)))
 
       val result: Map[Int, FYConfig] = await(
-        mockCalculationConfigProvider.getAllConfigs(dummyCalculatorDualResult)
+        mockCalculationConfigService.getAllConfigs(dummyCalculatorDualResult)
       )
 
       result mustBe Map(2020 -> dummyConfig2020, 2021 -> dummyConfig2021)
