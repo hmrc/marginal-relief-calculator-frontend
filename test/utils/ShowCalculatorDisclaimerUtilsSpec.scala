@@ -23,9 +23,9 @@ import java.time.LocalDate
 
 class ShowCalculatorDisclaimerUtilsSpec extends AnyFreeSpec with Matchers {
 
-  val curYear = ShowCalculatorDisclaimerUtils.financialYearEnd(LocalDate.now())
+  val curYear: LocalDate = ShowCalculatorDisclaimerUtils.financialYearEnd(LocalDate.now())
 
-  "ShowCalculatorDisclaimerUtilsSpec" - {
+  "showCalculatorDisclaimer" - {
     "When the accounting period end date is after the 31st of March of the year after the current financial year should return true" in {
       ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(
         curYear.plusDays(1).plusYears(1)
@@ -47,6 +47,32 @@ class ShowCalculatorDisclaimerUtilsSpec extends AnyFreeSpec with Matchers {
       ShowCalculatorDisclaimerUtils.showCalculatorDisclaimer(
         curYear.minusYears(2)
       ) shouldBe false
+    }
+  }
+
+  "getFinancialYearForDate" - {
+    "when calendar year is the same as tax year should return expected result" in {
+      ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
+        LocalDate.of(2023, 1, 1)
+      ) shouldBe 2023
+    }
+
+    "when calendar year is not the same as tax year should return expected result" in {
+      ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
+        LocalDate.of(2023, 5, 1)
+      ) shouldBe 2024
+    }
+
+    "when date is the first day of a tax year should return expected result" in {
+      ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
+        LocalDate.of(2023, 4, 1)
+      ) shouldBe 2024
+    }
+
+    "when date is the last day of a tax year should return expected result" in {
+      ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
+        LocalDate.of(2023, 3, 31)
+      ) shouldBe 2023
     }
   }
 }
