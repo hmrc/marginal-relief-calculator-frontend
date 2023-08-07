@@ -17,19 +17,18 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import forms.{ AccountingPeriodForm, DistributionsIncludedForm, DistributionsIncludedFormProvider }
-import models.{ Distribution, DistributionsIncluded, NormalMode }
-import navigation.{ FakeNavigator, Navigator }
+import forms.{AccountingPeriodForm, DistributionsIncludedForm, DistributionsIncludedFormProvider}
+import models.{Distribution, DistributionsIncluded, NormalMode}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ AccountingPeriodPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
+import pages.{AccountingPeriodPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.DistributionsIncludedView
 
@@ -38,9 +37,9 @@ import scala.concurrent.Future
 
 class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val distributionsIncludedRoute = routes.DistributionsIncludedController.onPageLoad(NormalMode).url
+  private lazy val distributionsIncludedRoute = routes.DistributionsIncludedController.onPageLoad(NormalMode).url
 
   private val formProvider = new DistributionsIncludedFormProvider()
   private val form = formProvider()
@@ -103,17 +102,15 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
       val mockSessionRepository = mock[SessionRepository]
-
-      val mockConnector = mock[MarginalReliefCalculatorConnector]
+      val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()

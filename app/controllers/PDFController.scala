@@ -17,38 +17,37 @@
 package controllers
 
 import akka.stream.scaladsl.StreamConverters
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ CalculatorResult, FYConfig }
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
-import models.{ Distribution, PDFAddCompanyDetails, UserAnswers }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import models.{Distribution, PDFAddCompanyDetails, UserAnswers}
+import pages._
 import play.api.http.HttpEntity
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import services.{CalculationConfigService, CalculatorService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{ DateTime, PDFGenerator }
-import views.html.{ PDFFileTemplate, PDFView }
+import utils.{DateTime, PDFGenerator}
+import views.html.{PDFFileTemplate, PDFView}
 
 import java.io.ByteArrayInputStream
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class PDFController @Inject() (
-  override val messagesApi: MessagesApi,
-  val controllerComponents: MessagesControllerComponents,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  view: PDFView,
-  pdfFileTemplate: PDFFileTemplate,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector,
-  dateTime: DateTime,
-  pdfGenerator: PDFGenerator
+                                override val messagesApi: MessagesApi,
+                                val controllerComponents: MessagesControllerComponents,
+                                identify: IdentifierAction,
+                                getData: DataRetrievalAction,
+                                requireData: DataRequiredAction,
+                                view: PDFView,
+                                pdfFileTemplate: PDFFileTemplate,
+                                dateTime: DateTime,
+                                pdfGenerator: PDFGenerator,
+                                calculationConfigService: CalculationConfigService,
+                                calculatorService: CalculatorService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -115,7 +114,7 @@ class PDFController @Inject() (
   def onPageLoad: Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        calculatorResult <- marginalReliefCalculatorConnector
+        calculatorResult <- calculatorService
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
@@ -125,7 +124,7 @@ class PDFController @Inject() (
                                 None,
                                 None
                               )
-        config <- getConfig(calculatorResult)
+        config <- calculationConfigService.getAllConfigs(calculatorResult)
       } yield Ok(
         view(
           request.pdfMetadata,
@@ -143,7 +142,7 @@ class PDFController @Inject() (
   def downloadPdf(): Action[AnyContent] =
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       for {
-        calculatorResult <- marginalReliefCalculatorConnector
+        calculatorResult <- calculatorService
                               .calculate(
                                 request.accountingPeriod.accountingPeriodStartDate,
                                 request.accountingPeriod.accountingPeriodEndDateOrDefault,
@@ -153,44 +152,36 @@ class PDFController @Inject() (
                                 None,
                                 None
                               )
-        config <- getConfig(calculatorResult)
+        config <- calculationConfigService.getAllConfigs(calculatorResult)
       } yield {
 
         val html = pdfFileTemplate(
-          request.pdfMetadata,
-          calculatorResult,
-          request.accountingPeriod,
-          request.taxableProfit,
-          request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
-          getAssociatedCompanies,
-          config,
-          dateTime.currentInstant
+          pdfMetadata = request.pdfMetadata,
+          calculatorResult = calculatorResult,
+          accountingPeriodForm = request.accountingPeriod,
+          taxableProfit = request.taxableProfit,
+          distributions = request.distributionsIncluded.flatMap(_.distributionsIncludedAmount).getOrElse(0),
+          associatedCompanies = getAssociatedCompanies,
+          config = config,
+          currentInstant = dateTime.currentInstant
         ).toString
         Ok.sendEntity(
-          HttpEntity.Streamed(
-            StreamConverters.fromInputStream(() => new ByteArrayInputStream(pdfGenerator.generatePdf(html))),
-            None,
-            Some("application/pdf")
+          entity = HttpEntity.Streamed(
+            data = StreamConverters.fromInputStream(() => new ByteArrayInputStream(pdfGenerator.generatePdf(html))),
+            contentLength = None,
+            contentType = Some("application/pdf")
           ),
-          false,
-          Some(
-            s"marginal-relief-for-corporation-tax-result-${dateTime.currentInstant.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf"
+          inline = false,
+          fileName = Some(
+            s"marginal-relief-for-corporation-tax-result-" +
+              dateTime.currentInstant
+                .atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm")) +
+              ".pdf"
           )
         )
       }
     }
-
-  private def getConfig(calculatorResult: CalculatorResult)(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
-    calculatorResult.fold(single =>
-      marginalReliefCalculatorConnector
-        .config(single.details.year)
-        .map(config => Map(single.details.year -> config))
-    )(dual =>
-      for {
-        y1 <- marginalReliefCalculatorConnector.config(dual.year1.year)
-        y2 <- marginalReliefCalculatorConnector.config(dual.year2.year)
-      } yield Map(dual.year1.year -> y1, dual.year2.year -> y2)
-    )
 
   private def getAssociatedCompanies(implicit request: PDFPageRequiredParams[AnyContent]) =
     request.twoAssociatedCompanies match {

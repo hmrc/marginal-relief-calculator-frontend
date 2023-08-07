@@ -16,24 +16,24 @@
 
 package controllers
 
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter }
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import connectors.sharedmodel.{AskBothParts, AssociatedCompaniesParameter}
+import controllers.actions._
 import forms.DateUtils.financialYear
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
+import forms._
 import models.requests.DataRequest
-import models.{ Distribution, Mode, UserAnswers }
+import models.{Distribution, Mode, UserAnswers}
 import navigation.Navigator
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import pages._
 import play.api.data.Form
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TwoAssociatedCompaniesView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class TwoAssociatedCompaniesController @Inject() (
   override val messagesApi: MessagesApi,
@@ -45,7 +45,7 @@ class TwoAssociatedCompaniesController @Inject() (
   formProvider: TwoAssociatedCompaniesFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: TwoAssociatedCompaniesView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
+  associatedCompaniesParametersProvider: AssociatedCompaniesParameterService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -101,7 +101,7 @@ class TwoAssociatedCompaniesController @Inject() (
     (identify andThen getData andThen requireData andThen requireDomainData).async { implicit request =>
       val form = getForm
       for {
-        associatedCompaniesParameter <- marginalReliefCalculatorConnector
+        associatedCompaniesParameter <- associatedCompaniesParametersProvider
                                           .associatedCompaniesParameters(
                                             request.accountingPeriod.accountingPeriodStartDate,
                                             request.accountingPeriod.accountingPeriodEndDateOrDefault
@@ -150,7 +150,7 @@ class TwoAssociatedCompaniesController @Inject() (
         .fold(
           formWithErrors =>
             for {
-              associatedCompaniesParameter <- marginalReliefCalculatorConnector
+              associatedCompaniesParameter <- associatedCompaniesParametersProvider
                                                 .associatedCompaniesParameters(
                                                   request.accountingPeriod.accountingPeriodStartDate,
                                                   request.accountingPeriod.accountingPeriodEndDateOrDefault
@@ -166,7 +166,7 @@ class TwoAssociatedCompaniesController @Inject() (
             validateRequiredFields(value) match {
               case Some(errorKey) =>
                 for {
-                  associatedCompaniesParameter <- marginalReliefCalculatorConnector
+                  associatedCompaniesParameter <- associatedCompaniesParametersProvider
                                                     .associatedCompaniesParameters(
                                                       request.accountingPeriod.accountingPeriodStartDate,
                                                       request.accountingPeriod.accountingPeriodEndDateOrDefault

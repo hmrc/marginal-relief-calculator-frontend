@@ -16,21 +16,22 @@
 
 package navigation
 
-import com.google.inject.{ Inject, Singleton }
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk }
+import com.google.inject.{Inject, Singleton}
+import connectors.sharedmodel.{AskBothParts, AskFull, AskOnePart, DontAsk}
 import controllers.routes
 import forms.TwoAssociatedCompaniesForm
-import models.{ AssociatedCompanies, CheckMode, Distribution, Mode, NormalMode, PDFAddCompanyDetails, UserAnswers }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, Page, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import models._
+import pages._
 import play.api.mvc.Call
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, sessionRepository: SessionRepository)(implicit
+class Navigator @Inject()(associatedCompaniesParameterService: AssociatedCompaniesParameterService,
+                          sessionRepository: SessionRepository)(implicit
   executionContext: ExecutionContext
 ) {
 
@@ -86,7 +87,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
     def processNextPage = answers
       .get(AccountingPeriodPage)
       .map { accountingPeriodForm =>
-        connector
+        associatedCompaniesParameterService
           .associatedCompaniesParameters(
             accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodForm.accountingPeriodEndDateOrDefault
@@ -127,7 +128,7 @@ class Navigator @Inject() (connector: MarginalReliefCalculatorConnector, session
     }
   }
 
-  private def resetAssociatedCompanies(answers: UserAnswers) =
+  private def resetAssociatedCompanies(answers: UserAnswers): Future[Boolean] =
     Future
       .fromTry(for {
         x1 <- answers.remove(TwoAssociatedCompaniesPage)

@@ -17,19 +17,19 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import forms.{ AccountingPeriodForm, DistributionFormProvider }
-import models.{ Distribution, NormalMode }
-import navigation.{ FakeNavigator, Navigator }
+import forms.{AccountingPeriodForm, DistributionFormProvider}
+import models.{Distribution, NormalMode, UserAnswers}
+import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ AccountingPeriodPage, DistributionPage, TaxableProfitPage }
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
+import pages.{AccountingPeriodPage, DistributionPage, TaxableProfitPage}
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.DistributionView
 
@@ -38,9 +38,9 @@ import scala.concurrent.Future
 
 class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val distributionRoute = routes.DistributionController.onPageLoad(NormalMode).url
+  private lazy val distributionRoute = routes.DistributionController.onPageLoad(NormalMode).url
 
   private val formProvider = new DistributionFormProvider()
   private val form = formProvider()
@@ -53,14 +53,11 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
   "Distribution Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
-      val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
+      val application: Application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, distributionRoute)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[DistributionView]
 
         status(result) mustEqual OK
@@ -72,10 +69,8 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = requiredAnswers.set(DistributionPage, Distribution.values.head).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val userAnswers: UserAnswers = requiredAnswers.set(DistributionPage, Distribution.values.head).success.value
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, distributionRoute)
@@ -95,15 +90,14 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted" in {
 
       val mockSessionRepository = mock[SessionRepository]
-
-      val mockConnector = mock[MarginalReliefCalculatorConnector]
+      val mockParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -123,15 +117,14 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     "must redirect to the next page when valid data is submitted and Distribution No" in {
 
       val mockSessionRepository = mock[SessionRepository]
-
-      val mockConnector = mock[MarginalReliefCalculatorConnector]
+      val mockParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -172,8 +165,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
+      val application: Application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request = FakeRequest(GET, distributionRoute)
@@ -186,7 +178,6 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must redirect to Journey Recovery for a GET if request parameters are missing in user answers" in {
-
       val application = applicationBuilder(userAnswers =
         Some(
           emptyUserAnswers
@@ -223,7 +214,6 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "redirect to Journey Recovery for a POST if required parameters are missing in user answers" in {
-
       val application = applicationBuilder(userAnswers =
         Some(
           emptyUserAnswers

@@ -16,19 +16,19 @@
 
 package controllers
 
-import connectors.MarginalReliefCalculatorConnector
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import controllers.actions._
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
-import models.{ Distribution, UserAnswers }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
-import play.api.i18n.{ I18nSupport, MessagesApi }
-import play.api.mvc.{ Action, ActionRefiner, AnyContent, MessagesControllerComponents, Request, Result, WrappedRequest }
+import models.{Distribution, UserAnswers}
+import pages._
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import services.CalculatorService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class ResultsPageController @Inject() (
   override val messagesApi: MessagesApi,
@@ -37,7 +37,7 @@ class ResultsPageController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: ResultsPageView,
-  marginalReliefCalculatorConnector: MarginalReliefCalculatorConnector
+  calculatorService: CalculatorService
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
@@ -99,7 +99,7 @@ class ResultsPageController @Inject() (
           Right((a.associatedCompaniesFY1Count.getOrElse(0), a.associatedCompaniesFY2Count.getOrElse(0)))
         case None => Left(request.associatedCompanies.flatMap(_.associatedCompaniesCount).getOrElse(0))
       }
-      marginalReliefCalculatorConnector
+      calculatorService
         .calculate(
           request.accountingPeriod.accountingPeriodStartDate,
           request.accountingPeriod.accountingPeriodEndDateOrDefault,
