@@ -16,12 +16,15 @@
 
 package config
 
-import com.google.inject.{ Inject, Singleton }
+import com.google.inject.{Inject, Singleton}
+import connectors.sharedmodel.CalculatorConfig
+import org.slf4j.{Logger, LoggerFactory}
 import play.api.Configuration
 import play.api.i18n.Lang
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
+  private val logger: Logger = LoggerFactory.getLogger(getClass)
 
   val host: String = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
@@ -37,8 +40,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val marginalReliefCalculatorUrl: String =
     configuration.get[Service]("microservice.services.marginal-relief-calculator-backend").baseUrl
 
-  val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("features.welsh-translation")
+  val languageTranslationEnabled: Boolean = configuration.get[Boolean]("features.welsh-translation")
+  val reworkEnabled: Boolean = configuration.getOptional[Boolean](path = "features.rework-enabled").getOrElse(false)
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
@@ -54,4 +57,16 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val basicAuthRealm: Option[String] = configuration.getOptional[String]("auth.basic.realm")
   val basicAuthUser: Option[String] = configuration.getOptional[String]("auth.basic.username")
   val basicAuthPassword: Option[String] = configuration.getOptional[String]("auth.basic.password")
+
+  val calculatorConfig: CalculatorConfig =
+    CalculatorConfigParser
+      .parse(configuration)
+      .fold(
+        invalidConfigError => {
+          val errors = invalidConfigError.map(_.message).toList.mkString(", ")
+          logger.error(s"Failed to parse calculator-config. Errors are '$errors'")
+          throw new RuntimeException("Failed to parse calculator-config")
+        },
+        fyConfigs => CalculatorConfig(fyConfigs)
+      )
 }

@@ -51,6 +51,11 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
       "should be the corporation tax before MR from underlying tax details" in {
         singleResult.totalCorporationTaxBeforeMR shouldBe marginalRate.corporationTaxBeforeMR
       }
+
+      "should return the expected result for a flat rate result" in {
+        val singleResult = SingleResult(flatRate, 1)
+        singleResult.totalCorporationTaxBeforeMR shouldBe flatRate.corporationTax
+      }
     }
   }
 

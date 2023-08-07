@@ -19,12 +19,11 @@ package config
 import com.google.inject.AbstractModule
 import controllers.actions.{ DataRequiredAction, DataRequiredActionImpl, DataRetrievalAction, DataRetrievalActionImpl, IdentifierAction, SessionIdentifierAction }
 
-import java.time.{ Clock, ZoneOffset }
+import java.time.{Clock, ZoneOffset}
 
 class Module extends AbstractModule {
 
   override def configure(): Unit = {
-
     bind(classOf[DataRetrievalAction]).to(classOf[DataRetrievalActionImpl]).asEagerSingleton()
     bind(classOf[DataRequiredAction]).to(classOf[DataRequiredActionImpl]).asEagerSingleton()
 

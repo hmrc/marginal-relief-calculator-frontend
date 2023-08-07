@@ -14,26 +14,10 @@
  * limitations under the License.
  */
 
-package connectors.sharedmodel
+package config
 
-import julienrf.json.derived
-import play.api.libs.json.{ OFormat, __ }
+sealed trait ConfigError
 
-sealed trait FYConfig {
-  def year: Int
-  def mainRate: Double
-}
+case class ConfigMissingError(year: Int) extends ConfigError
 
-object FYConfig {
-  implicit val format: OFormat[FYConfig] = derived.flat.oformat[FYConfig]((__ \ "type").format[String])
-}
-
-case class FlatRateConfig(year: Int, mainRate: Double) extends FYConfig
-case class MarginalReliefConfig(
-  year: Int,
-  lowerThreshold: Int,
-  upperThreshold: Int,
-  smallProfitRate: Double,
-  mainRate: Double,
-  marginalReliefFraction: Double
-) extends FYConfig
+case class InvalidConfigError(message: String) extends ConfigError
