@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import forms._
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
-import navigation.{FakeNavigator, Navigator}
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -139,11 +139,13 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(
-                desiredRoute = onwardRoute,
-                associatedCompaniesParameterService = mockParameterService,
-                sessionRepository = mockSessionRepository
-              )),
+              bind[Navigator].toInstance(
+                new FakeNavigator(
+                  desiredRoute = onwardRoute,
+                  associatedCompaniesParameterService = mockParameterService,
+                  sessionRepository = mockSessionRepository
+                )
+              ),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()

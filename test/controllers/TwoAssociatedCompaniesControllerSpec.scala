@@ -17,12 +17,12 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel.{AskBothParts, Period}
+import connectors.sharedmodel.{ AskBothParts, Period }
 import forms.DateUtils.financialYear
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider}
-import models.{AssociatedCompanies, Distribution, NormalMode}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
+import models.{ AssociatedCompanies, Distribution, NormalMode }
 import org.mockito.Mockito.when
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import org.scalatest.prop.TableDrivenPropertyChecks
 import pages._
 import play.api.data.FormError

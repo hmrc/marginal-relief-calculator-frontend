@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import forms._
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode, PDFAddCompanyDetails}
-import navigation.{FakeNavigator, Navigator}
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode, PDFAddCompanyDetails }
+import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -27,7 +27,7 @@ import pages._
 import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.{Call, Result}
+import play.api.mvc.{ Call, Result }
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.AssociatedCompaniesParameterService
@@ -91,10 +91,13 @@ class PDFAddCompanyDetailsControllerSpec extends SpecBase with MockitoSugar {
           pdfAddCompanyDetails = PDFAddCompanyDetails.Yes
         )
 
-        val requiredAnswersWithExisting = requiredAnswers.copy().set(
-          page = PDFAddCompanyDetailsPage,
-          value = existingForm
-        ).get
+        val requiredAnswersWithExisting = requiredAnswers
+          .copy()
+          .set(
+            page = PDFAddCompanyDetailsPage,
+            value = existingForm
+          )
+          .get
 
         val application: Application = applicationBuilder(userAnswers = Some(requiredAnswersWithExisting)).build()
 

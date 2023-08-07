@@ -39,4 +39,5 @@ case object DontAsk extends AssociatedCompaniesParameter
 sealed trait AskAssociatedCompaniesParameter
 case object AskFull extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
 case class AskOnePart(period: Period) extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
-case class AskBothParts(period1: Period, period2: Period) extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter
+case class AskBothParts(period1: Period, period2: Period)
+    extends AssociatedCompaniesParameter with AskAssociatedCompaniesParameter

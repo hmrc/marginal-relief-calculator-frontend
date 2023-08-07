@@ -20,8 +20,8 @@ import cats.data.NonEmptyList
 import cats.data.Validated.Invalid
 import com.typesafe.config.ConfigFactory
 import cats.syntax.validated.catsSyntaxValidatedId
-import config.{ConfigMissingError, FrontendAppConfig}
-import connectors.sharedmodel.{DualResult, FYRatio, FlatRate, MarginalRate, SingleResult}
+import config.{ ConfigMissingError, FrontendAppConfig }
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.Configuration
@@ -36,12 +36,12 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
 
       "when single year and config missing, return error" in {
         val marginalReliefCalculator = new MarginalReliefCalculator(appConfigFromStr("""
-                                                                                           |appName = test
-                                                                                           |calculator-config = {
-                                                                                           | fy-configs = [
-                                                                                           | ]
-                                                                                           |}
-                                                                                           |""".stripMargin))
+                                                                                       |appName = test
+                                                                                       |calculator-config = {
+                                                                                       | fy-configs = [
+                                                                                       | ]
+                                                                                       |}
+                                                                                       |""".stripMargin))
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2022, 4, 1),
           LocalDate.of(2023, 3, 31),
@@ -56,11 +56,11 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
 
       "when straddles two financial years and both year configs missing, return error" in {
         val marginalReliefCalculator = new MarginalReliefCalculator(appConfigFromStr("""
-                                                                                           |appName = test
-                                                                                           |calculator-config = {
-                                                                                           | fy-configs = []
-                                                                                           |}
-                                                                                           |""".stripMargin))
+                                                                                       |appName = test
+                                                                                       |calculator-config = {
+                                                                                       | fy-configs = []
+                                                                                       |}
+                                                                                       |""".stripMargin))
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 1, 1),
           LocalDate.of(2023, 12, 31),
@@ -81,20 +81,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when config is missing for an accounting period year, fallback to the nearest config" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2022
-                                                              |     main-rate = 0.1
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     main-rate = 0.2
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2022
+                                                          |     main-rate = 0.1
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     main-rate = 0.2
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2024, 4, 1),
           LocalDate.of(2025, 3, 31),
@@ -110,16 +110,16 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when account period falls in FY with only main rate, apply main rate with no marginal relief" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2022
-                                                              |     main-rate = 0.19
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2022
+                                                          |     main-rate = 0.19
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2022, 4, 1),
           LocalDate.of(2023, 3, 31),
@@ -135,20 +135,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when a shorter account period falls in a single FY with MR and profits are above the upper threshold, apply main rate and MR ratio with 365 days" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 5, 1),
@@ -182,20 +182,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when account period falls in FY with marginal relief and profits are above the upper threshold, apply main rate" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 4, 1),
@@ -229,20 +229,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when account period falls in FY with marginal relief and profits are matching lower threshold, apply small profits rate" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 4, 1),
@@ -276,20 +276,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when account period falls in FY with marginal relief and profits are below lower threshold, apply small profits rate" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 4, 1),
@@ -308,20 +308,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when account period falls in FY with marginal relief and profits are between upper and lower thresholds, apply main rate with marginal relief" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 4, 1),
@@ -355,20 +355,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when account period falls in FY with marginal relief and profits are between upper and lower thresholds and there are associated companies, apply main rate with marginal relief" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 4, 1),
           LocalDate.of(2024, 3, 31),
@@ -404,12 +404,12 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 1, 1),
@@ -429,24 +429,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2022
-                                                              |     main-rate = 0.19
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2022
+                                                          |     main-rate = 0.19
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2024, 1, 1),
@@ -497,24 +497,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2022
-                                                              |     main-rate = 0.19
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2022
+                                                          |     main-rate = 0.19
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2025, 1, 1),
@@ -564,20 +564,20 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2022
-                                                              |     main-rate = 0.19
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     main-rate = 0.20
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2022
+                                                          |     main-rate = 0.19
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     main-rate = 0.20
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 1, 1),
@@ -601,28 +601,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2024
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2024
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2024, 1, 1),
@@ -673,24 +673,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2024
-                                                              |     main-rate = 0.19
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2024
+                                                          |     main-rate = 0.19
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 6, 1),
@@ -726,28 +726,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2024
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   },
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2024
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   },
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 10, 1),
@@ -798,28 +798,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
         // Calculation for a company with short AP
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   },
-                                                              |   {
-                                                              |     year = 2024
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 300000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   },
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   },
+                                                          |   {
+                                                          |     year = 2024
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 300000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   },
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 10, 1),
@@ -869,24 +869,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
       "when 2 associated companies in second accounting period, FY1 with flat rate and FY2 with MR rate - FY2 profits above upper threshold" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculator(appConfigFromStr("""
-                                                              |appName = test
-                                                              |calculator-config = {
-                                                              | fy-configs = [
-                                                              |   {
-                                                              |     year = 2022
-                                                              |     main-rate = 0.19
-                                                              |   }
-                                                              |   {
-                                                              |     year = 2023
-                                                              |     lower-threshold = 50000
-                                                              |     upper-threshold = 250000
-                                                              |     small-profit-rate = 0.19
-                                                              |     main-rate = 0.25
-                                                              |     marginal-relief-fraction = 0.015
-                                                              |   }
-                                                              | ]
-                                                              |}
-                                                              |""".stripMargin))
+                                                          |appName = test
+                                                          |calculator-config = {
+                                                          | fy-configs = [
+                                                          |   {
+                                                          |     year = 2022
+                                                          |     main-rate = 0.19
+                                                          |   }
+                                                          |   {
+                                                          |     year = 2023
+                                                          |     lower-threshold = 50000
+                                                          |     upper-threshold = 250000
+                                                          |     small-profit-rate = 0.19
+                                                          |     main-rate = 0.25
+                                                          |     marginal-relief-fraction = 0.015
+                                                          |   }
+                                                          | ]
+                                                          |}
+                                                          |""".stripMargin))
 
         val result = marginalReliefCalculator.compute(
           LocalDate.of(2023, 1, 1),
@@ -923,24 +923,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when 2 associated in the first accounting period, FY1 with MR rate and FY2 with flat rate - FY1 profits between thresholds" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2024
-                                                            |     main-rate = 0.19
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2024
+                                                        |     main-rate = 0.19
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2024, 1, 1),
@@ -976,24 +976,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when 2 associated in the second accounting period, FY1 with flat rate and FY2 with MR rate - FY2 profits between thresholds" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2022
-                                                            |     main-rate = 0.19
-                                                            |   }
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2022
+                                                        |     main-rate = 0.19
+                                                        |   }
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2023, 1, 1),
@@ -1029,24 +1029,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when 1 associated for the whole accounting period, FY1 with flat rate and FY2 with MR rate - FY2 profits between thresholds" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2022
-                                                            |     main-rate = 0.19
-                                                            |   }
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2022
+                                                        |     main-rate = 0.19
+                                                        |   }
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2023, 1, 1),
@@ -1082,24 +1082,24 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when 1 associated for the whole accounting period, FY1 with MR rate and FY2 with flat rate - FY1 profits between thresholds" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2024
-                                                            |     main-rate = 0.19
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2024
+                                                        |     main-rate = 0.19
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2024, 1, 1),
@@ -1135,28 +1135,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when no of associated companies changes, no change in rates or thresholds" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2024
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2024
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2023, 10, 1),
@@ -1206,28 +1206,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when no of associated companies and rates change, no change in thresholds" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2027
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2028
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.20
-                                                            |     main-rate = 0.26
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2027
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2028
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.20
+                                                        |     main-rate = 0.26
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2028, 1, 1),
@@ -1277,28 +1277,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when no of associated companies and thresholds change, no change in rates" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2030
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2031
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 300000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.012
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2030
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2031
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 300000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.012
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2030, 7, 1),
@@ -1348,28 +1348,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when rates change, no change in thresholds and accounting period is 365 days" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2024
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.26
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2024
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.26
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2024, 1, 1),
@@ -1418,28 +1418,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when associated companies in FY1 and no associated companies in FY2, FY1 and FY2 are MR rates" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2024
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2024
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2024, 1, 1),
@@ -1488,28 +1488,28 @@ class MarginalReliefCalculatorSpec extends AnyWordSpec with Matchers {
     "when no associated companies in FY1 and associated companies in FY2, FY1 and FY2 are MR rates" in {
       val marginalReliefCalculator =
         new MarginalReliefCalculator(appConfigFromStr("""
-                                                            |appName = test
-                                                            |calculator-config = {
-                                                            | fy-configs = [
-                                                            |   {
-                                                            |     year = 2023
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   },
-                                                            |   {
-                                                            |     year = 2024
-                                                            |     lower-threshold = 50000
-                                                            |     upper-threshold = 250000
-                                                            |     small-profit-rate = 0.19
-                                                            |     main-rate = 0.25
-                                                            |     marginal-relief-fraction = 0.015
-                                                            |   }
-                                                            | ]
-                                                            |}
-                                                            |""".stripMargin))
+                                                        |appName = test
+                                                        |calculator-config = {
+                                                        | fy-configs = [
+                                                        |   {
+                                                        |     year = 2023
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   },
+                                                        |   {
+                                                        |     year = 2024
+                                                        |     lower-threshold = 50000
+                                                        |     upper-threshold = 250000
+                                                        |     small-profit-rate = 0.19
+                                                        |     main-rate = 0.25
+                                                        |     marginal-relief-fraction = 0.015
+                                                        |   }
+                                                        | ]
+                                                        |}
+                                                        |""".stripMargin))
 
       val result = marginalReliefCalculator.compute(
         LocalDate.of(2024, 1, 1),

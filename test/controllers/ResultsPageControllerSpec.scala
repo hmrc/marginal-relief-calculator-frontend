@@ -17,10 +17,10 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel.{DualResult, FYRatio, FlatRate, MarginalRate, SingleResult}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers}
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers }
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -59,14 +59,16 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
   "ResultsPageController" - {
     "GET page" - {
       "must render results when all required data is available in user answers" in {
-        val allRequiredAnswers: UserAnswers = requiredAnswers.copy()
+        val allRequiredAnswers: UserAnswers = requiredAnswers
+          .copy()
           .set(
             page = TwoAssociatedCompaniesPage,
             value = TwoAssociatedCompaniesForm(
               associatedCompaniesFY1Count = Some(1),
               associatedCompaniesFY2Count = Some(2)
             )
-          ).get
+          )
+          .get
 
         val mockCalculatorService: CalculatorService = mock[CalculatorService]
 
@@ -74,20 +76,22 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
 
-        val calculatorResult = SingleResult(MarginalRate(
-          year = epoch.getYear,
-          corporationTaxBeforeMR = 1,
-          taxRateBeforeMR = 1,
-          corporationTax = 1,
-          taxRate = 1,
-          marginalRelief = 1,
-          adjustedProfit = 1,
-          adjustedDistributions = 1,
-          adjustedAugmentedProfit = 1,
-          adjustedLowerThreshold = 1,
-          adjustedUpperThreshold = 1,
-          days = 1,
-          fyRatio = FYRatio(numerator = 1, denominator = 365)),
+        val calculatorResult = SingleResult(
+          MarginalRate(
+            year = epoch.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(numerator = 1, denominator = 365)
+          ),
           effectiveTaxRate = 1
         )
 

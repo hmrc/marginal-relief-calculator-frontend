@@ -19,16 +19,15 @@ package services
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{CalculatorConfig, CalculatorResult, DualResult, FYConfig, FlatRate, FlatRateConfig, SingleResult}
+import connectors.sharedmodel.{ CalculatorConfig, CalculatorResult, DualResult, FYConfig, FlatRate, FlatRateConfig, SingleResult }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.ScalaOngoingStubbing
-import org.mockito.{ArgumentMatchers, MockitoSugar}
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import org.mockito.{ ArgumentMatchers, MockitoSugar }
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 
 class CalculationConfigServiceSpec extends SpecBase with MockitoSugar with FutureAwaits with DefaultAwaitTimeout {
 
@@ -39,7 +38,8 @@ class CalculationConfigServiceSpec extends SpecBase with MockitoSugar with Futur
     val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
     val mockCalculationConfigService: CalculationConfigService = new CalculationConfigService(
-      connector = mockConnector, appConfig = mockConfig
+      connector = mockConnector,
+      appConfig = mockConfig
     )
 
     val dummyConfig2020: FlatRateConfig = FlatRateConfig(2020, 50)
@@ -80,7 +80,7 @@ class CalculationConfigServiceSpec extends SpecBase with MockitoSugar with Futur
       mockCalculatorConfig(CalculatorConfig(Seq.empty[FYConfig]))
 
       def result: FYConfig = await(mockCalculationConfigService.getConfig(2020))
-      the [RuntimeException] thrownBy result must have message "Configuration for year 2020 is missing."
+      the[RuntimeException] thrownBy result must have message "Configuration for year 2020 is missing."
 
     }
   }

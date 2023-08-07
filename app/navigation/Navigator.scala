@@ -16,8 +16,8 @@
 
 package navigation
 
-import com.google.inject.{Inject, Singleton}
-import connectors.sharedmodel.{AskBothParts, AskFull, AskOnePart, DontAsk}
+import com.google.inject.{ Inject, Singleton }
+import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk }
 import controllers.routes
 import forms.TwoAssociatedCompaniesForm
 import models._
@@ -27,11 +27,13 @@ import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class Navigator @Inject()(associatedCompaniesParameterService: AssociatedCompaniesParameterService,
-                          sessionRepository: SessionRepository)(implicit
+class Navigator @Inject() (
+  associatedCompaniesParameterService: AssociatedCompaniesParameterService,
+  sessionRepository: SessionRepository
+)(implicit
   executionContext: ExecutionContext
 ) {
 

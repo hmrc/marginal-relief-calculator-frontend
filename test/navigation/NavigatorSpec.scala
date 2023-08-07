@@ -17,11 +17,11 @@
 package navigation
 
 import base.SpecBase
-import connectors.sharedmodel.{AskBothParts, AskOnePart, DontAsk, Period}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm}
+import connectors.sharedmodel.{ AskBothParts, AskOnePart, DontAsk, Period }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm }
 import pages._
 import models._
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import play.api.inject.guice.GuiceApplicationBuilder
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
@@ -196,17 +196,21 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = *,
-          accountingPeriodEnd = *
-        )(
-          hc = *
-        ).returns(
-          Future.successful(AskBothParts(
-            period1 = Period(start = LocalDate.now(), end = LocalDate.now()),
-            period2 = Period(start = LocalDate.now(), end = LocalDate.now())
-          ))
-        )
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = *,
+            accountingPeriodEnd = *
+          )(
+            hc = *
+          )
+          .returns(
+            Future.successful(
+              AskBothParts(
+                period1 = Period(start = LocalDate.now(), end = LocalDate.now()),
+                period2 = Period(start = LocalDate.now(), end = LocalDate.now())
+              )
+            )
+          )
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
           result mustBe routes.AssociatedCompaniesController.onPageLoad(CheckMode)
@@ -220,12 +224,14 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = *,
-          accountingPeriodEnd = *
-        )(
-          hc = *
-        ).returns(Future.successful(DontAsk))
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = *,
+            accountingPeriodEnd = *
+          )(
+            hc = *
+          )
+          .returns(Future.successful(DontAsk))
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
           result mustBe routes.CheckYourAnswersController.onPageLoad()
@@ -239,14 +245,18 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = *,
-          accountingPeriodEnd = *
-        )(
-          hc = *
-        ).returns(Future.successful(
-          result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
-        ))
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = *,
+            accountingPeriodEnd = *
+          )(
+            hc = *
+          )
+          .returns(
+            Future.successful(
+              result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
+            )
+          )
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
           result mustBe routes.CheckYourAnswersController.onPageLoad()
@@ -262,14 +272,18 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
           .get
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = *,
-          accountingPeriodEnd = *
-        )(
-          hc = *
-        ).returns(Future.successful(
-          result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
-        ))
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = *,
+            accountingPeriodEnd = *
+          )(
+            hc = *
+          )
+          .returns(
+            Future.successful(
+              result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
+            )
+          )
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
           result mustBe routes.AssociatedCompaniesController.onPageLoad(CheckMode)
@@ -285,17 +299,21 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
           .get
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = *,
-          accountingPeriodEnd = *
-        )(
-          hc = *
-        ).returns(Future.successful(
-          result = AskBothParts(
-            period1 = Period(start = LocalDate.now(), end = LocalDate.now()),
-            period2 = Period(start = LocalDate.now(), end = LocalDate.now())
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = *,
+            accountingPeriodEnd = *
+          )(
+            hc = *
           )
-        ))
+          .returns(
+            Future.successful(
+              result = AskBothParts(
+                period1 = Period(start = LocalDate.now(), end = LocalDate.now()),
+                period2 = Period(start = LocalDate.now(), end = LocalDate.now())
+              )
+            )
+          )
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
           result mustBe routes.CheckYourAnswersController.onPageLoad()
@@ -305,14 +323,18 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
       "must return error when navigating to next page on AccountingPeriodPage if periods not present" in {
         val userAnswers = UserAnswers("id")
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = *,
-          accountingPeriodEnd = *
-        )(
-          hc = *
-        ).returns(Future.successful(
-          result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
-        ))
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = *,
+            accountingPeriodEnd = *
+          )(
+            hc = *
+          )
+          .returns(
+            Future.successful(
+              result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
+            )
+          )
 
         val caught =
           intercept[RuntimeException] { // Result type: IndexOutOfBoundsException

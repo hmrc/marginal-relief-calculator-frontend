@@ -16,16 +16,16 @@
 
 package controllers
 
-import connectors.sharedmodel.{AskBothParts, AssociatedCompaniesParameter}
+import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter }
 import controllers.actions._
 import forms.DateUtils.financialYear
 import forms._
 import models.requests.DataRequest
-import models.{Distribution, Mode, UserAnswers}
+import models.{ Distribution, Mode, UserAnswers }
 import navigation.Navigator
 import pages._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
@@ -33,7 +33,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.TwoAssociatedCompaniesView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class TwoAssociatedCompaniesController @Inject() (
   override val messagesApi: MessagesApi,

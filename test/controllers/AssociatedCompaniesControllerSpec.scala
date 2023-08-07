@@ -18,18 +18,18 @@ package controllers
 
 import base.SpecBase
 import connectors.sharedmodel._
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode }
 import org.mockito.Mockito.when
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import org.scalatest.prop.TableDrivenPropertyChecks
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage}
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
-import uk.gov.hmrc.http.{SessionKeys, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{ SessionKeys, UpstreamErrorResponse }
 import views.html.AssociatedCompaniesView
 
 import java.time.LocalDate
@@ -60,12 +60,14 @@ class AssociatedCompaniesControllerSpec
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )(
-          hc = *
-        ).returns(Future.successful(AskFull))
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )(
+            hc = *
+          )
+          .returns(Future.successful(AskFull))
 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
@@ -112,13 +114,15 @@ class AssociatedCompaniesControllerSpec
         )
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )(
-          hc = *
-        ).returns(Future.successful(AskFull))
+
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )(
+            hc = *
+          )
+          .returns(Future.successful(AskFull))
 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
@@ -196,13 +200,15 @@ class AssociatedCompaniesControllerSpec
 
       "must redirect to CheckYourAnswers page, if AssociatedCompanies parameter is DontAsk" in {
         val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
-        
-        mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(
-          hc = *
-        ).returns(Future.successful(DontAsk))
+
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
+          )(
+            hc = *
+          )
+          .returns(Future.successful(DontAsk))
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
@@ -396,7 +402,6 @@ class AssociatedCompaniesControllerSpec
       }
 
       "must return a Bad Request when associatedCompanies parameter is invalid" in {
-
 
         val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
         mockParameterService.associatedCompaniesParameters(

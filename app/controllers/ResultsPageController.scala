@@ -17,18 +17,18 @@
 package controllers
 
 import controllers.actions._
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{Distribution, UserAnswers}
+import models.{ Distribution, UserAnswers }
 import pages._
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import services.CalculatorService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ResultsPageView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class ResultsPageController @Inject() (
   override val messagesApi: MessagesApi,

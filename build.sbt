@@ -47,7 +47,7 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    resolvers ++= Seq(Resolver.jcenterRepo),
+    resolvers ++= Seq(Resolver.jcenterRepo)
     // concatenate js
   )
   .settings(

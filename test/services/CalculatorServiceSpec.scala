@@ -17,17 +17,17 @@
 package services
 
 import base.SpecBase
-import calculator.{CalculatorValidationResult, MarginalReliefCalculator}
+import calculator.{ CalculatorValidationResult, MarginalReliefCalculator }
 import cats.implicits.catsSyntaxValidatedId
-import config.{ConfigMissingError, FrontendAppConfig}
+import config.{ ConfigMissingError, FrontendAppConfig }
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.ScalaOngoingStubbing
-import org.mockito.{ArgumentMatchers, MockitoSugar}
+import org.mockito.{ ArgumentMatchers, MockitoSugar }
 import org.scalatest.enablers.Messaging
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -42,7 +42,9 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     val mockCalculator: MarginalReliefCalculator = mock[MarginalReliefCalculator]
 
     val mockCalculatorService: CalculatorService = new CalculatorService(
-      connector = mockConnector, appConfig = mockConfig, calculator = mockCalculator
+      connector = mockConnector,
+      appConfig = mockConfig,
+      calculator = mockCalculator
     )
 
     val dummyConfig2020: FlatRateConfig = FlatRateConfig(2020, 50)
@@ -52,14 +54,16 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
       mockConfig.reworkEnabled
     ).thenReturn(result)
 
-    def mockCalculatorCall(accountingPeriodStart: LocalDate,
-                           accountingPeriodEnd: LocalDate,
-                           profit: BigDecimal,
-                           exemptDistributions: BigDecimal,
-                           associatedCompanies: Option[Int],
-                           associatedCompaniesFY1: Option[Int],
-                           associatedCompaniesFY2: Option[Int],
-                           result: CalculatorValidationResult[CalculatorResult]): ScalaOngoingStubbing[CalculatorValidationResult[CalculatorResult]] = when(
+    def mockCalculatorCall(
+      accountingPeriodStart: LocalDate,
+      accountingPeriodEnd: LocalDate,
+      profit: BigDecimal,
+      exemptDistributions: BigDecimal,
+      associatedCompanies: Option[Int],
+      associatedCompaniesFY1: Option[Int],
+      associatedCompaniesFY2: Option[Int],
+      result: CalculatorValidationResult[CalculatorResult]
+    ): ScalaOngoingStubbing[CalculatorValidationResult[CalculatorResult]] = when(
       mockCalculator.compute(
         accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
         accountingPeriodEnd = ArgumentMatchers.eq(accountingPeriodEnd),
@@ -71,14 +75,16 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
       )
     ).thenReturn(result)
 
-    def mockConnectorCalculateCall(accountingPeriodStart: LocalDate,
-                                   accountingPeriodEnd: LocalDate,
-                                   profit: Double,
-                                   exemptDistributions: Option[Double],
-                                   associatedCompanies: Option[Int],
-                                   associatedCompaniesFY1: Option[Int],
-                                   associatedCompaniesFY2: Option[Int],
-                                   result: Future[CalculatorResult]): ScalaOngoingStubbing[Future[CalculatorResult]] =
+    def mockConnectorCalculateCall(
+      accountingPeriodStart: LocalDate,
+      accountingPeriodEnd: LocalDate,
+      profit: Double,
+      exemptDistributions: Option[Double],
+      associatedCompanies: Option[Int],
+      associatedCompaniesFY1: Option[Int],
+      associatedCompaniesFY2: Option[Int],
+      result: Future[CalculatorResult]
+    ): ScalaOngoingStubbing[Future[CalculatorResult]] =
       when(
         mockConnector.calculate(
           accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
@@ -128,15 +134,17 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
         result = Future.successful(calculatorResult)
       )
 
-      val result: CalculatorResult = await(mockCalculatorService.calculate(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd,
-        profit = profit,
-        exemptDistributions = exemptDistributions,
-        associatedCompanies = associatedCompanies,
-        associatedCompaniesFY1 = associatedCompaniesFY1,
-        associatedCompaniesFY2 = associatedCompaniesFY2
-      ))
+      val result: CalculatorResult = await(
+        mockCalculatorService.calculate(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = accountingPeriodEnd,
+          profit = profit,
+          exemptDistributions = exemptDistributions,
+          associatedCompanies = associatedCompanies,
+          associatedCompaniesFY1 = associatedCompaniesFY1,
+          associatedCompaniesFY2 = associatedCompaniesFY2
+        )
+      )
 
       result mustBe calculatorResult
     }
@@ -155,15 +163,17 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
         result = calculatorResult.validNel
       )
 
-      val result: CalculatorResult = await(mockCalculatorService.calculate(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd,
-        profit = profit,
-        exemptDistributions = exemptDistributions,
-        associatedCompanies = associatedCompanies,
-        associatedCompaniesFY1 = associatedCompaniesFY1,
-        associatedCompaniesFY2 = associatedCompaniesFY2
-      ))
+      val result: CalculatorResult = await(
+        mockCalculatorService.calculate(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = accountingPeriodEnd,
+          profit = profit,
+          exemptDistributions = exemptDistributions,
+          associatedCompanies = associatedCompanies,
+          associatedCompaniesFY1 = associatedCompaniesFY1,
+          associatedCompaniesFY2 = associatedCompaniesFY2
+        )
+      )
 
       result mustBe calculatorResult
     }
@@ -184,24 +194,25 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
         result = ConfigMissingError(year = 1970).invalidNel.leftMap(errs => errs :+ ConfigMissingError(year = 1971))
       )
 
-
-      def result: CalculatorResult = await(mockCalculatorService.calculate(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEndYr2,
-        profit = profit,
-        exemptDistributions = None,
-        associatedCompanies = associatedCompanies,
-        associatedCompaniesFY1 = associatedCompaniesFY1,
-        associatedCompaniesFY2 = associatedCompaniesFY2
-      ))
+      def result: CalculatorResult = await(
+        mockCalculatorService.calculate(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = accountingPeriodEndYr2,
+          profit = profit,
+          exemptDistributions = None,
+          associatedCompanies = associatedCompanies,
+          associatedCompaniesFY1 = associatedCompaniesFY1,
+          associatedCompaniesFY2 = associatedCompaniesFY2
+        )
+      )
 
       implicit val messaging: Messaging[UnprocessableEntityException] = Messaging
         .messagingNatureOfThrowable[UnprocessableEntityException]
 
       the[UnprocessableEntityException] thrownBy result must have message
         "Failed to calculate marginal relief: " +
-          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1970, " +
-          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1971"
+        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1970, " +
+        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1971"
     }
   }
 

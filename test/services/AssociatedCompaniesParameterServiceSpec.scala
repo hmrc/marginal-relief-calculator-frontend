@@ -22,19 +22,17 @@ import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.ScalaOngoingStubbing
-import org.mockito.{ArgumentMatchers, MockitoSugar}
+import org.mockito.{ ArgumentMatchers, MockitoSugar }
 import org.scalatest.enablers.Messaging
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 import utils.ShowCalculatorDisclaimerUtils.financialYearEnd
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class AssociatedCompaniesParameterServiceSpec extends SpecBase
-  with MockitoSugar
-  with FutureAwaits
-  with DefaultAwaitTimeout {
+class AssociatedCompaniesParameterServiceSpec
+    extends SpecBase with MockitoSugar with FutureAwaits with DefaultAwaitTimeout {
 
   trait Test {
     implicit val hc: HeaderCarrier = new HeaderCarrier()
@@ -43,7 +41,8 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
 
     val mockParameterService: AssociatedCompaniesParameterService = new AssociatedCompaniesParameterService(
-      connector = mockConnector, appConfig = mockConfig
+      connector = mockConnector,
+      appConfig = mockConfig
     )
 
     val dummyConfig2020: FlatRateConfig = FlatRateConfig(2020, 50)
@@ -57,9 +56,11 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
       mockConfig.calculatorConfig
     ).thenReturn(result)
 
-    def mockConnectorCall(accountingPeriodStart: LocalDate,
-                          accountingPeriodEnd: LocalDate,
-                          result: Future[AssociatedCompaniesParameter]): ScalaOngoingStubbing[Future[AssociatedCompaniesParameter]] = when(
+    def mockConnectorCall(
+      accountingPeriodStart: LocalDate,
+      accountingPeriodEnd: LocalDate,
+      result: Future[AssociatedCompaniesParameter]
+    ): ScalaOngoingStubbing[Future[AssociatedCompaniesParameter]] = when(
       mockConnector.associatedCompaniesParameters(
         accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
         accountingPeriodEnd = ArgumentMatchers.eq(accountingPeriodEnd)
@@ -82,10 +83,12 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
         result = Future.successful(AskFull)
       )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = accountingPeriodEnd
+        )
+      )
 
       result mustBe AskFull
     }
@@ -93,14 +96,20 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     "rework is enabled should return DontAsk for single flat rate tax year" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        FlatRateConfig(year = 2023, mainRate = 50.0)
-      )))
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            FlatRateConfig(year = 2023, mainRate = 50.0)
+          )
+        )
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = accountingPeriodEnd
+        )
+      )
 
       result mustBe DontAsk
     }
@@ -108,21 +117,27 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     "rework is enabled should return AskFull for single marginal rate tax year" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        MarginalReliefConfig(
-          year = 2023,
-          lowerThreshold = 0,
-          upperThreshold = 10,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            MarginalReliefConfig(
+              year = 2023,
+              lowerThreshold = 0,
+              upperThreshold = 10,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            )
+          )
         )
-      )))
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = accountingPeriodEnd
+        )
+      )
 
       result mustBe AskFull
     }
@@ -133,15 +148,21 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     "rework is enabled should return DontAsk for two flat rate tax years" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        FlatRateConfig(year = 2023, mainRate = 50.0),
-        FlatRateConfig(year = 2024, mainRate = 50.0)
-      )))
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            FlatRateConfig(year = 2023, mainRate = 50.0),
+            FlatRateConfig(year = 2024, mainRate = 50.0)
+          )
+        )
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = secondYearAccountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = secondYearAccountingPeriodEnd
+        )
+      )
 
       result mustBe DontAsk
     }
@@ -149,29 +170,35 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     "rework is enabled should return AskFull for two marginal rate tax years with same thresholds" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        MarginalReliefConfig(
-          year = 2023,
-          lowerThreshold = 0,
-          upperThreshold = 10,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
-        ),
-        MarginalReliefConfig(
-          year = 2024,
-          lowerThreshold = 0,
-          upperThreshold = 10,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            MarginalReliefConfig(
+              year = 2023,
+              lowerThreshold = 0,
+              upperThreshold = 10,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            ),
+            MarginalReliefConfig(
+              year = 2024,
+              lowerThreshold = 0,
+              upperThreshold = 10,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            )
+          )
         )
-      )))
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = secondYearAccountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = secondYearAccountingPeriodEnd
+        )
+      )
 
       result mustBe AskFull
     }
@@ -181,29 +208,35 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     "rework is enabled should return AskBothParts for two marginal rate tax years with different thresholds" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        MarginalReliefConfig(
-          year = 2023,
-          lowerThreshold = 0,
-          upperThreshold = 10,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
-        ),
-        MarginalReliefConfig(
-          year = 2024,
-          lowerThreshold = 0,
-          upperThreshold = 12,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            MarginalReliefConfig(
+              year = 2023,
+              lowerThreshold = 0,
+              upperThreshold = 10,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            ),
+            MarginalReliefConfig(
+              year = 2024,
+              lowerThreshold = 0,
+              upperThreshold = 12,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            )
+          )
         )
-      )))
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = secondYearAccountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = secondYearAccountingPeriodEnd
+        )
+      )
 
       result mustBe AskBothParts(
         period1 = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart),
@@ -214,68 +247,84 @@ class AssociatedCompaniesParameterServiceSpec extends SpecBase
     "rework is enabled should return AskOnePart when first year only is marginal" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        MarginalReliefConfig(
-          year = 2023,
-          lowerThreshold = 0,
-          upperThreshold = 10,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
-        ),
-        FlatRateConfig(year = 2024, mainRate = 50.0)
-      )))
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            MarginalReliefConfig(
+              year = 2023,
+              lowerThreshold = 0,
+              upperThreshold = 10,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            ),
+            FlatRateConfig(year = 2024, mainRate = 50.0)
+          )
+        )
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = secondYearAccountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = secondYearAccountingPeriodEnd
+        )
+      )
 
-      result mustBe AskOnePart(period = Period(
-        start = accountingPeriodStart,
-        end = fyEndForAccountingPeriodStart
-      ))
+      result mustBe AskOnePart(period =
+        Period(
+          start = accountingPeriodStart,
+          end = fyEndForAccountingPeriodStart
+        )
+      )
     }
 
     "rework is enabled should return AskOnePart when second year only is marginal" in new Test {
       mockReworkEnabledFlag(result = true)
 
-      mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq(
-        FlatRateConfig(year = 2023, mainRate = 50.0),
-        MarginalReliefConfig(
-          year = 2024,
-          lowerThreshold = 0,
-          upperThreshold = 10,
-          smallProfitRate = 0.5,
-          mainRate = 0.7,
-          marginalReliefFraction = 0.5
+      mockCalculatorConfig(result =
+        CalculatorConfig(fyConfigs =
+          Seq(
+            FlatRateConfig(year = 2023, mainRate = 50.0),
+            MarginalReliefConfig(
+              year = 2024,
+              lowerThreshold = 0,
+              upperThreshold = 10,
+              smallProfitRate = 0.5,
+              mainRate = 0.7,
+              marginalReliefFraction = 0.5
+            )
+          )
         )
-      )))
+      )
 
-      val result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = secondYearAccountingPeriodEnd
-      ))
+      val result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = secondYearAccountingPeriodEnd
+        )
+      )
 
       result mustBe AskOnePart(period = Period(start = taxYear2Start, secondYearAccountingPeriodEnd))
     }
 
-    "rework is enabled should handle errors" in new Test{
+    "rework is enabled should handle errors" in new Test {
       mockReworkEnabledFlag(result = true)
       mockCalculatorConfig(result = CalculatorConfig(fyConfigs = Seq()))
 
-      def result: AssociatedCompaniesParameter = await(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = secondYearAccountingPeriodEnd
-      ))
+      def result: AssociatedCompaniesParameter = await(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = accountingPeriodStart,
+          accountingPeriodEnd = secondYearAccountingPeriodEnd
+        )
+      )
 
       implicit val messaging: Messaging[UnprocessableEntityException] = Messaging
         .messagingNatureOfThrowable[UnprocessableEntityException]
 
       the[UnprocessableEntityException] thrownBy result must have message
         "Failed to determined associated company parameters for given data: " +
-          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2023, " +
-          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2024"
+        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2023, " +
+        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2024"
     }
   }
 }

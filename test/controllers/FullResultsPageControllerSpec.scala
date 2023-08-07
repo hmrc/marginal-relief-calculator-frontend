@@ -18,14 +18,14 @@ package controllers
 
 import base.SpecBase
 import connectors.sharedmodel._
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CalculationConfigService, CalculatorService}
+import services.{ CalculationConfigService, CalculatorService }
 import views.html.FullResultsPageView
 
 import java.time.LocalDate

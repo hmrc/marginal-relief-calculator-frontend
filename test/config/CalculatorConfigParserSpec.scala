@@ -20,7 +20,7 @@ import cats.data.NonEmptyList
 import cats.data.Validated.Invalid
 import cats.syntax.validated._
 import com.typesafe.config.ConfigFactory
-import connectors.sharedmodel.{FYConfig, FlatRateConfig, MarginalReliefConfig}
+import connectors.sharedmodel.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.Configuration

@@ -18,7 +18,7 @@ package utils
 
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.time.{Instant, LocalDate, ZoneId}
+import java.time.{ Instant, LocalDate, ZoneId }
 
 object DateUtils extends App {
 

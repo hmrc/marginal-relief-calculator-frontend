@@ -16,9 +16,9 @@
 
 package config
 
-import com.google.inject.{Inject, Singleton}
+import com.google.inject.{ Inject, Singleton }
 import connectors.sharedmodel.CalculatorConfig
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.{ Logger, LoggerFactory }
 import play.api.Configuration
 import play.api.i18n.Lang
 

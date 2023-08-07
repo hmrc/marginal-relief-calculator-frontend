@@ -18,25 +18,29 @@ package services
 
 import cats.data.ValidatedNel
 import cats.syntax.apply._
-import config.{ConfigMissingError, FrontendAppConfig}
+import config.{ ConfigMissingError, FrontendAppConfig }
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import play.api.Logging
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
-import utils.ShowCalculatorDisclaimerUtils.{financialYearEnd, getFinancialYearForDate}
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
+import utils.ShowCalculatorDisclaimerUtils.{ financialYearEnd, getFinancialYearForDate }
 
 import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.Future
 
 @Singleton
-class AssociatedCompaniesParameterService @Inject()(connector: MarginalReliefCalculatorConnector,
-                                                    appConfig: FrontendAppConfig) extends Logging {
+class AssociatedCompaniesParameterService @Inject() (
+  connector: MarginalReliefCalculatorConnector,
+  appConfig: FrontendAppConfig
+) extends Logging {
 
   type ParameterConfigResult = ValidatedNel[ConfigMissingError, AssociatedCompaniesParameter]
 
-  private def doGetParameters(accountingPeriodStart: LocalDate,
-                              accountingPeriodEnd: LocalDate): ParameterConfigResult = {
+  private def doGetParameters(
+    accountingPeriodStart: LocalDate,
+    accountingPeriodEnd: LocalDate
+  ): ParameterConfigResult = {
 
     def findConfig: Int => ValidatedNel[ConfigMissingError, FYConfig] =
       appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
@@ -53,23 +57,27 @@ class AssociatedCompaniesParameterService @Inject()(connector: MarginalReliefCal
       config1.upperThreshold == config2.upperThreshold && config1.lowerThreshold == config2.lowerThreshold
 
     (fyr1Config, fyr2Config).mapN {
-      case (_: FlatRateConfig, _: FlatRateConfig) => DontAsk
+      case (_: FlatRateConfig, _: FlatRateConfig)                                                             => DontAsk
       case (c1: MarginalReliefConfig, c2: MarginalReliefConfig) if sameThresholds(config1 = c1, config2 = c2) => AskFull
-      case (_: MarginalReliefConfig, _: MarginalReliefConfig) => AskBothParts(
-        period1 = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart),
-        period2 = Period(start = fyEndForAccountingPeriodStart.plusDays(1), end = accountingPeriodEnd)
-      )
-      case (_: FlatRateConfig, _: MarginalReliefConfig) => AskOnePart(
-        period = Period(start = fyEndForAccountingPeriodStart.plusDays(1), end = accountingPeriodEnd)
-      )
-      case (_: MarginalReliefConfig, _: FlatRateConfig) => AskOnePart(
-        period = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart)
-      )
+      case (_: MarginalReliefConfig, _: MarginalReliefConfig) =>
+        AskBothParts(
+          period1 = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart),
+          period2 = Period(start = fyEndForAccountingPeriodStart.plusDays(1), end = accountingPeriodEnd)
+        )
+      case (_: FlatRateConfig, _: MarginalReliefConfig) =>
+        AskOnePart(
+          period = Period(start = fyEndForAccountingPeriodStart.plusDays(1), end = accountingPeriodEnd)
+        )
+      case (_: MarginalReliefConfig, _: FlatRateConfig) =>
+        AskOnePart(
+          period = Period(start = accountingPeriodStart, end = fyEndForAccountingPeriodStart)
+        )
     }
   }
 
-  def associatedCompaniesParameters(accountingPeriodStart: LocalDate, accountingPeriodEnd: LocalDate)
-                                   (implicit hc: HeaderCarrier): Future[AssociatedCompaniesParameter] =
+  def associatedCompaniesParameters(accountingPeriodStart: LocalDate, accountingPeriodEnd: LocalDate)(implicit
+    hc: HeaderCarrier
+  ): Future[AssociatedCompaniesParameter] =
     if (appConfig.reworkEnabled) {
       logger.info(message = "Determining associated companies parameters locally")
 

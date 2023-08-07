@@ -16,29 +16,29 @@
 
 package controllers
 
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{Distribution, UserAnswers}
+import models.{ Distribution, UserAnswers }
 import pages._
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
-import services.{CalculationConfigService, CalculatorService}
+import services.{ CalculationConfigService, CalculatorService }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FullResultsPageView
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class FullResultsPageController @Inject() (
-                                            override val messagesApi: MessagesApi,
-                                            identify: IdentifierAction,
-                                            getData: DataRetrievalAction,
-                                            requireData: DataRequiredAction,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            view: FullResultsPageView,
-                                            calculationConfigService: CalculationConfigService,
-                                            calculatorService: CalculatorService
+  override val messagesApi: MessagesApi,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: FullResultsPageView,
+  calculationConfigService: CalculationConfigService,
+  calculatorService: CalculatorService
 )(implicit val ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 

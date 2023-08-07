@@ -17,37 +17,37 @@
 package controllers
 
 import akka.stream.scaladsl.StreamConverters
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm}
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{Distribution, PDFAddCompanyDetails, UserAnswers}
+import models.{ Distribution, PDFAddCompanyDetails, UserAnswers }
 import pages._
 import play.api.http.HttpEntity
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
-import services.{CalculationConfigService, CalculatorService}
+import services.{ CalculationConfigService, CalculatorService }
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{DateTime, PDFGenerator}
-import views.html.{PDFFileTemplate, PDFView}
+import utils.{ DateTime, PDFGenerator }
+import views.html.{ PDFFileTemplate, PDFView }
 
 import java.io.ByteArrayInputStream
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class PDFController @Inject() (
-                                override val messagesApi: MessagesApi,
-                                val controllerComponents: MessagesControllerComponents,
-                                identify: IdentifierAction,
-                                getData: DataRetrievalAction,
-                                requireData: DataRequiredAction,
-                                view: PDFView,
-                                pdfFileTemplate: PDFFileTemplate,
-                                dateTime: DateTime,
-                                pdfGenerator: PDFGenerator,
-                                calculationConfigService: CalculationConfigService,
-                                calculatorService: CalculatorService
+  override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  view: PDFView,
+  pdfFileTemplate: PDFFileTemplate,
+  dateTime: DateTime,
+  pdfGenerator: PDFGenerator,
+  calculationConfigService: CalculationConfigService,
+  calculatorService: CalculatorService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 

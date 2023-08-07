@@ -16,29 +16,33 @@
 
 package services
 
-import calculator.{CalculatorValidationResult, MarginalReliefCalculator}
-import config.{ConfigMissingError, FrontendAppConfig}
+import calculator.{ CalculatorValidationResult, MarginalReliefCalculator }
+import config.{ ConfigMissingError, FrontendAppConfig }
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.CalculatorResult
 import play.api.Logging
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 
 import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
+import javax.inject.{ Inject, Singleton }
 import scala.concurrent.Future
 
 @Singleton
-class CalculatorService @Inject()(connector: MarginalReliefCalculatorConnector,
-                                  appConfig: FrontendAppConfig,
-                                  calculator: MarginalReliefCalculator) extends Logging {
+class CalculatorService @Inject() (
+  connector: MarginalReliefCalculatorConnector,
+  appConfig: FrontendAppConfig,
+  calculator: MarginalReliefCalculator
+) extends Logging {
 
-  def calculate(accountingPeriodStart: LocalDate,
-                accountingPeriodEnd: LocalDate,
-                profit: Double,
-                exemptDistributions: Option[Double],
-                associatedCompanies: Option[Int],
-                associatedCompaniesFY1: Option[Int],
-                associatedCompaniesFY2: Option[Int])(implicit hc: HeaderCarrier): Future[CalculatorResult] = {
+  def calculate(
+    accountingPeriodStart: LocalDate,
+    accountingPeriodEnd: LocalDate,
+    profit: Double,
+    exemptDistributions: Option[Double],
+    associatedCompanies: Option[Int],
+    associatedCompaniesFY1: Option[Int],
+    associatedCompaniesFY2: Option[Int]
+  )(implicit hc: HeaderCarrier): Future[CalculatorResult] =
     if (appConfig.reworkEnabled) {
       logger.info(message = "Using reworked calculation solution")
 
@@ -78,6 +82,5 @@ class CalculatorService @Inject()(connector: MarginalReliefCalculatorConnector,
         associatedCompaniesFY2 = associatedCompaniesFY2
       )
     }
-  }
 
 }

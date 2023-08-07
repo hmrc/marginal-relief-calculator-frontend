@@ -17,33 +17,37 @@
 package services
 
 import cats.data.Validated
-import config.{ConfigMissingError, FrontendAppConfig}
+import config.{ ConfigMissingError, FrontendAppConfig }
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{CalculatorResult, FYConfig}
+import connectors.sharedmodel.{ CalculatorResult, FYConfig }
 import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{ Inject, Singleton }
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CalculationConfigService @Inject()(connector: MarginalReliefCalculatorConnector, appConfig: FrontendAppConfig)
-                                        (implicit ec: ExecutionContext) extends Logging {
+class CalculationConfigService @Inject() (connector: MarginalReliefCalculatorConnector, appConfig: FrontendAppConfig)(
+  implicit ec: ExecutionContext
+) extends Logging {
 
   def getConfig(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig] = if (appConfig.reworkEnabled) {
     logger.info(message = "Retrieving config from configuration file")
 
     appConfig.calculatorConfig.findFYConfig(year)(ConfigMissingError) match {
       case Validated.Valid(config) => Future.successful(config)
-      case Validated.Invalid(e) => Future.failed(
-        new RuntimeException(s"Configuration for year ${e.head.year} is missing.")
-      )
+      case Validated.Invalid(e) =>
+        Future.failed(
+          new RuntimeException(s"Configuration for year ${e.head.year} is missing.")
+        )
     }
   } else {
     connector.config(year)
   }
 
-  def getAllConfigs[U <: CalculatorResult](calculatorResult: U)(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
+  def getAllConfigs[U <: CalculatorResult](
+    calculatorResult: U
+  )(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
     calculatorResult.fold(single =>
       getConfig(single.details.year)
         .map(config => Map(single.details.year -> config))

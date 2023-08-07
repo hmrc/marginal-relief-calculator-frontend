@@ -16,14 +16,14 @@
 
 package config
 
-import connectors.sharedmodel.{FYConfig, FlatRateConfig, MarginalReliefConfig}
-import play.api.{ConfigLoader, Configuration}
+import connectors.sharedmodel.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
+import play.api.{ ConfigLoader, Configuration }
 import cats.data.ValidatedNel
 import cats.syntax.apply._
 import cats.syntax.traverse._
 import cats.syntax.validated._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 object CalculatorConfigParser {
 

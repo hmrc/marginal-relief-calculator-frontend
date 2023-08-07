@@ -17,26 +17,29 @@
 package calculator
 
 import cats.syntax.apply._
-import com.google.inject.{Inject, Singleton}
-import config.{ConfigMissingError, FrontendAppConfig}
+import com.google.inject.{ Inject, Singleton }
+import config.{ ConfigMissingError, FrontendAppConfig }
 import connectors.sharedmodel._
 import utils.DateUtils._
-import utils.ShowCalculatorDisclaimerUtils.{DateOps, financialYearEnd}
+import utils.ShowCalculatorDisclaimerUtils.{ DateOps, financialYearEnd }
 
 import java.time.LocalDate
 
 @Singleton
-class MarginalReliefCalculator @Inject()(appConfig: FrontendAppConfig) {
+class MarginalReliefCalculator @Inject() (appConfig: FrontendAppConfig) {
 
-  def compute(accountingPeriodStart: LocalDate,
-              accountingPeriodEnd: LocalDate,
-              profit: BigDecimal,
-              exemptDistributions: BigDecimal,
-              associatedCompanies: Option[Int],
-              associatedCompaniesFY1: Option[Int],
-              associatedCompaniesFY2: Option[Int]): CalculatorValidationResult[CalculatorResult] = {
+  def compute(
+    accountingPeriodStart: LocalDate,
+    accountingPeriodEnd: LocalDate,
+    profit: BigDecimal,
+    exemptDistributions: BigDecimal,
+    associatedCompanies: Option[Int],
+    associatedCompaniesFY1: Option[Int],
+    associatedCompaniesFY2: Option[Int]
+  ): CalculatorValidationResult[CalculatorResult] = {
 
-    def findConfig: Int => CalculatorValidationResult[FYConfig] = appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
+    def findConfig: Int => CalculatorValidationResult[FYConfig] =
+      appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
 
     val daysInAP: Int = daysBetweenInclusive(accountingPeriodStart, accountingPeriodEnd)
     val fyEndForAPStartDate: LocalDate = financialYearEnd(accountingPeriodStart)

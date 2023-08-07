@@ -17,12 +17,12 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
+import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
-import models.{Distribution, UserAnswers}
+import models.{ Distribution, UserAnswers }
 import pages._
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import services.AssociatedCompaniesParameterService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -30,7 +30,7 @@ import viewmodels.checkAnswers._
 import viewmodels.govuk.summarylist._
 import views.html.CheckYourAnswersView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,

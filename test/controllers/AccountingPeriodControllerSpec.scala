@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import forms.{AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm}
-import models.{AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import forms.{ AccountingPeriodForm, AccountingPeriodFormProvider, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, CheckMode, Distribution, DistributionsIncluded, NormalMode, UserAnswers }
+import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -27,13 +27,13 @@ import pages._
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.api.inject.bind
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call}
+import play.api.mvc.{ AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Call }
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
-import views.html.{AccountingPeriodView, IrrelevantPeriodView}
+import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
 import controllers.routes
 
 import java.time.LocalDate
@@ -79,7 +79,8 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
     .get
 
   def onwardRoute: Call = Call("GET", "/foo")
-  val validAnswer: AccountingPeriodForm = AccountingPeriodForm(LocalDate.parse("2023-04-02"), Some(LocalDate.parse("2023-04-02").plusDays(1)))
+  val validAnswer: AccountingPeriodForm =
+    AccountingPeriodForm(LocalDate.parse("2023-04-02"), Some(LocalDate.parse("2023-04-02").plusDays(1)))
 
   private lazy val accountingPeriodRoute = routes.AccountingPeriodController.onPageLoad(NormalMode).url
   private lazy val accountingPeriodRouteCheckMode = routes.AccountingPeriodController.onPageLoad(CheckMode).url
@@ -220,12 +221,12 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val request = FakeRequest(POST, accountingPeriodRoute)
           .withFormUrlEncodedBody(
-            "accountingPeriodStartDate.day" -> epoch.getDayOfMonth.toString,
+            "accountingPeriodStartDate.day"   -> epoch.getDayOfMonth.toString,
             "accountingPeriodStartDate.month" -> epoch.getMonth.getValue.toString,
-            "accountingPeriodStartDate.year" -> epoch.getYear.toString,
-            "accountingPeriodEndDate.day" -> epochEndDate.getDayOfMonth.toString,
-            "accountingPeriodEndDate.month" -> epochEndDate.getMonth.getValue.toString,
-            "accountingPeriodEndDate.year" -> epochEndDate.getYear.toString
+            "accountingPeriodStartDate.year"  -> epoch.getYear.toString,
+            "accountingPeriodEndDate.day"     -> epochEndDate.getDayOfMonth.toString,
+            "accountingPeriodEndDate.month"   -> epochEndDate.getMonth.getValue.toString,
+            "accountingPeriodEndDate.year"    -> epochEndDate.getYear.toString
           )
           .withSession(SessionKeys.sessionId -> "test-session-id")
 

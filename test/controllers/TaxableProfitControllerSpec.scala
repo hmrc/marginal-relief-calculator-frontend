@@ -17,13 +17,13 @@
 package controllers
 
 import base.SpecBase
-import forms.{AccountingPeriodForm, TaxableProfitFormProvider}
+import forms.{ AccountingPeriodForm, TaxableProfitFormProvider }
 import models.NormalMode
-import navigation.{FakeNavigator, Navigator}
+import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{AccountingPeriodPage, TaxableProfitPage}
+import pages.{ AccountingPeriodPage, TaxableProfitPage }
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call

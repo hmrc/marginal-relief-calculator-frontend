@@ -18,20 +18,20 @@ package controllers
 
 import akka.stream.Materializer
 import base.SpecBase
-import connectors.sharedmodel.{DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm, TwoAssociatedCompaniesForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails}
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
+import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{CalculationConfigService, CalculatorService}
-import utils.{DateTime, FakeDateTime}
+import services.{ CalculationConfigService, CalculatorService }
+import utils.{ DateTime, FakeDateTime }
 import views.html.PDFView
 
-import java.time.{LocalDate, ZoneOffset}
+import java.time.{ LocalDate, ZoneOffset }
 import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
@@ -173,24 +173,30 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
         val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val dualYearAnswers = emptyUserAnswers
-          .set(AccountingPeriodPage, accountingPeriodForm).get
-          .set(TaxableProfitPage, 1).get
-          .set(DistributionPage, Distribution.Yes).get
+          .set(AccountingPeriodPage, accountingPeriodForm)
+          .get
+          .set(TaxableProfitPage, 1)
+          .get
+          .set(DistributionPage, Distribution.Yes)
+          .get
           .set(
             DistributionsIncludedPage,
             distributionsIncludedForm
-          ).get
+          )
+          .get
           .set(
             PDFMetadataPage,
             PDFMetadataForm(Some("company"), Some(utrString))
-          ).get
+          )
+          .get
           .set(
             page = TwoAssociatedCompaniesPage,
             value = TwoAssociatedCompaniesForm(
               associatedCompaniesFY1Count = Some(1),
               associatedCompaniesFY2Count = Some(2)
             )
-          ).get
+          )
+          .get
 
         val application = applicationBuilder(userAnswers = Some(dualYearAnswers))
           .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
@@ -274,14 +280,16 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
         val mockCalculatorService: CalculatorService = mock[CalculatorService]
         val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
-        val requiredAnswersWithAC = requiredAnswers.copy()
+        val requiredAnswersWithAC = requiredAnswers
+          .copy()
           .set(
             page = TwoAssociatedCompaniesPage,
             value = TwoAssociatedCompaniesForm(
               associatedCompaniesFY1Count = Some(1),
               associatedCompaniesFY2Count = Some(2)
             )
-          ).get
+          )
+          .get
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswersWithAC))
           .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
@@ -387,11 +395,9 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           val contentDisposition = headers(result).get("Content-Disposition")
           contentDisposition.isDefined mustBe true
           contentDisposition.get mustBe
-            s"""attachment; filename="marginal-relief-for-corporation-tax-result-${
-              fakeDateTime.currentInstant
+            s"""attachment; filename="marginal-relief-for-corporation-tax-result-${fakeDateTime.currentInstant
                 .atOffset(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))
-            }.pdf""""
+                .format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf""""
           contentAsBytes(result).nonEmpty mustBe true
         }
       }

@@ -17,7 +17,7 @@
 package config
 
 import com.typesafe.config.ConfigFactory
-import connectors.sharedmodel.{FlatRateConfig, MarginalReliefConfig}
+import connectors.sharedmodel.{ FlatRateConfig, MarginalReliefConfig }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.Configuration

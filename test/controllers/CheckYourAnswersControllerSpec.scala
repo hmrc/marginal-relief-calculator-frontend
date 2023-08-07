@@ -18,9 +18,9 @@ package controllers
 
 import base.SpecBase
 import connectors.sharedmodel.AskFull
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages._
 import play.api.i18n.Messages
 import play.api.inject.bind
