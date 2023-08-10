@@ -17,16 +17,15 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
-import play.api.http.Status.{ OK, SEE_OTHER }
+import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty }
+import play.api.test.Helpers._
+import services.CalculatorService
 import views.html.ResultsPageView
 
 import java.time.LocalDate
@@ -60,41 +59,71 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
   "ResultsPageController" - {
     "GET page" - {
       "must render results when all required data is available in user answers" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val allRequiredAnswers: UserAnswers = requiredAnswers
+          .copy()
+          .set(
+            page = TwoAssociatedCompaniesPage,
+            value = TwoAssociatedCompaniesForm(
+              associatedCompaniesFY1Count = Some(1),
+              associatedCompaniesFY2Count = Some(2)
+            )
+          )
+          .get
 
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+
+        val application = applicationBuilder(userAnswers = Some(allRequiredAnswers))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
-        val calculatorResult =
-          SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
-        mockMarginalReliefCalculatorConnector.calculate(
+
+        val calculatorResult = SingleResult(
+          MarginalRate(
+            year = epoch.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(numerator = 1, denominator = 365)
+          ),
+          effectiveTaxRate = 1
+        )
+
+        mockCalculatorService.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
-          1.0,
-          Some(1),
-          Some(1),
-          None,
-          None
+          profit = 1.0,
+          exemptDistributions = Some(1),
+          associatedCompanies = Some(1),
+          associatedCompaniesFY1 = Some(1),
+          associatedCompaniesFY2 = Some(2)
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
-
           val result = route(application, request).value
-
           val view = application.injector.instanceOf[ResultsPageView]
 
           status(result) mustEqual OK
+
           contentAsString(result).filterAndTrim mustEqual view
             .render(
-              calculatorResult,
-              AccountingPeriodForm(epoch, Some(epoch.plusDays(1))),
-              1,
-              1,
-              Left(1),
-              request,
-              messages(application)
+              calculatorResult = calculatorResult,
+              accountingPeriodForm = AccountingPeriodForm(
+                accountingPeriodStartDate = epoch,
+                accountingPeriodEndDate = Some(epoch.plusDays(1))
+              ),
+              taxableProfit = 1,
+              distributions = 1,
+              associatedCompanies = Right((1, 2)),
+              request = request,
+              messages = messages(application)
             )
             .toString
             .filterAndTrim
@@ -102,8 +131,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       }
 
       "must redirect to Journey recovery if required params are missing in user answers" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
 
         val application = applicationBuilder(
           userAnswers = Some(
@@ -111,11 +140,11 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
               .set(AccountingPeriodPage, AccountingPeriodForm(epoch, Some(epoch.plusDays(1))))
               .get
           )
-        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        ).overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
         val calculatorResult =
           SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = epoch,
           accountingPeriodEnd = epoch.plusDays(1),
           1.0,
@@ -134,8 +163,8 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
       }
 
       "must contain proper wording while accounting period covers 2 financial years" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
 
         val startDate = LocalDate.of(2023, 1, 1)
         val endDate = LocalDate.of(2023, 12, 31)
@@ -155,7 +184,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
                     AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
                   )
           } yield u5).toOption
-        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        ).overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .build()
 
         val calculatorResult =
@@ -164,7 +193,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
             FlatRate(2023, 1, 1, 1, 1, 1, 275),
             1
           )
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = startDate,
           accountingPeriodEnd = endDate,
           1.0,

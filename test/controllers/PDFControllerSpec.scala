@@ -18,17 +18,16 @@ package controllers
 
 import akka.stream.Materializer
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage }
-import play.api.http.Status.{ OK, SEE_OTHER }
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsBytes, contentAsString, defaultAwaitTimeout, header, headers, route, running, status, writeableOf_AnyContentAsEmpty }
+import play.api.test.Helpers._
+import services.{ CalculationConfigService, CalculatorService }
 import utils.{ DateTime, FakeDateTime }
 import views.html.PDFView
 
@@ -54,6 +53,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
   private val associatedCompaniesForm = AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))
   private val utrString = "1234567890"
   private val pdfMetadataForm = Option(PDFMetadataForm(Some("company"), Some(utrString)))
+
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, accountingPeriodForm)
     .get
@@ -86,77 +86,76 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
 
   "PDFController" - {
     "GET /pdf" - {
-      "must render pdf page when all data is available for single year" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+      "must render pdf page when data is available for single year" in {
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
         val calculatorResult = SingleResult(
           MarginalRate(
-            accountingPeriodForm.accountingPeriodStartDate.getYear,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            FYRatio(1, 365)
+            year = accountingPeriodForm.accountingPeriodStartDate.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(1, 365)
           ),
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          1,
-          Some(1),
-          Some(1),
-          None,
-          None
+          profit = 1,
+          exemptDistributions = Some(1),
+          associatedCompanies = Some(1),
+          associatedCompaniesFY1 = None,
+          associatedCompaniesFY2 = None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
-
           val result = route(application, request).value
-
           val view = application.injector.instanceOf[PDFView]
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view
             .render(
-              pdfMetadataForm,
-              calculatorResult,
-              accountingPeriodForm,
-              1,
-              1,
-              Left(1),
-              config,
-              fakeDateTime.currentInstant,
-              request,
-              messages(application)
+              pdfMetadata = pdfMetadataForm,
+              calculatorResult = calculatorResult,
+              accountingPeriodForm = accountingPeriodForm,
+              taxableProfit = 1,
+              distributions = 1,
+              associatedCompanies = Left(1),
+              config = config,
+              currentInstant = fakeDateTime.currentInstant,
+              request = request,
+              messages = messages(application)
             )
             .toString
             .filterAndTrim
         }
       }
 
-      "must render redirect to recovery controller when all data is not available" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+      "must render redirect to recovery controller when data is not available" in {
+        val mockCalculatorService: CalculatorService =
+          mock[CalculatorService]
         val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
@@ -169,81 +168,106 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
         }
       }
 
-      "must render pdf page when all data is available for dual year" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+      "must render pdf page when data is available for dual year" in {
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        val dualYearAnswers = emptyUserAnswers
+          .set(AccountingPeriodPage, accountingPeriodForm)
+          .get
+          .set(TaxableProfitPage, 1)
+          .get
+          .set(DistributionPage, Distribution.Yes)
+          .get
+          .set(
+            DistributionsIncludedPage,
+            distributionsIncludedForm
+          )
+          .get
+          .set(
+            PDFMetadataPage,
+            PDFMetadataForm(Some("company"), Some(utrString))
+          )
+          .get
+          .set(
+            page = TwoAssociatedCompaniesPage,
+            value = TwoAssociatedCompaniesForm(
+              associatedCompaniesFY1Count = Some(1),
+              associatedCompaniesFY2Count = Some(2)
+            )
+          )
+          .get
+
+        val application = applicationBuilder(userAnswers = Some(dualYearAnswers))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
         val calculatorResult = DualResult(
           MarginalRate(
-            accountingPeriodForm.accountingPeriodStartDate.getYear,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            FYRatio(1, 365)
+            year = accountingPeriodForm.accountingPeriodStartDate.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(1, 365)
           ),
           MarginalRate(
-            accountingPeriodForm.accountingPeriodStartDate.getYear,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            FYRatio(1, 365)
+            year = accountingPeriodForm.accountingPeriodStartDate.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(1, 365)
           ),
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          1,
-          Some(1),
-          Some(1),
-          None,
-          None
+          profit = 1,
+          exemptDistributions = Some(1),
+          associatedCompanies = None,
+          associatedCompaniesFY1 = None,
+          associatedCompaniesFY2 = None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
-
           val result = route(application, request).value
-
           val view = application.injector.instanceOf[PDFView]
 
           status(result) mustEqual OK
           contentAsString(result).filterAndTrim mustEqual view
             .render(
-              pdfMetadataForm,
-              calculatorResult,
-              accountingPeriodForm,
-              1,
-              1,
-              Left(1),
-              config,
-              fakeDateTime.currentInstant,
-              request,
-              messages(application)
+              pdfMetadata = None,
+              calculatorResult = calculatorResult,
+              accountingPeriodForm = accountingPeriodForm,
+              taxableProfit = 1,
+              distributions = 1,
+              associatedCompanies = Right((1, 2)),
+              config = config,
+              currentInstant = fakeDateTime.currentInstant,
+              request = request,
+              messages = messages(application)
             )
             .toString
             .filterAndTrim
@@ -252,44 +276,56 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
     }
 
     "GET - /pdf-save" - {
-      "should download the calculation details PDF" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+      "should download the calculation details PDF when twoAssociatedCompanies is defined" in {
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        val requiredAnswersWithAC = requiredAnswers
+          .copy()
+          .set(
+            page = TwoAssociatedCompaniesPage,
+            value = TwoAssociatedCompaniesForm(
+              associatedCompaniesFY1Count = Some(1),
+              associatedCompaniesFY2Count = Some(2)
+            )
+          )
+          .get
+
+        val application = applicationBuilder(userAnswers = Some(requiredAnswersWithAC))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .overrides(bind[DateTime].toInstance(fakeDateTime))
           .build()
 
         val calculatorResult = SingleResult(
-          MarginalRate(
-            accountingPeriodForm.accountingPeriodStartDate.getYear,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            FYRatio(1, 365)
+          details = MarginalRate(
+            year = accountingPeriodForm.accountingPeriodStartDate.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(1, 365)
           ),
-          1
+          effectiveTaxRate = 1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          1,
-          Some(1),
-          Some(1),
-          None,
-          None
+          profit = 1,
+          exemptDistributions = Some(1),
+          associatedCompanies = Some(1),
+          associatedCompaniesFY1 = None,
+          associatedCompaniesFY2 = None
         )(*) returns Future.successful(calculatorResult)
 
         running(application) {
@@ -304,6 +340,64 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           contentDisposition.get mustBe s"""attachment; filename="marginal-relief-for-corporation-tax-result-${fakeDateTime.currentInstant
               .atOffset(ZoneOffset.UTC)
               .format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf""""
+          contentAsBytes(result).nonEmpty mustBe true
+        }
+      }
+
+      "should download the calculation details PDF when twoAssociatedCompanies is not defined" in {
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
+
+        val application = applicationBuilder(userAnswers = Some(requiredAnswers))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
+          .overrides(bind[DateTime].toInstance(fakeDateTime))
+          .build()
+
+        val calculatorResult = SingleResult(
+          MarginalRate(
+            year = accountingPeriodForm.accountingPeriodStartDate.getYear,
+            corporationTaxBeforeMR = 1,
+            taxRateBeforeMR = 1,
+            corporationTax = 1,
+            taxRate = 1,
+            marginalRelief = 1,
+            adjustedProfit = 1,
+            adjustedDistributions = 1,
+            adjustedAugmentedProfit = 1,
+            adjustedLowerThreshold = 1,
+            adjustedUpperThreshold = 1,
+            days = 1,
+            fyRatio = FYRatio(1, 365)
+          ),
+          1
+        )
+
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+
+        mockCalculatorService.calculate(
+          accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+          profit = 1,
+          exemptDistributions = Some(1),
+          associatedCompanies = Some(1),
+          associatedCompaniesFY1 = None,
+          associatedCompaniesFY2 = None
+        )(*) returns Future.successful(calculatorResult)
+
+        running(application) {
+          implicit lazy val materializer: Materializer = application.materializer
+          val request = FakeRequest(GET, pdfSaveRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          val contentDisposition = headers(result).get("Content-Disposition")
+          contentDisposition.isDefined mustBe true
+          contentDisposition.get mustBe
+            s"""attachment; filename="marginal-relief-for-corporation-tax-result-${fakeDateTime.currentInstant
+                .atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ofPattern("ddMMyyyy-HHmm"))}.pdf""""
           contentAsBytes(result).nonEmpty mustBe true
         }
       }

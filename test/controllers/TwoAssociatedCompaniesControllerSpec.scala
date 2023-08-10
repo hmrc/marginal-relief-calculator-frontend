@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel.{ AskBothParts, Period }
 import forms.DateUtils.financialYear
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
@@ -25,12 +24,12 @@ import models.{ AssociatedCompanies, Distribution, NormalMode }
 import org.mockito.Mockito.when
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import org.scalatest.prop.TableDrivenPropertyChecks
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
+import pages._
 import play.api.data.FormError
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.TwoAssociatedCompaniesView
 
@@ -53,7 +52,7 @@ class TwoAssociatedCompaniesControllerSpec
     .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, None))
     .get
 
-  lazy val twoAssociatedCompaniesRoute = routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).url
+  private lazy val twoAssociatedCompaniesRoute = routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).url
 
   "TwoAssociatedCompanies Controller" - {
 
@@ -66,12 +65,13 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
         )
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(askParameter)
@@ -100,12 +100,13 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))
         )
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+
         val application = applicationBuilder(userAnswers = Some(answers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )(*) returns Future.successful(askParameter)
@@ -131,13 +132,15 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
         )
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+
+        val mockParameterService: AssociatedCompaniesParameterService =
+          mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(askParameter)
@@ -177,13 +180,13 @@ class TwoAssociatedCompaniesControllerSpec
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
           Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusYears(1).minusDays(1))
         )
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )(*) returns Future.successful(askParameter)
@@ -249,10 +252,10 @@ class TwoAssociatedCompaniesControllerSpec
           )
 
           val mockSessionRepository = mock[SessionRepository]
-          val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-            mock[MarginalReliefCalculatorConnector]
+          val mockParameterService: AssociatedCompaniesParameterService =
+            mock[AssociatedCompaniesParameterService]
 
-          mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
@@ -262,7 +265,7 @@ class TwoAssociatedCompaniesControllerSpec
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
               .overrides(
                 bind[SessionRepository].toInstance(mockSessionRepository),
-                bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
+                bind[AssociatedCompaniesParameterService].toInstance(mockParameterService)
               )
               .build()
 
@@ -305,10 +308,10 @@ class TwoAssociatedCompaniesControllerSpec
           )
 
           val mockSessionRepository = mock[SessionRepository]
-          val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-            mock[MarginalReliefCalculatorConnector]
+          val mockParameterService: AssociatedCompaniesParameterService =
+            mock[AssociatedCompaniesParameterService]
 
-          mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
@@ -318,7 +321,7 @@ class TwoAssociatedCompaniesControllerSpec
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
               .overrides(
                 bind[SessionRepository].toInstance(mockSessionRepository),
-                bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
+                bind[AssociatedCompaniesParameterService].toInstance(mockParameterService)
               )
               .build()
 
@@ -368,10 +371,9 @@ class TwoAssociatedCompaniesControllerSpec
           )
 
           val mockSessionRepository = mock[SessionRepository]
-          val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-            mock[MarginalReliefCalculatorConnector]
+          val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-          mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+          mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
             accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
           )(*) returns Future.successful(askParameter)
@@ -381,7 +383,7 @@ class TwoAssociatedCompaniesControllerSpec
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
               .overrides(
                 bind[SessionRepository].toInstance(mockSessionRepository),
-                bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector)
+                bind[AssociatedCompaniesParameterService].toInstance(mockParameterService)
               )
               .build()
 

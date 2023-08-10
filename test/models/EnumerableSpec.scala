@@ -16,10 +16,10 @@
 
 package models
 
-import org.scalatest.{ EitherValues, OptionValues }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.{ Format, JsPath, JsString, Json, JsonValidationError, Reads, Writes }
+import org.scalatest.{ EitherValues, OptionValues }
+import play.api.libs.json._
 
 object EnumerableSpec {
 
@@ -57,10 +57,15 @@ class EnumerableSpec extends AnyFreeSpec with Matchers with EitherValues with Op
         JsPath -> Seq(JsonValidationError("error.invalid"))
       )
     }
+
+    "must fail to bind for non JsString" in {
+      Json.fromJson[Foo](JsBoolean(true)).asEither.left.value must contain(
+        JsPath -> Seq(JsonValidationError("error.invalid"))
+      )
+    }
   }
 
   ".writes" - {
-
     "must be found implicitly" in {
       implicitly[Writes[Foo]]
     }
@@ -73,7 +78,6 @@ class EnumerableSpec extends AnyFreeSpec with Matchers with EitherValues with Op
   }
 
   ".formats" - {
-
     "must be found implicitly" in {
       implicitly[Format[Foo]]
     }

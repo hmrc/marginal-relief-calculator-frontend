@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-package connectors.sharedmodel
+package config
 
-import cats.data.ValidatedNel
-import cats.implicits.catsSyntaxValidatedId
-import play.api.libs.json.{ Json, OFormat }
+sealed trait ConfigError
 
-object CalculatorConfig {
-  implicit val format: OFormat[CalculatorConfig] = Json.format[CalculatorConfig]
-}
-case class CalculatorConfig(fyConfigs: Seq[FYConfig]) {
-  def findFYConfig[T](year: Int)(error: Int => T): ValidatedNel[T, FYConfig] =
-    this.fyConfigs.sortBy(_.year)(Ordering[Int].reverse).find(_.year <= year) match {
-      case Some(value) => value.validNel
-      case None        => error(year).invalidNel
-    }
-}
+case class ConfigMissingError(year: Int) extends ConfigError
+
+case class InvalidConfigError(message: String) extends ConfigError

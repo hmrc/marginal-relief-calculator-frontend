@@ -17,19 +17,19 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, PDFMetadataFormProvider }
+import forms._
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import navigation.{ FakeNavigator, Navigator }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFMetadataPage, TaxableProfitPage }
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
+import pages._
+import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.PDFMetadataView
 
@@ -38,7 +38,7 @@ import scala.concurrent.Future
 
 class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   private val formProvider = new PDFMetadataFormProvider()
   private val form = formProvider()
@@ -70,8 +70,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
     "onPageLoad" - {
       "must return OK and the correct view for a GET" in {
-
-        val application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
+        val application: Application = applicationBuilder(userAnswers = Some(requiredAnswers)).build()
 
         running(application) {
           val request = FakeRequest(GET, pDFMetadataRoute)
@@ -132,17 +131,21 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
     "onSubmit" - {
 
       "must redirect to the next page when valid data is submitted" in {
-
         val mockSessionRepository = mock[SessionRepository]
-
-        val mockConnector = mock[MarginalReliefCalculatorConnector]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
             .overrides(
-              bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
+              bind[Navigator].toInstance(
+                new FakeNavigator(
+                  desiredRoute = onwardRoute,
+                  associatedCompaniesParameterService = mockParameterService,
+                  sessionRepository = mockSessionRepository
+                )
+              ),
               bind[SessionRepository].toInstance(mockSessionRepository)
             )
             .build()

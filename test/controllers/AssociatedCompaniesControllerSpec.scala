@@ -17,18 +17,17 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
+import connectors.sharedmodel._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode }
 import org.mockito.Mockito.when
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import org.scalatest.prop.TableDrivenPropertyChecks
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.{ SessionKeys, UpstreamErrorResponse }
 import views.html.AssociatedCompaniesView
@@ -53,21 +52,22 @@ class AssociatedCompaniesControllerSpec
     .get
 
   "AssociatedCompanies Controller" - {
-
     "GET page" - {
-
       "must return OK and the correct view for a GET" in {
-
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )(*) returns Future.successful(AskFull)
+
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )(
+            hc = *
+          )
+          .returns(Future.successful(AskFull))
 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
@@ -85,41 +85,48 @@ class AssociatedCompaniesControllerSpec
       }
 
       "must return OK when distributions is yes and distributions included is non-empty" in {
-
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(
           Some(
             emptyUserAnswers
-              .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
+              .set(
+                page = AccountingPeriodPage,
+                value = AccountingPeriodForm(
+                  accountingPeriodStartDate = LocalDate.ofEpochDay(0),
+                  accountingPeriodEndDate = Some(LocalDate.ofEpochDay(1))
+                )
+              )
               .get
-              .set(TaxableProfitPage, 1)
+              .set(page = TaxableProfitPage, value = 1)
               .get
-              .set(DistributionPage, Distribution.Yes)
+              .set(page = DistributionPage, value = Distribution.Yes)
               .get
               .set(
-                DistributionsIncludedPage,
-                DistributionsIncludedForm(
-                  DistributionsIncluded.Yes,
-                  Some(1)
+                page = DistributionsIncludedPage,
+                value = DistributionsIncludedForm(
+                  distributionsIncluded = DistributionsIncluded.Yes,
+                  distributionsIncludedAmount = Some(1)
                 )
               )
               .get
           )
         )
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )(*) returns Future.successful(AskFull)
+
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )(
+            hc = *
+          )
+          .returns(Future.successful(AskFull))
 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
-
           val result = route(application, request).value
-
           val view = application.injector.instanceOf[AssociatedCompaniesView]
 
           status(result) mustEqual OK
@@ -131,18 +138,18 @@ class AssociatedCompaniesControllerSpec
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application = applicationBuilder(
           userAnswers = (for {
             u2 <- requiredAnswers.set(TaxableProfitPage, 1)
             u3 <- u2.set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           } yield u3).toOption
-        ).overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+        ).overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
@@ -192,15 +199,19 @@ class AssociatedCompaniesControllerSpec
       }
 
       "must redirect to CheckYourAnswers page, if AssociatedCompanies parameter is DontAsk" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(*) returns Future.successful(DontAsk)
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+
+        mockParameterService
+          .associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
+          )(
+            hc = *
+          )
+          .returns(Future.successful(DontAsk))
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
         running(application) {
@@ -212,15 +223,15 @@ class AssociatedCompaniesControllerSpec
       }
 
       "must throw an Exception if associated parameters HTTP call fails" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
 
         val application = applicationBuilder(Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
         running(application) {
@@ -233,22 +244,19 @@ class AssociatedCompaniesControllerSpec
     }
 
     "POST page" - {
-
       "must redirect to CheckYourAnswersController page when valid data is submitted" in {
-
         val mockSessionRepository = mock[SessionRepository]
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
-            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
         running(application) {
@@ -266,8 +274,8 @@ class AssociatedCompaniesControllerSpec
       "must clear associated companies count when associatedCompanies is No" in {
 
         val mockSessionRepository = mock[SessionRepository]
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         when(
           mockSessionRepository.set(
@@ -282,7 +290,7 @@ class AssociatedCompaniesControllerSpec
               .get
           )
         ) thenReturn Future.successful(true)
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
@@ -295,7 +303,7 @@ class AssociatedCompaniesControllerSpec
                 .get
             )
           )
-            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
         running(application) {
@@ -314,11 +322,11 @@ class AssociatedCompaniesControllerSpec
       "must redirect to the TwoAssociatedCompanies page when valid data is submitted and ask associated companies parameter is AskBothParts" in {
 
         val mockSessionRepository = mock[SessionRepository]
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         when(mockSessionRepository.set(*)) thenReturn Future.successful(true)
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )(*) returns Future.successful(
@@ -330,7 +338,7 @@ class AssociatedCompaniesControllerSpec
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
-            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
         running(application) {
@@ -346,12 +354,12 @@ class AssociatedCompaniesControllerSpec
       }
 
       "must return a Bad Request when associated companies requirement is AskFull or AskOnePart, but associatedCompaniesCount is empty" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
         val application =
           applicationBuilder(Some(requiredAnswers))
-            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
         running(application) {
@@ -366,7 +374,7 @@ class AssociatedCompaniesControllerSpec
           )
 
           forAll(table) { (requestParams, associatedCompaniesParameter) =>
-            mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+            mockParameterService.associatedCompaniesParameters(
               accountingPeriodStart = LocalDate.ofEpochDay(0),
               accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
             )(*) returns Future.successful(associatedCompaniesParameter)
@@ -395,15 +403,14 @@ class AssociatedCompaniesControllerSpec
 
       "must return a Bad Request when associatedCompanies parameter is invalid" in {
 
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
-        mockMarginalReliefCalculatorConnector.associatedCompaniesParameters(
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+        mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
         )(*) returns Future.successful(AskFull)
         val application =
           applicationBuilder(Some(requiredAnswers))
-            .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
         running(application) {

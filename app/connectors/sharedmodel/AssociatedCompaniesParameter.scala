@@ -24,8 +24,9 @@ import java.time.LocalDate
 sealed trait AssociatedCompaniesParameter
 
 object AssociatedCompaniesParameter {
-  implicit val format: OFormat[AssociatedCompaniesParameter] =
-    derived.flat.oformat[AssociatedCompaniesParameter]((__ \ "type").format[String])
+  implicit val format: OFormat[AssociatedCompaniesParameter] = derived.flat.oformat[AssociatedCompaniesParameter](
+    (__ \ "type").format[String]
+  )
 }
 
 case class Period(start: LocalDate, end: LocalDate)

@@ -17,7 +17,6 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
 import forms.{ AccountingPeriodForm, TaxableProfitFormProvider }
 import models.NormalMode
 import navigation.{ FakeNavigator, Navigator }
@@ -25,11 +24,12 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{ AccountingPeriodPage, TaxableProfitPage }
-import play.api.http.Status.{ BAD_REQUEST, OK, SEE_OTHER }
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, POST, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty, writeableOf_AnyContentAsFormUrlEncoded }
+import play.api.test.Helpers._
+import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import views.html.TaxableProfitView
 
@@ -39,13 +39,13 @@ import scala.concurrent.Future
 class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new TaxableProfitFormProvider()
-  val form = formProvider()
+  val form: Form[Int] = formProvider()
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val validAnswer = 0
 
-  lazy val taxableProfitRoute = routes.TaxableProfitController.onPageLoad(NormalMode).url
+  private lazy val taxableProfitRoute = routes.TaxableProfitController.onPageLoad(NormalMode).url
 
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
@@ -94,17 +94,15 @@ class TaxableProfitControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
       val mockSessionRepository = mock[SessionRepository]
-
-      val mockConnector = mock[MarginalReliefCalculatorConnector]
+      val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockConnector, mockSessionRepository)),
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute, mockParameterService, mockSessionRepository)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()

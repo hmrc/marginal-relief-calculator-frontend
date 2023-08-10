@@ -25,8 +25,7 @@ sealed trait FYConfig {
 }
 
 object FYConfig {
-  implicit val format: OFormat[FYConfig] =
-    derived.flat.oformat[FYConfig]((__ \ "type").format[String])
+  implicit val format: OFormat[FYConfig] = derived.flat.oformat[FYConfig]((__ \ "type").format[String])
 }
 
 case class FlatRateConfig(year: Int, mainRate: Double) extends FYConfig

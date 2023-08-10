@@ -17,16 +17,15 @@
 package controllers
 
 import base.SpecBase
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
+import connectors.sharedmodel._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
-import play.api.http.Status.{ OK, SEE_OTHER }
+import pages._
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, redirectLocation, route, running, status, writeableOf_AnyContentAsEmpty }
+import play.api.test.Helpers._
+import services.{ CalculationConfigService, CalculatorService }
 import views.html.FullResultsPageView
 
 import java.time.LocalDate
@@ -75,12 +74,14 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
   "FullResultsPageController" - {
     "GET page" - {
       "must render results when all data is available" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers = Some(requiredAnswers))
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .build()
+
         val calculatorResult = DualResult(
           year1 = MarginalRate(
             accountingPeriodForm.accountingPeriodStartDate.getYear,
@@ -115,9 +116,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -152,8 +153,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
       }
 
       "must render results when distributions is No" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers =
           Some(
@@ -171,7 +172,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
               .get
           )
         )
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .build()
         val calculatorResult = SingleResult(
           MarginalRate(
@@ -192,9 +194,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -224,8 +226,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
       }
 
       "must render results when distributions and associated companies is No" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers =
           Some(
@@ -243,7 +245,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
               .get
           )
         )
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .build()
         val calculatorResult = SingleResult(
           MarginalRate(
@@ -264,9 +267,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -296,8 +299,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
       }
 
       "must redirect to Journey recovery when mandatory parameters are missing in user answers" in {
-        val mockMarginalReliefCalculatorConnector: MarginalReliefCalculatorConnector =
-          mock[MarginalReliefCalculatorConnector]
+        val mockCalculatorService: CalculatorService = mock[CalculatorService]
+        val mockConfigService: CalculationConfigService = mock[CalculationConfigService]
 
         val application = applicationBuilder(userAnswers =
           Some(
@@ -306,7 +309,8 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
               .get
           )
         )
-          .overrides(bind[MarginalReliefCalculatorConnector].toInstance(mockMarginalReliefCalculatorConnector))
+          .overrides(bind[CalculatorService].toInstance(mockCalculatorService))
+          .overrides(bind[CalculationConfigService].toInstance(mockConfigService))
           .build()
         val calculatorResult = SingleResult(
           MarginalRate(
@@ -327,9 +331,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockMarginalReliefCalculatorConnector.config(2023)(*) returns Future.successful(config(2023))
+        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
 
-        mockMarginalReliefCalculatorConnector.calculate(
+        mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,

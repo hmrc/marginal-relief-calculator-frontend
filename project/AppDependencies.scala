@@ -11,7 +11,8 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"            % "1.3.0",
     "org.julienrf"      %% "play-json-derived-codecs"      % "10.1.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.13.0-play-28",
-    "com.openhtmltopdf"  % "openhtmltopdf-pdfbox"          % "1.0.10"
+    "com.openhtmltopdf"  % "openhtmltopdf-pdfbox"          % "1.0.10",
+    "org.typelevel"     %% "cats-core"                     % "2.9.0"
   )
 
   val test: Seq[ModuleID] = Seq(

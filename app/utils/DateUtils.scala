@@ -17,11 +17,21 @@
 package utils
 
 import java.time.format.DateTimeFormatter
-import java.time.{ Instant, ZoneId }
+import java.time.temporal.ChronoUnit
+import java.time.{ Instant, LocalDate, ZoneId }
 
 object DateUtils extends App {
+
+  def daysBetweenInclusive(start: LocalDate, end: LocalDate): Int =
+    (start.until(end, ChronoUnit.DAYS) + 1).toInt
+
   def formatInstantUTC(instant: Instant = Instant.now()): String =
     instant
       .atZone(ZoneId.of("UTC"))
       .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
+
+  def daysInFY(year: Int): Int = {
+    val start = LocalDate.of(year, 4, 1)
+    daysBetweenInclusive(start, start.plusYears(1).withMonth(3).withDayOfMonth(31))
+  }
 }
