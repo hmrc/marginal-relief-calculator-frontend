@@ -37,5 +37,5 @@ object ShowCalculatorDisclaimerUtils {
        date.plusYears(1)
      }).withMonth(Month.MARCH.getValue).withDayOfMonth(31)
 
-  def getFinancialYearForDate(date: LocalDate): Int = if (date.getMonthValue <= 3) date.getYear else date.getYear + 1
+  def getFinancialYearForDate(date: LocalDate): Int = if (date.getMonthValue >= 4) date.getYear else date.getYear - 1
 }
