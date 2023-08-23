@@ -22,10 +22,10 @@ import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.ScalaOngoingStubbing
-import org.mockito.{ArgumentMatchers, MockitoSugar}
+import org.mockito.{ ArgumentMatchers, MockitoSugar }
 import org.scalatest.enablers.Messaging
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 import utils.ShowCalculatorDisclaimerUtils.financialYearEnd
 
 import java.time.LocalDate
