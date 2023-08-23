@@ -22,10 +22,10 @@ import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.ScalaOngoingStubbing
-import org.mockito.{ ArgumentMatchers, MockitoSugar }
+import org.mockito.{ArgumentMatchers, MockitoSugar}
 import org.scalatest.enablers.Messaging
-import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
-import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
 import utils.ShowCalculatorDisclaimerUtils.financialYearEnd
 
 import java.time.LocalDate
@@ -99,7 +99,7 @@ class AssociatedCompaniesParameterServiceSpec
       mockCalculatorConfig(result =
         CalculatorConfig(fyConfigs =
           Seq(
-            FlatRateConfig(year = 2023, mainRate = 50.0)
+            FlatRateConfig(year = 2022, mainRate = 50.0)
           )
         )
       )
@@ -121,7 +121,7 @@ class AssociatedCompaniesParameterServiceSpec
         CalculatorConfig(fyConfigs =
           Seq(
             MarginalReliefConfig(
-              year = 2023,
+              year = 2022,
               lowerThreshold = 0,
               upperThreshold = 10,
               smallProfitRate = 0.5,
@@ -151,8 +151,8 @@ class AssociatedCompaniesParameterServiceSpec
       mockCalculatorConfig(result =
         CalculatorConfig(fyConfigs =
           Seq(
-            FlatRateConfig(year = 2023, mainRate = 50.0),
-            FlatRateConfig(year = 2024, mainRate = 50.0)
+            FlatRateConfig(year = 2022, mainRate = 50.0),
+            FlatRateConfig(year = 2023, mainRate = 50.0)
           )
         )
       )
@@ -174,7 +174,7 @@ class AssociatedCompaniesParameterServiceSpec
         CalculatorConfig(fyConfigs =
           Seq(
             MarginalReliefConfig(
-              year = 2023,
+              year = 2022,
               lowerThreshold = 0,
               upperThreshold = 10,
               smallProfitRate = 0.5,
@@ -182,7 +182,7 @@ class AssociatedCompaniesParameterServiceSpec
               marginalReliefFraction = 0.5
             ),
             MarginalReliefConfig(
-              year = 2024,
+              year = 2023,
               lowerThreshold = 0,
               upperThreshold = 10,
               smallProfitRate = 0.5,
@@ -212,7 +212,7 @@ class AssociatedCompaniesParameterServiceSpec
         CalculatorConfig(fyConfigs =
           Seq(
             MarginalReliefConfig(
-              year = 2023,
+              year = 2022,
               lowerThreshold = 0,
               upperThreshold = 10,
               smallProfitRate = 0.5,
@@ -220,7 +220,7 @@ class AssociatedCompaniesParameterServiceSpec
               marginalReliefFraction = 0.5
             ),
             MarginalReliefConfig(
-              year = 2024,
+              year = 2023,
               lowerThreshold = 0,
               upperThreshold = 12,
               smallProfitRate = 0.5,
@@ -251,14 +251,14 @@ class AssociatedCompaniesParameterServiceSpec
         CalculatorConfig(fyConfigs =
           Seq(
             MarginalReliefConfig(
-              year = 2023,
+              year = 2022,
               lowerThreshold = 0,
               upperThreshold = 10,
               smallProfitRate = 0.5,
               mainRate = 0.7,
               marginalReliefFraction = 0.5
             ),
-            FlatRateConfig(year = 2024, mainRate = 50.0)
+            FlatRateConfig(year = 2023, mainRate = 50.0)
           )
         )
       )
@@ -284,9 +284,9 @@ class AssociatedCompaniesParameterServiceSpec
       mockCalculatorConfig(result =
         CalculatorConfig(fyConfigs =
           Seq(
-            FlatRateConfig(year = 2023, mainRate = 50.0),
+            FlatRateConfig(year = 2022, mainRate = 50.0),
             MarginalReliefConfig(
-              year = 2024,
+              year = 2023,
               lowerThreshold = 0,
               upperThreshold = 10,
               smallProfitRate = 0.5,
@@ -323,8 +323,8 @@ class AssociatedCompaniesParameterServiceSpec
 
       the[UnprocessableEntityException] thrownBy result must have message
         "Failed to determined associated company parameters for given data: " +
-        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2023, " +
-        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2024"
+        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2022, " +
+        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2023"
     }
   }
 }

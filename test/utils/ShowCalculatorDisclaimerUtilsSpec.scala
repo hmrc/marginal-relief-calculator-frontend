@@ -54,25 +54,25 @@ class ShowCalculatorDisclaimerUtilsSpec extends AnyFreeSpec with Matchers {
     "when calendar year is the same as tax year should return expected result" in {
       ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
         LocalDate.of(2023, 1, 1)
-      ) shouldBe 2023
+      ) shouldBe 2022
     }
 
     "when calendar year is not the same as tax year should return expected result" in {
       ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
         LocalDate.of(2023, 5, 1)
-      ) shouldBe 2024
+      ) shouldBe 2023
     }
 
     "when date is the first day of a tax year should return expected result" in {
       ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
         LocalDate.of(2023, 4, 1)
-      ) shouldBe 2024
+      ) shouldBe 2023
     }
 
     "when date is the last day of a tax year should return expected result" in {
       ShowCalculatorDisclaimerUtils.getFinancialYearForDate(
         LocalDate.of(2023, 3, 31)
-      ) shouldBe 2023
+      ) shouldBe 2022
     }
   }
 }
