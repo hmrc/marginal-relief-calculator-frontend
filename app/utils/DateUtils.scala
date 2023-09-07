@@ -16,19 +16,27 @@
 
 package utils
 
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.time.{ Instant, LocalDate, ZoneId }
+import java.time.{ LocalDate, Month }
 
-object DateUtils extends App {
+trait DateUtils {
+
+  implicit class DateOps(date: LocalDate) {
+    def isEqualOrAfter(another: LocalDate): Boolean =
+      date.equals(another) || date.isAfter(another)
+  }
+
+  def fyForDate(date: LocalDate): Int = date.getYear + (if (date.getMonth.getValue < Month.APRIL.getValue) -1 else 0)
+
+  def financialYearEnd(date: LocalDate): LocalDate =
+    (if (date.getMonth.getValue >= Month.JANUARY.getValue && date.getMonth.getValue <= Month.MARCH.getValue) {
+       date
+     } else {
+       date.plusYears(1)
+     }).withMonth(Month.MARCH.getValue).withDayOfMonth(31)
 
   def daysBetweenInclusive(start: LocalDate, end: LocalDate): Int =
     (start.until(end, ChronoUnit.DAYS) + 1).toInt
-
-  def formatInstantUTC(instant: Instant = Instant.now()): String =
-    instant
-      .atZone(ZoneId.of("UTC"))
-      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
 
   def daysInFY(year: Int): Int = {
     val start = LocalDate.of(year, 4, 1)
