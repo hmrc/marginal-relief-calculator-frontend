@@ -17,7 +17,7 @@
 package services
 
 import base.SpecBase
-import config.FrontendAppConfig
+import config.{ CalculatorConfig, FrontendAppConfig }
 import connectors.MarginalReliefCalculatorConnector
 import connectors.sharedmodel._
 import org.mockito.ArgumentMatchers.any

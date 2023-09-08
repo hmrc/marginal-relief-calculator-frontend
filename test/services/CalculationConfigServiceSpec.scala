@@ -17,9 +17,9 @@
 package services
 
 import base.SpecBase
-import config.FrontendAppConfig
+import config.{ CalculatorConfig, FrontendAppConfig }
 import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ CalculatorConfig, CalculatorResult, DualResult, FYConfig, FlatRate, FlatRateConfig, SingleResult }
+import connectors.sharedmodel.{ CalculatorResult, DualResult, FYConfig, FlatRate, FlatRateConfig, SingleResult }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.stubbing.ScalaOngoingStubbing
 import org.mockito.{ ArgumentMatchers, MockitoSugar }
