@@ -18,7 +18,8 @@ package controllers
 
 import akka.stream.Materializer
 import base.SpecBase
-import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig, SingleResult }
+import models.MarginalReliefConfig
+import models.calculator.{ DualResult, FYRatio, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
@@ -298,7 +299,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           .build()
 
         val calculatorResult = SingleResult(
-          details = MarginalRate(
+          taxDetails = MarginalRate(
             year = accountingPeriodForm.accountingPeriodStartDate.getYear,
             corporationTaxBeforeMR = 1,
             taxRateBeforeMR = 1,

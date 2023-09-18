@@ -21,10 +21,21 @@ import play.api.libs.json.{ OFormat, __ }
 import utils.RoundingUtils.roundUp
 
 sealed trait TaxDetails {
-  val corporationTax: BigDecimal
-  val adjustedProfit: BigDecimal
+  def year: Int
+  def days: Int
+  def corporationTax: BigDecimal
+  def adjustedProfit: BigDecimal
+  def adjustedDistributions: BigDecimal
+  def taxRate: BigDecimal
+  def adjustedAugmentedProfit: BigDecimal
 
   def roundValsUp: TaxDetails
+
+  def fold[T](f: FlatRate => T)(g: MarginalRate => T): T =
+    this match {
+      case x: FlatRate     => f(x)
+      case x: MarginalRate => g(x)
+    }
 }
 
 object TaxDetails {

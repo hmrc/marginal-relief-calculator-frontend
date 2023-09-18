@@ -18,7 +18,8 @@ package views.helpers
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, MarginalReliefConfig, SingleResult }
+import models.MarginalReliefConfig
+import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.api.test.Helpers

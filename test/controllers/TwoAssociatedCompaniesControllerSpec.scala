@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel.{ AskBothParts, Period }
+import models.associatedCompanies.{ AskBothParts, Period }
 import forms.DateUtils.financialYear
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
 import models.{ AssociatedCompanies, Distribution, NormalMode }

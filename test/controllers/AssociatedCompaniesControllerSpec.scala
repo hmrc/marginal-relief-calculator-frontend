@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel._
+import models.associatedCompanies._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, NormalMode }
 import org.mockito.Mockito.when

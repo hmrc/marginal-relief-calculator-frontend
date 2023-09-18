@@ -27,6 +27,7 @@ object AssociatedCompaniesParameter {
 }
 
 case object DontAsk extends AssociatedCompaniesParameter
+
 case object AskFull extends AssociatedCompaniesParameter
 case class AskOnePart(period: Period) extends AssociatedCompaniesParameter
 case class AskBothParts(period1: Period, period2: Period) extends AssociatedCompaniesParameter

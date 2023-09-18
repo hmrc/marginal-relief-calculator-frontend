@@ -16,7 +16,8 @@
 
 package views.helpers
 //
-import connectors.sharedmodel._
+import models.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
+import models.calculator._
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases._
@@ -24,8 +25,6 @@ import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTabl
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
 import views.helpers.ResultsPageHelper.replaceTableHeader
-
-import scala.collection.immutable.Seq
 
 object FullResultsPageHelper extends ViewHelper {
 
@@ -83,7 +82,7 @@ object FullResultsPageHelper extends ViewHelper {
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
-    def dualResultTable(dual: DualResult) = {
+    def dualResultTable(dual: DualResult[_ <: TaxDetails, _ <: TaxDetails]) = {
 
       def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year
@@ -116,9 +115,9 @@ object FullResultsPageHelper extends ViewHelper {
                 |</div>
                 |""".stripMargin)
 
-      val daysInAccountingPeriod = dual.year1.days + dual.year2.days
+      val daysInAccountingPeriod = dual.year1TaxDetails.days + dual.year2TaxDetails.days
 
-      dual.year1 -> dual.year2 match {
+      dual.year1TaxDetails -> dual.year2TaxDetails match {
         case (y1: MarginalRate, y2: MarginalRate) =>
           tabDisplay(taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies), daysInAccountingPeriod)
         case (y1: MarginalRate, y2: FlatRate) =>
@@ -144,7 +143,7 @@ object FullResultsPageHelper extends ViewHelper {
     calculatorResult.fold(single =>
       nonTabCalculationResultsTable(
         calculatorResult,
-        taxDetailsWithAssociatedCompanies(Seq(single.details), associatedCompanies),
+        taxDetailsWithAssociatedCompanies(Seq(single.taxDetails), associatedCompanies),
         taxableProfit,
         distributions,
         config
@@ -169,7 +168,8 @@ object FullResultsPageHelper extends ViewHelper {
             |<p class="govuk-body">${messages("fullResultsPage.marginalReliefFormula.description")}</p>""".stripMargin)
 
   def showMarginalReliefExplanation(calculatorResult: CalculatorResult): Boolean = {
-    val taxDetails = calculatorResult.fold(single => Seq(single.details))(dual => Seq(dual.year1, dual.year2))
+    val taxDetails =
+      calculatorResult.fold(single => Seq(single.taxDetails))(dual => Seq(dual.year1TaxDetails, dual.year2TaxDetails))
     taxDetails.exists(taxDetails => taxDetails.fold(_ => false)(isFiveStepMarginalRate))
   }
   def whatIsMarginalRate(calculatorResult: CalculatorResult)(implicit messages: Messages): Html =
@@ -213,7 +213,7 @@ object FullResultsPageHelper extends ViewHelper {
 
     val days = marginalRate.fyRatio.numerator.toInt
 
-    val daysInAP = calculatorResult.totalDays
+    val daysInAP = calculatorResult.fold(_.taxDetails.days)(_.totalDays)
     val daysInAPForAdjustedUL = marginalRate.fyRatio.denominator
 
     val upperThreshold = CurrencyUtils.format(yearConfig.upperThreshold)

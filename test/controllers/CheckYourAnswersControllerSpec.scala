@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel.AskFull
+import models.associatedCompanies._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }

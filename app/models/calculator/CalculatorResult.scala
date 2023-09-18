@@ -24,7 +24,18 @@ sealed trait CalculatorResult {
   val taxDetails: TaxDetails
   val `type`: String
 
+  def totalMarginalRelief: Double
+  def totalCorporationTax: Double
+  def totalCorporationTaxBeforeMR: Double
+  def effectiveTaxRateBeforeMR: Double
+
   def roundValsUp: CalculatorResult
+
+  def fold[T](f: SingleResult[TaxDetails] => T)(g: DualResult[TaxDetails, TaxDetails] => T): T =
+    this match {
+      case x @ SingleResult(_, _)  => f(x)
+      case x @ DualResult(_, _, _) => g(x)
+    }
 }
 
 object CalculatorResult {
@@ -49,6 +60,16 @@ object CalculatorResult {
 
 case class SingleResult[I <: TaxDetails](taxDetails: I, effectiveTaxRate: BigDecimal) extends CalculatorResult {
   val `type`: String = "SingleResult"
+
+  override def totalMarginalRelief: Double = taxDetails.fold(_ => 0.0)(_.marginalRelief.doubleValue)
+
+  override def totalCorporationTax: Double = taxDetails.corporationTax.doubleValue
+
+  override def totalCorporationTaxBeforeMR: Double =
+    taxDetails.fold(_.corporationTax)(_.corporationTaxBeforeMR).doubleValue
+
+  override def effectiveTaxRateBeforeMR: Double =
+    ((this.totalCorporationTaxBeforeMR / taxDetails.adjustedProfit) * 100).toDouble
 
   def roundValsUp: CalculatorResult = copy(
     taxDetails = taxDetails.roundValsUp,
@@ -78,4 +99,21 @@ case class DualResult[A <: TaxDetails, B <: TaxDetails](
     year2TaxDetails = year2TaxDetails.roundValsUp,
     effectiveTaxRate = roundUp(effectiveTaxRate)
   )
+  def totalDays: Int = year1TaxDetails.days + year2TaxDetails.days
+  override def totalCorporationTax: Double =
+    (year1TaxDetails.fold(_.corporationTax)(_.corporationTax) +
+      year2TaxDetails.fold(_.corporationTax)(_.corporationTax)).doubleValue
+
+  override def totalCorporationTaxBeforeMR: Double =
+    (year1TaxDetails.fold(_.corporationTax)(_.corporationTaxBeforeMR) +
+      year2TaxDetails.fold(_.corporationTax)(_.corporationTaxBeforeMR)).doubleValue
+
+  override def effectiveTaxRateBeforeMR: Double =
+    ((year1TaxDetails.fold(_.corporationTax)(_.corporationTaxBeforeMR) +
+      year2TaxDetails.fold(_.corporationTax)(_.corporationTaxBeforeMR)) /
+      (year1TaxDetails.adjustedProfit + year2TaxDetails.adjustedProfit) * 100).doubleValue
+
+  override def totalMarginalRelief: Double =
+    year1TaxDetails.fold(_ => 0.0)(_.marginalRelief.doubleValue) +
+      year2TaxDetails.fold(_ => 0.0)(_.marginalRelief.doubleValue)
 }

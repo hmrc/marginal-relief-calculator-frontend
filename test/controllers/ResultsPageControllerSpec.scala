@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
+import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }

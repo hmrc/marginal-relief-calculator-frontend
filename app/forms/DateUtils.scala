@@ -17,7 +17,7 @@
 package forms
 
 import java.time.format.DateTimeFormatter
-import java.time.{ LocalDate, Month }
+import java.time.{ Instant, LocalDate, Month, ZoneId }
 
 object DateUtils {
 
@@ -39,4 +39,9 @@ object DateUtils {
     } else {
       date.getYear
     }
+
+  def formatInstantUTC(instant: Instant = Instant.now()): String =
+    instant
+      .atZone(ZoneId.of("UTC"))
+      .format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss z"))
 }

@@ -16,12 +16,13 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ CalculatorResult, DualResult, FYConfig, FlatRate, MarginalRate, SingleResult }
+import models.FYConfig
+import models.calculator.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult }
 import forms.DateUtils.DateOps
-import forms.{ AccountingPeriodForm, PDFMetadataForm }
+import forms.{ AccountingPeriodForm, DateUtils, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import utils.{ CurrencyUtils, DateUtils, PercentageUtils, ShowCalculatorDisclaimerUtils }
+import utils.{ CurrencyUtils, PercentageUtils, ShowCalculatorDisclaimerUtils }
 import views.helpers.FullResultsPageHelper.{ marginalReliefFormula, nonTabCalculationResultsTable, showMarginalReliefExplanation, taxDetailsWithAssociatedCompanies }
 import views.helpers.ResultsPageHelper.{ displayBanner, displayCorporationTaxTable, displayEffectiveTaxTable, displayYourDetails }
 
@@ -340,13 +341,13 @@ object PDFViewHelper extends ViewHelper {
              "resultsPage.corporationTaxLiability"
            )}</h2>
             |                  <span class="govuk-heading-l" style="margin-bottom: 4px;">${CurrencyUtils.format(
-             calculatorResult.totalCorporationTax
+             calculatorResult.taxDetails.corporationTax
            )}</span>
-            |                  ${if (calculatorResult.totalMarginalRelief > 0) {
+            |                  ${if (calculatorResult.taxDetails.isInstanceOf[MarginalRate]) {
              s"""<p class="govuk -body">${messages(
                  "resultsPage.corporationTaxReducedFrom",
-                 CurrencyUtils.format(calculatorResult.totalCorporationTaxBeforeMR),
-                 CurrencyUtils.format(calculatorResult.totalMarginalRelief)
+                 CurrencyUtils.format(calculatorResult.taxDetails.asInstanceOf[MarginalRate].corporationTaxBeforeMR),
+                 CurrencyUtils.format(calculatorResult.taxDetails.asInstanceOf[MarginalRate].marginalRelief)
                )}</p>"""
            } else s""}
             |  <div class="app-table" role="region" aria-label="${messages(
@@ -360,12 +361,14 @@ object PDFViewHelper extends ViewHelper {
              "resultsPage.effectiveTaxRate"
            )}</h2>
             |                   <span class="govuk-heading-l" style="margin-bottom: 4px;">${PercentageUtils.format(
-             calculatorResult.effectiveTaxRate
+             calculatorResult.effectiveTaxRate.doubleValue
            )}</span>
-            |                   ${if (calculatorResult.totalMarginalRelief > 0) {
+            |                   ${if (calculatorResult.taxDetails.isInstanceOf[MarginalRate]) {
              s"""<p class="govuk -body">${messages(
                  "resultsPage.reducedFromAfterMR",
-                 PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR)
+                 PercentageUtils.format(
+                   calculatorResult.taxDetails.asInstanceOf[MarginalRate].taxRateBeforeMR.doubleValue
+                 )
                )}</p>"""
            } else s""}
             |  <div class="app-table" role="region" aria-label="${messages(

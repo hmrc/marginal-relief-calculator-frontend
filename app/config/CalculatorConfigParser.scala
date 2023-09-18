@@ -21,7 +21,6 @@ import cats.syntax.apply.catsSyntaxTuple6Semigroupal
 import cats.syntax.traverse.toTraverseOps
 import cats.syntax.validated.catsSyntaxValidatedId
 import models.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
-import models.errors.InvalidConfigError
 import play.api.{ ConfigLoader, Configuration }
 
 import scala.util.{ Failure, Success, Try }

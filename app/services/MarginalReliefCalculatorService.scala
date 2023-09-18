@@ -16,19 +16,19 @@
 
 package services
 
-import calculator.{ FlatRateCalculator, MarginalRateCalculator, MixedRateCalculator }
+import calculator.{FlatRateCalculator, MarginalRateCalculator, MixedRateCalculator}
 import cats.data.ValidatedNel
 import cats.syntax.apply.catsSyntaxTuple2Semigroupal
-import com.google.inject.{ Inject, Singleton }
+import com.google.inject.{Inject, Singleton}
+import config.{ConfigMissingError, FrontendAppConfig}
 import models.calculator._
-import models.errors.ConfigMissingError
-import models.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
+import models.{FYConfig, FlatRateConfig, MarginalReliefConfig}
 import utils.DateUtils
 
 import java.time.LocalDate
 
 @Singleton
-class MarginalReliefCalculatorService @Inject() (appConfig: AppConfig) extends DateUtils {
+class MarginalReliefCalculatorService @Inject() (appConfig: FrontendAppConfig) extends DateUtils {
   type ValidationResult[A] = ValidatedNel[ConfigMissingError, A]
 
   def compute(

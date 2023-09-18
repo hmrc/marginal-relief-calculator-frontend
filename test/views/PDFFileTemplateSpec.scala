@@ -18,11 +18,12 @@ package views
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FYRatio, MarginalRate, MarginalReliefConfig }
+import models.calculator.{ DualResult, FYRatio, MarginalRate }
+import models.MarginalReliefConfig
 import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import org.jsoup.Jsoup
 import play.api.test.Helpers.running
-import utils.DateUtils
+import forms.DateUtils
 import views.html.PDFFileTemplate
 
 import java.time.{ Instant, LocalDate }

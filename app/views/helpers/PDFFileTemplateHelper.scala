@@ -16,7 +16,8 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ CalculatorResult, DualResult, FYConfig, FlatRate, MarginalRate, SingleResult }
+import models.calculator.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult }
+import models.FYConfig
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html

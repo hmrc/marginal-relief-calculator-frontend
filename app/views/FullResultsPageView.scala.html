@@ -14,7 +14,8 @@
  * limitations under the License.
  *@
 
-@import connectors.sharedmodel._
+@import models.calculator.CalculatorResult
+@import models.FYConfig
 @import forms._
 @import utils.CurrencyUtils
 @import views.helpers.ResultsPageHelper._
@@ -39,7 +40,7 @@
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, false)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
-    <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</span>
+    <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(marginalRelief(calculatorResult.taxDetails))}</span>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
     @displayFullCalculationResult(calculatorResult, associatedCompanies, taxableProfit, distributions, config)

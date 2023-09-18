@@ -20,9 +20,8 @@ import cats.data.NonEmptyList
 import cats.data.Validated.Invalid
 import cats.syntax.validated.catsSyntaxValidatedId
 import com.typesafe.config.ConfigFactory
-import config.AppConfig
 import models.calculator._
-import models.errors.ConfigMissingError
+import config.{ ConfigMissingError, FrontendAppConfig }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.Configuration
@@ -1558,6 +1557,6 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
     }
   }
 
-  def appConfigFromStr(configStr: String): AppConfig =
-    new AppConfig(Configuration(ConfigFactory.parseString(configStr).withFallback(ConfigFactory.load())))
+  def appConfigFromStr(configStr: String): FrontendAppConfig =
+    new FrontendAppConfig(Configuration(ConfigFactory.parseString(configStr).withFallback(ConfigFactory.load())))
 }

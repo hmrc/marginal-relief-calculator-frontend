@@ -36,11 +36,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
   val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/marginal-relief-calculator-frontend"
 
-  val marginalReliefCalculatorUrl: String =
-    configuration.get[Service]("microservice.services.marginal-relief-calculator-backend").baseUrl
-
   val languageTranslationEnabled: Boolean = configuration.get[Boolean]("features.welsh-translation")
-  val reworkEnabled: Boolean = configuration.getOptional[Boolean](path = "features.rework-enabled").getOrElse(false)
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),

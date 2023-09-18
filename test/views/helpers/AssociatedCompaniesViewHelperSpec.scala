@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, Period }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, Period }
 import forms.AssociatedCompaniesFormProvider
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers

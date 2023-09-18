@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel._
+import models.calculator._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, MarginalReliefConfig }
 import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
 import pages._
 import play.api.inject.bind
@@ -83,7 +83,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           .build()
 
         val calculatorResult = DualResult(
-          year1 = MarginalRate(
+          year1TaxDetails = MarginalRate(
             accountingPeriodForm.accountingPeriodStartDate.getYear,
             1,
             1,
@@ -98,7 +98,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
             1,
             FYRatio(1, 1)
           ),
-          year2 = MarginalRate(
+          year2TaxDetails = MarginalRate(
             accountingPeriodForm.accountingPeriodStartDate.getYear,
             1,
             1,

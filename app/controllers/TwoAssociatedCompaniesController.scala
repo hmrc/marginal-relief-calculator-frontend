@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.sharedmodel.{ AskBothParts, AssociatedCompaniesParameter }
+import models.associatedCompanies.{ AskBothParts, AssociatedCompaniesParameter }
 import controllers.actions._
 import forms.DateUtils.financialYear
 import forms._

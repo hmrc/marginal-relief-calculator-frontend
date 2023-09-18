@@ -16,7 +16,8 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult, TaxDetails }
+import models.calculator.CalculatorResult
+import models.calculator.{ DualResult, FlatRate, MarginalRate, SingleResult, TaxDetails }
 import forms.AccountingPeriodForm
 import forms.DateUtils.{ DateOps, financialYear }
 import org.slf4j.{ Logger, LoggerFactory }
@@ -33,7 +34,6 @@ import utils.{ CurrencyUtils, PercentageUtils }
 import views.html.templates.BannerPanel
 
 import scala.collection.immutable
-import scala.collection.immutable.Seq
 
 object ResultsPageHelper extends ViewHelper {
 
@@ -202,45 +202,45 @@ object ResultsPageHelper extends ViewHelper {
 
     if (m1.marginalRelief > 0 || m2.marginalRelief > 0) {
       (
-        positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))._1,
-        positiveMarginalReliefBanner(roundUp(BigDecimal(m1.marginalRelief + m2.marginalRelief)))._2
+        positiveMarginalReliefBanner(roundUp(m1.marginalRelief + m2.marginalRelief))._1,
+        positiveMarginalReliefBanner(roundUp(m1.marginalRelief + m2.marginalRelief))._2
       )
     } else if (
       m1.adjustedAugmentedProfit >= m1.adjustedUpperThreshold && m2.adjustedAugmentedProfit >= m2.adjustedUpperThreshold
     ) {
       (
-        adjustedProfitAboveUpperThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._1,
-        adjustedProfitAboveUpperThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._2
+        adjustedProfitAboveUpperThresholdBanner((m1.adjustedDistributions + m2.adjustedDistributions).doubleValue)._1,
+        adjustedProfitAboveUpperThresholdBanner((m1.adjustedDistributions + m2.adjustedDistributions).doubleValue)._2
       )
     } else if (
       m1.adjustedAugmentedProfit <= m1.adjustedLowerThreshold && m2.adjustedAugmentedProfit <= m2.adjustedLowerThreshold
     ) {
       (
-        adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._1,
-        adjustedProfitBelowLowerThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)._2
+        adjustedProfitBelowLowerThresholdBanner((m1.adjustedDistributions + m2.adjustedDistributions).doubleValue)._1,
+        adjustedProfitBelowLowerThresholdBanner((m1.adjustedDistributions + m2.adjustedDistributions).doubleValue)._2
       )
     } else if (marginalRateOutsideOfThresholdBounds(m1) && marginalRateOutsideOfThresholdBounds(m2)) {
-      adjustedProfitAboveAndBelowThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
+      adjustedProfitAboveAndBelowThresholdBanner((m1.adjustedDistributions + m2.adjustedDistributions).doubleValue)
     } else {
-      adjustedProfitAboveAndBelowThresholdBanner(m1.adjustedDistributions + m2.adjustedDistributions)
+      adjustedProfitAboveAndBelowThresholdBanner((m1.adjustedDistributions + m2.adjustedDistributions).doubleValue)
     }
   }
 
   private def marginalReliefBanner(marginalRate: MarginalRate)(implicit messages: Messages): (String, Html) =
     if (marginalRate.marginalRelief > 0) {
       (
-        positiveMarginalReliefBanner(marginalRate.marginalRelief)._1,
-        positiveMarginalReliefBanner(marginalRate.marginalRelief)._2
+        positiveMarginalReliefBanner(marginalRate.marginalRelief.doubleValue)._1,
+        positiveMarginalReliefBanner(marginalRate.marginalRelief.doubleValue)._2
       )
     } else if (marginalRate.adjustedAugmentedProfit >= marginalRate.adjustedUpperThreshold) {
       (
-        adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions)._1,
-        adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions)._2
+        adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions.doubleValue)._1,
+        adjustedProfitAboveUpperThresholdBanner(marginalRate.adjustedDistributions.doubleValue)._2
       )
     } else if (marginalRate.adjustedAugmentedProfit <= marginalRate.adjustedLowerThreshold) {
       (
-        adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions)._1,
-        adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions)._2
+        adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions.doubleValue)._1,
+        adjustedProfitBelowLowerThresholdBanner(marginalRate.adjustedDistributions.doubleValue)._2
       )
     } else {
       val message =
@@ -416,7 +416,8 @@ object ResultsPageHelper extends ViewHelper {
                 Seq(
                   TableRow(content =
                     Text(
-                      if (d.totalMarginalRelief > 0) messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief")
+                      if (d.totalMarginalRelief > 0)
+                        messages("resultsPage.corporationTaxLiabilityBeforeMarginalRelief")
                       else messages("resultsPage.corporationTaxLiability")
                     )
                   ),
@@ -502,32 +503,32 @@ object ResultsPageHelper extends ViewHelper {
                   classes = "not-header"
                 ),
                 HeadCell(content =
-                  Text(messages("site.from.to", s.details.year.toString, (s.details.year + 1).toString))
+                  Text(messages("site.from.to", s.taxDetails.year.toString, (s.taxDetails.year + 1).toString))
                 )
               )
             ),
             rows = Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
-                TableRow(content = HtmlContent(s"""${s.details.days.toString} ${screenReaderText()}"""))
+                TableRow(content = HtmlContent(s"""${s.taxDetails.days.toString} ${screenReaderText()}"""))
               ),
-              if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
+              if (marginalRelief(s.taxDetails) > 0) {
                 Seq(
                   TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
-                  TableRow(content = Text(PercentageUtils.format(s.effectiveTaxRateBeforeMR)))
+                  TableRow(content = Text(PercentageUtils.format(s.effectiveTaxRate.doubleValue)))
                 )
               } else {
                 Seq.empty
               },
               Seq(
-                TableRow(content = Text(messages(if (s.details.fold(_ => false)(_.marginalRelief > 0)) {
+                TableRow(content = Text(messages(if (s.taxDetails.fold(_ => false)(_.marginalRelief > 0)) {
                   "resultsPage.effectiveCorporationTaxAfterMarginalRelief"
-                } else if (s.details.fold(_ => true)(m => m.adjustedAugmentedProfit > m.adjustedLowerThreshold)) {
+                } else if (s.taxDetails.fold(_ => true)(m => m.adjustedAugmentedProfit > m.adjustedLowerThreshold)) {
                   "resultsPage.corporationTaxMainRate"
                 } else {
                   "resultsPage.smallProfitRate"
                 }))),
-                TableRow(content = Text(PercentageUtils.format(s.details.taxRate)))
+                TableRow(content = Text(PercentageUtils.format(s.taxDetails.taxRate.doubleValue)))
               )
             ).filter(_.nonEmpty),
             caption = Some(messages("resultsPage.effectiveTaxRateTableCaption")),
@@ -540,33 +541,34 @@ object ResultsPageHelper extends ViewHelper {
           Seq(
             TableRow(content = Text(messages("resultsPage.daysAllocatedToFinancialYear"))),
             TableRow(
-              content = HtmlContent(s"""${d.year1.days.toString} ${screenReaderText()}"""),
+              content = HtmlContent(s"""${d.year1TaxDetails.days.toString} ${screenReaderText()}"""),
               classes = "govuk-table__cell--numeric"
             ),
             TableRow(
-              content = HtmlContent(s"""${d.year2.days.toString} ${screenReaderText()}"""),
+              content = HtmlContent(s"""${d.year2TaxDetails.days.toString} ${screenReaderText()}"""),
               classes = "govuk-table__cell--numeric"
             ),
             TableRow(
-              content = HtmlContent(s"""${(d.year1.days + d.year2.days).toString} ${screenReaderText()}"""),
+              content =
+                HtmlContent(s"""${(d.year1TaxDetails.days + d.year2TaxDetails.days).toString} ${screenReaderText()}"""),
               classes = "govuk-table__cell--numeric"
             )
           )
-        ) ++ ((d.year1, d.year2) match {
+        ) ++ ((d.year1TaxDetails, d.year2TaxDetails) match {
           case (_: FlatRate, _: FlatRate) =>
             Seq(
               Seq(
                 TableRow(content = Text(messages("resultsPage.corporationTaxMainRate"))),
                 TableRow(
-                  content = Text(PercentageUtils.format(d.year1.taxRate)),
+                  content = Text(PercentageUtils.format(d.year1TaxDetails.taxRate.doubleValue)),
                   classes = "govuk-table__cell--numeric"
                 ),
                 TableRow(
-                  content = Text(PercentageUtils.format(d.year2.taxRate)),
+                  content = Text(PercentageUtils.format(d.year2TaxDetails.taxRate.doubleValue)),
                   classes = "govuk-table__cell--numeric"
                 ),
                 TableRow(
-                  content = Text(PercentageUtils.format(d.effectiveTaxRate)),
+                  content = Text(PercentageUtils.format(d.effectiveTaxRate.doubleValue)),
                   classes = "govuk-table__cell--numeric"
                 )
               )
@@ -576,15 +578,17 @@ object ResultsPageHelper extends ViewHelper {
               Seq(
                 TableRow(content = Text(messages("resultsPage.corporationTaxMainRateBeforeMarginalRelief"))),
                 TableRow(
-                  content = Text(PercentageUtils.format(d.year1.fold(_.taxRate)(_.taxRateBeforeMR))),
+                  content =
+                    Text(PercentageUtils.format(d.year1TaxDetails.fold(_.taxRate)(_.taxRateBeforeMR).doubleValue)),
                   classes = "govuk-table__cell--numeric"
                 ),
                 TableRow(
-                  content = Text(PercentageUtils.format(d.year2.fold(_.taxRate)(_.taxRateBeforeMR))),
+                  content =
+                    Text(PercentageUtils.format(d.year2TaxDetails.fold(_.taxRate)(_.taxRateBeforeMR).doubleValue)),
                   classes = "govuk-table__cell--numeric"
                 ),
                 TableRow(
-                  content = Text(PercentageUtils.format(d.effectiveTaxRateBeforeMR)),
+                  content = Text(PercentageUtils.format(d.effectiveTaxRateBeforeMR.doubleValue)),
                   classes = "govuk-table__cell--numeric"
                 )
               )
@@ -598,7 +602,7 @@ object ResultsPageHelper extends ViewHelper {
                       if (d.totalMarginalRelief > 0)
                         messages("resultsPage.effectiveCorporationTaxAfterMarginalRelief")
                       else if (
-                        List(d.year1, d.year2)
+                        List(d.year1TaxDetails, d.year2TaxDetails)
                           .forall(_.fold(_ => false)(m => m.adjustedAugmentedProfit <= m.adjustedLowerThreshold))
                       ) // if all rates are Marginal Rates, display "Small profits rate"
                         messages("resultsPage.smallProfitRate")
@@ -607,15 +611,15 @@ object ResultsPageHelper extends ViewHelper {
                     )
                   ),
                   TableRow(
-                    content = Text(PercentageUtils.format(d.year1.taxRate)),
+                    content = Text(PercentageUtils.format(d.year1TaxDetails.taxRate.doubleValue)),
                     classes = "govuk-table__cell--numeric"
                   ),
                   TableRow(
-                    content = Text(PercentageUtils.format(d.year2.taxRate)),
+                    content = Text(PercentageUtils.format(d.year2TaxDetails.taxRate.doubleValue)),
                     classes = "govuk-table__cell--numeric"
                   ),
                   TableRow(
-                    content = Text(PercentageUtils.format(d.effectiveTaxRate)),
+                    content = Text(PercentageUtils.format(d.effectiveTaxRate.doubleValue)),
                     classes = "govuk-table__cell--numeric"
                   )
                 )
@@ -630,11 +634,15 @@ object ResultsPageHelper extends ViewHelper {
                   classes = "not-header"
                 ),
                 HeadCell(
-                  content = Text(messages("site.from.to", d.year1.year.toString, (d.year1.year + 1).toString)),
+                  content = Text(
+                    messages("site.from.to", d.year1TaxDetails.year.toString, (d.year1TaxDetails.year + 1).toString)
+                  ),
                   classes = "govuk-table__header--numeric"
                 ),
                 HeadCell(
-                  content = Text(messages("site.from.to", d.year2.year.toString, (d.year2.year + 1).toString)),
+                  content = Text(
+                    messages("site.from.to", d.year2TaxDetails.year.toString, (d.year2TaxDetails.year + 1).toString)
+                  ),
                   classes = "govuk-table__header--numeric"
                 ),
                 HeadCell(content = Text(messages("site.overall")), classes = "govuk-table__header--numeric")
@@ -670,22 +678,22 @@ object ResultsPageHelper extends ViewHelper {
         )
     )
 
-  private def corporatonTaxBeforeMR(details: TaxDetails) =
+  def corporatonTaxBeforeMR(details: TaxDetails) =
     details.fold(_.corporationTax)(_.corporationTaxBeforeMR)
 
   def marginalRelief(details: TaxDetails): Double =
-    details.fold(_ => 0.0)(_.marginalRelief)
+    details.fold(_ => 0.0)(_.marginalRelief.doubleValue)
 
-  def yearDescription(accountingPeriodForm: AccountingPeriodForm, dualResult: DualResult)(implicit
-    messages: Messages
+  def yearDescription(accountingPeriodForm: AccountingPeriodForm, dualResult: DualResult[TaxDetails, TaxDetails])(
+    implicit messages: Messages
   ): Html = {
-    val year1 = dualResult.year1
+    val year1 = dualResult.year1TaxDetails
     val fromDate1 = accountingPeriodForm.accountingPeriodStartDate
     val endDate1 = fromDate1.plusDays(year1.days - 1)
     val fromYear1 = year1.year
     val toYear1 = fromYear1 + 1
 
-    val year2 = dualResult.year2
+    val year2 = dualResult.year2TaxDetails
     val fromDate2 = endDate1.plusDays(1)
     val endDate2 = accountingPeriodForm.accountingPeriodEndDateOrDefault
     val fromYear2 = year2.year

@@ -17,7 +17,7 @@
 package navigation
 
 import base.SpecBase
-import connectors.sharedmodel.{ AskBothParts, AskOnePart, DontAsk, Period }
+import models.associatedCompanies.{ AskBothParts, AskOnePart, DontAsk, Period }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm }
 import pages._
 import models._

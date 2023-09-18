@@ -17,7 +17,8 @@
 package views.helpers
 
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, FlatRateConfig, MarginalRate, MarginalReliefConfig, SingleResult }
+import models.{ FlatRateConfig, MarginalReliefConfig }
+import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.AccountingPeriodForm
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers

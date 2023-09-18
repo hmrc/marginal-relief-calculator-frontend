@@ -18,7 +18,7 @@ package views.helpers
 
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
-import connectors.sharedmodel.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
+import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.AccountingPeriodForm
 import org.jsoup.Jsoup
 import play.api.i18n.Messages
@@ -993,7 +993,7 @@ class ResultsPageHelperSpec extends SpecBase {
       }
       "when marginal rate" in {
         val calculatorResult =
-          SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365, FYRatio(365, 365)), 1)
+          SingleResult(MarginalRate(1970, 250, 25, 200, 20, 50, 1000, 10, 1, 0, 1100, 365, FYRatio(365, 365)), 25)
         replaceTableHeader(
           displayEffectiveTaxTable(calculatorResult)
         ).htmlFormat shouldMatchTo

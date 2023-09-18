@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import connectors.sharedmodel._
+@import models.calculator.{ CalculatorResult, MarginalRate }
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import utils.CurrencyUtils
 @import utils.PercentageUtils
@@ -54,7 +54,7 @@
 
     <h2 class="govuk-heading-m" style="margin-bottom: 7px;">@messages("resultsPage.effectiveTaxRate")</h2>
 
-    <span class="govuk-heading-l" style="margin-bottom: 4px;">@{PercentageUtils.format(calculatorResult.effectiveTaxRate)}</span>
+    <span class="govuk-heading-l" style="margin-bottom: 4px;">@{PercentageUtils.format(calculatorResult.effectiveTaxRate.doubleValue)}</span>
 
     @if(calculatorResult.totalMarginalRelief > 0) {
         <p class="govuk-body">@messages("resultsPage.reducedFromAfterMR", PercentageUtils.format(calculatorResult.effectiveTaxRateBeforeMR))</p>

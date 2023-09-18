@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
 import controllers.routes
 import forms.AssociatedCompaniesForm
 import models.{ AssociatedCompanies, CheckMode, UserAnswers }
