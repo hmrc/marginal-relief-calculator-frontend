@@ -16,13 +16,13 @@
 
 package services
 
-import calculator.{FlatRateCalculator, MarginalRateCalculator, MixedRateCalculator}
+import calculator.{ FlatRateCalculator, MarginalRateCalculator, MixedRateCalculator }
 import cats.data.ValidatedNel
 import cats.syntax.apply.catsSyntaxTuple2Semigroupal
-import com.google.inject.{Inject, Singleton}
-import config.{ConfigMissingError, FrontendAppConfig}
+import com.google.inject.{ Inject, Singleton }
+import config.{ ConfigMissingError, FrontendAppConfig }
 import models.calculator._
-import models.{FYConfig, FlatRateConfig, MarginalReliefConfig}
+import models.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
 import utils.DateUtils
 
 import java.time.LocalDate
