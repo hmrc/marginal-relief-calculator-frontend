@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import models.associatedCompanies.{ AssociatedCompaniesParameter, AskBothParts, AskFull, AskOnePart, Period }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, Period }
 import forms.DateUtils.DateOps
 import play.api.data.Form
 import play.api.i18n.Messages
@@ -56,9 +56,9 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
       a match {
         case AskFull | AskBothParts(_, _) =>
           messages("associatedCompanies.heading")
-
         case AskOnePart(Period(start, end)) =>
           messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
+        case _ => ""
       },
       classes = "govuk-heading-xl"
     )
