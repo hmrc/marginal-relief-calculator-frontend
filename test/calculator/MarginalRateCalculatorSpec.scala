@@ -40,6 +40,11 @@ class MarginalRateCalculatorSpec extends AnyWordSpec with Matchers {
       )
       val result = MarginalRateCalculator.computeSingle(fyData)
 
+      val fYRatio = FYRatio(366, 366)
+      val fyRatioJson = FYRatio.format.writes(fYRatio)
+      (fyRatioJson \ "numerator").as[Int] shouldBe 366
+      (fyRatioJson \ "denominator").as[Int] shouldBe 366
+
       result shouldBe SingleResult(
         MarginalRate(
           2023,
@@ -54,7 +59,7 @@ class MarginalRateCalculatorSpec extends AnyWordSpec with Matchers {
           50000.0,
           250000.0,
           366,
-          FYRatio(366, 366)
+          fYRatio
         ),
         22.75
       )
