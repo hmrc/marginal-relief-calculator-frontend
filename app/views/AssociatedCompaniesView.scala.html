@@ -15,7 +15,7 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-@import connectors.sharedmodel._
+@import models.associatedCompanies._
 @import forms.DateUtils._
 @import views.helpers.AssociatedCompaniesViewHelper
 @import views.helpers.BackLinkHelper
@@ -32,7 +32,7 @@
     govukDetails : GovukDetails
 )
 
-@(form: Form[_], associatedCompaniesParameter: AskAssociatedCompaniesParameter,mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], associatedCompaniesParameter: AssociatedCompaniesParameter,mode: Mode)(implicit request: Request[_], messages: Messages)
 
 
 @layout(pageTitle = title(form, messages("associatedCompanies.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path(), mode)) {

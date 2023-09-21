@@ -16,9 +16,9 @@
 
 package controllers
 
-import connectors.sharedmodel._
 import controllers.actions._
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, AssociatedCompaniesFormProvider, DistributionsIncludedForm }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, DontAsk }
 import models.requests.DataRequest
 import models.{ AssociatedCompanies, Distribution, Mode, UserAnswers }
 import navigation.Navigator
@@ -148,7 +148,7 @@ class AssociatedCompaniesController @Inject() (
 
   private def badRequestWithError(
     form: Form[AssociatedCompaniesForm],
-    a: AskAssociatedCompaniesParameter,
+    a: AssociatedCompaniesParameter,
     errorKey: String,
     mode: Mode
   )(implicit request: Request[AnyContent]) =
@@ -205,12 +205,12 @@ class AssociatedCompaniesController @Inject() (
 
   private def ifAskAssociatedCompaniesThen(
     a: AssociatedCompaniesParameter,
-    f: AskAssociatedCompaniesParameter => Future[Result]
+    f: AssociatedCompaniesParameter => Future[Result]
   ): Future[Result] =
     a match {
       case DontAsk =>
         logger.info("Associated companies ask parameter is 'DontAsk'. Redirecting to CheckYourAnswers page")
         Future.successful(Redirect(routes.CheckYourAnswersController.onPageLoad().url))
-      case p: AskAssociatedCompaniesParameter => f(p)
+      case p: AssociatedCompaniesParameter => f(p)
     }
 }

@@ -19,8 +19,8 @@ package services
 import cats.data.ValidatedNel
 import cats.syntax.apply._
 import config.{ ConfigMissingError, FrontendAppConfig }
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel._
+import models._
+import models.associatedCompanies._
 import play.api.Logging
 import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 import utils.ShowCalculatorDisclaimerUtils.{ financialYearEnd, getFinancialYearForDate }
@@ -30,10 +30,7 @@ import javax.inject.{ Inject, Singleton }
 import scala.concurrent.Future
 
 @Singleton
-class AssociatedCompaniesParameterService @Inject() (
-  connector: MarginalReliefCalculatorConnector,
-  appConfig: FrontendAppConfig
-) extends Logging {
+class AssociatedCompaniesParameterService @Inject() (appConfig: FrontendAppConfig) extends Logging {
 
   type ParameterConfigResult = ValidatedNel[ConfigMissingError, AssociatedCompaniesParameter]
 
@@ -41,7 +38,6 @@ class AssociatedCompaniesParameterService @Inject() (
     accountingPeriodStart: LocalDate,
     accountingPeriodEnd: LocalDate
   ): ParameterConfigResult = {
-
     def findConfig: Int => ValidatedNel[ConfigMissingError, FYConfig] =
       appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
 
@@ -77,28 +73,22 @@ class AssociatedCompaniesParameterService @Inject() (
 
   def associatedCompaniesParameters(accountingPeriodStart: LocalDate, accountingPeriodEnd: LocalDate)(implicit
     hc: HeaderCarrier
-  ): Future[AssociatedCompaniesParameter] =
-    if (appConfig.reworkEnabled) {
-      logger.info(message = "Determining associated companies parameters locally")
+  ): Future[AssociatedCompaniesParameter] = {
+    logger.info(message = "Determining associated companies parameters locally")
 
-      doGetParameters(accountingPeriodStart = accountingPeriodStart, accountingPeriodEnd = accountingPeriodEnd).fold(
-        errors =>
-          throw new UnprocessableEntityException(
-            "Failed to determined associated company parameters for given data: " + errors
-              .map { case ConfigMissingError(year) =>
-                new UnprocessableEntityException(s"Configuration missing for financial year: $year")
-              }
-              .toList
-              .mkString(", ")
-          ),
-        success => Future.successful(success)
-      )
+    doGetParameters(accountingPeriodStart = accountingPeriodStart, accountingPeriodEnd = accountingPeriodEnd).fold(
+      errors =>
+        throw new UnprocessableEntityException(
+          "Failed to determined associated company parameters for given data: " + errors
+            .map { case ConfigMissingError(year) =>
+              new UnprocessableEntityException(s"Configuration missing for financial year: $year")
+            }
+            .toList
+            .mkString(", ")
+        ),
+      success => Future.successful(success)
+    )
 
-    } else {
-      connector.associatedCompaniesParameters(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd
-      )
-    }
+  }
 
 }

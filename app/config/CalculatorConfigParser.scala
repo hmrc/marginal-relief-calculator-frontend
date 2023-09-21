@@ -16,12 +16,12 @@
 
 package config
 
-import connectors.sharedmodel.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
-import play.api.{ ConfigLoader, Configuration }
 import cats.data.ValidatedNel
-import cats.syntax.apply._
-import cats.syntax.traverse._
-import cats.syntax.validated._
+import cats.syntax.apply.catsSyntaxTuple6Semigroupal
+import cats.syntax.traverse.toTraverseOps
+import cats.syntax.validated.catsSyntaxValidatedId
+import models.{ FYConfig, FlatRateConfig, MarginalReliefConfig }
+import play.api.{ ConfigLoader, Configuration }
 
 import scala.util.{ Failure, Success, Try }
 

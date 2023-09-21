@@ -17,12 +17,10 @@
 package services
 
 import base.SpecBase
-import calculator.{ CalculatorValidationResult, MarginalReliefCalculator }
 import cats.implicits.catsSyntaxValidatedId
 import config.{ ConfigMissingError, FrontendAppConfig }
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel._
-import org.mockito.ArgumentMatchers.any
+import models.FlatRateConfig
+import models.calculator._
 import org.mockito.stubbing.ScalaOngoingStubbing
 import org.mockito.{ ArgumentMatchers, MockitoSugar }
 import org.scalatest.enablers.Messaging
@@ -30,29 +28,22 @@ import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
 import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 
 import java.time.LocalDate
-import scala.concurrent.Future
 
 class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits with DefaultAwaitTimeout {
 
   trait Test {
     implicit val hc: HeaderCarrier = new HeaderCarrier()
 
-    val mockConnector: MarginalReliefCalculatorConnector = mock[MarginalReliefCalculatorConnector]
     val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
-    val mockCalculator: MarginalReliefCalculator = mock[MarginalReliefCalculator]
+    val mockCalculator: MarginalReliefCalculatorService = mock[MarginalReliefCalculatorService]
 
     val mockCalculatorService: CalculatorService = new CalculatorService(
-      connector = mockConnector,
       appConfig = mockConfig,
       calculator = mockCalculator
     )
 
     val dummyConfig2020: FlatRateConfig = FlatRateConfig(2020, 50)
     val dummyConfig2021: FlatRateConfig = FlatRateConfig(2021, 50)
-
-    def mockReworkEnabledFlag(result: Boolean): ScalaOngoingStubbing[Boolean] = when(
-      mockConfig.reworkEnabled
-    ).thenReturn(result)
 
     def mockCalculatorCall(
       accountingPeriodStart: LocalDate,
@@ -62,40 +53,18 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
       associatedCompanies: Option[Int],
       associatedCompaniesFY1: Option[Int],
       associatedCompaniesFY2: Option[Int],
-      result: CalculatorValidationResult[CalculatorResult]
-    ): ScalaOngoingStubbing[CalculatorValidationResult[CalculatorResult]] = when(
+      result: mockCalculator.ValidationResult[CalculatorResult]
+    ): ScalaOngoingStubbing[mockCalculator.ValidationResult[CalculatorResult]] = when(
       mockCalculator.compute(
         accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
         accountingPeriodEnd = ArgumentMatchers.eq(accountingPeriodEnd),
         profit = ArgumentMatchers.eq(profit),
-        exemptDistributions = ArgumentMatchers.eq(exemptDistributions),
+        distributions = ArgumentMatchers.eq(exemptDistributions),
         associatedCompanies = ArgumentMatchers.eq(associatedCompanies),
         associatedCompaniesFY1 = ArgumentMatchers.eq(associatedCompaniesFY1),
         associatedCompaniesFY2 = ArgumentMatchers.eq(associatedCompaniesFY2)
       )
     ).thenReturn(result)
-
-    def mockConnectorCalculateCall(
-      accountingPeriodStart: LocalDate,
-      accountingPeriodEnd: LocalDate,
-      profit: Double,
-      exemptDistributions: Option[Double],
-      associatedCompanies: Option[Int],
-      associatedCompaniesFY1: Option[Int],
-      associatedCompaniesFY2: Option[Int],
-      result: Future[CalculatorResult]
-    ): ScalaOngoingStubbing[Future[CalculatorResult]] =
-      when(
-        mockConnector.calculate(
-          accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
-          accountingPeriodEnd = ArgumentMatchers.eq(accountingPeriodEnd),
-          profit = ArgumentMatchers.eq(profit),
-          exemptDistributions = ArgumentMatchers.eq(exemptDistributions),
-          associatedCompanies = ArgumentMatchers.eq(associatedCompanies),
-          associatedCompaniesFY1 = ArgumentMatchers.eq(associatedCompaniesFY1),
-          associatedCompaniesFY2 = ArgumentMatchers.eq(associatedCompaniesFY2)
-        )(hc = any())
-      ).thenReturn(result)
   }
 
   "calculate" - {
@@ -108,7 +77,7 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     val associatedCompaniesFY2: Option[Int] = Some(3)
 
     val calculatorResult: CalculatorResult = SingleResult(
-      details = FlatRate(
+      taxDetails = FlatRate(
         year = 2023,
         corporationTax = 1.0,
         taxRate = 11.0,
@@ -120,38 +89,7 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
       effectiveTaxRate = 0.5
     )
 
-    "rework is not enabled should return the expected result" in new Test {
-      mockReworkEnabledFlag(result = false)
-
-      mockConnectorCalculateCall(
-        accountingPeriodStart = accountingPeriodStart,
-        accountingPeriodEnd = accountingPeriodEnd,
-        profit = profit,
-        exemptDistributions = exemptDistributions,
-        associatedCompanies = associatedCompanies,
-        associatedCompaniesFY1 = associatedCompaniesFY1,
-        associatedCompaniesFY2 = associatedCompaniesFY2,
-        result = Future.successful(calculatorResult)
-      )
-
-      val result: CalculatorResult = await(
-        mockCalculatorService.calculate(
-          accountingPeriodStart = accountingPeriodStart,
-          accountingPeriodEnd = accountingPeriodEnd,
-          profit = profit,
-          exemptDistributions = exemptDistributions,
-          associatedCompanies = associatedCompanies,
-          associatedCompaniesFY1 = associatedCompaniesFY1,
-          associatedCompaniesFY2 = associatedCompaniesFY2
-        )
-      )
-
-      result mustBe calculatorResult
-    }
-
     "rework is enabled should return the expected result" in new Test {
-      mockReworkEnabledFlag(result = true)
-
       mockCalculatorCall(
         accountingPeriodStart = accountingPeriodStart,
         accountingPeriodEnd = accountingPeriodEnd,
@@ -179,8 +117,6 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     }
 
     "rework is enabled should handle errors" in new Test {
-      mockReworkEnabledFlag(result = true)
-
       val accountingPeriodEndYr2: LocalDate = accountingPeriodEnd.plusYears(1)
 
       mockCalculatorCall(

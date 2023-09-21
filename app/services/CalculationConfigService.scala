@@ -18,8 +18,8 @@ package services
 
 import cats.data.Validated
 import config.{ ConfigMissingError, FrontendAppConfig }
-import connectors.MarginalReliefCalculatorConnector
-import connectors.sharedmodel.{ CalculatorResult, FYConfig }
+import models.calculator.CalculatorResult
+import models.FYConfig
 import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -27,11 +27,11 @@ import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
-class CalculationConfigService @Inject() (connector: MarginalReliefCalculatorConnector, appConfig: FrontendAppConfig)(
-  implicit ec: ExecutionContext
+class CalculationConfigService @Inject() (appConfig: FrontendAppConfig)(implicit
+  ec: ExecutionContext
 ) extends Logging {
 
-  def getConfig(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig] = if (appConfig.reworkEnabled) {
+  def getConfig(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig] = {
     logger.info(message = "Retrieving config from configuration file")
 
     appConfig.calculatorConfig.findFYConfig(year)(ConfigMissingError) match {
@@ -41,20 +41,18 @@ class CalculationConfigService @Inject() (connector: MarginalReliefCalculatorCon
           new RuntimeException(s"Configuration for year ${e.head.year} is missing.")
         )
     }
-  } else {
-    connector.config(year)
   }
 
   def getAllConfigs[U <: CalculatorResult](
     calculatorResult: U
   )(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
     calculatorResult.fold(single =>
-      getConfig(single.details.year)
-        .map(config => Map(single.details.year -> config))
+      getConfig(single.taxDetails.year)
+        .map(config => Map(single.taxDetails.year -> config))
     )(dual =>
       for {
-        y1 <- getConfig(dual.year1.year)
-        y2 <- getConfig(dual.year2.year)
-      } yield Map(dual.year1.year -> y1, dual.year2.year -> y2)
+        y1 <- getConfig(dual.year1TaxDetails.year)
+        y2 <- getConfig(dual.year2TaxDetails.year)
+      } yield Map(dual.year1TaxDetails.year -> y1, dual.year2TaxDetails.year -> y2)
     )
 }

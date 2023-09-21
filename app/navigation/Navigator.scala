@@ -17,7 +17,7 @@
 package navigation
 
 import com.google.inject.{ Inject, Singleton }
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, DontAsk }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, DontAsk }
 import controllers.routes
 import forms.TwoAssociatedCompaniesForm
 import models._

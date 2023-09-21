@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package connectors.sharedmodel
+package models
 
 import julienrf.json.derived
 import play.api.libs.json.{ OFormat, __ }
@@ -29,6 +29,7 @@ object FYConfig {
 }
 
 case class FlatRateConfig(year: Int, mainRate: Double) extends FYConfig
+
 case class MarginalReliefConfig(
   year: Int,
   lowerThreshold: Int,
@@ -36,4 +37,8 @@ case class MarginalReliefConfig(
   smallProfitRate: Double,
   mainRate: Double,
   marginalReliefFraction: Double
-) extends FYConfig
+) extends FYConfig {
+
+  def thresholdsMatch(otherConfig: MarginalReliefConfig): Boolean =
+    lowerThreshold == otherConfig.lowerThreshold && upperThreshold == otherConfig.upperThreshold
+}

@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.sharedmodel.{ AskBothParts, Period }
+import models.associatedCompanies.{ AskBothParts, DontAsk, Period }
 import forms.DateUtils.financialYear
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
 import models.{ AssociatedCompanies, Distribution, NormalMode }
@@ -213,6 +213,32 @@ class TwoAssociatedCompaniesControllerSpec
         }
       }
 
+      "must return SEE_OTHER and redirect to journey recovery page if distributions page available" in {
+
+        val askParameter = AskBothParts(
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)),
+          Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1))
+        )
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+
+        val application =
+          applicationBuilder(userAnswers = Some(requiredAnswers.set(DistributionPage, Distribution.Yes).get))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
+            .build()
+
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
+        )(*) returns Future.successful(askParameter)
+
+        running(application) {
+          val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
+          val result = route(application, request).value
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
       "must redirect to Journey Recovery if no existing data is found" in {
 
         val application = applicationBuilder(userAnswers = None).build()
@@ -224,6 +250,26 @@ class TwoAssociatedCompaniesControllerSpec
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        }
+      }
+
+      "must throw unsupported error if associated parameter is not AskBothParts" in {
+
+        val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
+
+        val application =
+          applicationBuilder(userAnswers = Some(requiredAnswers.set(DistributionPage, Distribution.No).get))
+            .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
+            .build()
+
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
+        )(*) returns Future.successful(DontAsk)
+
+        running(application) {
+          val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
+          assert(route(application, request).value.failed.futureValue.isInstanceOf[UnsupportedOperationException])
         }
       }
     }

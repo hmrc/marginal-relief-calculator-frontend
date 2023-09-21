@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ AskBothParts, AskFull, AskOnePart, Period }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
 import forms.AssociatedCompaniesFormProvider
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
@@ -111,6 +111,10 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
       AssociatedCompaniesViewHelper.heading(
         AskOnePart(Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(1)))
       ) shouldBe h1("Associated companies between 1 January 1970 and 2 January 1970", classes = "govuk-heading-xl")
+    }
+
+    "should be empty when AskAssociatedCompaniesParameter is DontAsk" in {
+      AssociatedCompaniesViewHelper.heading(DontAsk) shouldBe h1("", classes = "govuk-heading-xl")
     }
   }
 }

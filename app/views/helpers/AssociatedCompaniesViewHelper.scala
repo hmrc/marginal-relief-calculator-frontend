@@ -16,7 +16,7 @@
 
 package views.helpers
 
-import connectors.sharedmodel.{ AskAssociatedCompaniesParameter, AskBothParts, AskFull, AskOnePart, Period }
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, Period }
 import forms.DateUtils.DateOps
 import play.api.data.Form
 import play.api.i18n.Messages
@@ -34,7 +34,7 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
   private val govukLabel = new GovukLabel
   private val govukInput = new GovukInput(govukErrorMessage, govukHint, govukLabel)
 
-  def yesHtml(form: Form[_], a: AskAssociatedCompaniesParameter)(implicit messages: Messages): Option[Html] =
+  def yesHtml(form: Form[_], a: AssociatedCompaniesParameter)(implicit messages: Messages): Option[Html] =
     a match {
       case AskFull | AskOnePart(_) =>
         Some(
@@ -51,14 +51,14 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
         None
     }
 
-  def heading(a: AskAssociatedCompaniesParameter)(implicit messages: Messages): Html =
+  def heading(a: AssociatedCompaniesParameter)(implicit messages: Messages): Html =
     h1(
       a match {
         case AskFull | AskBothParts(_, _) =>
           messages("associatedCompanies.heading")
-
         case AskOnePart(Period(start, end)) =>
           messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
+        case _ => ""
       },
       classes = "govuk-heading-xl"
     )
