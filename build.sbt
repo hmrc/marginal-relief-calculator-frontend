@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(
-    scalaVersion := "2.13.11",
+    scalaVersion := "2.13.12",
     PlayKeys.playDefaultPort := 7101,
     name := appName,
     majorVersion := 0,
