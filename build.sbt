@@ -1,24 +1,18 @@
 import play.sbt.routes.RoutesKeys
 import sbt.Def
-import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings._
 
 lazy val appName: String = "marginal-relief-calculator-frontend"
-
-targetJvm := "jvm-11"
-
-ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+lazy val IntegrationTest = config("it") extend Test
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
-  .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .settings(DefaultBuildSettings.scalaSettings: _*)
-  .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(
-    scalaVersion := "2.13.12",
     PlayKeys.playDefaultPort := 7101,
     name := appName,
-    majorVersion := 0,
+    targetJvm := "jvm-11",
+    scalaVersion := "2.13.12",
+    majorVersion := 1,
     scalacOptions ++= Seq(
       "-feature",
       "-Xlint:-byname-implicit",
@@ -69,13 +63,13 @@ lazy val root = (project in file("."))
   )
   .settings(CodeCoverageSettings.settings: _*)
 
-lazy val testSettings: Seq[Def.Setting[_]] = Seq(
+lazy val testSettings: Seq[Def.Setting[_]] = Defaults.testSettings ++ Seq(
   fork := true,
   javaOptions += "-Dconfig.resource=test.application.conf",
   unmanagedSourceDirectories += baseDirectory.value / "test-utils"
 )
 
-lazy val itSettings = Defaults.itSettings ++ Seq(
+lazy val itSettings = Defaults.testSettings ++ Seq(
   unmanagedSourceDirectories := Seq(
     baseDirectory.value / "it",
     baseDirectory.value / "test-utils"

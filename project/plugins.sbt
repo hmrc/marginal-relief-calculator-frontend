@@ -1,5 +1,3 @@
-ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
-
 val artefactsUrl: String = "https://open.artefacts.tax.service.gov.uk"
 
 resolvers += "HMRC-open-artefacts-maven" at (artefactsUrl + "/maven2")
