@@ -11,7 +11,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
     "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"            % "8.1.0",
    // "uk.gov.hmrc"       %% s"play-conditional-form-mapping-PlayVersion" % "1.13.0",
-    // This dependency does not support Play 30, I have copied
+    // This dependency does not support Play 30, I have copied the dependent code out into this repo for now
     "org.julienrf"      %% "play-json-derived-codecs"                    % "10.1.0",
     "com.openhtmltopdf"  % "openhtmltopdf-pdfbox"                        % "1.0.10",
     "org.typelevel"     %% "cats-core"                                   % "2.10.0"
