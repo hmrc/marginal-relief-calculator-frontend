@@ -5,13 +5,15 @@ import uk.gov.hmrc.DefaultBuildSettings._
 lazy val appName: String = "marginal-relief-calculator-frontend"
 lazy val IntegrationTest = config("it") extend Test
 
+ThisBuild / targetJvm := "jvm-11"
+ThisBuild / scalaVersion := "2.13.12"
+
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .settings(
     PlayKeys.playDefaultPort := 7101,
     name := appName,
     targetJvm := "jvm-11",
-    scalaVersion := "2.13.12",
     majorVersion := 1,
     scalacOptions ++= Seq(
       "-feature",

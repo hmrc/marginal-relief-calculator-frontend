@@ -4,7 +4,7 @@ resolvers += "HMRC-open-artefacts-maven" at (artefactsUrl + "/maven2")
 resolvers += Resolver.url("HMRC-open-artefacts-ivy", url(artefactsUrl + "/ivy2"))(Resolver.ivyStylePatterns)
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.9.0")
+addSbtPlugin("org.playframework" % "sbt-plugin" % "3.0.0")
 addSbtPlugin("uk.gov.hmrc" % "sbt-auto-build" % "3.15.0")
 addSbtPlugin("uk.gov.hmrc" % "sbt-distributables" % "2.4.0")
 

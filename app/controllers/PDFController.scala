@@ -16,25 +16,27 @@
 
 package controllers
 
-import akka.stream.scaladsl.StreamConverters
-import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
+import org.apache.pekko.stream.scaladsl.{Source, StreamConverters}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm}
 import models.requests.DataRequest
-import models.{ Distribution, PDFAddCompanyDetails, UserAnswers }
+import models.{Distribution, PDFAddCompanyDetails, UserAnswers}
+import org.apache.pekko.stream.IOResult
+import org.apache.pekko.util.ByteString
 import pages._
 import play.api.http.HttpEntity
-import play.api.i18n.{ I18nSupport, MessagesApi }
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{ CalculationConfigService, CalculatorService }
+import services.{CalculationConfigService, CalculatorService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{ DateTime, PDFGenerator }
-import views.html.{ PDFFileTemplate, PDFView }
+import utils.{DateTime, PDFGenerator}
+import views.html.{PDFFileTemplate, PDFView}
 
 import java.io.ByteArrayInputStream
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class PDFController @Inject() (
   override val messagesApi: MessagesApi,
@@ -165,9 +167,14 @@ class PDFController @Inject() (
           config = config,
           currentInstant = dateTime.currentInstant
         ).toString
+
+        val data: Source[ByteString, Future[IOResult]] = StreamConverters.fromInputStream(
+          () => new ByteArrayInputStream(pdfGenerator.generatePdf(html))
+        )
+
         Ok.sendEntity(
           entity = HttpEntity.Streamed(
-            data = StreamConverters.fromInputStream(() => new ByteArrayInputStream(pdfGenerator.generatePdf(html))),
+            data = data,
             contentLength = None,
             contentType = Some("application/pdf")
           ),
