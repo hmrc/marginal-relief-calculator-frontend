@@ -504,9 +504,9 @@ class PDFFileTemplateSpec extends SpecBase {
        |       </tr>
        |       <tr class="govuk-table__row">
        |        <th scope="row" class="govuk-table__header">Marginal Relief</th>
-       |        <td class="govuk-table__cell govuk-table__cell--numeric">-£1</td>
-       |        <td class="govuk-table__cell govuk-table__cell--numeric">-£1</td>
-       |        <td class="govuk-table__cell govuk-table__cell--numeric">-£2</td>
+       |        <td class="govuk-table__cell govuk-table__cell--numeric">−£1</td>
+       |        <td class="govuk-table__cell govuk-table__cell--numeric">−£1</td>
+       |        <td class="govuk-table__cell govuk-table__cell--numeric">−£2</td>
        |       </tr>
        |       <tr class="govuk-table__row">
        |        <th scope="row" class="govuk-table__header">Corporation Tax liability after Marginal Relief</th>

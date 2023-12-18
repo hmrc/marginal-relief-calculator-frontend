@@ -45,7 +45,7 @@ object ResultsPageHelper extends ViewHelper {
 
   private val bannerPanel = new BannerPanel()
 
-  private val minusSymbol = "&minus;"
+  private val minusSymbol = "&#x02212;"
 
   case class Banner(title: String, html: Html)
 
