@@ -47,9 +47,7 @@
                     errorLinkOverrides = Map(form.errors.head.key -> form.errors.head.key)))
         }
 
-    <h1 class="govuk-heading-xl">
-        @messages(s"$heading")
-    </h1>
+    <h1 class="govuk-heading-xl">@heading</h1>
 
         @govukWarningText(WarningText(
             iconFallbackText = Some(messages("site.warning")),
@@ -64,7 +62,7 @@
         @govukRadios(
             RadiosViewModel(
                 field  = form("associatedCompanies"),
-                legend = LegendViewModel(messages(s"$heading")).withCssClass("govuk-visually-hidden"),
+                legend = LegendViewModel(content = HtmlContent(heading)).withCssClass("govuk-visually-hidden"),
                 items = Seq(
                     RadioItem(
                         content = Text(messages("site.yes")),
