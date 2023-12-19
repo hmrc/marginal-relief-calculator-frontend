@@ -34,6 +34,7 @@
 
 @(form: Form[_], associatedCompaniesParameter: AssociatedCompaniesParameter,mode: Mode)(implicit request: Request[_], messages: Messages)
 
+@heading= {@AssociatedCompaniesViewHelper.heading(associatedCompaniesParameter)}
 
 @layout(pageTitle = title(form, messages("associatedCompanies.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path(), mode)) {
 
@@ -46,7 +47,9 @@
                     errorLinkOverrides = Map(form.errors.head.key -> form.errors.head.key)))
         }
 
-        @AssociatedCompaniesViewHelper.heading(associatedCompaniesParameter)
+    <h1 class="govuk-heading-xl">
+        @messages(s"$heading")
+    </h1>
 
         @govukWarningText(WarningText(
             iconFallbackText = Some(messages("site.warning")),
@@ -61,7 +64,7 @@
         @govukRadios(
             RadiosViewModel(
                 field  = form("associatedCompanies"),
-                legend = LegendViewModel(""),
+                legend = LegendViewModel(messages(s"$heading")).withCssClass("govuk-visually-hidden"),
                 items = Seq(
                     RadioItem(
                         content = Text(messages("site.yes")),

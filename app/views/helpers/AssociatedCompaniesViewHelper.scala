@@ -16,13 +16,13 @@
 
 package views.helpers
 
-import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, Period }
+import models.associatedCompanies.{AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, Period}
 import forms.DateUtils.DateOps
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukErrorMessage, GovukHint, GovukInput, GovukLabel }
+import uk.gov.hmrc.govukfrontend.views.html.components.{GovukErrorMessage, GovukHint, GovukInput, GovukLabel}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 import viewmodels.govuk.All.FluentInput
 import viewmodels.govuk.input.InputViewModel
@@ -51,15 +51,12 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
         None
     }
 
-  def heading(a: AssociatedCompaniesParameter)(implicit messages: Messages): Html =
-    h1(
-      a match {
-        case AskFull | AskBothParts(_, _) =>
-          messages("associatedCompanies.heading")
-        case AskOnePart(Period(start, end)) =>
-          messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
-        case _ => ""
-      },
-      classes = "govuk-heading-xl"
-    )
+  def heading(a: AssociatedCompaniesParameter)(implicit messages: Messages): String =
+    a match {
+      case AskFull | AskBothParts(_, _) =>
+        messages("associatedCompanies.heading")
+      case AskOnePart(Period(start, end)) =>
+        messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
+      case _ => ""
+    }
 }
