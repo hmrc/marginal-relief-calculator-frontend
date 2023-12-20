@@ -651,7 +651,7 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
-                    TableRow(content = Text("-£50.00"))
+                    TableRow(content = Text("−£50.00"))
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),
@@ -934,9 +934,9 @@ class ResultsPageHelperSpec extends SpecBase {
                   ),
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
-                    TableRow(content = Text("-£50"), classes = "govuk-table__cell--numeric"),
-                    TableRow(content = Text("-£50"), classes = "govuk-table__cell--numeric"),
-                    TableRow(content = Text("-£100"), classes = "govuk-table__cell--numeric")
+                    TableRow(content = Text("−£50"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("−£50"), classes = "govuk-table__cell--numeric"),
+                    TableRow(content = Text("−£100"), classes = "govuk-table__cell--numeric")
                   ),
                   Seq(
                     TableRow(content = Text(messages("resultsPage.corporationTaxLiabilityAfterMarginalRelief"))),

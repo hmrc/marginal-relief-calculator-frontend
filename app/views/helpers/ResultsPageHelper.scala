@@ -45,6 +45,8 @@ object ResultsPageHelper extends ViewHelper {
 
   private val bannerPanel = new BannerPanel()
 
+  private val minusSymbol = "&#x02212;"
+
   case class Banner(title: String, html: Html)
 
   def displayYourDetails(
@@ -344,8 +346,8 @@ object ResultsPageHelper extends ViewHelper {
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
                     TableRow(content =
-                      Text(
-                        "-" + CurrencyUtils.decimalFormat(
+                      HtmlContent(
+                        minusSymbol + CurrencyUtils.decimalFormat(
                           marginalRelief(details)
                         )
                       )
@@ -438,23 +440,23 @@ object ResultsPageHelper extends ViewHelper {
                   Seq(
                     TableRow(content = Text(messages("site.marginalRelief"))),
                     TableRow(
-                      content = Text(
-                        (if (marginalRelief(year1) > 0) "-" else "") + CurrencyUtils.format(
+                      content = HtmlContent(
+                        (if (marginalRelief(year1) > 0) minusSymbol else "") + CurrencyUtils.format(
                           marginalRelief(year1)
                         )
                       ),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = Text(
-                        (if (marginalRelief(year2) > 0) "-" else "") + CurrencyUtils.format(
+                      content = HtmlContent(
+                        (if (marginalRelief(year2) > 0) minusSymbol else "") + CurrencyUtils.format(
                           marginalRelief(year2)
                         )
                       ),
                       classes = "govuk-table__cell--numeric"
                     ),
                     TableRow(
-                      content = Text("-" + CurrencyUtils.format(d.totalMarginalRelief)),
+                      content = HtmlContent(minusSymbol + CurrencyUtils.format(d.totalMarginalRelief)),
                       classes = "govuk-table__cell--numeric"
                     )
                   )
