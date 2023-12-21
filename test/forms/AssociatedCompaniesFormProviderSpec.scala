@@ -85,7 +85,7 @@ class AssociatedCompaniesFormProviderSpec extends OptionFieldBehaviours {
           val result = form.bind(buildDataMap(AssociatedCompanies.Yes, associatedCompaniesCountKey -> value))
           result.hasErrors mustBe true
           result.errors mustBe Seq(
-            FormError(associatedCompaniesCountKey, List("associatedCompaniesCount.error.wholeNumber"))
+            FormError(associatedCompaniesCountKey, List("error.greaterThan99"))
           )
         }
       }

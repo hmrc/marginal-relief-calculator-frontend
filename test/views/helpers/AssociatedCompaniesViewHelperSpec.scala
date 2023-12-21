@@ -58,8 +58,7 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
             field = form("associatedCompaniesCount"),
             label = Label(content = Text(messages("associatedCompanies.countLabel")))
           )
-            .withCssClass("govuk-!-width-one-third")
-            .withAttribute("maxlength" -> "2")
+            .withCssClass("govuk-input--width-2")
         )
       )
     }
@@ -75,8 +74,7 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
             field = form("associatedCompaniesCount"),
             label = Label(content = Text("Associated companies count"))
           )
-            .withCssClass("govuk-!-width-one-third")
-            .withAttribute("maxlength" -> "2")
+            .withCssClass("govuk-input--width-2")
         )
       )
     }

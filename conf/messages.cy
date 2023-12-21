@@ -249,7 +249,6 @@ associatedCompanies.checkYourAnswersLabel=Nifer y cwmnïau cysylltiedig
 associatedCompanies.error.required=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompanies.error.invalid=Dewiswch a oes gennych gwmnïau cysylltiedig ai peidio
 associatedCompaniesCount.error.lessThanOne=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn fwy na 0
-associatedCompaniesCount.error.wholeNumber=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn rhif cyfan, megis 1
 associatedCompaniesCount.error.nonNumeric=Mae’n rhaid i nifer y cwmnïau cysylltiedig fod yn rhif, megis 1
 associatedCompaniesCount.error.required=Nodwch nifer y cwmnïau cysylltiedig, megis 1
 associatedCompanies.change.hidden=Cwmnïau cysylltiedig

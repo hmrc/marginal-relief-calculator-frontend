@@ -39,7 +39,7 @@ class AssociatedCompaniesFormProvider @Inject() extends Mappings {
           optional(
             int(
               "associatedCompaniesCount.error.required",
-              "associatedCompaniesCount.error.wholeNumber",
+              "error.greaterThan99",
               "associatedCompaniesCount.error.nonNumeric"
             ).verifying(
               minimumValue(1, "associatedCompaniesCount.error.lessThanOne"),
