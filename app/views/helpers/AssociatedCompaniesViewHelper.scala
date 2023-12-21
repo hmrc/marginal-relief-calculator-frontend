@@ -43,8 +43,7 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
               field = form("associatedCompaniesCount"),
               label = Label(content = Text(messages("associatedCompanies.countLabel")))
             )
-              .withCssClass("govuk-!-width-one-third")
-              .withAttribute("maxlength" -> "2")
+              .withCssClass("govuk-input--width-2")
           )
         )
       case _ =>
