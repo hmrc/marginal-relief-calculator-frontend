@@ -5,15 +5,13 @@ import uk.gov.hmrc.DefaultBuildSettings._
 lazy val appName: String = "marginal-relief-calculator-frontend"
 lazy val IntegrationTest = config("it") extend Test
 
-ThisBuild / targetJvm := "jvm-11"
-ThisBuild / scalaVersion := "2.13.12"
-
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .settings(
     PlayKeys.playDefaultPort := 7101,
     name := appName,
     targetJvm := "jvm-11",
+    scalaVersion := "2.13.12",
     majorVersion := 1,
     scalacOptions ++= Seq(
       "-feature",
@@ -74,17 +72,17 @@ lazy val testSettings: Seq[Def.Setting[_]] = Defaults.testSettings ++ Seq(
   unmanagedSourceDirectories := Seq(
     baseDirectory.value / "test",
     baseDirectory.value / "test-utils"
-  )
+  ),
+  unmanagedResourceDirectories := Seq(baseDirectory.value / "test" / "resources")
 )
 
 lazy val itSettings = Defaults.testSettings ++ Seq(
-  unmanagedSourceDirectories := Seq(
-    baseDirectory.value / "it",
-    baseDirectory.value / "test-utils"
-  ),
-  unmanagedResourceDirectories += baseDirectory.value / "it" / "resources",
-  parallelExecution := false,
   fork := true,
+  parallelExecution := false,
+  unmanagedSourceDirectories := Seq(
+    baseDirectory.value / "it"
+  ),
+  unmanagedResourceDirectories := Seq(baseDirectory.value / "it" / "resources"),
   javaOptions += "-Dconfig.resource=it.application.conf"
 )
 
