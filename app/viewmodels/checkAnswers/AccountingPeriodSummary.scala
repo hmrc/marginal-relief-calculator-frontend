@@ -39,8 +39,8 @@ object AccountingPeriodSummary {
               HtmlContent(
                 messages(
                   "site.from.to",
-                  answer.accountingPeriodStartDate.formatDate,
-                  answer.accountingPeriodEndDateOrDefault.formatDate + {
+                  answer.accountingPeriodStartDate.formatDateFull,
+                  answer.accountingPeriodEndDateOrDefault.formatDateFull + {
                     answer.accountingPeriodEndDate match {
                       case None    => ".</br>" + messages("accountingPeriod.defaultedEndDateMessage")
                       case Some(_) => ""
