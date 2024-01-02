@@ -16,10 +16,10 @@
 
 package pages
 
-import akka.http.scaladsl.model.StatusCodes
 import base.SpecBase
 import handlers.ErrorHandler
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.http.Status.NOT_FOUND
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, running, status }
 import views.html.{ ErrorTemplate, InternalServerErrorTemplate }
@@ -31,7 +31,7 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
 
       val errorHandler = application.injector.instanceOf[ErrorHandler]
       val request = FakeRequest(GET, "/fake")
-      val statusCode = StatusCodes.NotFound
+      val statusCode = NOT_FOUND
       val message = "Please check that you have entered the correct web address."
 
       val result = errorHandler.onClientError(request, statusCode.intValue, message)

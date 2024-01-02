@@ -16,7 +16,7 @@
 
 package controllers
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import base.SpecBase
 import models.MarginalReliefConfig
 import models.calculator.{ DualResult, FYRatio, MarginalRate, SingleResult }

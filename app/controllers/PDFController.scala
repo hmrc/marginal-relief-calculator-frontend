@@ -16,11 +16,13 @@
 
 package controllers
 
-import akka.stream.scaladsl.StreamConverters
+import org.apache.pekko.stream.scaladsl.{ Source, StreamConverters }
 import controllers.actions.{ DataRequiredAction, DataRetrievalAction, IdentifierAction }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.requests.DataRequest
 import models.{ Distribution, PDFAddCompanyDetails, UserAnswers }
+import org.apache.pekko.stream.IOResult
+import org.apache.pekko.util.ByteString
 import pages._
 import play.api.http.HttpEntity
 import play.api.i18n.{ I18nSupport, MessagesApi }
@@ -165,9 +167,13 @@ class PDFController @Inject() (
           config = config,
           currentInstant = dateTime.currentInstant
         ).toString
+
+        val data: Source[ByteString, Future[IOResult]] =
+          StreamConverters.fromInputStream(() => new ByteArrayInputStream(pdfGenerator.generatePdf(html)))
+
         Ok.sendEntity(
           entity = HttpEntity.Streamed(
-            data = StreamConverters.fromInputStream(() => new ByteArrayInputStream(pdfGenerator.generatePdf(html))),
+            data = data,
             contentLength = None,
             contentType = Some("application/pdf")
           ),

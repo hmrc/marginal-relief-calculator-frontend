@@ -16,7 +16,7 @@
 
 package filters
 
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import com.google.inject.Inject
 import controllers.routes
 import models.NormalMode
@@ -37,7 +37,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 object BackLinkFilterSpec {
   class Filters @Inject() (backlinkFilter: BackLinkFilter) extends HttpFilters {
-    def filters = Seq(backlinkFilter)
+    def filters: Seq[BackLinkFilter] = Seq(backlinkFilter)
   }
 
   class TestBackLinkFilter @Inject() (
