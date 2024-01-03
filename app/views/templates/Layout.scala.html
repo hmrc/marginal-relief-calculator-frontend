@@ -64,10 +64,6 @@
     )
 }
 
-@additionalScripts = {
-    <script src='@controllers.routes.Assets.versioned("javascripts/application.min.js")'></script>
-}
-
 @beforeContent = {
 
 
@@ -103,8 +99,6 @@
     )),
     beforeContentBlock = Some(beforeContent),
     footerBlock        = Some(hmrcStandardFooter()),
-    scriptsBlock       = Some(hmrcScripts(
-        scriptsBlock = Some(additionalScripts)
-    )),
+    scriptsBlock       = Some(hmrcScripts()),
     mainContentLayout = mainContentLayout
 )(content)
