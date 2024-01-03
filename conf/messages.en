@@ -249,7 +249,7 @@ associatedCompanies.error.invalid = Select whether you have associated companies
 associatedCompaniesCount.error.lessThanOne = The number of associated companies must be greater than 0
 associatedCompaniesCount.error.wholeNumber = The number of associated companies must be a whole number, like 1
 associatedCompaniesCount.error.nonNumeric = The number of associated companies must be a number, like 1
-associatedCompaniesCount.error.required = Enter the number of associated companies
+associatedCompaniesCount.error.required = Enter the number of associated companies, like 1
 associatedCompanies.change.hidden = Associated Companies
 
 taxableProfit.title = How much is your company''s taxable profit?
