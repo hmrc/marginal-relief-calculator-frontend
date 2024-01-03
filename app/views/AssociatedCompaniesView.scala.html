@@ -36,7 +36,7 @@
 
 @heading= @{AssociatedCompaniesViewHelper.heading(associatedCompaniesParameter)}
 
-@layout(pageTitle = title(form, messages("associatedCompanies.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path(), mode)) {
+@layout(pageTitle = title(form, heading, None), backLink = BackLinkHelper.backLinkOrDefault(routes.DistributionController.onPageLoad(NormalMode).path(), mode)) {
 
     @formHelper(action = routes.AssociatedCompaniesController.onSubmit(mode), Symbol("autoComplete") -> "off") {
 
