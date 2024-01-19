@@ -61,7 +61,7 @@
                 label = Label(content = Text(messages("twoAssociatedCompanies.financialYearFromTo", financialYear(accountingPeriodForm.accountingPeriodStartDate).toString, (financialYear(accountingPeriodForm.accountingPeriodStartDate) + 1).toString))).withCssClass("govuk-label--s")
             )
             .withCssClass("govuk-!-width-one-third")
-            .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period1.start.formatDateFull, askBothParts.period1.end.formatDateFull)))
+            .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period1.start.govDisplayFormat, askBothParts.period1.end.govDisplayFormat)))
         )
 
         @govukInput(
@@ -70,7 +70,7 @@
                 label = Label(content = Text(messages("twoAssociatedCompanies.financialYearFromTo", financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault).toString, (financialYear(accountingPeriodForm.accountingPeriodEndDateOrDefault) + 1).toString))).withCssClass("govuk-label--s")
             )
             .withCssClass("govuk-!-width-one-third")
-            .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period2.start.formatDateFull, askBothParts.period2.end.formatDateFull)))
+            .withHint(HintViewModel(messages("twoAssociatedCompanies.numberOfAssociatedCompaniesBetween", askBothParts.period2.start.govDisplayFormat, askBothParts.period2.end.govDisplayFormat)))
         )
 
         <p class="govuk-body govuk-!-margin-bottom-8"></p>

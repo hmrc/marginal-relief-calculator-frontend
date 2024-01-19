@@ -16,8 +16,10 @@
 
 package forms
 
+import play.api.i18n.Messages
+
 import java.time.format.DateTimeFormatter
-import java.time.{ Instant, LocalDate, Month, ZoneId }
+import java.time.{Instant, LocalDate, Month, ZoneId}
 
 object DateUtils {
 
@@ -31,6 +33,14 @@ object DateUtils {
     def formatDate: String = FORMAT.format(date)
 
     def formatDateFull: String = FORMAT_FULL.format(date)
+
+    def govDisplayFormat(implicit messages: Messages): String = {
+      val dayOfMonth = date.getDayOfMonth
+      val month      = messages(s"date.${date.getMonthValue}")
+      val year       = date.getYear
+
+      s"$dayOfMonth $month $year"
+    }
   }
 
   def financialYear(date: LocalDate): Int =
