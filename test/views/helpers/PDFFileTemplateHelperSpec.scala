@@ -102,7 +102,6 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |           </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
           |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
@@ -182,7 +181,6 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |           </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td  class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
           |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
@@ -291,7 +289,6 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
           |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
@@ -371,7 +368,6 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
           |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
@@ -424,7 +420,6 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">No header</span></td>
           |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>

@@ -365,10 +365,6 @@ object ResultsPageHelper extends ViewHelper {
               ).filter(_.nonEmpty),
               head = Some(
                 Seq(
-                  HeadCell(
-                    content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
-                    classes = "not-header"
-                  ),
                   HeadCell(content = Text(messages("site.from.to", details.year.toString, (details.year + 1).toString)))
                 )
               ),
@@ -382,10 +378,6 @@ object ResultsPageHelper extends ViewHelper {
             Table(
               head = Some(
                 Seq(
-                  HeadCell(
-                    content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
-                    classes = "not-header"
-                  ),
                   HeadCell(
                     content = Text(messages("site.from.to", year1.year.toString, (year1.year + 1).toString)),
                     classes = "govuk-table__header--numeric"
@@ -498,10 +490,6 @@ object ResultsPageHelper extends ViewHelper {
           Table(
             head = Some(
               Seq(
-                HeadCell(
-                  content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
-                  classes = "not-header"
-                ),
                 HeadCell(content =
                   Text(messages("site.from.to", s.taxDetails.year.toString, (s.taxDetails.year + 1).toString))
                 )
@@ -630,10 +618,6 @@ object ResultsPageHelper extends ViewHelper {
             head = Some(
               Seq(
                 HeadCell(
-                  content = HtmlContent(s"""<span class="govuk-visually-hidden">No header</span>"""),
-                  classes = "not-header"
-                ),
-                HeadCell(
                   content = Text(
                     messages("site.from.to", d.year1TaxDetails.year.toString, (d.year1TaxDetails.year + 1).toString)
                   ),
@@ -664,10 +648,6 @@ object ResultsPageHelper extends ViewHelper {
       tableHtml
         .toString()
         .replaceAll("[\n\r]", "")
-        .replace(
-          "<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-visually-hidden\">No header</span></th>",
-          "<td class=\"govuk-table__header not-header\"><span class=\"govuk-visually-hidden\">No header</span></td>"
-        )
         .replace(
           s"""<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-visually-hidden\">${messages(
               "fullResultsPage.variables"
