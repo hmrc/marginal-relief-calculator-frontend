@@ -405,7 +405,12 @@ object PDFViewHelper extends ViewHelper {
        |<h3 class="govuk-heading-s">${messages("fullResultsPage.whatToDoNext")}</h3>
        |    <ul class="govuk-list govuk-list--bullet">
        |        <li>${messages("fullResultsPage.completeYourCorporationTaxReturn")}</li>
-       |        <li>${messages("fullResultsPage.payYourCorporationTaxBy")} <b>${accountingPeriodForm.accountingPeriodEndDateOrDefault.plusMonths(9).plusDays(1).govDisplayFormat}</b>.</li>
+       |        <li>${messages(
+        "fullResultsPage.payYourCorporationTaxBy"
+      )} <b>${accountingPeriodForm.accountingPeriodEndDateOrDefault
+        .plusMonths(9)
+        .plusDays(1)
+        .govDisplayFormat}</b>.</li>
        |    </ul>
        |""".stripMargin
   )

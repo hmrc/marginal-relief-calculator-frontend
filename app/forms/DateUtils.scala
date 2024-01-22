@@ -19,7 +19,7 @@ package forms
 import play.api.i18n.Messages
 
 import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDate, Month, ZoneId}
+import java.time.{ Instant, LocalDate, Month, ZoneId }
 
 object DateUtils {
 
@@ -36,8 +36,8 @@ object DateUtils {
 
     def govDisplayFormat(implicit messages: Messages): String = {
       val dayOfMonth = date.getDayOfMonth
-      val month      = messages(s"date.${date.getMonthValue}")
-      val year       = date.getYear
+      val month = messages(s"date.${date.getMonthValue}")
+      val year = date.getYear
 
       s"$dayOfMonth $month $year"
     }

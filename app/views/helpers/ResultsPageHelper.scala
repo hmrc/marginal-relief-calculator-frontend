@@ -143,7 +143,7 @@ object ResultsPageHelper extends ViewHelper {
     calculatorResult: CalculatorResult,
     accountingPeriodForm: AccountingPeriodForm,
     displayCoversFinancialYears: Boolean
-  )(implicit  messages: Messages) =
+  )(implicit messages: Messages) =
     if (displayCoversFinancialYears && calculatorResult.fold(_ => false)(_ => true)) {
       HtmlContent(
         HtmlFormat.fill(

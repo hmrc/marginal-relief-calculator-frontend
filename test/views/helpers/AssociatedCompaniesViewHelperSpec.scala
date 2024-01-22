@@ -38,18 +38,18 @@ class AssociatedCompaniesViewHelperSpec extends AnyFreeSpec with Matchers with V
           "associatedCompanies.countLabel"      -> "Associated companies count",
           "associatedCompanies.heading"         -> "Associated companies",
           "associatedCompanies.heading.between" -> "Associated companies between {0} and {1}",
-          "date.1" -> "January",
-          "date.2" -> "February",
-          "date.3" -> "March",
-          "date.4" -> "April",
-          "date.5" -> "May",
-          "date.6" -> "June",
-          "date.7" -> "July",
-          "date.8" -> "August",
-          "date.9" -> "September",
-          "date.10" -> "October",
-          "date.11" -> "November",
-          "date.12" -> "December"
+          "date.1"                              -> "January",
+          "date.2"                              -> "February",
+          "date.3"                              -> "March",
+          "date.4"                              -> "April",
+          "date.5"                              -> "May",
+          "date.6"                              -> "June",
+          "date.7"                              -> "July",
+          "date.8"                              -> "August",
+          "date.9"                              -> "September",
+          "date.10"                             -> "October",
+          "date.11"                             -> "November",
+          "date.12"                             -> "December"
         )
       )
     )
