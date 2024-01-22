@@ -34,7 +34,26 @@ import java.time.LocalDate
 class AccountingPeriodSummarySpec extends AnyFreeSpec with Matchers {
 
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
-  private implicit val messages: Messages = Helpers.stubMessages()
+  private implicit val messages: Messages = Helpers.stubMessages(messagesApi =
+    Helpers.stubMessagesApi(
+      messages = Map(
+        "en" -> Map(
+          "date.1"  -> "January",
+          "date.2"  -> "February",
+          "date.3"  -> "March",
+          "date.4"  -> "April",
+          "date.5"  -> "May",
+          "date.6"  -> "June",
+          "date.7"  -> "July",
+          "date.8"  -> "August",
+          "date.9"  -> "September",
+          "date.10" -> "October",
+          "date.11" -> "November",
+          "date.12" -> "December"
+        )
+      )
+    )
+  )
 
   "row" - {
     "when answer available, return the summary row" in {
@@ -54,8 +73,8 @@ class AccountingPeriodSummarySpec extends AnyFreeSpec with Matchers {
             HtmlContent(
               messages(
                 "site.from.to",
-                epoch.formatDate,
-                Some(epoch.plusDays(1).formatDate)
+                epoch.govDisplayFormat,
+                Some(epoch.plusDays(1).govDisplayFormat)
               )
             )
           ),
@@ -84,8 +103,8 @@ class AccountingPeriodSummarySpec extends AnyFreeSpec with Matchers {
             HtmlContent(
               messages(
                 "site.from.to",
-                epoch.formatDate,
-                s"${epoch.plusDays(1).formatDate}.</br>${messages("accountingPeriod.defaultedEndDateMessage")}"
+                epoch.govDisplayFormat,
+                s"${epoch.plusDays(1).govDisplayFormat}.</br>${messages("accountingPeriod.defaultedEndDateMessage")}"
               )
             )
           ),

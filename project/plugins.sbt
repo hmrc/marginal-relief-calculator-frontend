@@ -5,7 +5,7 @@ resolvers += Resolver.url("HMRC-open-artefacts-ivy", url(artefactsUrl + "/ivy2")
 resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases/"
 
 addSbtPlugin("org.playframework" % "sbt-plugin"         % "3.0.0")
-addSbtPlugin("uk.gov.hmrc"       % "sbt-auto-build"     % "3.18.0")
+addSbtPlugin("uk.gov.hmrc"       % "sbt-auto-build"     % "3.20.0")
 addSbtPlugin("uk.gov.hmrc"       % "sbt-distributables" % "2.4.0")
 
 addSbtPlugin("org.scalastyle" % "scalastyle-sbt-plugin" % "1.0.0" exclude ("org.scala-lang.modules", "scala-xml_2.12"))

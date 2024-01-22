@@ -399,17 +399,18 @@ object PDFViewHelper extends ViewHelper {
     messages: Messages
   ): Html = Html(
     s"""
-       ${if (showMarginalReliefExplanation(calculatorResult)) {
-        s"""
-      |   $marginalReliefFormula
-      |   ${views.helpers.FullResultsPageHelper.hr}"""
-      } else s""}
+      ${if (showMarginalReliefExplanation(calculatorResult)) {
+        s"""$marginalReliefFormula${views.helpers.FullResultsPageHelper.hr}"""
+      } else ""}
        |<h3 class="govuk-heading-s">${messages("fullResultsPage.whatToDoNext")}</h3>
        |    <ul class="govuk-list govuk-list--bullet">
        |        <li>${messages("fullResultsPage.completeYourCorporationTaxReturn")}</li>
        |        <li>${messages(
         "fullResultsPage.payYourCorporationTaxBy"
-      )} <b>${accountingPeriodForm.accountingPeriodEndDateOrDefault.plusMonths(9).plusDays(1).formatDateFull}</b>.</li>
+      )} <b>${accountingPeriodForm.accountingPeriodEndDateOrDefault
+        .plusMonths(9)
+        .plusDays(1)
+        .govDisplayFormat}</b>.</li>
        |    </ul>
        |""".stripMargin
   )

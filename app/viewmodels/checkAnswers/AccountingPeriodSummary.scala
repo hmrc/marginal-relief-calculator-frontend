@@ -39,10 +39,10 @@ object AccountingPeriodSummary {
               HtmlContent(
                 messages(
                   "site.from.to",
-                  answer.accountingPeriodStartDate.formatDateFull,
-                  answer.accountingPeriodEndDateOrDefault.formatDateFull + {
+                  answer.accountingPeriodStartDate.govDisplayFormat,
+                  answer.accountingPeriodEndDateOrDefault.govDisplayFormat + {
                     answer.accountingPeriodEndDate match {
-                      case None    => ".</br>" + messages("accountingPeriod.defaultedEndDateMessage")
+                      case None    => ".<br>" + messages("accountingPeriod.defaultedEndDateMessage")
                       case Some(_) => ""
                     }
                   }

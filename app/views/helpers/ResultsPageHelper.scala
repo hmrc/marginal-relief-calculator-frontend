@@ -72,8 +72,7 @@ object ResultsPageHelper extends ViewHelper {
                       displayAccountingPeriodText(
                         calculatorResult,
                         accountingPeriodForm,
-                        displayCoversFinancialYears,
-                        messages
+                        displayCoversFinancialYears
                       )
                     )
                   ),
@@ -143,9 +142,8 @@ object ResultsPageHelper extends ViewHelper {
   private def displayAccountingPeriodText(
     calculatorResult: CalculatorResult,
     accountingPeriodForm: AccountingPeriodForm,
-    displayCoversFinancialYears: Boolean,
-    messages: Messages
-  ) =
+    displayCoversFinancialYears: Boolean
+  )(implicit messages: Messages) =
     if (displayCoversFinancialYears && calculatorResult.fold(_ => false)(_ => true)) {
       HtmlContent(
         HtmlFormat.fill(
@@ -153,8 +151,8 @@ object ResultsPageHelper extends ViewHelper {
             p(
               messages(
                 "site.from.to",
-                accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
-                accountingPeriodForm.accountingPeriodEndDateOrDefault.formatDateFull
+                accountingPeriodForm.accountingPeriodStartDate.govDisplayFormat,
+                accountingPeriodForm.accountingPeriodEndDateOrDefault.govDisplayFormat
               )
             ),
             calculatorResult.fold(_ => HtmlFormat.empty)(_ => p(messages("resultsPage.covers2FinancialYears")))
@@ -165,8 +163,8 @@ object ResultsPageHelper extends ViewHelper {
       HtmlContent(
         messages(
           "site.from.to",
-          accountingPeriodForm.accountingPeriodStartDate.formatDateFull,
-          accountingPeriodForm.accountingPeriodEndDateOrDefault.formatDateFull
+          accountingPeriodForm.accountingPeriodStartDate.govDisplayFormat,
+          accountingPeriodForm.accountingPeriodEndDateOrDefault.govDisplayFormat
         )
       )
     }
@@ -703,12 +701,12 @@ object ResultsPageHelper extends ViewHelper {
 
     Html(s"""${p(
         messages("site.from.to", fromYear1.toString, toYear1.toString) + ": " +
-          messages("site.from.to", fromDate1.formatDateFull, endDate1.formatDateFull),
+          messages("site.from.to", fromDate1.govDisplayFormat, endDate1.govDisplayFormat),
         "govuk-body govuk-!-margin-0"
       )}
     ${p(
         messages("site.from.to", fromYear2.toString, toYear2.toString) + ": " +
-          messages("site.from.to", fromDate2.formatDateFull, endDate2.formatDateFull)
+          messages("site.from.to", fromDate2.govDisplayFormat, endDate2.govDisplayFormat)
       )}""")
   }
 

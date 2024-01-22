@@ -55,7 +55,7 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
       case AskFull | AskBothParts(_, _) =>
         messages("associatedCompanies.heading")
       case AskOnePart(Period(start, end)) =>
-        messages("associatedCompanies.heading.between", start.formatDateFull, end.formatDateFull)
+        messages("associatedCompanies.heading.between", start.govDisplayFormat, end.govDisplayFormat)
       case _ => ""
     }
 }
