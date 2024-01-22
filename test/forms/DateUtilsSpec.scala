@@ -16,7 +16,7 @@
 
 package forms
 
-import forms.DateUtils.{DateOps, financialYear}
+import forms.DateUtils.{ DateOps, financialYear }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.i18n.Messages
@@ -31,18 +31,18 @@ class DateUtilsSpec extends AnyFreeSpec with Matchers {
     Helpers.stubMessagesApi(
       messages = Map(
         "en" -> Map(
-          "date.1"                              -> "January",
-          "date.2"                              -> "February",
-          "date.3"                              -> "March",
-          "date.4"                              -> "April",
-          "date.5"                              -> "May",
-          "date.6"                              -> "June",
-          "date.7"                              -> "July",
-          "date.8"                              -> "August",
-          "date.9"                              -> "September",
-          "date.10"                             -> "October",
-          "date.11"                             -> "November",
-          "date.12"                             -> "December"
+          "date.1"  -> "January",
+          "date.2"  -> "February",
+          "date.3"  -> "March",
+          "date.4"  -> "April",
+          "date.5"  -> "May",
+          "date.6"  -> "June",
+          "date.7"  -> "July",
+          "date.8"  -> "August",
+          "date.9"  -> "September",
+          "date.10" -> "October",
+          "date.11" -> "November",
+          "date.12" -> "December"
         )
       )
     )
