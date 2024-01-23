@@ -24,7 +24,6 @@ import uk.gov.hmrc.govukfrontend.views.Aliases._
 import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukDetails, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.{ CurrencyUtils, DecimalToFractionUtils }
-import views.helpers.ResultsPageHelper.replaceTableHeader
 
 object FullResultsPageHelper extends ViewHelper {
 
@@ -193,6 +192,19 @@ object FullResultsPageHelper extends ViewHelper {
 
   private def isFiveStepMarginalRate(marginalRate: MarginalRate) = marginalRate.marginalRelief > 0
 
+  private def replaceTableHeader(tableHtml: Html)(implicit
+                                          messages: Messages
+  ): Html = {
+    val th = s"""<th scope="col" class="govuk-table__header"  >${messages("site.step")}</th>"""
+    val td = s"""<td class="govuk-table__header"><span aria-hidden="true">${messages("site.step")}</span></td>"""
+    Html(
+      tableHtml
+        .toString()
+        .replaceAll("[\n\r]", "")
+        .replace(th, td)
+    )
+  }
+
   private def displayFullFinancialYearTable(
     calculatorResult: CalculatorResult,
     marginalRate: MarginalRate,
@@ -208,7 +220,7 @@ object FullResultsPageHelper extends ViewHelper {
     }
 
     def boldRow(text: String) = TableRow(
-      content = HtmlContent(s"""<span class="sr-only">Step $text</span><span aria-hidden="true">$text</span>""")
+      content = HtmlContent(s"""<span class="sr-only">${messages("site.step")} $text</span><span aria-hidden="true">$text</span>""")
     )
 
     val days = marginalRate.fyRatio.numerator.toInt
@@ -304,12 +316,8 @@ object FullResultsPageHelper extends ViewHelper {
         rows = rows,
         head = Some(
           Seq(
-            HeadCell(content = Text("")),
-            HeadCell(
-              content =
-                HtmlContent(s"""<span class="govuk-visually-hidden">${messages("fullResultsPage.variables")}</span>"""),
-              classes = "not-header"
-            ),
+            HeadCell(content = Text(messages("site.step"))),
+            HeadCell(content = Text(messages("fullResultsPage.variables"))),
             HeadCell(content = Text(messages("fullResultsPage.calculation"))),
             HeadCell(content = Text(messages("fullResultsPage.result")))
           )
