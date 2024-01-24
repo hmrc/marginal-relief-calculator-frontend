@@ -483,6 +483,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      </caption>
        |      <thead class="govuk-table__head">
        |       <tr class="govuk-table__row">
+       |        <td class="govuk-table__header"></td>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Overall</th>
@@ -525,6 +526,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |      </caption>
        |      <thead class="govuk-table__head">
        |       <tr class="govuk-table__row">
+       |        <td class="govuk-table__header"></td>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">2023 to 2024</th>
        |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">Overall</th>
@@ -565,6 +567,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |       </caption>
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
+       |         <td class="govuk-table__header"></td>
        |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">Calculation variables</span></td>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>
@@ -616,6 +619,7 @@ class PDFFileTemplateSpec extends SpecBase {
        |       </caption>
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
+       |         <td class="govuk-table__header"></td>
        |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">Calculation variables</span></td>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>

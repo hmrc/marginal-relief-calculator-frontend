@@ -304,6 +304,7 @@ object FullResultsPageHelper extends ViewHelper {
         rows = rows,
         head = Some(
           Seq(
+            HeadCell(content = Text("")),
             HeadCell(
               content =
                 HtmlContent(s"""<span class="govuk-visually-hidden">${messages("fullResultsPage.variables")}</span>"""),
