@@ -45,7 +45,7 @@
     @govukRadios(
         RadiosViewModel(
             field  = form("pdfAddCompanyDetails"),
-            legend = LegendViewModel(messages("pdfAddCompanyDetails.heading")).withCssClass("govuk-visually-hidden"),
+            legend = LegendViewModel(messages("pdfAddCompanyDetails.heading")).withCssClass("govuk-visually-hidden govuk-!-display-block"),
             items = Seq(
                 RadioItem(
                     content = Text(messages("site.yes")),
