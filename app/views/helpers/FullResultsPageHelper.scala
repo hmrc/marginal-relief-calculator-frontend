@@ -193,7 +193,7 @@ object FullResultsPageHelper extends ViewHelper {
   private def isFiveStepMarginalRate(marginalRate: MarginalRate) = marginalRate.marginalRelief > 0
 
   private def replaceTableHeader(tableHtml: Html)(implicit
-                                          messages: Messages
+    messages: Messages
   ): Html = {
     val th = s"""<th scope="col" class="govuk-table__header"  >${messages("site.step")}</th>"""
     val td = s"""<td class="govuk-table__header"><span aria-hidden="true">${messages("site.step")}</span></td>"""
@@ -220,7 +220,9 @@ object FullResultsPageHelper extends ViewHelper {
     }
 
     def boldRow(text: String) = TableRow(
-      content = HtmlContent(s"""<span class="sr-only">${messages("site.step")} $text</span><span aria-hidden="true">$text</span>""")
+      content = HtmlContent(
+        s"""<span class="sr-only">${messages("site.step")} $text</span><span aria-hidden="true">$text</span>"""
+      )
     )
 
     val days = marginalRate.fyRatio.numerator.toInt
