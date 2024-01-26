@@ -102,39 +102,39 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |           </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td  class="govuk-table__header"></td>
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <td class="govuk-table__header"><span aria-hidden="true">site.step</span></td>
+          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.variables</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 1</span><span aria-hidden="true">1</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.adjustedLowerLimit</td>
           |                  <td class="govuk-table__cell"  >£50,000 fullResultsPage.lowerLimit × (1 fullResultsPage.day.singular ÷ 1 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
           |                  <td class="govuk-table__cell"  >£1 × (1 fullResultsPage.day.singular ÷ 1 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
           |                  <td class="govuk-table__cell"  >(£1 + £1) × (1 fullResultsPage.day.singular ÷ 1 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 4</span><span aria-hidden="true">4</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 4</span><span aria-hidden="true">4</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction</td>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction.description</td>
           |                  <td class="govuk-table__cell"  >3 ÷ 200</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 5</span><span aria-hidden="true">5</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 5</span><span aria-hidden="true">5</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.fullCalculation</td>
           |                  <td class="govuk-table__cell"  >(£1 - £1) × (£1 ÷ £1) × (3 ÷ 200)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
@@ -182,39 +182,39 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |           </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td  class="govuk-table__header"></td>
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <td class="govuk-table__header"><span aria-hidden="true">site.step</span></td>
+          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.variables</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 1</span><span aria-hidden="true">1</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.adjustedLowerLimit</td>
           |                  <td class="govuk-table__cell"  >£50,000 fullResultsPage.lowerLimit × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
           |                  <td class="govuk-table__cell"  >£1 × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
           |                  <td class="govuk-table__cell"  >(£1 + £1) × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 4</span><span aria-hidden="true">4</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 4</span><span aria-hidden="true">4</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction</td>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction.description</td>
           |                  <td class="govuk-table__cell"  >3 ÷ 200</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 5</span><span aria-hidden="true">5</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 5</span><span aria-hidden="true">5</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.fullCalculation</td>
           |                  <td class="govuk-table__cell"  >(£2 - £2) × (£2 ÷ £2) × (3 ÷ 200)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
@@ -291,39 +291,39 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td class="govuk-table__header"></td>
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <td class="govuk-table__header"><span aria-hidden="true">site.step</span></td>
+          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.variables</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 1</span><span aria-hidden="true">1</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.adjustedLowerLimit</td>
           |                  <td class="govuk-table__cell"  >£50,000 fullResultsPage.lowerLimit × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
+          |                  <th scope="row" class="govuk-table__header"><span class="sr-only">site.step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
           |                  <td class="govuk-table__cell"  >£1 × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
           |                  <td class="govuk-table__cell"  >(£1 + £1) × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 4</span><span aria-hidden="true">4</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 4</span><span aria-hidden="true">4</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction</td>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction.description</td>
           |                  <td class="govuk-table__cell"  >3 ÷ 200</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 5</span><span aria-hidden="true">5</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 5</span><span aria-hidden="true">5</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.fullCalculation</td>
           |                  <td class="govuk-table__cell"  >(£2 - £2) × (£2 ÷ £2) × (3 ÷ 200)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
@@ -371,39 +371,39 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td class="govuk-table__header"></td>
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <td class="govuk-table__header"><span aria-hidden="true">site.step</span></td>
+          |                  <th scope="col" class="govuk-table__header"  >fullResultsPage.variables</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 1</span><span aria-hidden="true">1</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.adjustedLowerLimit</td>
           |                  <td class="govuk-table__cell"  >£50,000 fullResultsPage.lowerLimit × (1 fullResultsPage.day.singular ÷ 1 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
           |                  <td class="govuk-table__cell"  >£1 × (1 fullResultsPage.day.singular ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
           |                  <td class="govuk-table__cell"  >(£1 + £1) × (1 fullResultsPage.day.singular ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 4</span><span aria-hidden="true">4</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 4</span><span aria-hidden="true">4</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction</td>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction.description</td>
           |                  <td class="govuk-table__cell"  >3 ÷ 200</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 5</span><span aria-hidden="true">5</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 5</span><span aria-hidden="true">5</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.fullCalculation</td>
           |                  <td class="govuk-table__cell"  >(£1 - £1) × (£1 ÷ £1) × (3 ÷ 200)</td>
           |                  <td class="govuk-table__cell"  >£1</td>
@@ -424,39 +424,39 @@ class PDFFileTemplateHelperSpec extends AnyFreeSpec with Matchers {
           |            </caption>
           |            <thead class="govuk-table__head">
           |               <tr class="govuk-table__row">
-          |                  <td class="govuk-table__header"></td>
-          |                  <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">fullResultsPage.variables</span></td>
+          |                  <td class="govuk-table__header"><span aria-hidden="true">site.step</span></td>
+          |                  <th scope="col" class="govuk-table__header">fullResultsPage.variables</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.calculation</th>
           |                  <th scope="col" class="govuk-table__header">fullResultsPage.result</th>
           |               </tr>
           |            </thead>
           |            <tbody class="govuk-table__body">
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 1</span><span aria-hidden="true">1</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 1</span><span aria-hidden="true">1</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.adjustedLowerLimit</td>
           |                  <td class="govuk-table__cell"  >£50,000 fullResultsPage.lowerLimit × (2 fullResultsPage.day.plural ÷ 2 fullResultsPage.day.plural) ÷ (1 fullResultsPage.associatedCompany.singular + fullResultsPage.oneOriginalCompany)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 2</span><span aria-hidden="true">2</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 2</span><span aria-hidden="true">2</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfit</td>
           |                  <td class="govuk-table__cell"  >£1 × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 3</span><span aria-hidden="true">3</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 3</span><span aria-hidden="true">3</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.taxableProfitDistributions</td>
           |                  <td class="govuk-table__cell"  >(£1 + £1) × (2 fullResultsPage.day.plural ÷ 3 fullResultsPage.day.plural)</td>
           |                  <td class="govuk-table__cell"  >£2</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 4</span><span aria-hidden="true">4</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 4</span><span aria-hidden="true">4</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction</td>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.marginalReliefFraction.description</td>
           |                  <td class="govuk-table__cell"  >3 ÷ 200</td>
           |               </tr>
           |               <tr class="govuk-table__row">
-          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">Step 5</span><span aria-hidden="true">5</span></th>
+          |                  <th scope="row" class="govuk-table__header"  ><span class="sr-only">site.step 5</span><span aria-hidden="true">5</span></th>
           |                  <td class="govuk-table__cell"  >fullResultsPage.financialYear.fullCalculation</td>
           |                  <td class="govuk-table__cell"  >(£2 - £2) × (£2 ÷ £2) × (3 ÷ 200)</td>
           |                  <td class="govuk-table__cell"  >£2</td>

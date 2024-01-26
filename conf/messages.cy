@@ -17,6 +17,8 @@ site.marginalReliefForCorporationTax=Rhyddhad Ffiniol ar gyfer Treth Gorfforaeth
 site.marginalRelief=Rhyddhad Ffiniol
 site.overall=Yn gyffredinol
 site.visuallyHiddenErrorMessage=Gwall
+site.step = Cam
+
 date.day=Diwrnod
 date.month=Mis
 date.year=Blwyddyn
@@ -230,11 +232,13 @@ fullResultsPage.taxableProfit=Elw trethadwy
 fullResultsPage.taxableProfit.daysAllocated=Diwrnodau wedi’u neilltuo i bob blwyddyn ariannol
 fullResultsPage.taxableProfit.distributions=Dosbarthiadau
 fullResultsPage.taxableProfit.profitAndDistributions=Elw trethadwy gan gynnwys dosbarthiadau
-fullResultsPage.calculationTableSummary=Tabl yw hwn sy’n disgrifio’ch cyfrifiad ar gyfer Rhyddhad Ffiniol yn fanwl.
-fullResultsPage.tableSummary=Tabl yw hwn sy’n disgrifio’ch cyfrifiad o elw trethadwy’n fanwl.
+fullResultsPage.calculationTableSummary=Eich cyfrifiad Elw Trethadwy yn fanwl
+fullResultsPage.tableSummary=Eich cyfrifiad Elw Trethadwy yn fanwl
 fullResultsPage.taxableProfitTableScrollableLabel=Tabl o’r elw trethadwy
 fullResultsPage.taxableProfitTable.hidden=Tabl o’r elw trethadwy
 fullResultsPage.calculationTable.hidden=Tabl dadansoddol o’r cyfrifiad
+
+fullResultsPage.calculationTableCaption = Eich cyfrifiad ar gyfer Rhyddhad Ffiniol llawn yn fanwl
 
 
 associatedCompanies.title=Nifer y cwmnïau cysylltiedig

@@ -44,7 +44,7 @@ object PDFViewHelper extends ViewHelper {
     calculatorResult match {
       case SingleResult(flatRate: FlatRate, _) =>
         Html(s"""
-              ${pdfHeaderHtml(
+        ${pdfHeaderHtml(
             "3",
             pdfMetadata,
             calculatorResult,
@@ -54,8 +54,8 @@ object PDFViewHelper extends ViewHelper {
             associatedCompanies,
             now
           )}
-                ${pdfCorporationTaxHtml("3", calculatorResult)}
-             ${pdfDetailedCalculationHtml(
+          ${pdfCorporationTaxHtml("3", calculatorResult)}
+          ${pdfDetailedCalculationHtml(
             nonTabCalculationResultsTable(
               calculatorResult,
               taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),

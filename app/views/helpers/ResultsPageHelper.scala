@@ -656,14 +656,6 @@ object ResultsPageHelper extends ViewHelper {
           "<th scope=\"col\" class=\"govuk-table__header\"  ></th>",
           "<td class=\"govuk-table__header\"></td>"
         )
-        .replace(
-          s"""<th scope=\"col\" class=\"govuk-table__header not-header\"  ><span class=\"govuk-visually-hidden\">${messages(
-              "fullResultsPage.variables"
-            )}</span></th>""",
-          s"""<td class=\"govuk-table__header not-header\"><span class=\"govuk-visually-hidden\">${messages(
-              "fullResultsPage.variables"
-            )}</span></td>"""
-        )
     )
 
   def corporatonTaxBeforeMR(details: TaxDetails) =

@@ -560,15 +560,15 @@ class PDFFileTemplateSpec extends SpecBase {
        |     <h2 class="govuk-heading-l">How it's calculated</h2>
        |     <p class="govuk-body">Marginal Relief for your accounting period</p>
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
-       |     <div class="app-table" role="region" aria-label="This is a table describing your Marginal Relief calculation in detail." tabindex="0">
+       |     <div class="app-table" role="region" aria-label="Your Marginal Relief calculation in detail." tabindex="0">
        |      <table class="govuk-table">
        |       <caption class="govuk-table__caption govuk-visually-hidden">
-       |        This is a table describing your Marginal Relief calculation in detail.
+       |        Your Marginal Relief calculation in detail.
        |       </caption>
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
-       |         <td class="govuk-table__header"></td>
-       |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">Calculation variables</span></td>
+       |         <td class="govuk-table__header"><span aria-hidden="true">Step</span></td>
+       |         <th scope="col" class="govuk-table__header">Calculation variables</th>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>
        |        </tr>
@@ -612,15 +612,15 @@ class PDFFileTemplateSpec extends SpecBase {
        |   <div class="pdf-page">
        |    <div class="grid-row">
        |     <h3 class="govuk-heading-m" style="margin-bottom: 4px;">For financial year 2023 to 2024 (1 days)</h3>
-       |     <div class="app-table" role="region" aria-label="This is a table describing your Marginal Relief calculation in detail." tabindex="0">
+       |     <div class="app-table" role="region" aria-label="Your Marginal Relief calculation in detail." tabindex="0">
        |      <table class="govuk-table">
        |       <caption class="govuk-table__caption govuk-visually-hidden">
-       |        This is a table describing your Marginal Relief calculation in detail.
+       |        Your Marginal Relief calculation in detail.
        |       </caption>
        |       <thead class="govuk-table__head">
        |        <tr class="govuk-table__row">
-       |         <td class="govuk-table__header"></td>
-       |         <td class="govuk-table__header not-header"><span class="govuk-visually-hidden">Calculation variables</span></td>
+       |         <td class="govuk-table__header"><span aria-hidden="true">Step</span></td>
+       |         <th scope="col" class="govuk-table__header">Calculation variables</th>
        |         <th scope="col" class="govuk-table__header">Calculation</th>
        |         <th scope="col" class="govuk-table__header">Result</th>
        |        </tr>
