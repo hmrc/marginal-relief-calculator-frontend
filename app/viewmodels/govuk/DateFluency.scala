@@ -53,7 +53,7 @@ trait DateFluency {
           value = field("day").value,
           label = Some(messages("date.day")),
           classes = s"govuk-input--width-2 ${errorClass("day")}".trim,
-          attributes = Map("maxlength" -> "2")
+          attributes = Map.empty
         ),
         InputItem(
           id = s"${field.id}.month",
@@ -61,7 +61,7 @@ trait DateFluency {
           value = field("month").value,
           label = Some(messages("date.month")),
           classes = s"govuk-input--width-2 ${errorClass("month")}".trim,
-          attributes = Map("maxlength" -> "2")
+          attributes = Map.empty
         ),
         InputItem(
           id = s"${field.id}.year",
@@ -69,7 +69,7 @@ trait DateFluency {
           value = field("year").value,
           label = Some(messages("date.year")),
           classes = s"govuk-input--width-4 ${errorClass("year")}".trim,
-          attributes = Map("maxlength" -> "4")
+          attributes = Map.empty
         )
       )
 
