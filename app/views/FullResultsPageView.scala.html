@@ -36,7 +36,7 @@
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad().path(), NormalMode)) {
 
-    <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("fullResultsPage.heading")</h1>
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, false)
 
     <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
