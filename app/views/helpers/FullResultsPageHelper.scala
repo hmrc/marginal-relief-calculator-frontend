@@ -86,9 +86,8 @@ object FullResultsPageHelper extends ViewHelper {
       def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
-           |    ${h2(
-            text = messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, marginalRate.days),
-            styles = "margin-bottom: 4px;"
+           |    ${h3FullResultsPage(
+            text = messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, marginalRate.days)
           )}
            |    ${displayFullFinancialYearTable(
             calculatorResult,
