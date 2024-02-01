@@ -46,7 +46,7 @@ class FullResultsPageHelperSpec extends SpecBase {
         FullResultsPageHelper
           .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo """
-                                      |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">
+                                      |<h3 class="govuk-heading-s" style="margin-bottom: 4px;">
                                       |   fullResultsPage.forFinancialYear
                                       |</h3>
                                       |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£13</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£9</b></p>
@@ -215,9 +215,9 @@ class FullResultsPageHelperSpec extends SpecBase {
           .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo
           """
-            |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
+            |<h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
-            |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
+            |<h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
             |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
             |<table class="govuk-table">
@@ -267,7 +267,7 @@ class FullResultsPageHelperSpec extends SpecBase {
           .displayFullCalculationResult(calculatorResult, Left(1), 11, 111, config)
           .htmlFormat shouldMatchTo
           """
-            |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
+            |<h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.notEligibleAboveUpperLimit.1 <b>£143</b> fullResultsPage.notEligibleAboveUpperLimit.2 <b>£0</b></p>
             |<div class="app-table" role="region" aria-label="fullResultsPage.calculationTableCaption" tabindex="0">
             |<table class="govuk-table">
@@ -304,7 +304,7 @@ class FullResultsPageHelperSpec extends SpecBase {
             |  </tbody>
             |</table>
             |</div>
-            |<h3 class="govuk-heading-m" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
+            |<h3 class="govuk-heading-s" style="margin-bottom: 4px;">fullResultsPage.forFinancialYear</h3>
             |<p class="govuk-body">fullResultsPage.marginalReliefNotAvailable</p>
             |""".stripMargin.htmlFormat
       }

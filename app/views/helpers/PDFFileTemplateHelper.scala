@@ -16,12 +16,12 @@
 
 package views.helpers
 
-import models.calculator.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult }
+import models.calculator.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult, TaxDetails }
 import models.FYConfig
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import views.helpers.FullResultsPageHelper.{ nonTabCalculationResultsTable, taxDetailsWithAssociatedCompanies }
+import views.helpers.FullResultsPageHelper.{ displayFullFinancialYearTable, h3FullResultsPage, nonTabCalculationResultsTable, p, taxDetailsWithAssociatedCompanies }
 import views.helpers.PDFViewHelper.pdfFormulaAndNextHtml
 
 import scala.collection.immutable.Seq
@@ -48,7 +48,8 @@ object PDFFileTemplateHelper {
                  taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),
                  taxableProfit,
                  distributions,
-                 config
+                 config,
+                 true
                )}
                 ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
@@ -67,7 +68,8 @@ object PDFFileTemplateHelper {
                  taxDetailsWithAssociatedCompanies(Seq(flatRate1, flatRate2), associatedCompanies),
                  taxableProfit,
                  distributions,
-                 config
+                 config,
+                 true
                )}
                 ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
@@ -85,7 +87,8 @@ object PDFFileTemplateHelper {
                  taxDetailsWithAssociatedCompanies(Seq(marginalRate), associatedCompanies),
                  taxableProfit,
                  distributions,
-                 config
+                 config,
+                 true
                )}
                 ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
@@ -104,7 +107,8 @@ object PDFFileTemplateHelper {
               taxDetailsWithAssociatedCompanies(Seq(flatRate, marginalRate), associatedCompanies),
               taxableProfit,
               distributions,
-              config
+              config,
+              true
             )}
              ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
              |        </div>
@@ -123,7 +127,8 @@ object PDFFileTemplateHelper {
                  taxDetailsWithAssociatedCompanies(Seq(marginalRate, flatRate), associatedCompanies),
                  taxableProfit,
                  distributions,
-                 config
+                 config,
+                 true
                )}
                 ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
                 |        </div>
@@ -145,7 +150,8 @@ object PDFFileTemplateHelper {
               },
               taxableProfit,
               distributions,
-              config
+              config,
+              true
             )}
              |      </div>
              |      <span class="govuk-body-s footer-page-no">${messages("pdf.page", "3", pageCount)}</span>
@@ -160,7 +166,8 @@ object PDFFileTemplateHelper {
               },
               taxableProfit,
               distributions,
-              config
+              config,
+              true
             )}
              ${pdfFormulaAndNextHtml(accountingPeriodForm, calculatorResult)}
              |      </div>
