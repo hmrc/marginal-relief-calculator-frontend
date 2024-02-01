@@ -28,7 +28,9 @@ trait ViewHelper {
 
   def h3(text: String): Html = Html(s"""<h3 class="govuk-heading-m" style="margin-bottom: 4px;">$text</h3>""")
 
-  def h3FullResultsPage(text: String): Html = Html(s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">$text</h3>""")
+  def h3FullResultsPage(text: String): Html = Html(
+    s"""<h3 class="govuk-heading-s" style="margin-bottom: 4px;">$text</h3>"""
+  )
 
   def p(text: String, classes: String = "govuk-body"): Html =
     Html(s"""<p class="$classes">$text</p>""")
