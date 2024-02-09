@@ -36,10 +36,10 @@
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad().path(), NormalMode)) {
 
-    <h1 class="govuk-heading-xl">@messages("fullResultsPage.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("fullResultsPage.heading")</h1>
     @displayYourDetails(calculatorResult, accountingPeriodForm, taxableProfit, distributions, associatedCompanies, true, false)
 
-    <h2 class="govuk-heading-l">@messages("fullResultsPage.howItsCalculated")</h2>
+    <h2 class="govuk-heading-m">@messages("fullResultsPage.howItsCalculated")</h2>
     <span class="govuk-heading-m" style="margin-bottom: 4px;">@{CurrencyUtils.format(calculatorResult.totalMarginalRelief)}</span>
     <p class="govuk-body">@messages("fullResultsPage.marginalReliefForAccountingPeriod")</p>
 
@@ -52,7 +52,7 @@
 
     @templates.PrintResults()
 
-    <h3 class="govuk-heading-s">@messages("fullResultsPage.whatToDoNext")</h3>
+    <h2 class="govuk-heading-m">@messages("fullResultsPage.whatToDoNext")</h2>
     <ul class="govuk-list govuk-list--bullet">
         <li>@messages("fullResultsPage.completeYourCorporationTaxReturn")</li>
         <li>@messages("fullResultsPage.payYourCorporationTaxBy") <b>@accountingPeriodForm.accountingPeriodEndDateOrDefault.plusMonths(9).plusDays(1).govDisplayFormat</b>.</li>

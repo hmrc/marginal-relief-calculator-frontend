@@ -25,7 +25,7 @@
 @()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm("session.signOut.title"), timeout = false, showBackLink = false) {
- <h1 class="govuk-heading-xl">@messages("session.signOut.heading")</h1>
+ <h1 class="govuk-heading-l">@messages("session.signOut.heading")</h1>
 
  @govukButton(Button(
   href = Some(routes.IndexController.onPageLoad().url),

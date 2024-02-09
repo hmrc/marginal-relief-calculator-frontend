@@ -35,29 +35,51 @@ object FullResultsPageHelper extends ViewHelper {
     taxDetailsWithAssociatedCompanies: Seq[(TaxDetails, Int)],
     taxableProfit: Int,
     distributions: Int,
-    config: Map[Int, FYConfig]
+    config: Map[Int, FYConfig],
+    isPDF: Boolean
   )(implicit messages: Messages): Html = {
 
     val html = taxDetailsWithAssociatedCompanies.flatMap { case (td, associatedCompanies) =>
       val year = td.year
       val days = td.days
-      td.fold { _ =>
-        Seq(
-          h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
-          p(messages("fullResultsPage.marginalReliefNotAvailable", year.toString, (year + 1).toString))
-        )
-      } { marginal =>
-        Seq(
-          h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
-          displayFullFinancialYearTable(
-            calculatorResult,
-            marginal,
-            associatedCompanies,
-            taxableProfit,
-            distributions,
-            config
+      if (isPDF) {
+        td.fold { _ =>
+          Seq(
+            h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+            p(messages("fullResultsPage.marginalReliefNotAvailable", year.toString, (year + 1).toString))
           )
-        )
+        } { marginal =>
+          Seq(
+            h3(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+            displayFullFinancialYearTable(
+              calculatorResult,
+              marginal,
+              associatedCompanies,
+              taxableProfit,
+              distributions,
+              config
+            )
+          )
+        }
+      } else {
+        td.fold { _ =>
+          Seq(
+            h3FullResultsPage(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+            p(messages("fullResultsPage.marginalReliefNotAvailable", year.toString, (year + 1).toString))
+          )
+        } { marginal =>
+          Seq(
+            h3FullResultsPage(messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, days)),
+            displayFullFinancialYearTable(
+              calculatorResult,
+              marginal,
+              associatedCompanies,
+              taxableProfit,
+              distributions,
+              config
+            )
+          )
+        }
       }
     }
 
@@ -86,9 +108,8 @@ object FullResultsPageHelper extends ViewHelper {
       def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year
         s"""<div class="govuk-tabs__panel" id="year$year">
-           |    ${h2(
-            text = messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, marginalRate.days),
-            styles = "margin-bottom: 4px;"
+           |    ${h3FullResultsPage(
+            text = messages("fullResultsPage.forFinancialYear", year.toString, (year + 1).toString, marginalRate.days)
           )}
            |    ${displayFullFinancialYearTable(
             calculatorResult,
@@ -125,7 +146,8 @@ object FullResultsPageHelper extends ViewHelper {
             taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
-            config
+            config,
+            isPDF = false
           )
         case (y1: FlatRate, y2: MarginalRate) =>
           nonTabCalculationResultsTable(
@@ -133,7 +155,8 @@ object FullResultsPageHelper extends ViewHelper {
             taxDetailsWithAssociatedCompanies(Seq(y1, y2), associatedCompanies),
             taxableProfit,
             distributions,
-            config
+            config,
+            isPDF = false
           )
         case _ => throw new RuntimeException("Both financial years are flat rate")
       }
@@ -145,7 +168,8 @@ object FullResultsPageHelper extends ViewHelper {
         taxDetailsWithAssociatedCompanies(Seq(single.taxDetails), associatedCompanies),
         taxableProfit,
         distributions,
-        config
+        config,
+        isPDF = false
       )
     )(dualResultTable)
   }

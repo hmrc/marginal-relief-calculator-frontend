@@ -79,7 +79,14 @@ class PDFViewHelperSpec extends SpecBase {
             )}
                 ${pdfCorporationTaxHtml(pageCount, calculatorResult)}
                 ${pdfDetailedCalculationHtml(
-              nonTabCalculationResultsTable(calculatorResult, Seq(flatRate -> 0), taxableProfit, distributions, config),
+              nonTabCalculationResultsTable(
+                calculatorResult,
+                Seq(flatRate -> 0),
+                taxableProfit,
+                distributions,
+                config,
+                isPDF = true
+              ),
               calculatorResult,
               accountingPeriodForm,
               pageCount
@@ -117,7 +124,8 @@ class PDFViewHelperSpec extends SpecBase {
                 Seq(marginalRate -> 0),
                 taxableProfit,
                 distributions,
-                config
+                config,
+                isPDF = true
               ),
               calculatorResult,
               accountingPeriodForm,
@@ -166,7 +174,8 @@ class PDFViewHelperSpec extends SpecBase {
                 Seq(flatRate1 -> 0, flatRate2 -> 0),
                 taxableProfit,
                 distributions,
-                config
+                config,
+                isPDF = true
               ),
               calculatorResult,
               accountingPeriodForm,
@@ -212,7 +221,8 @@ class PDFViewHelperSpec extends SpecBase {
                 Seq(marginalRate -> 0, flatRate -> 0),
                 taxableProfit,
                 distributions,
-                config
+                config,
+                isPDF = true
               ),
               calculatorResult,
               accountingPeriodForm,
@@ -258,7 +268,8 @@ class PDFViewHelperSpec extends SpecBase {
                 Seq(flatRate -> 0, marginalRate -> 0),
                 taxableProfit,
                 distributions,
-                config
+                config,
+                isPDF = true
               ),
               calculatorResult,
               accountingPeriodForm,
@@ -304,7 +315,8 @@ class PDFViewHelperSpec extends SpecBase {
                 Seq(marginalRate1 -> 0),
                 taxableProfit,
                 distributions,
-                config
+                config,
+                isPDF = true
               ),
               calculatorResult,
               accountingPeriodForm,
@@ -316,7 +328,8 @@ class PDFViewHelperSpec extends SpecBase {
                 Seq(marginalRate2 -> 0),
                 taxableProfit,
                 distributions,
-                config
+                config,
+                isPDF = true
               ),
               calculatorResult,
               accountingPeriodForm,

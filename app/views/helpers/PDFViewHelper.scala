@@ -61,7 +61,8 @@ object PDFViewHelper extends ViewHelper {
               taxDetailsWithAssociatedCompanies(Seq(flatRate), associatedCompanies),
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,
@@ -87,7 +88,8 @@ object PDFViewHelper extends ViewHelper {
               taxDetailsWithAssociatedCompanies(Seq(flatRate1, flatRate2), associatedCompanies),
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,
@@ -113,7 +115,8 @@ object PDFViewHelper extends ViewHelper {
               taxDetailsWithAssociatedCompanies(Seq(m), associatedCompanies),
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,
@@ -139,7 +142,8 @@ object PDFViewHelper extends ViewHelper {
               taxDetailsWithAssociatedCompanies(Seq(flatRate, m), associatedCompanies),
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,
@@ -166,7 +170,8 @@ object PDFViewHelper extends ViewHelper {
               taxDetailsWithAssociatedCompanies(Seq(m, flatRate), associatedCompanies),
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,
@@ -195,7 +200,8 @@ object PDFViewHelper extends ViewHelper {
               },
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,
@@ -210,7 +216,8 @@ object PDFViewHelper extends ViewHelper {
               },
               taxableProfit,
               distributions,
-              config
+              config,
+              isPDF = true
             ),
             calculatorResult,
             accountingPeriodForm,

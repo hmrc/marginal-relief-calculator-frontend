@@ -32,7 +32,7 @@
     mainContentLayout = Some(new templates.FullMainContent().render(_)),
     backLink = BackLinkHelper.backLinkOrDefault(routes.PDFAddCompanyDetailsController.onPageLoad().path(), NormalMode)
 ) {
-<h1 class="govuk-heading-xl">@messages("pdf.title")</h1>
+<h1 class="govuk-heading-l">@messages("pdf.title")</h1>
 <div class="print-this govuk-!-margin-bottom-4">
     <a class="govuk-link print-this__print" href="javascript:window.print()"><span>@messages("pdf.print")</span></a>
 </div>
