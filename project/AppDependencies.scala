@@ -9,7 +9,7 @@ object AppDependencies {
     play.sbt.PlayImport.ws,
     "uk.gov.hmrc"       %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
     "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
-    "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"            % "8.1.0",
+    "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"            % "8.5.0",
     "uk.gov.hmrc"       %% s"play-conditional-form-mapping-$playVersion" % "2.0.0",
     "org.julienrf"      %% "play-json-derived-codecs"                    % "10.1.0",
     "com.openhtmltopdf"  % "openhtmltopdf-pdfbox"                        % "1.0.10",
