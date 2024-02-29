@@ -116,7 +116,10 @@
 
     .print-header {
         margin-bottom: 15px;
-
+        .print-header__hmrc-logo {
+            width: 32px;
+            height: 30px;
+        }
         .govuk-grid-column-one-third {
             border-left: #28a197 solid;
             padding-left: 8px;
