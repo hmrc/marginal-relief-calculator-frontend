@@ -1,23 +1,21 @@
-
 # Marginal Relief Calculator (frontend)
 
-This repository contains the necessary code to display user journey for Marginal Relief Calculator. It is dependendent on the [marginal-relief-calculator-backend](https://github.com/hmrc/marginal-relief-calculator-backend) service for calculator logic and marginal relief calculations.
+This repository contains the necessary code to display user journey for Marginal Relief Calculator.
 
 The codebase uses the [scaffolding service](https://github.com/hmrc/hmrc-frontend-scaffold.g8) for generating pages in user journey. To add a new page, run the scaffolding sbt command with the appropriate template and run the migration script to add routes e.g `sbt g8Scaffold intPage`
 
 ## Running in DEV mode
 
-To start the service locally using service manager, use `sm2 --start MARGINAL_RELIEF_CALCULATOR_FRONTEND`
-For a functioning frontend, it also needs following services to be running locally. They can be started via service manager using
+To start the service locally using service manager, use `sm2 --start MARGINAL_RELIEF_CALCULATOR_ALL`
+For a functioning frontend, it also needs following services to be running locally. Make sure `DATASTREAM` is started correctly using
 ```
 sm2 --start DATASTREAM
-sm2 --start MARGINAL_RELIEF_CALCULATOR_BACKEND
 ```
 
 ### From source code on your local machine
 Prior to starting the service from source, make sure the instance running in service manager is stopped. This can be done by running `sm2 --stop MARGINAL_RELIEF_CALCULATOR_FRONTEND`.
 
-To run the service locally from source code, you need the following installed: `Java 1.8`, `Mongo 4.0.25`, `sbt 1.7.1`
+To run the service locally from source code, you need the following installed: `Java 11`, `Mongo`, `sbt`
 
 ```$ sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
 
