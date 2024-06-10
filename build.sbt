@@ -6,7 +6,7 @@ lazy val appName: String = "marginal-relief-calculator-frontend"
 lazy val IntegrationTest = config("it") extend Test
 
 lazy val root = (project in file("."))
-  .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .settings(
     PlayKeys.playDefaultPort := 7101,
     name := appName,
