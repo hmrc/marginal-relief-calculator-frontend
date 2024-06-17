@@ -21,7 +21,6 @@ import config.{ ConfigMissingError, FrontendAppConfig }
 import models.calculator.CalculatorResult
 import models.FYConfig
 import play.api.Logging
-import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{ Inject, Singleton }
 import scala.concurrent.{ ExecutionContext, Future }
@@ -31,7 +30,7 @@ class CalculationConfigService @Inject() (appConfig: FrontendAppConfig)(implicit
   ec: ExecutionContext
 ) extends Logging {
 
-  def getConfig(year: Int)(implicit hc: HeaderCarrier): Future[FYConfig] = {
+  def getConfig(year: Int): Future[FYConfig] = {
     logger.info(message = "Retrieving config from configuration file")
 
     appConfig.calculatorConfig.findFYConfig(year)(ConfigMissingError) match {
@@ -45,7 +44,7 @@ class CalculationConfigService @Inject() (appConfig: FrontendAppConfig)(implicit
 
   def getAllConfigs[U <: CalculatorResult](
     calculatorResult: U
-  )(implicit hc: HeaderCarrier): Future[Map[Int, FYConfig]] =
+  ): Future[Map[Int, FYConfig]] =
     calculatorResult.fold(single =>
       getConfig(single.taxDetails.year)
         .map(config => Map(single.taxDetails.year -> config))

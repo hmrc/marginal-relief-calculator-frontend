@@ -103,7 +103,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           associatedCompanies = Some(1),
           associatedCompaniesFY1 = Some(1),
           associatedCompaniesFY2 = Some(2)
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
@@ -152,7 +152,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           Some(1),
           None,
           None
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
@@ -201,7 +201,7 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           Some(1),
           None,
           None
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
 

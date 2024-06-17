@@ -645,9 +645,7 @@ object ResultsPageHelper extends ViewHelper {
       }
     )
 
-  def replaceTableHeader(tableHtml: Html)(implicit
-    messages: Messages
-  ): Html =
+  def replaceTableHeader(tableHtml: Html): Html =
     Html(
       tableHtml
         .toString()

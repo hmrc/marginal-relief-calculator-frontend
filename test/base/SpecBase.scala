@@ -46,14 +46,14 @@ trait SpecBase
       )
 
   implicit class StringOps(value: String) {
-    def filterAndTrim =
+    def filterAndTrim: String =
       value
         .split("\n")
         .filterNot(_.contains("csrfToken"))
         .map(_.trim)
         .mkString
 
-    def trimNewLines = value
+    def trimNewLines: String = value
       .split("\n")
       .map(_.trim)
       .mkString

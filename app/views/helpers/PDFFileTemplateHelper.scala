@@ -16,12 +16,12 @@
 
 package views.helpers
 
-import models.calculator.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult, TaxDetails }
+import models.calculator.{ CalculatorResult, DualResult, FlatRate, MarginalRate, SingleResult }
 import models.FYConfig
 import forms.AccountingPeriodForm
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import views.helpers.FullResultsPageHelper.{ displayFullFinancialYearTable, h3FullResultsPage, nonTabCalculationResultsTable, p, taxDetailsWithAssociatedCompanies }
+import views.helpers.FullResultsPageHelper.{ nonTabCalculationResultsTable, taxDetailsWithAssociatedCompanies }
 import views.helpers.PDFViewHelper.pdfFormulaAndNextHtml
 
 import scala.collection.immutable.Seq

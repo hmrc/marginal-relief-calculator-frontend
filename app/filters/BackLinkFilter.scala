@@ -67,9 +67,11 @@ class BackLinkFilter(
         if (isRefererChangePage) {
           visitedLinks
         } else {
-          if (visitedLinks.nonEmpty)
+          if (visitedLinks.nonEmpty) {
             visitedLinks.tail
-          else visitedLinks
+          } else {
+            visitedLinks
+          }
         }
       } else {
         if (visitedLinks.headOption.contains(rh.path)) visitedLinks else rh.path :: visitedLinks

@@ -29,7 +29,6 @@ import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.mvc._
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.AssociatedCompaniesView
 
@@ -167,7 +166,7 @@ class AssociatedCompaniesController @Inject() (
     associatedCompaniesParameter: AssociatedCompaniesParameter,
     mode: Mode,
     userAnswers: UserAnswers
-  )(implicit headerCarrier: HeaderCarrier) =
+  ) =
     for {
       updated <- Future.fromTry(value.associatedCompanies match {
                    case AssociatedCompanies.Yes => userAnswers.set(AssociatedCompaniesPage, value)

@@ -64,8 +64,6 @@ class AssociatedCompaniesControllerSpec
           .associatedCompaniesParameters(
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(1)
-          )(
-            hc = *
           )
           .returns(Future.successful(AskFull))
 
@@ -119,8 +117,6 @@ class AssociatedCompaniesControllerSpec
           .associatedCompaniesParameters(
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(1)
-          )(
-            hc = *
           )
           .returns(Future.successful(AskFull))
 
@@ -152,7 +148,7 @@ class AssociatedCompaniesControllerSpec
         mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(*) returns Future.successful(AskFull)
+        ) returns Future.successful(AskFull)
 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
@@ -205,8 +201,6 @@ class AssociatedCompaniesControllerSpec
           .associatedCompaniesParameters(
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-          )(
-            hc = *
           )
           .returns(Future.successful(DontAsk))
 
@@ -228,7 +222,7 @@ class AssociatedCompaniesControllerSpec
         mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(*) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
+        ) returns Future.failed(UpstreamErrorResponse("Bad request", 400))
 
         val application = applicationBuilder(Some(requiredAnswers))
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
@@ -252,7 +246,7 @@ class AssociatedCompaniesControllerSpec
         mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(*) returns Future.successful(AskFull)
+        ) returns Future.successful(AskFull)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -293,7 +287,7 @@ class AssociatedCompaniesControllerSpec
         mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(*) returns Future.successful(AskFull)
+        ) returns Future.successful(AskFull)
 
         val application =
           applicationBuilder(userAnswers =
@@ -329,7 +323,7 @@ class AssociatedCompaniesControllerSpec
         mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )(*) returns Future.successful(
+        ) returns Future.successful(
           AskBothParts(
             Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
             Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
@@ -377,7 +371,7 @@ class AssociatedCompaniesControllerSpec
             mockParameterService.associatedCompaniesParameters(
               accountingPeriodStart = LocalDate.ofEpochDay(0),
               accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-            )(*) returns Future.successful(associatedCompaniesParameter)
+            ) returns Future.successful(associatedCompaniesParameter)
 
             val request =
               FakeRequest(POST, associatedCompaniesRoute)
@@ -407,7 +401,7 @@ class AssociatedCompaniesControllerSpec
         mockParameterService.associatedCompaniesParameters(
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
-        )(*) returns Future.successful(AskFull)
+        ) returns Future.successful(AskFull)
         val application =
           applicationBuilder(Some(requiredAnswers))
             .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))

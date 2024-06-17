@@ -55,8 +55,8 @@ class PDFAddCompanyDetailsController @Inject() (
       }
       Ok(view(preparedForm, NormalMode))
   }
-  def onSubmit = (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async {
-    implicit request =>
+  def onSubmit: Action[AnyContent] =
+    (identify andThen getData andThen requireData andThen PDFRequiredDataAction).async { implicit request =>
       form
         .bindFromRequest()
         .fold(
@@ -68,5 +68,5 @@ class PDFAddCompanyDetailsController @Inject() (
               nextPage       <- navigator.nextPage(PDFAddCompanyDetailsPage, NormalMode, updatedAnswers)
             } yield Redirect(nextPage)
         )
-  }
+    }
 }
