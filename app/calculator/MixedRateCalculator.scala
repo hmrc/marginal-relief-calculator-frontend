@@ -36,8 +36,9 @@ object MixedRateCalculator extends FlatRateComputation with MarginalRateComputat
       differentUpperLimitThresholds = true
     )
 
-    if (fyFlatValues.fy < fyMarginalValues.fy) { flatResult.combineWith(marginalResult) }
-    else {
+    if (fyFlatValues.fy < fyMarginalValues.fy) {
+      flatResult.combineWith(marginalResult)
+    } else {
       marginalResult.combineWith(flatResult)
     }
   }
