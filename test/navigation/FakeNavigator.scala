@@ -21,7 +21,6 @@ import pages._
 import play.api.mvc.Call
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,8 +34,6 @@ class FakeNavigator(
       sessionRepository = sessionRepository
     ) {
 
-  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers)(implicit
-    headerCarrier: HeaderCarrier
-  ): Future[Call] =
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Future[Call] =
     Future.successful(desiredRoute)
 }

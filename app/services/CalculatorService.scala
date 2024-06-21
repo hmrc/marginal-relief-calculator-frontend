@@ -19,7 +19,7 @@ package services
 import config.{ ConfigMissingError, FrontendAppConfig }
 import models.calculator.CalculatorResult
 import play.api.Logging
-import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
+import uk.gov.hmrc.http.UnprocessableEntityException
 
 import java.time.LocalDate
 import javax.inject.{ Inject, Singleton }
@@ -39,7 +39,7 @@ class CalculatorService @Inject() (
     associatedCompanies: Option[Int],
     associatedCompaniesFY1: Option[Int],
     associatedCompaniesFY2: Option[Int]
-  )(implicit hc: HeaderCarrier): Future[CalculatorResult] = {
+  ): Future[CalculatorResult] = {
     logger.info(message = "Using reworked calculation solution")
 
     val distributions: BigDecimal = BigDecimal(exemptDistributions.getOrElse(0.0))

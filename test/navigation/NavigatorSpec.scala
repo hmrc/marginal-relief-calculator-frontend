@@ -200,8 +200,6 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .associatedCompaniesParameters(
             accountingPeriodStart = *,
             accountingPeriodEnd = *
-          )(
-            hc = *
           )
           .returns(
             Future.successful(
@@ -228,8 +226,6 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .associatedCompaniesParameters(
             accountingPeriodStart = *,
             accountingPeriodEnd = *
-          )(
-            hc = *
           )
           .returns(Future.successful(DontAsk))
 
@@ -249,8 +245,6 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .associatedCompaniesParameters(
             accountingPeriodStart = *,
             accountingPeriodEnd = *
-          )(
-            hc = *
           )
           .returns(
             Future.successful(
@@ -276,8 +270,6 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .associatedCompaniesParameters(
             accountingPeriodStart = *,
             accountingPeriodEnd = *
-          )(
-            hc = *
           )
           .returns(
             Future.successful(
@@ -303,8 +295,6 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .associatedCompaniesParameters(
             accountingPeriodStart = *,
             accountingPeriodEnd = *
-          )(
-            hc = *
           )
           .returns(
             Future.successful(
@@ -327,8 +317,6 @@ class NavigatorSpec extends SpecBase with IdiomaticMockito with ArgumentMatchers
           .associatedCompaniesParameters(
             accountingPeriodStart = *,
             accountingPeriodEnd = *
-          )(
-            hc = *
           )
           .returns(
             Future.successful(

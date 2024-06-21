@@ -116,7 +116,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
 
         mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
@@ -126,7 +126,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           associatedCompanies = Some(1),
           associatedCompaniesFY1 = None,
           associatedCompaniesFY2 = None
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
@@ -239,7 +239,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
 
         mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
@@ -249,7 +249,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           associatedCompanies = None,
           associatedCompaniesFY1 = None,
           associatedCompaniesFY2 = None
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
@@ -317,7 +317,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           effectiveTaxRate = 1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
 
         mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
@@ -327,7 +327,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           associatedCompanies = Some(1),
           associatedCompaniesFY1 = None,
           associatedCompaniesFY2 = None
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
           implicit lazy val materializer: Materializer = application.materializer
@@ -374,7 +374,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult)(*) returns Future.successful(Map(2023 -> config(2023)))
+        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
 
         mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
@@ -384,7 +384,7 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           associatedCompanies = Some(1),
           associatedCompaniesFY1 = None,
           associatedCompaniesFY2 = None
-        )(*) returns Future.successful(calculatorResult)
+        ) returns Future.successful(calculatorResult)
 
         running(application) {
           implicit lazy val materializer: Materializer = application.materializer

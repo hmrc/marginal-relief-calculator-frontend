@@ -71,7 +71,7 @@ class FullResultsPageController @Inject() (
                 Some(taxableProfit),
                 Some(distribution),
                 maybeDistributionsIncluded,
-                maybeAassociatedCompanies,
+                maybeAssociatedCompanies,
                 maybeTwoAssociatedCompanies
               ) if distribution == Distribution.No || maybeDistributionsIncluded.nonEmpty =>
             Right(
@@ -80,7 +80,7 @@ class FullResultsPageController @Inject() (
                 taxableProfit,
                 distribution,
                 maybeDistributionsIncluded,
-                maybeAassociatedCompanies,
+                maybeAssociatedCompanies,
                 maybeTwoAssociatedCompanies,
                 request,
                 request.userId,

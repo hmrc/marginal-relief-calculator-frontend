@@ -71,7 +71,7 @@ class CheckYourAnswersControllerSpec
       mockParameterService.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
         accountingPeriodEnd = LocalDate.ofEpochDay(1)
-      )(*) returns Future.successful(AskFull)
+      ) returns Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
       running(application) {
@@ -113,7 +113,7 @@ class CheckYourAnswersControllerSpec
       mockParameterService.associatedCompaniesParameters(
         accountingPeriodStart = LocalDate.ofEpochDay(0),
         accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
-      )(*) returns Future.successful(AskFull)
+      ) returns Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
       running(application) {

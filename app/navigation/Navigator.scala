@@ -25,7 +25,6 @@ import pages._
 import play.api.mvc.Call
 import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
-import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -76,13 +75,13 @@ class Navigator @Inject() (
       _ => routes.IndexController.onPageLoad()
   }
 
-  private def checkRouteMap(implicit headerCarrier: HeaderCarrier): Page => UserAnswers => Future[Call] = {
+  private def checkRouteMap: Page => UserAnswers => Future[Call] = {
     case AccountingPeriodPage => accountingPeriodChangeRoute
     case DistributionPage     => userAnswers => Future.successful(distributionsChangeRoute(userAnswers))
     case _                    => _ => Future.successful(routes.CheckYourAnswersController.onPageLoad())
   }
 
-  private def accountingPeriodChangeRoute(answers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] = {
+  private def accountingPeriodChangeRoute(answers: UserAnswers): Future[Call] = {
     val needToProcessNextPage =
       answers.get(AssociatedCompaniesPage).forall(_.associatedCompanies == AssociatedCompanies.Yes)
 
@@ -152,11 +151,11 @@ class Navigator @Inject() (
       case _                      => routes.JourneyRecoveryController.onPageLoad()
     }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers)(implicit headerCarrier: HeaderCarrier): Future[Call] =
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Future[Call] =
     mode match {
       case NormalMode =>
         Future.successful(normalRoutes(page)(userAnswers))
       case CheckMode =>
-        checkRouteMap(headerCarrier)(page)(userAnswers)
+        checkRouteMap(page)(userAnswers)
     }
 }

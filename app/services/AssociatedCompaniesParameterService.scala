@@ -22,7 +22,7 @@ import config.{ ConfigMissingError, FrontendAppConfig }
 import models._
 import models.associatedCompanies._
 import play.api.Logging
-import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
+import uk.gov.hmrc.http.UnprocessableEntityException
 import utils.ShowCalculatorDisclaimerUtils.{ financialYearEnd, getFinancialYearForDate }
 
 import java.time.LocalDate
@@ -71,8 +71,9 @@ class AssociatedCompaniesParameterService @Inject() (appConfig: FrontendAppConfi
     }
   }
 
-  def associatedCompaniesParameters(accountingPeriodStart: LocalDate, accountingPeriodEnd: LocalDate)(implicit
-    hc: HeaderCarrier
+  def associatedCompaniesParameters(
+    accountingPeriodStart: LocalDate,
+    accountingPeriodEnd: LocalDate
   ): Future[AssociatedCompaniesParameter] = {
     logger.info(message = "Determining associated companies parameters locally")
 
