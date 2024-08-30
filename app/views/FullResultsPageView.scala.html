@@ -32,7 +32,7 @@
     govukButton: GovukButton
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)], config:Map[Int,FYConfig])(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)], config:Map[Int,FYConfig])(implicit request: RequestHeader, messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("resultsPage.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.ResultsPageController.onPageLoad().path(), NormalMode)) {
 

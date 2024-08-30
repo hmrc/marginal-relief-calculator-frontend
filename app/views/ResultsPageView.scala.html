@@ -30,7 +30,7 @@
         govukButton: GovukButton
 )
 
-@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)])(implicit request: Request[_], messages: Messages)
+@(calculatorResult: CalculatorResult, accountingPeriodForm: AccountingPeriodForm, taxableProfit: Int, distributions: Int, associatedCompanies: Either[Int, (Int, Int)])(implicit request: RequestHeader, messages: Messages)
 
 @titleAndBanner = @{displayBanner(calculatorResult)}
 

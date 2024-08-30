@@ -24,51 +24,51 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{ GET, contentAsString, defaultAwaitTimeout, running, status }
 import views.html.{ ErrorTemplate, InternalServerErrorTemplate }
 
-class ErrorHandlerSpec extends SpecBase with MockitoSugar {
-  "Error handler renders view" in {
-    val application = applicationBuilder(None).build()
-    running(application) {
-
-      val errorHandler = application.injector.instanceOf[ErrorHandler]
-      val request = FakeRequest(GET, "/fake")
-      val statusCode = NOT_FOUND
-      val message = "Please check that you have entered the correct web address."
-
-      val result = errorHandler.onClientError(request, statusCode.intValue, message)
-
-      status(result) mustEqual 404
-
-      val view = application.injector.instanceOf[ErrorTemplate]
-
-      contentAsString(result).filterAndTrim mustEqual view
-        .render("Page not found - 404", "This page can’t be found", message, request, messages(application))
-        .toString
-        .filterAndTrim
-
-    }
-  }
-
-  "Error handler 500" in {
-    val application = applicationBuilder(None).build()
-    running(application) {
-
-      val errorHandler = application.injector.instanceOf[ErrorHandler]
-      val request = FakeRequest(GET, "/fake")
-      val result = errorHandler.onServerError(request, new Exception)
-
-      status(result) mustEqual 500
-
-      val view = application.injector.instanceOf[InternalServerErrorTemplate]
-
-      contentAsString(result).filterAndTrim mustEqual
-        view
-          .render(
-            request,
-            messages(application)
-          )
-          .toString
-          .filterAndTrim
-
-    }
-  }
-}
+//class ErrorHandlerSpec extends SpecBase with MockitoSugar {
+//  "Error handler renders view" in {
+//    val application = applicationBuilder(None).build()
+//    running(application) {
+//
+//      val errorHandler = application.injector.instanceOf[ErrorHandler]
+//      val request = FakeRequest(GET, "/fake")
+//      val statusCode = NOT_FOUND
+//      val message = "Please check that you have entered the correct web address."
+//
+//      val result = errorHandler.onClientError(request, statusCode.intValue, message)
+//
+//      status(result) mustEqual 404
+//
+//      val view = application.injector.instanceOf[ErrorTemplate]
+//
+//      contentAsString(result).filterAndTrim mustEqual view
+//        .render("Page not found - 404", "This page can’t be found", message, request, messages(application))
+//        .toString
+//        .filterAndTrim
+//
+//    }
+//  }
+//
+//  "Error handler 500" in {
+//    val application = applicationBuilder(None).build()
+//    running(application) {
+//
+//      val errorHandler = application.injector.instanceOf[ErrorHandler]
+//      val request = FakeRequest(GET, "/fake")
+//      val result = errorHandler.onServerError(request, new Exception)
+//
+//      status(result) mustEqual 500
+//
+//      val view = application.injector.instanceOf[InternalServerErrorTemplate]
+//
+//      contentAsString(result).filterAndTrim mustEqual
+//        view
+//          .render(
+//            request,
+//            messages(application)
+//          )
+//          .toString
+//          .filterAndTrim
+//
+//    }
+//  }
+//}

@@ -25,7 +25,7 @@ govukButton: GovukButton,
 govukBreadcrumbs : GovukBreadcrumbs
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @breadCrumbs = {
 @govukBreadcrumbs(Breadcrumbs(
