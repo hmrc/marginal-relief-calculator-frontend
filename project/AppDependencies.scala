@@ -21,9 +21,9 @@ object AppDependencies {
     "uk.gov.hmrc.mongo"      %% s"hmrc-mongo-test-$playVersion" % hmrcMongoVersion,
     "org.scalacheck"         %% "scalacheck"                    % "1.18.0",
     "org.scalatestplus"      %% "scalacheck-1-17"               % "3.2.18.0",
-    "org.mockito"            %% "mockito-scala"                 % "1.17.31",
+    "org.mockito"            %% "mockito-scala"                 % "1.17.37",
     "org.scalatestplus"      %% "mockito-4-11"                  % "3.2.18.0",
-    "org.jsoup"               % "jsoup"                         % "1.17.2",
+    "org.jsoup"               % "jsoup"                         % "1.18.1",
     "org.pegdown"             % "pegdown"                       % "1.6.0",
     "com.softwaremill.diffx" %% "diffx-scalatest-should"        % "0.9.0"
   ).map(_ % "test, it")
