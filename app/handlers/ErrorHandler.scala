@@ -24,21 +24,21 @@ import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.ErrorTemplate
 import views.html.InternalServerErrorTemplate
 
-import scala.concurrent.{ExecutionContext, Future}
-
+import scala.concurrent.{ ExecutionContext, Future }
 
 @Singleton
 class ErrorHandler @Inject() (
-                               val messagesApi: MessagesApi,
-                               view: ErrorTemplate,
-                               errorInternal: InternalServerErrorTemplate
-                             )(implicit val ec: ExecutionContext)
-  extends FrontendErrorHandler with I18nSupport {
+  val messagesApi: MessagesApi,
+  view: ErrorTemplate,
+  errorInternal: InternalServerErrorTemplate
+)(implicit val ec: ExecutionContext)
+    extends FrontendErrorHandler with I18nSupport {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: RequestHeader): Future[Html] =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
+    rh: RequestHeader
+  ): Future[Html] =
     Future.successful(view(pageTitle, heading, message))
 
-  override def internalServerErrorTemplate(implicit request: RequestHeader): Future[Html]  =
+  override def internalServerErrorTemplate(implicit request: RequestHeader): Future[Html] =
     Future.successful(errorInternal())
 }
-
