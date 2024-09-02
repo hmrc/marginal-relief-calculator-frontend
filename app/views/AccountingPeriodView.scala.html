@@ -27,7 +27,7 @@
     govukDetails : GovukDetails
 )
 
-@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode)(implicit request: RequestHeader, messages: Messages)
 
 @*Need to change this if accountingPeriod.error.day welsh translation changed*@
 @errorMap = @{
