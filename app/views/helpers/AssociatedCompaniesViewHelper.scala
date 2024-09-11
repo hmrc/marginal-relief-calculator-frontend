@@ -32,7 +32,7 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
 
   private val govukErrorMessage = new GovukErrorMessage
   private val govukHint = new GovukHint
-  private val govukHintAndErrorMessage = new GovukHintAndErrorMessage
+  private val govukHintAndErrorMessage = new GovukHintAndErrorMessage(govukHint, govukErrorMessage)
   private val govukFormGroup = new GovukFormGroup
   private val govukLabel = new GovukLabel
   private val govukInput = new GovukInput(govukLabel, govukFormGroup, govukHintAndErrorMessage)
