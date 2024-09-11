@@ -16,13 +16,14 @@
 
 package views.helpers
 
-import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, Period }
+import models.associatedCompanies.{AskBothParts, AskFull, AskOnePart, AssociatedCompaniesParameter, Period}
 import forms.DateUtils.DateOps
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukErrorMessage, GovukHint, GovukInput, GovukLabel }
+import uk.gov.hmrc.govukfrontend.views.html.components.{GovukInput, GovukLabel, GovukErrorMessage, GovukHint}
+import uk.gov.hmrc.govukfrontend.views.html.helpers.{GovukFormGroup, GovukHintAndErrorMessage}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 import viewmodels.govuk.All.FluentInput
 import viewmodels.govuk.input.InputViewModel
@@ -31,8 +32,10 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
 
   private val govukErrorMessage = new GovukErrorMessage
   private val govukHint = new GovukHint
+  private val govukHintAndErrorMessage = new GovukHintAndErrorMessage
+  private val govukFormGroup = new GovukFormGroup
   private val govukLabel = new GovukLabel
-  private val govukInput = new GovukInput(govukErrorMessage, govukHint, govukLabel)
+  private val govukInput = new GovukInput(govukLabel, govukFormGroup, govukHintAndErrorMessage)
 
   def yesHtml(form: Form[_], a: AssociatedCompaniesParameter)(implicit messages: Messages): Option[Html] =
     a match {
