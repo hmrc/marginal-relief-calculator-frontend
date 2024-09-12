@@ -16,15 +16,15 @@
 
 package views.helpers
 
-import models.associatedCompanies.{AskBothParts, AskFull, AskOnePart, DontAsk, Period}
+import models.associatedCompanies.{ AskBothParts, AskFull, AskOnePart, DontAsk, Period }
 import forms.AssociatedCompaniesFormProvider
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.html.components.{GovukErrorMessage, GovukHint, GovukInput, GovukLabel}
-import uk.gov.hmrc.govukfrontend.views.html.helpers.{GovukFormGroup, GovukHintAndErrorMessage}
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukErrorMessage, GovukHint, GovukInput, GovukLabel }
+import uk.gov.hmrc.govukfrontend.views.html.helpers.{ GovukFormGroup, GovukHintAndErrorMessage }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
 import viewmodels.govuk.All.FluentInput
 import viewmodels.govuk.input.InputViewModel
