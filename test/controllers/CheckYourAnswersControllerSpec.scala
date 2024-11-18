@@ -91,9 +91,10 @@ class CheckYourAnswersControllerSpec
         )
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view
+        contentAsString(result).filterAndTrim mustEqual view
           .render(list, routes.ResultsPageController.onPageLoad().url, request, messages(application))
           .toString
+          .filterAndTrim
       }
     }
 
@@ -133,9 +134,10 @@ class CheckYourAnswersControllerSpec
         )
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view
+        contentAsString(result).filterAndTrim mustEqual view
           .render(list, routes.ResultsPageController.onPageLoad().url, request, messages(application))
           .toString
+          .filterAndTrim
       }
     }
 

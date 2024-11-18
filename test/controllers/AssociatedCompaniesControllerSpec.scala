@@ -387,10 +387,10 @@ class AssociatedCompaniesControllerSpec
             val result = route(application, request).value
 
             status(result) mustEqual BAD_REQUEST
-            contentAsString(result) mustEqual view(boundForm, associatedCompaniesParameter, NormalMode)(
+            contentAsString(result).filterAndTrim mustEqual view(boundForm, associatedCompaniesParameter, NormalMode)(
               request,
               messages(application)
-            ).toString
+            ).toString.filterAndTrim
           }
         }
       }
@@ -423,10 +423,10 @@ class AssociatedCompaniesControllerSpec
           val result = route(application, request).value
 
           status(result) mustEqual BAD_REQUEST
-          contentAsString(result) mustEqual view(boundForm, AskFull, NormalMode)(
+          contentAsString(result).filterAndTrim mustEqual view(boundForm, AskFull, NormalMode)(
             request,
             messages(application)
-          ).toString
+          ).toString.filterAndTrim
         }
       }
 
