@@ -388,9 +388,10 @@ class TwoAssociatedCompaniesControllerSpec
             val result = route(application, request).value
 
             status(result) mustEqual BAD_REQUEST
-            contentAsString(result) mustEqual view
+            contentAsString(result).filterAndTrim mustEqual view
               .render(boundForm, accountingPeriodForm, askParameter, NormalMode, request, messages(application))
               .toString
+              .filterAndTrim
           }
         }
       }

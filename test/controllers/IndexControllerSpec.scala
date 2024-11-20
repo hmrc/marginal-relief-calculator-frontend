@@ -50,7 +50,7 @@ class IndexControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
 
-          contentAsString(result) mustEqual view()(request, messages(application)).toString
+          contentAsString(result).filterAndTrim mustEqual view()(request, messages(application)).toString.filterAndTrim
         }
       }
     }

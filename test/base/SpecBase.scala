@@ -28,6 +28,8 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 
+import scala.util.matching.Regex
+
 trait SpecBase
     extends AnyFreeSpec with Matchers with TryValues with OptionValues with ScalaFutures with IntegrationPatience {
 
@@ -46,16 +48,19 @@ trait SpecBase
       )
 
   implicit class StringOps(value: String) {
+    val nonceRegex: Regex = """\S*nonce="[^"]*"\s*""".r
+    val outPut: String = nonceRegex.replaceAllIn(value, " ").replaceAll("\\s+>", ">")
+
     def filterAndTrim: String =
-      value
+      outPut
         .split("\n")
         .filterNot(_.contains("csrfToken"))
         .map(_.trim)
         .mkString
-
     def trimNewLines: String = value
       .split("\n")
       .map(_.trim)
       .mkString
+
   }
 }
