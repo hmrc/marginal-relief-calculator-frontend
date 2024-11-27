@@ -34,7 +34,7 @@
 ) {
 <h1 class="govuk-heading-l">@messages("pdf.title")</h1>
 <div class="print-this govuk-!-margin-bottom-4">
-    <a class="govuk-link print-this__print" href="javascript:window.print()"><span>@messages("pdf.print")</span></a>
+    <a class="govuk-link print-this__print" href="#" data-module="hmrc-print-link"><span>@messages("pdf.print")</span></a>
 </div>
 <div class="pdf-preview">
     @pdfTableHtml(calculatorResult, associatedCompanies, taxableProfit, distributions, config, pdfMetadata, accountingPeriodForm, currentInstant)
