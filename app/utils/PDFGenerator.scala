@@ -39,7 +39,7 @@ class PDFGenerator @Inject() (env: Environment) {
       builder.useFastMode()
       builder.useFont(() => arialFontStream, "Arial")
       builder.useFont(() => gdsFontStream, "GDS Transport")
-      builder.usePdfUaAccessbility(true)
+      builder.usePdfUaAccessibility(true)
       builder.usePdfAConformance(PdfRendererBuilder.PdfAConformance.PDFA_3_U)
       builder.withHtmlContent(html, null)
       builder.toStream(outputStream)
