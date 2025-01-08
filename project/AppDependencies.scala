@@ -2,18 +2,18 @@ import sbt._
 
 object AppDependencies {
   private val playVersion = "play-30"
-  private val bootstrapVersion = "9.5.0"
+  private val bootstrapVersion = "9.6.0"
   private val hmrcMongoVersion = "2.3.0"
 
   val compile: Seq[ModuleID] = Seq(
     play.sbt.PlayImport.ws,
-    "uk.gov.hmrc"       %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
-    "uk.gov.hmrc"       %% s"play-frontend-hmrc-$playVersion"            % "11.7.0",
-    "uk.gov.hmrc"       %% s"play-conditional-form-mapping-$playVersion" % "3.2.0",
-    "uk.gov.hmrc.mongo" %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
-    "io.github.openhtmltopdf"  % "openhtmltopdf-pdfbox"                  % "1.1.23",
-    "org.julienrf"      %% "play-json-derived-codecs"                    % "11.0.0",
-    "org.typelevel"     %% "cats-core"                                   % "2.12.0"
+    "uk.gov.hmrc"             %% s"bootstrap-frontend-$playVersion"            % bootstrapVersion,
+    "uk.gov.hmrc"             %% s"play-frontend-hmrc-$playVersion"            % "11.8.0",
+    "uk.gov.hmrc"             %% s"play-conditional-form-mapping-$playVersion" % "3.2.0",
+    "uk.gov.hmrc.mongo"       %% s"hmrc-mongo-$playVersion"                    % hmrcMongoVersion,
+    "io.github.openhtmltopdf"  % "openhtmltopdf-pdfbox"                        % "1.1.23",
+    "org.julienrf"            %% "play-json-derived-codecs"                    % "11.0.0",
+    "org.typelevel"           %% "cats-core"                                   % "2.12.0"
   )
 
   val test: Seq[ModuleID] = Seq(
