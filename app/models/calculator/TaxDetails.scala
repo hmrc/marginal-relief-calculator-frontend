@@ -39,10 +39,10 @@ sealed trait TaxDetails {
 }
 
 object TaxDetails {
-  given flatRateFormat: OFormat[FlatRate] = Json.format[FlatRate]
-  given marginalRateFormat: OFormat[MarginalRate] = Json.format[MarginalRate]
+  implicit val flatRateFormat: OFormat[FlatRate] = Json.format[FlatRate]
+  implicit val marginalRateFormat: OFormat[MarginalRate] = Json.format[MarginalRate]
 
-  given taxDetailsFormat: OFormat[TaxDetails] = new OFormat[TaxDetails] {
+  implicit val taxDetailsFormat: OFormat[TaxDetails] = new OFormat[TaxDetails] {
     def reads(json: JsValue): JsResult[TaxDetails] = (json \ "type").validate[String].flatMap {
       case "FlatRate" => flatRateFormat.reads(json)
       case "MarginalRate" => marginalRateFormat.reads(json)

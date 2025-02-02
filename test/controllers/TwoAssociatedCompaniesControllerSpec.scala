@@ -26,7 +26,7 @@ import org.mockito.ArgumentMatchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar.mock
-import pages.*
+import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
 import play.api.data.FormError
 import play.api.inject.bind
 import play.api.test.FakeRequest

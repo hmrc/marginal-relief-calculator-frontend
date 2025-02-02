@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import config.{CalculatorConfig, FrontendAppConfig}
-import models.*
+import models.{FlatRateConfig, MarginalReliefConfig}
 import models.associatedCompanies.*
 import org.mockito.stubbing.OngoingStubbing
 import org.mockito.Mockito.when
