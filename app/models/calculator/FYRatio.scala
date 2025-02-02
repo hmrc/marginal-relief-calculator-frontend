@@ -16,13 +16,12 @@
 
 package models.calculator
 
-import julienrf.json.derived
-import play.api.libs.json.OFormat
+import play.api.libs.json.{Json, OFormat}
 
 case class FYRatio(numerator: BigDecimal, denominator: Int) {
   val ratio: BigDecimal = numerator / denominator
 }
 
 object FYRatio {
-  implicit val format: OFormat[FYRatio] = derived.oformat[FYRatio]()
+  implicit val format: OFormat[FYRatio] = Json.format[FYRatio]
 }

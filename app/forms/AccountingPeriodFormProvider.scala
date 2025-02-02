@@ -45,6 +45,6 @@ class AccountingPeriodFormProvider extends Mappings {
             )
           )
         )
-      )(AccountingPeriodForm.apply)(AccountingPeriodForm.unapply)
+      )(AccountingPeriodForm.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
 }

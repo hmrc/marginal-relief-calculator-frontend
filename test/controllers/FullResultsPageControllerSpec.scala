@@ -17,21 +17,23 @@
 package controllers
 
 import base.SpecBase
-import models.calculator._
-import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
-import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, MarginalReliefConfig }
-import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages._
+import models.calculator.*
+import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
+import models.{AssociatedCompanies, Distribution, DistributionsIncluded, MarginalReliefConfig}
+import org.scalatestplus.mockito.MockitoSugar.mock
+import pages.*
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import services.{ CalculationConfigService, CalculatorService }
+import play.api.test.Helpers.*
+import services.{CalculationConfigService, CalculatorService}
 import views.html.FullResultsPageView
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
+class FullResultsPageControllerSpec extends SpecBase  with MockitoSugar {
 
   private lazy val fullResultsPageRoute = routes.FullResultsPageController.onPageLoad().url
 
@@ -116,9 +118,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn  Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
+        when(mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -126,7 +128,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           None,
           Some(1),
           Some(2)
-        ) returns Future.successful(calculatorResult)
+        )) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
@@ -194,9 +196,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
+        when(mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -204,7 +206,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           Some(1),
           None,
           None
-        ) returns Future.successful(calculatorResult)
+        )) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
@@ -267,9 +269,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
+        when(mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -277,7 +279,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           None,
           None,
           None
-        ) returns Future.successful(calculatorResult)
+        )) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
@@ -331,9 +333,9 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
+        when(mockCalculatorService.calculate(
           accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
           accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
           1,
@@ -341,7 +343,7 @@ class FullResultsPageControllerSpec extends SpecBase with IdiomaticMockito with 
           None,
           None,
           None
-        ) returns Future.successful(calculatorResult)
+        )) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)

@@ -34,7 +34,6 @@ import services.AssociatedCompaniesParameterService
 import repositories.SessionRepository
 import uk.gov.hmrc.http.SessionKeys
 import views.html.{ AccountingPeriodView, IrrelevantPeriodView }
-import controllers.routes
 
 import java.time.LocalDate
 import scala.concurrent.Future

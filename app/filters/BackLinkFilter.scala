@@ -28,7 +28,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 class BackLinkFilter(
   override val mat: Materializer,
-  sessionCookieBaker: SessionCookieBaker,
+  implicit val sessionCookieBaker: SessionCookieBaker,
   implicit val ec: ExecutionContext
 ) extends Filter {
 

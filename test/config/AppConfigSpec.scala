@@ -49,10 +49,10 @@ class AppConfigSpec extends AnyFreeSpec with Matchers {
                                            |}
                                            |""".stripMargin)
         appConfig.calculatorConfig
-          .findFYConfig(2022)(ConfigMissingError)
+          .findFYConfig(2022)(config.ConfigMissingError.apply)
           .map(config => config shouldBe FlatRateConfig(2022, 0.19))
         appConfig.calculatorConfig
-          .findFYConfig(2023)(ConfigMissingError)
+          .findFYConfig(2023)(config.ConfigMissingError.apply)
           .map(config => config shouldBe MarginalReliefConfig(2023, 50000, 250000, 0.19, 0.25, 0.015))
       }
       "should error when config is invalid" in {

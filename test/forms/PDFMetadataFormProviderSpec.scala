@@ -33,7 +33,7 @@ class PDFMetadataFormProviderSpec extends StringFieldBehaviours {
   } yield i.toString
 
   val numericStringUnder: Gen[String] = for {
-    i <- Gen.choose(0, Math.pow(10, 9).toLong - 1)
+    i <- Gen.choose(0, (Math.pow(10, 9).toLong - 1).toInt)
   } yield i.toString
 
   val validPDFMetadataFormGenerator: Gen[PDFMetadataForm] = for {

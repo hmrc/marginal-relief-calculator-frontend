@@ -42,7 +42,7 @@ class MarginalReliefCalculatorService @Inject() (appConfig: FrontendAppConfig) e
   ): ValidationResult[CalculatorResult] = {
 
     def findConfig: Int => ValidatedNel[ConfigMissingError, FYConfig] =
-      appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
+      appConfig.calculatorConfig.findFYConfig(_)(config.ConfigMissingError.apply)
 
     val fy1 = fyForDate(accountingPeriodStart)
     val fy2 = fyForDate(accountingPeriodEnd)

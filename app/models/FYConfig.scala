@@ -16,8 +16,7 @@
 
 package models
 
-import julienrf.json.derived
-import play.api.libs.json.{ OFormat, __ }
+import play.api.libs.json._
 
 sealed trait FYConfig {
   def year: Int
@@ -25,7 +24,21 @@ sealed trait FYConfig {
 }
 
 object FYConfig {
-  implicit val format: OFormat[FYConfig] = derived.flat.oformat[FYConfig]((__ \ "type").format[String])
+  implicit val formatRateConfig: OFormat[FlatRateConfig] = Json.format[FlatRateConfig]
+  implicit val formatMarginalConfig: OFormat[MarginalReliefConfig] = Json.format[MarginalReliefConfig]
+
+  implicit val taxDetailsFormat: OFormat[FYConfig] = new OFormat[FYConfig] {
+    def reads(json: JsValue): JsResult[FYConfig] = (json \ "type").validate[String].flatMap {
+      case "FlatRateConfig" => formatRateConfig.reads(json)
+      case "MarginalReliefConfig" => formatMarginalConfig.reads(json)
+      case other => JsError(s"Unknown type: $other")
+    }
+
+    def writes(td: FYConfig): JsObject = td match {
+      case fr: FlatRateConfig => formatRateConfig.writes(fr) + ("type" -> JsString("FlatRateConfig"))
+      case mr: MarginalReliefConfig => formatMarginalConfig.writes(mr) + ("type" -> JsString("MarginalReliefConfig"))
+    }
+  }
 }
 
 case class FlatRateConfig(year: Int, mainRate: Double) extends FYConfig

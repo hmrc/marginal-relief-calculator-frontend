@@ -11,27 +11,25 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
-
-import java.time.{ Clock, Instant, ZoneId }
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
+import java.time.Instant
 
 class SessionRepositorySpec
     extends AnyFreeSpec with Matchers with DefaultPlayMongoRepositorySupport[UserAnswers] with ScalaFutures
-    with IntegrationPatience with OptionValues with MockitoSugar {
+    with IntegrationPatience with OptionValues with MockitoSugar with GuiceOneAppPerSuite {
 
   private val instant = Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
-  private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
-
   private val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
 
   private val mockAppConfig = mock[FrontendAppConfig]
   when(mockAppConfig.cacheTtl) thenReturn 1
+  
+  override def fakeApplication(): Application =
+  new GuiceApplicationBuilder().build()
 
-  protected override val repository = new SessionRepository(
-    mongoComponent = mongoComponent,
-    appConfig = mockAppConfig,
-    clock = stubClock
-  )
+  val repository: SessionRepository = app.injector.instanceOf[SessionRepository]
 
   ".set" - {
 

@@ -11,13 +11,13 @@ lazy val root = (project in file("."))
     PlayKeys.playDefaultPort := 7101,
     name := appName,
     targetJvm := "jvm-11",
-    scalaVersion := "2.13.12",
+    scalaVersion := "3.3.4",
     majorVersion := 1,
     scalacOptions ++= Seq(
       "-feature",
-      "-Xlint:-byname-implicit",
-      "-Wconf:cat=unused&src=routes/.*:s",
-      "-Wconf:cat=unused-imports&src=target/.*:s"
+      "-Wconf:msg=unused-patterns&src=routes/.*:s",
+      "-Wconf:msg=unused&src=target/.*:s",
+      "-Wconf:msg=Flag.*repeatedly:s",
     )
   )
   .settings(inConfig(Test)(testSettings): _*)

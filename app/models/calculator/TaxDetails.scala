@@ -16,8 +16,8 @@
 
 package models.calculator
 
-import julienrf.json.derived
-import play.api.libs.json.{ OFormat, __ }
+import play.api.libs.json
+import play.api.libs.json.{JsError, JsObject, JsResult, JsString, JsValue, Json, OFormat}
 import utils.RoundingUtils.roundUp
 
 sealed trait TaxDetails {
@@ -39,7 +39,21 @@ sealed trait TaxDetails {
 }
 
 object TaxDetails {
-  implicit val format: OFormat[TaxDetails] = derived.flat.oformat[TaxDetails]((__ \ "type").format[String])
+  given flatRateFormat: OFormat[FlatRate] = Json.format[FlatRate]
+  given marginalRateFormat: OFormat[MarginalRate] = Json.format[MarginalRate]
+
+  given taxDetailsFormat: OFormat[TaxDetails] = new OFormat[TaxDetails] {
+    def reads(json: JsValue): JsResult[TaxDetails] = (json \ "type").validate[String].flatMap {
+      case "FlatRate" => flatRateFormat.reads(json)
+      case "MarginalRate" => marginalRateFormat.reads(json)
+      case other => JsError(s"Unknown type: $other")
+    }
+
+    def writes(td: TaxDetails): JsObject = td match {
+      case fr: FlatRate => flatRateFormat.writes(fr) + ("type" -> JsString("FlatRate"))
+      case mr: MarginalRate => marginalRateFormat.writes(mr) + ("type" -> JsString("MarginalRate"))
+    }
+  }
 }
 
 case class FlatRate(

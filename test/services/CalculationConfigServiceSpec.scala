@@ -17,12 +17,13 @@
 package services
 
 import base.SpecBase
-import config.{ CalculatorConfig, FrontendAppConfig }
-import models.calculator.{ CalculatorResult, DualResult, FlatRate, SingleResult }
-import models.{ FYConfig, FlatRateConfig }
-import org.mockito.MockitoSugar
-import org.mockito.stubbing.ScalaOngoingStubbing
-import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
+import config.{CalculatorConfig, FrontendAppConfig}
+import models.calculator.{CalculatorResult, DualResult, FlatRate, SingleResult}
+import models.{FYConfig, FlatRateConfig}
+import org.mockito.Mockito.when
+import org.mockito.stubbing.OngoingStubbing
+import org.scalatestplus.mockito.MockitoSugar
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,7 +42,7 @@ class CalculationConfigServiceSpec extends SpecBase with MockitoSugar with Futur
     val dummyConfig2020: FlatRateConfig = FlatRateConfig(2020, 50)
     val dummyConfig2021: FlatRateConfig = FlatRateConfig(2021, 50)
 
-    def mockCalculatorConfig(result: CalculatorConfig): ScalaOngoingStubbing[CalculatorConfig] = when(
+    def mockCalculatorConfig(result: CalculatorConfig): OngoingStubbing[CalculatorConfig] = when(
       mockConfig.calculatorConfig
     ).thenReturn(result)
 

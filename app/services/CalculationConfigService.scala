@@ -33,7 +33,7 @@ class CalculationConfigService @Inject() (appConfig: FrontendAppConfig)(implicit
   def getConfig(year: Int): Future[FYConfig] = {
     logger.info(message = "Retrieving config from configuration file")
 
-    appConfig.calculatorConfig.findFYConfig(year)(ConfigMissingError) match {
+    appConfig.calculatorConfig.findFYConfig(year)(config.ConfigMissingError.apply) match {
       case Validated.Valid(config) => Future.successful(config)
       case Validated.Invalid(e) =>
         Future.failed(

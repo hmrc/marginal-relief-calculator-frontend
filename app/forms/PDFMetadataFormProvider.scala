@@ -37,6 +37,6 @@ class PDFMetadataFormProvider @Inject() extends Mappings {
             maxLength = 10
           )
         )
-      )(PDFMetadataForm.apply)(PDFMetadataForm.unapply)
+      )(PDFMetadataForm.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
 }

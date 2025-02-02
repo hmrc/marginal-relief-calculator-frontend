@@ -27,11 +27,8 @@ import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import play.api.http.{ DefaultHttpFilters, HeaderNames, HttpFilters, Status }
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.SessionCookieBaker
 import play.api.test.Helpers.{ GET, defaultAwaitTimeout, header, route, status, writeableOf_AnyContentAsEmpty }
 import play.api.{ Application, Configuration }
-
-import scala.concurrent.ExecutionContext
 
 object BasicAuthFilterSpec {
   class Filters @Inject() (basicAuthFilter: BasicAuthFilter) extends DefaultHttpFilters(basicAuthFilter)
@@ -51,9 +48,7 @@ object BasicAuthFilterSpec {
   )
   lazy val frontendAppConfig: FrontendAppConfig = new FrontendAppConfig(config)
   class TestBasicAuthFilter @Inject() (
-    override val mat: Materializer,
-    ec: ExecutionContext,
-    scb: SessionCookieBaker
+    override val mat: Materializer
   ) extends BasicAuthFilter(frontendAppConfig, mat)
 }
 

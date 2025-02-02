@@ -187,7 +187,7 @@ class MappingsSpec extends AnyFreeSpec with Matchers with OptionValues with Mapp
           conditionField = text().withPrefix("check"),
           condition = _ == "yes"
         )
-      )(TestFormData.apply)(TestFormData.unapply)
+      )(TestFormData.apply)(o => Some(Tuple.fromProductTyped(o)))
     }
 
     "must bind when condition true (value set to non-empty)" in {

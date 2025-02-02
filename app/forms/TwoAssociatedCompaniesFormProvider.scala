@@ -75,6 +75,6 @@ class TwoAssociatedCompaniesFormProvider @Inject() extends Mappings {
               )
             )
           )
-      )(TwoAssociatedCompaniesForm.apply)(TwoAssociatedCompaniesForm.unapply)
+      )(TwoAssociatedCompaniesForm.apply)(o => Some(Tuple.fromProductTyped(o)))
     )
 }

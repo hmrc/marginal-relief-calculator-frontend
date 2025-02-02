@@ -16,8 +16,9 @@
 
 package models.calculator
 
-import play.api.libs.json.{ JsNumber, JsObject, JsString, Json, OWrites }
 import utils.RoundingUtils.roundUp
+import play.api.libs.json.*
+import TaxDetails.taxDetailsFormat
 
 sealed trait CalculatorResult {
   val effectiveTaxRate: BigDecimal
@@ -31,30 +32,30 @@ sealed trait CalculatorResult {
 
   def roundValsUp: CalculatorResult
 
-  def fold[T](f: SingleResult[TaxDetails] => T)(g: DualResult[TaxDetails, TaxDetails] => T): T =
-    this match {
-      case x @ SingleResult(_, _)  => f(x)
-      case x @ DualResult(_, _, _) => g(x)
-    }
+    def fold[T](f: SingleResult[TaxDetails] => T)(g: DualResult[TaxDetails, TaxDetails] => T): T =
+      this match {
+        case x: SingleResult[_] => f(x.asInstanceOf[SingleResult[TaxDetails]])
+        case x: DualResult[_, _] => g(x.asInstanceOf[DualResult[TaxDetails, TaxDetails]])
+      }
 }
 
 object CalculatorResult {
-  implicit def writes[A <: CalculatorResult]: OWrites[A] = (o: A) => {
-    val taxDetails = o match {
-      case SingleResult(td: TaxDetails, _) => Map("details" -> Json.toJson(td))
-      case DualResult(y1: TaxDetails, y2: TaxDetails, _) =>
-        Map(
-          "year1" -> Json.toJson(y1),
-          "year2" -> Json.toJson(y2)
-        )
-    }
+  implicit def writes[A <: CalculatorResult]: OWrites[A] = new OWrites[A] {
+    def writes(o: A): JsObject = {
+      val taxDetails = o match {
+          case s: SingleResult[_] => Json.obj("details" -> Json.toJson(s.taxDetails)(taxDetailsFormat))
+          case d: DualResult[_, _] =>
+            Json.obj(
+              "year1" -> Json.toJson(d.year1TaxDetails)(taxDetailsFormat),
+              "year2" -> Json.toJson(d.year2TaxDetails)(taxDetailsFormat)
+            )
 
-    JsObject(
-      Map(
-        "type"             -> JsString(o.`type`),
+      }
+      Json.obj(
+        "type" -> JsString(o.`type`),
         "effectiveTaxRate" -> JsNumber(o.effectiveTaxRate)
       ) ++ taxDetails
-    )
+    }
   }
 }
 
