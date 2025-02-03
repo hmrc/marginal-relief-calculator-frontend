@@ -19,16 +19,16 @@ package views.helpers
 import base.SpecBase
 import com.softwaremill.diffx.scalatest.DiffShouldMatcher.shouldMatchTo
 import models.MarginalReliefConfig
-import models.calculator.{DualResult, FYRatio, FlatRate, MarginalRate, SingleResult}
-import forms.{AccountingPeriodForm, PDFMetadataForm}
+import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
+import forms.{ AccountingPeriodForm, PDFMetadataForm }
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import play.twirl.api.Html
 import utils.FormatUtils.HtmlFormat
 import views.helpers.FullResultsPageHelper.nonTabCalculationResultsTable
-import views.helpers.PDFViewHelper.{pdfCorporationTaxHtml, pdfDetailedCalculationHtml, pdfDetailedCalculationHtmlWithoutHeader, pdfHeaderHtml, pdfTableHtml}
+import views.helpers.PDFViewHelper.{ pdfCorporationTaxHtml, pdfDetailedCalculationHtml, pdfDetailedCalculationHtmlWithoutHeader, pdfHeaderHtml, pdfTableHtml }
 
-import java.time.{Instant, LocalDate}
+import java.time.{ Instant, LocalDate }
 import scala.collection.immutable.Seq
 
 class PDFViewHelperSpec extends SpecBase {

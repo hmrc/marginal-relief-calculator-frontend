@@ -16,7 +16,7 @@
 
 package models.calculator
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{ Json, OFormat }
 
 case class FYRatio(numerator: BigDecimal, denominator: Int) {
   val ratio: BigDecimal = numerator / denominator

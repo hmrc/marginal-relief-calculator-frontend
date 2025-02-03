@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import models.associatedCompanies.*
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.mockito.MockitoSugar
 import pages.*
@@ -36,8 +36,7 @@ import org.mockito.Mockito.when
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class CheckYourAnswersControllerSpec
-    extends SpecBase with SummaryListFluency with MockitoSugar {
+class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency with MockitoSugar {
 
   private val requiredAnswers = emptyUserAnswers
     .set(AccountingPeriodPage, AccountingPeriodForm(LocalDate.ofEpochDay(0), Some(LocalDate.ofEpochDay(1))))
@@ -70,10 +69,12 @@ class CheckYourAnswersControllerSpec
         .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
         .build()
 
-      when(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = LocalDate.ofEpochDay(0),
-        accountingPeriodEnd = LocalDate.ofEpochDay(1)
-      )) thenReturn Future.successful(AskFull)
+      when(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(1)
+        )
+      ) thenReturn Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
       running(application) {
@@ -113,10 +114,12 @@ class CheckYourAnswersControllerSpec
         .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
         .build()
 
-      when(mockParameterService.associatedCompaniesParameters(
-        accountingPeriodStart = LocalDate.ofEpochDay(0),
-        accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
-      )) thenReturn Future.successful(AskFull)
+      when(
+        mockParameterService.associatedCompaniesParameters(
+          accountingPeriodStart = LocalDate.ofEpochDay(0),
+          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
+        )
+      ) thenReturn Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
       running(application) {

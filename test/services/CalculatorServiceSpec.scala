@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import cats.implicits.catsSyntaxValidatedId
-import config.{ConfigMissingError, FrontendAppConfig}
+import config.{ ConfigMissingError, FrontendAppConfig }
 import models.FlatRateConfig
 import models.calculator.*
 import org.mockito.ArgumentMatchers
@@ -27,8 +27,8 @@ import org.mockito.stubbing.OngoingStubbing
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.matchers.should.Matchers.shouldBe
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 
 import java.time.LocalDate
 
@@ -49,15 +49,15 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     val dummyConfig2021: FlatRateConfig = FlatRateConfig(2021, 50)
 
     def mockCalculatorCall(
-                            accountingPeriodStart: LocalDate,
-                            accountingPeriodEnd: LocalDate,
-                            profit: BigDecimal,
-                            exemptDistributions: BigDecimal,
-                            associatedCompanies: Option[Int],
-                            associatedCompaniesFY1: Option[Int],
-                            associatedCompaniesFY2: Option[Int],
-                            result: mockCalculator.ValidationResult[CalculatorResult]
-                          ): OngoingStubbing[mockCalculator.ValidationResult[CalculatorResult]] = when(
+      accountingPeriodStart: LocalDate,
+      accountingPeriodEnd: LocalDate,
+      profit: BigDecimal,
+      exemptDistributions: BigDecimal,
+      associatedCompanies: Option[Int],
+      associatedCompaniesFY1: Option[Int],
+      associatedCompaniesFY2: Option[Int],
+      result: mockCalculator.ValidationResult[CalculatorResult]
+    ): OngoingStubbing[mockCalculator.ValidationResult[CalculatorResult]] = when(
       mockCalculator.compute(
         accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
         accountingPeriodEnd = ArgumentMatchers.eq(accountingPeriodEnd),

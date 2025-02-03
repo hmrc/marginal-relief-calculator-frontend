@@ -25,9 +25,9 @@ class SessionRepositorySpec
 
   private val mockAppConfig = mock[FrontendAppConfig]
   when(mockAppConfig.cacheTtl) thenReturn 1
-  
+
   override def fakeApplication(): Application =
-  new GuiceApplicationBuilder().build()
+    new GuiceApplicationBuilder().build()
 
   val repository: SessionRepository = app.injector.instanceOf[SessionRepository]
 

@@ -26,8 +26,8 @@ import javax.inject.{ Inject, Singleton }
 import scala.concurrent.Future
 
 @Singleton
-class CalculatorService @Inject() (
-  implicit val appConfig: FrontendAppConfig,
+class CalculatorService @Inject() (implicit
+  val appConfig: FrontendAppConfig,
   calculator: MarginalReliefCalculatorService
 ) extends Logging {
 

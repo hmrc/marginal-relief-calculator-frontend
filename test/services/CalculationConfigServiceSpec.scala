@@ -17,13 +17,13 @@
 package services
 
 import base.SpecBase
-import config.{CalculatorConfig, FrontendAppConfig}
-import models.calculator.{CalculatorResult, DualResult, FlatRate, SingleResult}
-import models.{FYConfig, FlatRateConfig}
+import config.{ CalculatorConfig, FrontendAppConfig }
+import models.calculator.{ CalculatorResult, DualResult, FlatRate, SingleResult }
+import models.{ FYConfig, FlatRateConfig }
 import org.mockito.Mockito.when
 import org.mockito.stubbing.OngoingStubbing
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global

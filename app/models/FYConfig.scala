@@ -29,13 +29,13 @@ object FYConfig {
 
   implicit val taxDetailsFormat: OFormat[FYConfig] = new OFormat[FYConfig] {
     def reads(json: JsValue): JsResult[FYConfig] = (json \ "type").validate[String].flatMap {
-      case "FlatRateConfig" => formatRateConfig.reads(json)
+      case "FlatRateConfig"       => formatRateConfig.reads(json)
       case "MarginalReliefConfig" => formatMarginalConfig.reads(json)
-      case other => JsError(s"Unknown type: $other")
+      case other                  => JsError(s"Unknown type: $other")
     }
 
     def writes(td: FYConfig): JsObject = td match {
-      case fr: FlatRateConfig => formatRateConfig.writes(fr) + ("type" -> JsString("FlatRateConfig"))
+      case fr: FlatRateConfig       => formatRateConfig.writes(fr) + ("type"     -> JsString("FlatRateConfig"))
       case mr: MarginalReliefConfig => formatMarginalConfig.writes(mr) + ("type" -> JsString("MarginalReliefConfig"))
     }
   }

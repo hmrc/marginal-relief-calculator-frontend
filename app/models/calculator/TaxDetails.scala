@@ -17,7 +17,7 @@
 package models.calculator
 
 import play.api.libs.json
-import play.api.libs.json.{JsError, JsObject, JsResult, JsString, JsValue, Json, OFormat}
+import play.api.libs.json.{ JsError, JsObject, JsResult, JsString, JsValue, Json, OFormat }
 import utils.RoundingUtils.roundUp
 
 sealed trait TaxDetails {
@@ -44,13 +44,13 @@ object TaxDetails {
 
   implicit val taxDetailsFormat: OFormat[TaxDetails] = new OFormat[TaxDetails] {
     def reads(json: JsValue): JsResult[TaxDetails] = (json \ "type").validate[String].flatMap {
-      case "FlatRate" => flatRateFormat.reads(json)
+      case "FlatRate"     => flatRateFormat.reads(json)
       case "MarginalRate" => marginalRateFormat.reads(json)
-      case other => JsError(s"Unknown type: $other")
+      case other          => JsError(s"Unknown type: $other")
     }
 
     def writes(td: TaxDetails): JsObject = td match {
-      case fr: FlatRate => flatRateFormat.writes(fr) + ("type" -> JsString("FlatRate"))
+      case fr: FlatRate     => flatRateFormat.writes(fr) + ("type"     -> JsString("FlatRate"))
       case mr: MarginalRate => marginalRateFormat.writes(mr) + ("type" -> JsString("MarginalRate"))
     }
   }

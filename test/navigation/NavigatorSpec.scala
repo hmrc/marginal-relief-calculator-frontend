@@ -17,8 +17,8 @@
 package navigation
 
 import base.SpecBase
-import models.associatedCompanies.{AskBothParts, AskOnePart, DontAsk, Period}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm}
+import models.associatedCompanies.{ AskBothParts, AskOnePart, DontAsk, Period }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, PDFAddCompanyDetailsForm, TwoAssociatedCompaniesForm }
 import pages.*
 import models.*
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -198,11 +198,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        when(mockParameterService
-          .associatedCompaniesParameters(
-            accountingPeriodStart = any[LocalDate],
-            accountingPeriodEnd = any[LocalDate]
-          ))
+        when(
+          mockParameterService
+            .associatedCompaniesParameters(
+              accountingPeriodStart = any[LocalDate],
+              accountingPeriodEnd = any[LocalDate]
+            )
+        )
           .thenReturn(
             Future.successful(
               AskBothParts(
@@ -224,11 +226,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        when(mockParameterService
-          .associatedCompaniesParameters(
-            accountingPeriodStart = any[LocalDate],
-            accountingPeriodEnd = any[LocalDate]
-          ))
+        when(
+          mockParameterService
+            .associatedCompaniesParameters(
+              accountingPeriodStart = any[LocalDate],
+              accountingPeriodEnd = any[LocalDate]
+            )
+        )
           .thenReturn(Future.successful(DontAsk))
 
         whenReady(navigator.nextPage(AccountingPeriodPage, CheckMode, userAnswers)) { result =>
@@ -243,11 +247,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
           .set(AssociatedCompaniesPage, AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1)))
           .get
 
-        when(mockParameterService
-          .associatedCompaniesParameters(
-            accountingPeriodStart = any[LocalDate],
-            accountingPeriodEnd = any[LocalDate]
-          ))
+        when(
+          mockParameterService
+            .associatedCompaniesParameters(
+              accountingPeriodStart = any[LocalDate],
+              accountingPeriodEnd = any[LocalDate]
+            )
+        )
           .thenReturn(
             Future.successful(
               result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
@@ -268,11 +274,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
           .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
           .get
 
-        when(mockParameterService
-          .associatedCompaniesParameters(
-            accountingPeriodStart = any[LocalDate],
-            accountingPeriodEnd = any[LocalDate]
-          ))
+        when(
+          mockParameterService
+            .associatedCompaniesParameters(
+              accountingPeriodStart = any[LocalDate],
+              accountingPeriodEnd = any[LocalDate]
+            )
+        )
           .thenReturn(
             Future.successful(
               result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))
@@ -293,11 +301,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
           .set(TwoAssociatedCompaniesPage, TwoAssociatedCompaniesForm(Some(1), Some(1)))
           .get
 
-        when(mockParameterService
-          .associatedCompaniesParameters(
-            accountingPeriodStart = any[LocalDate],
-            accountingPeriodEnd = any[LocalDate]
-          ))
+        when(
+          mockParameterService
+            .associatedCompaniesParameters(
+              accountingPeriodStart = any[LocalDate],
+              accountingPeriodEnd = any[LocalDate]
+            )
+        )
           .thenReturn(
             Future.successful(
               result = AskBothParts(
@@ -315,11 +325,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
       "must return error when navigating to next page on AccountingPeriodPage if periods not present" in {
         val userAnswers = UserAnswers("id")
 
-        when(mockParameterService
-          .associatedCompaniesParameters(
-            accountingPeriodStart = any[LocalDate],
-            accountingPeriodEnd = any[LocalDate]
-          ))
+        when(
+          mockParameterService
+            .associatedCompaniesParameters(
+              accountingPeriodStart = any[LocalDate],
+              accountingPeriodEnd = any[LocalDate]
+            )
+        )
           .thenReturn(
             Future.successful(
               result = AskOnePart(period = Period(start = LocalDate.now(), end = LocalDate.now()))

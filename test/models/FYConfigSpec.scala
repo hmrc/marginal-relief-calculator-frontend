@@ -26,7 +26,8 @@ class FYConfigSpec extends AnyFreeSpec with Matchers {
         val flatRateConfig = FYConfig.taxDetailsFormat.writes(FlatRateConfig(2022, 0.19))
         (flatRateConfig \ "type").as[String] shouldBe "FlatRateConfig"
 
-        val marginalReliefConfig = FYConfig.taxDetailsFormat.writes(MarginalReliefConfig(2023, 50000, 250000, 0.19, 0.25, 0.015))
+        val marginalReliefConfig =
+          FYConfig.taxDetailsFormat.writes(MarginalReliefConfig(2023, 50000, 250000, 0.19, 0.25, 0.015))
         (marginalReliefConfig \ "type").as[String] shouldBe "MarginalReliefConfig"
       }
     }

@@ -17,16 +17,16 @@
 package controllers
 
 import base.SpecBase
-import models.associatedCompanies.{AskBothParts, DontAsk, Period}
+import models.associatedCompanies.{ AskBothParts, DontAsk, Period }
 import forms.DateUtils.financialYear
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider}
-import models.{AssociatedCompanies, Distribution, NormalMode, UserAnswers}
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, TwoAssociatedCompaniesForm, TwoAssociatedCompaniesFormProvider }
+import models.{ AssociatedCompanies, Distribution, NormalMode, UserAnswers }
 import org.mockito.Mockito.when
 import org.mockito.ArgumentMatchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar.mock
-import pages.{AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, TaxableProfitPage, TwoAssociatedCompaniesPage}
+import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.data.FormError
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -38,8 +38,7 @@ import views.html.TwoAssociatedCompaniesView
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class TwoAssociatedCompaniesControllerSpec
-    extends SpecBase with MockitoSugar with TableDrivenPropertyChecks {
+class TwoAssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with TableDrivenPropertyChecks {
 
   private val formProvider = new TwoAssociatedCompaniesFormProvider()
   private val form = formProvider(1, 2)
@@ -73,10 +72,12 @@ class TwoAssociatedCompaniesControllerSpec
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        when(mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )) thenReturn Future.successful(askParameter)
+        when(
+          mockParameterService.associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )
+        ) thenReturn Future.successful(askParameter)
 
         running(application) {
           val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
@@ -108,10 +109,12 @@ class TwoAssociatedCompaniesControllerSpec
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        when(mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
-        )) thenReturn Future.successful(askParameter)
+        when(
+          mockParameterService.associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
+          )
+        ) thenReturn Future.successful(askParameter)
 
         running(application) {
           val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
@@ -142,10 +145,12 @@ class TwoAssociatedCompaniesControllerSpec
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
 
-        when(mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )) thenReturn Future.successful(askParameter)
+        when(
+          mockParameterService.associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )
+        ) thenReturn Future.successful(askParameter)
 
         running(application) {
           val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
@@ -188,10 +193,12 @@ class TwoAssociatedCompaniesControllerSpec
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
           .build()
-        when(mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
-        )) thenReturn Future.successful(askParameter)
+        when(
+          mockParameterService.associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
+          )
+        ) thenReturn Future.successful(askParameter)
 
         running(application) {
           val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
@@ -228,10 +235,12 @@ class TwoAssociatedCompaniesControllerSpec
             .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
-        when(mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )) thenReturn Future.successful(askParameter)
+        when(
+          mockParameterService.associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )
+        ) thenReturn Future.successful(askParameter)
 
         running(application) {
           val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
@@ -264,10 +273,12 @@ class TwoAssociatedCompaniesControllerSpec
             .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
             .build()
 
-        when(mockParameterService.associatedCompaniesParameters(
-          accountingPeriodStart = LocalDate.ofEpochDay(0),
-          accountingPeriodEnd = LocalDate.ofEpochDay(1)
-        )) thenReturn Future.successful(DontAsk)
+        when(
+          mockParameterService.associatedCompaniesParameters(
+            accountingPeriodStart = LocalDate.ofEpochDay(0),
+            accountingPeriodEnd = LocalDate.ofEpochDay(1)
+          )
+        ) thenReturn Future.successful(DontAsk)
 
         running(application) {
           val request = FakeRequest(GET, twoAssociatedCompaniesRoute)
@@ -303,10 +314,12 @@ class TwoAssociatedCompaniesControllerSpec
           val mockParameterService: AssociatedCompaniesParameterService =
             mock[AssociatedCompaniesParameterService]
 
-          when(mockParameterService.associatedCompaniesParameters(
-            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
-          )) thenReturn Future.successful(askParameter)
+          when(
+            mockParameterService.associatedCompaniesParameters(
+              accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+              accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
+            )
+          ) thenReturn Future.successful(askParameter)
           when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) thenReturn Future.successful(true)
 
           val application =
@@ -359,10 +372,12 @@ class TwoAssociatedCompaniesControllerSpec
           val mockParameterService: AssociatedCompaniesParameterService =
             mock[AssociatedCompaniesParameterService]
 
-          when(mockParameterService.associatedCompaniesParameters(
-            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
-          )) thenReturn Future.successful(askParameter)
+          when(
+            mockParameterService.associatedCompaniesParameters(
+              accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+              accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
+            )
+          ) thenReturn Future.successful(askParameter)
           when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) thenReturn Future.successful(true)
 
           val application =
@@ -422,10 +437,12 @@ class TwoAssociatedCompaniesControllerSpec
           val mockSessionRepository = mock[SessionRepository]
           val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-          when(mockParameterService.associatedCompaniesParameters(
-            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
-          )) thenReturn Future.successful(askParameter)
+          when(
+            mockParameterService.associatedCompaniesParameters(
+              accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+              accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
+            )
+          ) thenReturn Future.successful(askParameter)
           when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) thenReturn Future.successful(true)
 
           val application =

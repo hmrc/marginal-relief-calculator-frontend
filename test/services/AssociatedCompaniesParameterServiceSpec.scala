@@ -17,8 +17,8 @@
 package services
 
 import base.SpecBase
-import config.{CalculatorConfig, FrontendAppConfig}
-import models.{FlatRateConfig, MarginalReliefConfig}
+import config.{ CalculatorConfig, FrontendAppConfig }
+import models.{ FlatRateConfig, MarginalReliefConfig }
 import models.associatedCompanies.*
 import org.mockito.stubbing.OngoingStubbing
 import org.mockito.Mockito.when
@@ -26,8 +26,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.should.Matchers.shouldBe
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
-import uk.gov.hmrc.http.{HeaderCarrier, UnprocessableEntityException}
+import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
+import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 import utils.ShowCalculatorDisclaimerUtils.financialYearEnd
 
 import java.time.LocalDate

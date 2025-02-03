@@ -17,9 +17,9 @@
 package controllers
 
 import base.SpecBase
-import models.calculator.{DualResult, FYRatio, FlatRate, MarginalRate, SingleResult}
-import forms.{AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm}
-import models.{AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers}
+import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
+import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
+import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers }
 import org.scalatestplus.mockito.MockitoSugar
 import pages.*
 import play.api.inject.bind
@@ -28,7 +28,6 @@ import play.api.test.Helpers.*
 import services.CalculatorService
 import views.html.ResultsPageView
 import org.mockito.Mockito.when
-
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -97,15 +96,17 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
           effectiveTaxRate = 1
         )
 
-        when(mockCalculatorService.calculate(
-          accountingPeriodStart = epoch,
-          accountingPeriodEnd = epoch.plusDays(1),
-          profit = 1.0,
-          exemptDistributions = Some(1),
-          associatedCompanies = Some(1),
-          associatedCompaniesFY1 = Some(1),
-          associatedCompaniesFY2 = Some(2)
-        )) thenReturn Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = epoch,
+            accountingPeriodEnd = epoch.plusDays(1),
+            profit = 1.0,
+            exemptDistributions = Some(1),
+            associatedCompanies = Some(1),
+            associatedCompaniesFY1 = Some(1),
+            associatedCompaniesFY2 = Some(2)
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
@@ -146,15 +147,17 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
           .build()
         val calculatorResult =
           SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
-        when(mockCalculatorService.calculate(
-          accountingPeriodStart = epoch,
-          accountingPeriodEnd = epoch.plusDays(1),
-          1.0,
-          Some(1),
-          Some(1),
-          None,
-          None
-        )) thenReturn Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = epoch,
+            accountingPeriodEnd = epoch.plusDays(1),
+            1.0,
+            Some(1),
+            Some(1),
+            None,
+            None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
@@ -195,15 +198,17 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
             FlatRate(2023, 1, 1, 1, 1, 1, 275),
             1
           )
-        when(mockCalculatorService.calculate(
-          accountingPeriodStart = startDate,
-          accountingPeriodEnd = endDate,
-          1.0,
-          Some(1),
-          Some(1),
-          None,
-          None
-        )) thenReturn Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = startDate,
+            accountingPeriodEnd = endDate,
+            1.0,
+            Some(1),
+            Some(1),
+            None,
+            None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
 
