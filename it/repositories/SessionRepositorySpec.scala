@@ -5,20 +5,23 @@ import models.UserAnswers
 import org.mockito.Mockito.when
 import org.mongodb.scala.model.Filters
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import java.time.Instant
+
+import java.time.{Clock, Instant, ZoneId}
+import scala.concurrent.ExecutionContext
+import org.scalatest.concurrent.ScalaFutures.*
+
 
 class SessionRepositorySpec
     extends AnyFreeSpec with Matchers with DefaultPlayMongoRepositorySupport[UserAnswers] with ScalaFutures
-    with IntegrationPatience with OptionValues with MockitoSugar with GuiceOneAppPerSuite {
+    with IntegrationPatience with OptionValues with MockitoSugar {
+
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
   private val instant = Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
   private val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
@@ -26,10 +29,14 @@ class SessionRepositorySpec
   private val mockAppConfig = mock[FrontendAppConfig]
   when(mockAppConfig.cacheTtl) thenReturn 1
 
-  override def fakeApplication(): Application =
-    new GuiceApplicationBuilder().build()
+  private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
 
-  val repository: SessionRepository = app.injector.instanceOf[SessionRepository]
+  protected override val repository: SessionRepository = new SessionRepository(
+    mongoComponent = mongoComponent,
+    appConfig = mockAppConfig,
+    clock = stubClock
+  )
+
 
   ".set" - {
 
