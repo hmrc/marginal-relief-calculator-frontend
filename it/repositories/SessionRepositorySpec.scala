@@ -5,17 +5,16 @@ import models.UserAnswers
 import org.mockito.Mockito.when
 import org.mongodb.scala.model.Filters
 import org.scalatest.OptionValues
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
-import java.time.{Clock, Instant, ZoneId}
+import java.time.{ Clock, Instant, ZoneId }
 import scala.concurrent.ExecutionContext
 import org.scalatest.concurrent.ScalaFutures.*
-
 
 class SessionRepositorySpec
     extends AnyFreeSpec with Matchers with DefaultPlayMongoRepositorySupport[UserAnswers] with ScalaFutures
@@ -36,7 +35,6 @@ class SessionRepositorySpec
     appConfig = mockAppConfig,
     clock = stubClock
   )
-
 
   ".set" - {
 
