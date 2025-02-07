@@ -17,7 +17,7 @@ lazy val root = (project in file("."))
       "-feature",
       "-Wconf:msg=unused-patterns&src=routes/.*:s",
       "-Wconf:msg=unused&src=target/.*:s",
-      "-Wconf:msg=Flag.*repeatedly:s",
+      "-Wconf:msg=Flag.*repeatedly:s"
     )
   )
   .settings(inConfig(Test)(testSettings): _*)

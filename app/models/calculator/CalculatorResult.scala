@@ -31,25 +31,25 @@ sealed trait CalculatorResult {
   def effectiveTaxRateBeforeMR: Double
 
   def roundValsUp: CalculatorResult
-
+//
   def fold[T](f: SingleResult[TaxDetails] => T)(g: DualResult[TaxDetails, TaxDetails] => T): T =
     this match {
-      case x: SingleResult[_]  => f(x.asInstanceOf[SingleResult[TaxDetails]])
-      case x: DualResult[_, _] => g(x.asInstanceOf[DualResult[TaxDetails, TaxDetails]])
+      case x: SingleResult[TaxDetails]           => f(x)
+      case x: DualResult[TaxDetails, TaxDetails] => g(x)
     }
 }
+
 
 object CalculatorResult {
   implicit def writes[A <: CalculatorResult]: OWrites[A] = new OWrites[A] {
     def writes(o: A): JsObject = {
       val taxDetails = o match {
-        case s: SingleResult[_] => Json.obj("details" -> Json.toJson(s.taxDetails)(taxDetailsFormat))
-        case d: DualResult[_, _] =>
+        case SingleResult(td, _) => Json.obj("details" -> Json.toJson(td)(taxDetailsFormat))
+        case DualResult(y1, y2, _) =>
           Json.obj(
-            "year1" -> Json.toJson(d.year1TaxDetails)(taxDetailsFormat),
-            "year2" -> Json.toJson(d.year2TaxDetails)(taxDetailsFormat)
+            "year1" -> Json.toJson(y1)(taxDetailsFormat),
+            "year2" -> Json.toJson(y2)(taxDetailsFormat)
           )
-
       }
       Json.obj(
         "type"             -> JsString(o.`type`),
