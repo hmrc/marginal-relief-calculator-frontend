@@ -39,7 +39,6 @@ sealed trait CalculatorResult {
     }
 }
 
-
 object CalculatorResult {
   implicit def writes[A <: CalculatorResult]: OWrites[A] = new OWrites[A] {
     def writes(o: A): JsObject = {
