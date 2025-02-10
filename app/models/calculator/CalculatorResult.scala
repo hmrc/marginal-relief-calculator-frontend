@@ -33,28 +33,34 @@ sealed trait CalculatorResult {
 
   def fold[T](f: SingleResult[TaxDetails] => T)(g: DualResult[TaxDetails, TaxDetails] => T): T =
     this match {
-      case x @ SingleResult(_, _)  => f(x)
-      case x @ DualResult(_, _, _) => g(x)
+      case x: SingleResult[_] if x.taxDetails.isInstanceOf[TaxDetails] =>
+        f(x.asInstanceOf[SingleResult[TaxDetails]])
+      case x: DualResult[_, _]
+          if x.year1TaxDetails.isInstanceOf[TaxDetails] && x.year2TaxDetails.isInstanceOf[TaxDetails] =>
+        g(x.asInstanceOf[DualResult[TaxDetails, TaxDetails]])
+      case _ => throw new MatchError(this)
     }
 }
 
 object CalculatorResult {
-  implicit def writes[A <: CalculatorResult]: OWrites[A] = (o: A) => {
-    val taxDetails = o match {
-      case SingleResult(td: TaxDetails, _) => Map("details" -> Json.toJson(td))
-      case DualResult(y1: TaxDetails, y2: TaxDetails, _) =>
-        Map(
-          "year1" -> Json.toJson(y1),
-          "year2" -> Json.toJson(y2)
-        )
-    }
+  implicit def writes[A <: CalculatorResult]: OWrites[A] = new OWrites[A] {
+    def writes(o: A): JsObject = {
+      val taxDetails = o match {
+        case SingleResult(td, _) => Map("details" -> Json.toJson(td)(TaxDetails.taxDetailsFormat))
+        case DualResult(y1, y2, _) =>
+          Map(
+            "year1" -> Json.toJson(y1)(TaxDetails.taxDetailsFormat),
+            "year2" -> Json.toJson(y2)(TaxDetails.taxDetailsFormat)
+          )
+      }
 
-    JsObject(
-      Map(
-        "type"             -> JsString(o.`type`),
-        "effectiveTaxRate" -> JsNumber(o.effectiveTaxRate)
-      ) ++ taxDetails
-    )
+      JsObject(
+        Map(
+          "type"             -> JsString(o.`type`),
+          "effectiveTaxRate" -> JsNumber(o.effectiveTaxRate)
+        ) ++ taxDetails
+      )
+    }
   }
 }
 
@@ -99,7 +105,9 @@ case class DualResult[A <: TaxDetails, B <: TaxDetails](
     year2TaxDetails = year2TaxDetails.roundValsUp,
     effectiveTaxRate = roundUp(effectiveTaxRate)
   )
+
   def totalDays: Int = year1TaxDetails.days + year2TaxDetails.days
+
   override def totalCorporationTax: Double =
     (year1TaxDetails.fold(_.corporationTax)(_.corporationTax) +
       year2TaxDetails.fold(_.corporationTax)(_.corporationTax)).doubleValue

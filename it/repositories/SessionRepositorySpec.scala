@@ -13,21 +13,24 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import java.time.{ Clock, Instant, ZoneId }
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
+import org.scalatest.concurrent.ScalaFutures.*
 
 class SessionRepositorySpec
     extends AnyFreeSpec with Matchers with DefaultPlayMongoRepositorySupport[UserAnswers] with ScalaFutures
     with IntegrationPatience with OptionValues with MockitoSugar {
 
-  private val instant = Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
-  private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
+  private val instant = Instant.now.truncatedTo(java.time.temporal.ChronoUnit.MILLIS)
   private val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
 
   private val mockAppConfig = mock[FrontendAppConfig]
   when(mockAppConfig.cacheTtl) thenReturn 1
 
-  protected override val repository = new SessionRepository(
+  private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
+
+  protected override val repository: SessionRepository = new SessionRepository(
     mongoComponent = mongoComponent,
     appConfig = mockAppConfig,
     clock = stubClock

@@ -27,8 +27,8 @@ class CurrencyUtilsSpec extends AnyFreeSpec with Matchers with TableDrivenProper
     "should round up values" in {
       val table: TableFor2[BigDecimal, Double] = Table(
         ("input", "expected"),
-        (BigDecimal(0), 0),
-        (BigDecimal(1), 1),
+        (BigDecimal(0), 0.0),
+        (BigDecimal(1), 1.0),
         (BigDecimal(1.1), 1.1),
         (BigDecimal(1.11), 1.11),
         (BigDecimal(1.15), 1.15),

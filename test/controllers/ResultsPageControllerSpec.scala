@@ -20,18 +20,19 @@ import base.SpecBase
 import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, UserAnswers }
-import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
-import pages._
+import org.scalatestplus.mockito.MockitoSugar
+import pages.*
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.CalculatorService
 import views.html.ResultsPageView
+import org.mockito.Mockito.when
 
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
+class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
   private val epoch: LocalDate = LocalDate.ofEpochDay(0)
   private lazy val resultsPageRoute = routes.ResultsPageController.onPageLoad().url
 
@@ -95,15 +96,17 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           effectiveTaxRate = 1
         )
 
-        mockCalculatorService.calculate(
-          accountingPeriodStart = epoch,
-          accountingPeriodEnd = epoch.plusDays(1),
-          profit = 1.0,
-          exemptDistributions = Some(1),
-          associatedCompanies = Some(1),
-          associatedCompaniesFY1 = Some(1),
-          associatedCompaniesFY2 = Some(2)
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = epoch,
+            accountingPeriodEnd = epoch.plusDays(1),
+            profit = 1.0,
+            exemptDistributions = Some(1),
+            associatedCompanies = Some(1),
+            associatedCompaniesFY1 = Some(1),
+            associatedCompaniesFY2 = Some(2)
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
@@ -144,15 +147,17 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
           .build()
         val calculatorResult =
           SingleResult(MarginalRate(epoch.getYear, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, FYRatio(1, 365)), 1)
-        mockCalculatorService.calculate(
-          accountingPeriodStart = epoch,
-          accountingPeriodEnd = epoch.plusDays(1),
-          1.0,
-          Some(1),
-          Some(1),
-          None,
-          None
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = epoch,
+            accountingPeriodEnd = epoch.plusDays(1),
+            1.0,
+            Some(1),
+            Some(1),
+            None,
+            None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
@@ -193,15 +198,17 @@ class ResultsPageControllerSpec extends SpecBase with IdiomaticMockito with Argu
             FlatRate(2023, 1, 1, 1, 1, 1, 275),
             1
           )
-        mockCalculatorService.calculate(
-          accountingPeriodStart = startDate,
-          accountingPeriodEnd = endDate,
-          1.0,
-          Some(1),
-          Some(1),
-          None,
-          None
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = startDate,
+            accountingPeriodEnd = endDate,
+            1.0,
+            Some(1),
+            Some(1),
+            None,
+            None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
 

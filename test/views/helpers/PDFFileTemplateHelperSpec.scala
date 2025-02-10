@@ -16,7 +16,8 @@
 
 package views.helpers
 
-import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
+import com.softwaremill.diffx.scalatest.*
+import com.softwaremill.diffx.scalatest.DiffShouldMatcher.shouldMatchTo
 import models.{ FlatRateConfig, MarginalReliefConfig }
 import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import forms.AccountingPeriodForm

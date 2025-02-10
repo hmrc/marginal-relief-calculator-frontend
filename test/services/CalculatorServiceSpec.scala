@@ -20,10 +20,13 @@ import base.SpecBase
 import cats.implicits.catsSyntaxValidatedId
 import config.{ ConfigMissingError, FrontendAppConfig }
 import models.FlatRateConfig
-import models.calculator._
-import org.mockito.stubbing.ScalaOngoingStubbing
-import org.mockito.{ ArgumentMatchers, MockitoSugar }
-import org.scalatest.enablers.Messaging
+import models.calculator.*
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.when
+import org.mockito.stubbing.OngoingStubbing
+import org.scalatestplus.mockito.MockitoSugar.mock
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.matchers.should.Matchers.shouldBe
 import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
 import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 
@@ -37,7 +40,7 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     val mockConfig: FrontendAppConfig = mock[FrontendAppConfig]
     val mockCalculator: MarginalReliefCalculatorService = mock[MarginalReliefCalculatorService]
 
-    val mockCalculatorService: CalculatorService = new CalculatorService(
+    val mockCalculatorService: CalculatorService = new CalculatorService()(
       appConfig = mockConfig,
       calculator = mockCalculator
     )
@@ -54,7 +57,7 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
       associatedCompaniesFY1: Option[Int],
       associatedCompaniesFY2: Option[Int],
       result: mockCalculator.ValidationResult[CalculatorResult]
-    ): ScalaOngoingStubbing[mockCalculator.ValidationResult[CalculatorResult]] = when(
+    ): OngoingStubbing[mockCalculator.ValidationResult[CalculatorResult]] = when(
       mockCalculator.compute(
         accountingPeriodStart = ArgumentMatchers.eq(accountingPeriodStart),
         accountingPeriodEnd = ArgumentMatchers.eq(accountingPeriodEnd),
@@ -142,14 +145,13 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
         )
       )
 
-      implicit val messaging: Messaging[UnprocessableEntityException] = Messaging
-        .messagingNatureOfThrowable[UnprocessableEntityException]
+      val exception: UnprocessableEntityException = intercept[UnprocessableEntityException](result)
 
-      the[UnprocessableEntityException] thrownBy result must have message
+      exception.getMessage shouldBe {
         "Failed to calculate marginal relief: " +
-        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1970, " +
-        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1971"
+          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1970, " +
+          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 1971"
+      }
     }
   }
-
 }

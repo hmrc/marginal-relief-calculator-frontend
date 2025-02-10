@@ -17,7 +17,7 @@
 package views
 
 import base.SpecBase
-import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
+import com.softwaremill.diffx.scalatest.DiffShouldMatcher.shouldMatchTo
 import models.calculator.{ DualResult, FYRatio, MarginalRate }
 import models.MarginalReliefConfig
 import forms.{ AccountingPeriodForm, PDFMetadataForm }

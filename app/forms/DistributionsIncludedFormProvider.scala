@@ -43,6 +43,6 @@ class DistributionsIncludedFormProvider @Inject() extends Mappings {
           enumerable[DistributionsIncluded]().withPrefix("distributionsIncluded"),
           _ == DistributionsIncluded.Yes
         )
-      )(DistributionsIncludedForm.apply)(DistributionsIncludedForm.unapply)
+      )(DistributionsIncludedForm.apply)(o => Some(Tuple.fromProductTyped(o)))
     }
 }

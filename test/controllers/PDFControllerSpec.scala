@@ -22,12 +22,14 @@ import models.MarginalReliefConfig
 import models.calculator.{ DualResult, FYRatio, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
-import org.mockito.{ ArgumentMatchersSugar, IdiomaticMockito }
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar.mock
+import org.scalatestplus.mockito.MockitoSugar
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.http.HeaderNames
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.{ CalculationConfigService, CalculatorService }
 import utils.{ DateTime, FakeDateTime }
 import views.html.PDFView
@@ -36,7 +38,7 @@ import java.time.{ LocalDate, ZoneOffset }
 import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
-class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatchersSugar {
+class PDFControllerSpec extends SpecBase with MockitoSugar {
 
   private val fakeDateTime = new FakeDateTime()
   private lazy val pdfViewRoute = routes.PDFController.onPageLoad().url
@@ -116,17 +118,19 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
-          accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          profit = 1,
-          exemptDistributions = Some(1),
-          associatedCompanies = Some(1),
-          associatedCompaniesFY1 = None,
-          associatedCompaniesFY2 = None
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+            profit = 1,
+            exemptDistributions = Some(1),
+            associatedCompanies = Some(1),
+            associatedCompaniesFY1 = None,
+            associatedCompaniesFY2 = None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
@@ -239,17 +243,19 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
-          accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          profit = 1,
-          exemptDistributions = Some(1),
-          associatedCompanies = None,
-          associatedCompaniesFY1 = None,
-          associatedCompaniesFY2 = None
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+            profit = 1,
+            exemptDistributions = Some(1),
+            associatedCompanies = None,
+            associatedCompaniesFY1 = None,
+            associatedCompaniesFY2 = None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
@@ -317,17 +323,19 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           effectiveTaxRate = 1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
-          accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          profit = 1,
-          exemptDistributions = Some(1),
-          associatedCompanies = Some(1),
-          associatedCompaniesFY1 = None,
-          associatedCompaniesFY2 = None
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+            profit = 1,
+            exemptDistributions = Some(1),
+            associatedCompanies = Some(1),
+            associatedCompaniesFY1 = None,
+            associatedCompaniesFY2 = None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           implicit lazy val materializer: Materializer = application.materializer
@@ -374,17 +382,19 @@ class PDFControllerSpec extends SpecBase with IdiomaticMockito with ArgumentMatc
           1
         )
 
-        mockConfigService.getAllConfigs(calculatorResult) returns Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
 
-        mockCalculatorService.calculate(
-          accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
-          accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
-          profit = 1,
-          exemptDistributions = Some(1),
-          associatedCompanies = Some(1),
-          associatedCompaniesFY1 = None,
-          associatedCompaniesFY2 = None
-        ) returns Future.successful(calculatorResult)
+        when(
+          mockCalculatorService.calculate(
+            accountingPeriodStart = accountingPeriodForm.accountingPeriodStartDate,
+            accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault,
+            profit = 1,
+            exemptDistributions = Some(1),
+            associatedCompanies = Some(1),
+            associatedCompaniesFY1 = None,
+            associatedCompaniesFY2 = None
+          )
+        ) thenReturn Future.successful(calculatorResult)
 
         running(application) {
           implicit lazy val materializer: Materializer = application.materializer

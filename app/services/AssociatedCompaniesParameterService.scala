@@ -39,7 +39,7 @@ class AssociatedCompaniesParameterService @Inject() (appConfig: FrontendAppConfi
     accountingPeriodEnd: LocalDate
   ): ParameterConfigResult = {
     def findConfig: Int => ValidatedNel[ConfigMissingError, FYConfig] =
-      appConfig.calculatorConfig.findFYConfig(_)(ConfigMissingError)
+      appConfig.calculatorConfig.findFYConfig(_)(config.ConfigMissingError.apply)
 
     val year1: Int = getFinancialYearForDate(accountingPeriodStart)
     val year2: Int = getFinancialYearForDate(accountingPeriodEnd)

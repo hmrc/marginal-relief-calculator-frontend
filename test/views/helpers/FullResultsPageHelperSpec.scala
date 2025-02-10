@@ -17,8 +17,8 @@
 package views.helpers
 
 import base.SpecBase
-import com.softwaremill.diffx.scalatest.DiffShouldMatcher.convertToAnyShouldMatcher
 import models.MarginalReliefConfig
+import com.softwaremill.diffx.scalatest.DiffShouldMatcher.shouldMatchTo
 import models.calculator.{ DualResult, FYRatio, FlatRate, MarginalRate, SingleResult }
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages

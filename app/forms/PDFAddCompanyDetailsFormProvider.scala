@@ -31,6 +31,6 @@ class PDFAddCompanyDetailsFormProvider @Inject() extends Mappings {
           "pdfAddCompanyDetails.error.required",
           "pdfAddCompanyDetails.error.invalid"
         )
-      )(PDFAddCompanyDetailsForm.apply)(PDFAddCompanyDetailsForm.unapply)
+      )(PDFAddCompanyDetailsForm.apply)(o => Some(o.pdfAddCompanyDetails))
     }
 }

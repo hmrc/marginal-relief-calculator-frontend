@@ -18,11 +18,14 @@ package services
 
 import base.SpecBase
 import config.{ CalculatorConfig, FrontendAppConfig }
-import models._
-import models.associatedCompanies._
-import org.mockito.MockitoSugar
-import org.mockito.stubbing.ScalaOngoingStubbing
-import org.scalatest.enablers.Messaging
+import models.{ FlatRateConfig, MarginalReliefConfig }
+import models.associatedCompanies.*
+import org.mockito.stubbing.OngoingStubbing
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar.mock
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.matchers.should.Matchers.shouldBe
 import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
 import uk.gov.hmrc.http.{ HeaderCarrier, UnprocessableEntityException }
 import utils.ShowCalculatorDisclaimerUtils.financialYearEnd
@@ -44,7 +47,7 @@ class AssociatedCompaniesParameterServiceSpec
     val dummyConfig2020: FlatRateConfig = FlatRateConfig(2020, 50)
     val dummyConfig2021: FlatRateConfig = FlatRateConfig(2021, 50)
 
-    def mockCalculatorConfig(result: CalculatorConfig): ScalaOngoingStubbing[CalculatorConfig] = when(
+    def mockCalculatorConfig(result: CalculatorConfig): OngoingStubbing[CalculatorConfig] = when(
       mockConfig.calculatorConfig
     ).thenReturn(result)
 
@@ -270,13 +273,13 @@ class AssociatedCompaniesParameterServiceSpec
         )
       )
 
-      implicit val messaging: Messaging[UnprocessableEntityException] = Messaging
-        .messagingNatureOfThrowable[UnprocessableEntityException]
+      val exception: UnprocessableEntityException = intercept[UnprocessableEntityException](result)
 
-      the[UnprocessableEntityException] thrownBy result must have message
+      exception.getMessage shouldBe {
         "Failed to determined associated company parameters for given data: " +
-        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2022, " +
-        "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2023"
+          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2022, " +
+          "uk.gov.hmrc.http.UnprocessableEntityException: Configuration missing for financial year: 2023"
+      }
     }
   }
 }
