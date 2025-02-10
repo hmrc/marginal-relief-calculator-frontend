@@ -35,7 +35,8 @@ sealed trait CalculatorResult {
     this match {
       case x: SingleResult[_] if x.taxDetails.isInstanceOf[TaxDetails] =>
         f(x.asInstanceOf[SingleResult[TaxDetails]])
-      case x: DualResult[_, _] if x.year1TaxDetails.isInstanceOf[TaxDetails] && x.year2TaxDetails.isInstanceOf[TaxDetails] =>
+      case x: DualResult[_, _]
+          if x.year1TaxDetails.isInstanceOf[TaxDetails] && x.year2TaxDetails.isInstanceOf[TaxDetails] =>
         g(x.asInstanceOf[DualResult[TaxDetails, TaxDetails]])
       case _ => throw new MatchError(this)
     }
@@ -87,15 +88,15 @@ case class SingleResult[I <: TaxDetails](taxDetails: I, effectiveTaxRate: BigDec
     effectiveTaxRate = 100 * (
       (taxDetails.corporationTax + otherResult.taxDetails.corporationTax) /
         (taxDetails.adjustedProfit + otherResult.taxDetails.adjustedProfit)
-      )
+    )
   )
 }
 
 case class DualResult[A <: TaxDetails, B <: TaxDetails](
-                                                         year1TaxDetails: A,
-                                                         year2TaxDetails: B,
-                                                         effectiveTaxRate: BigDecimal
-                                                       ) extends CalculatorResult {
+  year1TaxDetails: A,
+  year2TaxDetails: B,
+  effectiveTaxRate: BigDecimal
+) extends CalculatorResult {
   val `type`: String = "DualResult"
   val taxDetails: TaxDetails = year1TaxDetails
 
