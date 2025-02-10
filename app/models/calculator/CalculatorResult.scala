@@ -16,9 +16,8 @@
 
 package models.calculator
 
+import play.api.libs.json.{ JsNumber, JsObject, JsString, Json, OWrites }
 import utils.RoundingUtils.roundUp
-import play.api.libs.json.*
-import TaxDetails.taxDetailsFormat
 
 sealed trait CalculatorResult {
   val effectiveTaxRate: BigDecimal
@@ -31,11 +30,14 @@ sealed trait CalculatorResult {
   def effectiveTaxRateBeforeMR: Double
 
   def roundValsUp: CalculatorResult
-//
+
   def fold[T](f: SingleResult[TaxDetails] => T)(g: DualResult[TaxDetails, TaxDetails] => T): T =
     this match {
-      case x: SingleResult[TaxDetails]           => f(x)
-      case x: DualResult[TaxDetails, TaxDetails] => g(x)
+      case x: SingleResult[_] if x.taxDetails.isInstanceOf[TaxDetails] =>
+        f(x.asInstanceOf[SingleResult[TaxDetails]])
+      case x: DualResult[_, _] if x.year1TaxDetails.isInstanceOf[TaxDetails] && x.year2TaxDetails.isInstanceOf[TaxDetails] =>
+        g(x.asInstanceOf[DualResult[TaxDetails, TaxDetails]])
+      case _ => throw new MatchError(this)
     }
 }
 
@@ -43,17 +45,20 @@ object CalculatorResult {
   implicit def writes[A <: CalculatorResult]: OWrites[A] = new OWrites[A] {
     def writes(o: A): JsObject = {
       val taxDetails = o match {
-        case SingleResult(td, _) => Json.obj("details" -> Json.toJson(td)(taxDetailsFormat))
+        case SingleResult(td, _) => Map("details" -> Json.toJson(td)(TaxDetails.taxDetailsFormat))
         case DualResult(y1, y2, _) =>
-          Json.obj(
-            "year1" -> Json.toJson(y1)(taxDetailsFormat),
-            "year2" -> Json.toJson(y2)(taxDetailsFormat)
+          Map(
+            "year1" -> Json.toJson(y1)(TaxDetails.taxDetailsFormat),
+            "year2" -> Json.toJson(y2)(TaxDetails.taxDetailsFormat)
           )
       }
-      Json.obj(
-        "type"             -> JsString(o.`type`),
-        "effectiveTaxRate" -> JsNumber(o.effectiveTaxRate)
-      ) ++ taxDetails
+
+      JsObject(
+        Map(
+          "type"             -> JsString(o.`type`),
+          "effectiveTaxRate" -> JsNumber(o.effectiveTaxRate)
+        ) ++ taxDetails
+      )
     }
   }
 }
@@ -82,15 +87,15 @@ case class SingleResult[I <: TaxDetails](taxDetails: I, effectiveTaxRate: BigDec
     effectiveTaxRate = 100 * (
       (taxDetails.corporationTax + otherResult.taxDetails.corporationTax) /
         (taxDetails.adjustedProfit + otherResult.taxDetails.adjustedProfit)
-    )
+      )
   )
 }
 
 case class DualResult[A <: TaxDetails, B <: TaxDetails](
-  year1TaxDetails: A,
-  year2TaxDetails: B,
-  effectiveTaxRate: BigDecimal
-) extends CalculatorResult {
+                                                         year1TaxDetails: A,
+                                                         year2TaxDetails: B,
+                                                         effectiveTaxRate: BigDecimal
+                                                       ) extends CalculatorResult {
   val `type`: String = "DualResult"
   val taxDetails: TaxDetails = year1TaxDetails
 
@@ -99,7 +104,9 @@ case class DualResult[A <: TaxDetails, B <: TaxDetails](
     year2TaxDetails = year2TaxDetails.roundValsUp,
     effectiveTaxRate = roundUp(effectiveTaxRate)
   )
+
   def totalDays: Int = year1TaxDetails.days + year2TaxDetails.days
+
   override def totalCorporationTax: Double =
     (year1TaxDetails.fold(_.corporationTax)(_.corporationTax) +
       year2TaxDetails.fold(_.corporationTax)(_.corporationTax)).doubleValue
