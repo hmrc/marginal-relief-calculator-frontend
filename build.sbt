@@ -11,7 +11,7 @@ lazy val root = (project in file("."))
     PlayKeys.playDefaultPort := 7101,
     name := appName,
     targetJvm := "jvm-11",
-    scalaVersion := "3.3.4",
+    scalaVersion := "3.3.6",
     majorVersion := 1,
     scalacOptions ++= Seq(
       "-feature",
