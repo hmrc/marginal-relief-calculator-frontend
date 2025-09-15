@@ -1,6 +1,6 @@
 import play.sbt.routes.RoutesKeys
 import sbt.Def
-import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.DefaultBuildSettings.*
 
 lazy val appName: String = "marginal-relief-calculator-frontend"
 lazy val IntegrationTest = config("it") extend Test
@@ -10,8 +10,7 @@ lazy val root = (project in file("."))
   .settings(
     PlayKeys.playDefaultPort := 7101,
     name := appName,
-    targetJvm := "jvm-11",
-    scalaVersion := "3.3.4",
+    scalaVersion := "3.3.6",
     majorVersion := 1,
     scalacOptions ++= Seq(
       "-feature",
@@ -41,7 +40,6 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    resolvers ++= Seq(Resolver.jcenterRepo)
     // concatenate js
   )
   .settings(
