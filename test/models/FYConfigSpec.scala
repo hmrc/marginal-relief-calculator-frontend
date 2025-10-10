@@ -18,7 +18,7 @@ package models
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import play.api.libs.json.{ JsError, JsResult, JsSuccess, JsValue, Json }
+import play.api.libs.json.{ JsError, JsSuccess, JsValue, Json }
 
 class FYConfigSpec extends AnyFreeSpec with Matchers {
   "FYConfig" - {
