@@ -64,15 +64,6 @@
 
 @beforeContent = {
 
-
-    @if(appConfig.languageTranslationEnabled) {
-        @hmrcLanguageSelect(LanguageSelect(
-                if (messages.lang.code == "cy") Cy else En,
-                (En, routes.LanguageSwitchController.switchToLanguage("en").url),
-                (Cy, routes.LanguageSwitchController.switchToLanguage("cy").url)
-            ))
-    }
-
     @if(showBackLink) {
         @govukBackLink(BackLinkViewModel(href = backLink))
     }
@@ -93,7 +84,8 @@
     headBlock   = Some(head),
     headerBlock = Some(hmrcStandardHeader(
         serviceUrl  = Some(routes.IndexController.onPageLoad().url),
-        signOutUrl  = None
+        signOutUrl  = None,
+        isWelshTranslationAvailable = appConfig.languageTranslationEnabled
     )),
     beforeContentBlock = Some(beforeContent),
     footerBlock        = Some(hmrcStandardFooter()),
