@@ -26,8 +26,8 @@ class AccountingPeriodFormProvider extends Mappings {
   def apply(implicit messages: Messages): Form[AccountingPeriodForm] =
     Form(
       mapping(
-        "accountingPeriodStartDate" -> of(using
-          new LocalDateFormatter(
+        "accountingPeriodStartDate" -> of(
+          using new LocalDateFormatter(
             invalidKey = "accountingPeriodStartDate.error.invalid",
             allRequiredKey = "accountingPeriodStartDate.error.required.all",
             twoRequiredKey = "accountingPeriodStartDate.error.required.two",
@@ -35,8 +35,8 @@ class AccountingPeriodFormProvider extends Mappings {
           )
         ),
         "accountingPeriodEndDate" -> optional(
-          of(using
-            new EndLocalDateFormatter(
+          of(
+            using new EndLocalDateFormatter(
               invalidKey = "accountingPeriodEndDate.error.invalid",
               allRequiredKey = "accountingPeriodEndDate.error.required.all",
               twoRequiredKey = "accountingPeriodEndDate.error.required.two",

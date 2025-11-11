@@ -319,7 +319,9 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar wi
               accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
             )
           ) `thenReturn` Future.successful(askParameter)
-          when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(true)
+          when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(
+            true
+          )
 
           val application =
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
@@ -377,7 +379,9 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar wi
               accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
             )
           ) `thenReturn` Future.successful(askParameter)
-          when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(true)
+          when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(
+            true
+          )
 
           val application =
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
@@ -442,7 +446,9 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar wi
               accountingPeriodEnd = accountingPeriodForm.accountingPeriodEndDateOrDefault
             )
           ) `thenReturn` Future.successful(askParameter)
-          when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(true)
+          when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(
+            true
+          )
 
           val application =
             applicationBuilder(userAnswers = Some(requiredAnswers.set(AccountingPeriodPage, accountingPeriodForm).get))
@@ -481,7 +487,7 @@ class TwoAssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar wi
               val request =
                 FakeRequest(POST, twoAssociatedCompaniesRoute)
                   .withFormUrlEncodedBody(
-                    formInput.toList*
+                    formInput.toList *
                   )
 
               val boundForm = form

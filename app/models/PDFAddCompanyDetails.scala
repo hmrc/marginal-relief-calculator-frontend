@@ -29,5 +29,5 @@ object PDFAddCompanyDetails extends Enumerable.Implicits {
   )
 
   implicit val enumerable: Enumerable[PDFAddCompanyDetails] =
-    Enumerable(values.map(v => v.toString -> v)*)
+    Enumerable(values.map(v => v.toString -> v) *)
 }

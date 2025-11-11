@@ -117,7 +117,9 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
+          Map(2023 -> config(2023))
+        )
 
         when(
           mockCalculatorService.calculate(
@@ -197,7 +199,9 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
+          Map(2023 -> config(2023))
+        )
 
         when(
           mockCalculatorService.calculate(
@@ -272,7 +276,9 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
+          Map(2023 -> config(2023))
+        )
 
         when(
           mockCalculatorService.calculate(
@@ -338,7 +344,9 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
+          Map(2023 -> config(2023))
+        )
 
         when(
           mockCalculatorService.calculate(

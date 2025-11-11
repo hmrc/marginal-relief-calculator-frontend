@@ -394,7 +394,7 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
             val request =
               FakeRequest(POST, associatedCompaniesRoute)
                 .withFormUrlEncodedBody(
-                  requestParams.toList*
+                  requestParams.toList *
                 )
 
             val boundForm =

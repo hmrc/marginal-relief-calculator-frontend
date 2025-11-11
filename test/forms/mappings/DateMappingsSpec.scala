@@ -30,8 +30,8 @@ class DateMappingsSpec extends SpecBase with ScalaCheckPropertyChecks with Gener
   private implicit val msgs: Messages = messages(applicationBuilder(None).build())
 
   val form = Form(
-    "value" -> Forms.of(using
-      new LocalDateFormatter(
+    "value" -> Forms.of(
+      using new LocalDateFormatter(
         requiredKey = "error.required",
         allRequiredKey = "error.required.all",
         twoRequiredKey = "error.required.two",

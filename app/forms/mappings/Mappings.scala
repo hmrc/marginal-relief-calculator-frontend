@@ -42,8 +42,8 @@ trait Mappings extends Formatters with Constraints {
     valueRange: ValueRange = ValueRange(Integer.MIN_VALUE, Integer.MAX_VALUE),
     args: Seq[String] = Seq.empty
   ): FieldMapping[Int] =
-    of(using 
-      wholeAmountFormatter(
+    of(
+      using wholeAmountFormatter(
         requiredKey,
         outOfRangeKey,
         doNotUseDecimalsKey,
@@ -61,8 +61,8 @@ trait Mappings extends Formatters with Constraints {
     maxLength: Int = 10,
     args: Seq[String] = Seq.empty
   ): FieldMapping[String] =
-    of(using 
-      utrFormatter(
+    of(
+      using utrFormatter(
         requiredKey,
         nonNumericKey,
         maxKey,

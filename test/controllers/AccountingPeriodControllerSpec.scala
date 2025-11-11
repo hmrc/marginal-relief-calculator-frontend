@@ -127,7 +127,10 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, getRequest).value
 
         status(result) `mustEqual` OK
-        contentAsString(result).filterAndTrim `mustEqual` view(form(messages(application)).fill(validAnswer), NormalMode)(
+        contentAsString(result).filterAndTrim `mustEqual` view(
+          form(messages(application)).fill(validAnswer),
+          NormalMode
+        )(
           getRequest,
           messages(application)
         ).toString.filterAndTrim

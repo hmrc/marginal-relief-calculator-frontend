@@ -41,5 +41,5 @@ object Distribution extends Enumerable.Implicits {
   }
 
   implicit val enumerable: Enumerable[Distribution] =
-    Enumerable(values.map(v => v.toString -> v)*)
+    Enumerable(values.map(v => v.toString -> v) *)
 }
