@@ -42,7 +42,7 @@ class BannerPanelSpec extends SpecBase {
         )
       )
 
-      contentAsString(result).filterAndTrim mustEqual panel.filterAndTrim
+      contentAsString(result).filterAndTrim `mustEqual` panel.filterAndTrim
     }
     "Should render when content empty" in {
       val bannerPanel = new BannerPanel()
@@ -58,7 +58,7 @@ class BannerPanelSpec extends SpecBase {
         )
       )
 
-      contentAsString(result).filterAndTrim mustEqual panel.filterAndTrim
+      contentAsString(result).filterAndTrim `mustEqual` panel.filterAndTrim
     }
   }
 }

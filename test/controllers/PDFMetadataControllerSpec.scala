@@ -79,8 +79,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
           val view = application.injector.instanceOf[PDFMetadataView]
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form)(
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view(form)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -103,8 +103,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view(
             form.fill(PDFMetadataForm(Some("name"), Some(StringUTR)))
           )(
             request,
@@ -122,8 +122,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
     }
@@ -134,7 +134,7 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
         val mockSessionRepository = mock[SessionRepository]
         val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-        when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any())) `thenReturn` Future.successful(true)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -157,8 +157,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual onwardRoute.url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` onwardRoute.url
         }
       }
 
@@ -178,8 +178,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result).filterAndTrim mustEqual view(boundForm)(
+          status(result) `mustEqual` BAD_REQUEST
+          contentAsString(result).filterAndTrim `mustEqual` view(boundForm)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -197,8 +197,8 @@ class PDFMetadataControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
     }

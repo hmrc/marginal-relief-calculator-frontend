@@ -36,7 +36,7 @@ class DistributionsIncludedSpec extends AnyFreeSpec with Matchers with ScalaChec
         JsString(distributionsIncluded.toString)
           .validate[DistributionsIncluded]
           .asOpt
-          .value mustEqual distributionsIncluded
+          .value `mustEqual` distributionsIncluded
       }
     }
 
@@ -45,7 +45,7 @@ class DistributionsIncludedSpec extends AnyFreeSpec with Matchers with ScalaChec
       val gen = arbitrary[String] suchThat (!DistributionsIncluded.values.map(_.toString).contains(_))
 
       forAll(gen) { invalidValue =>
-        JsString(invalidValue).validate[DistributionsIncluded] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[DistributionsIncluded] `mustEqual` JsError("error.invalid")
       }
     }
 
@@ -54,7 +54,7 @@ class DistributionsIncludedSpec extends AnyFreeSpec with Matchers with ScalaChec
       val gen = Gen.oneOf(DistributionsIncluded.values.toSeq)
 
       forAll(gen) { distributionsIncluded =>
-        Json.toJson(distributionsIncluded) mustEqual JsString(distributionsIncluded.toString)
+        Json.toJson(distributionsIncluded) `mustEqual` JsString(distributionsIncluded.toString)
       }
     }
   }

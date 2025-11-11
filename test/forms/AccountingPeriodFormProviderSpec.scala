@@ -47,7 +47,7 @@ class AccountingPeriodFormProviderSpec extends DateBehaviours with SpecBase {
 
         val result = form.bind(data)
 
-        result.value.value mustEqual AccountingPeriodForm(startDate, Some(endDate))
+        result.value.value `mustEqual` AccountingPeriodForm(startDate, Some(endDate))
         result.errors mustBe empty
       }
     }

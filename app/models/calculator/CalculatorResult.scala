@@ -46,11 +46,11 @@ object CalculatorResult {
   implicit def writes[A <: CalculatorResult]: OWrites[A] = new OWrites[A] {
     def writes(o: A): JsObject = {
       val taxDetails = o match {
-        case SingleResult(td, _) => Map("details" -> Json.toJson(td)(TaxDetails.taxDetailsFormat))
+        case SingleResult(td, _) => Map("details" -> Json.toJson(td)(using TaxDetails.taxDetailsFormat))
         case DualResult(y1, y2, _) =>
           Map(
-            "year1" -> Json.toJson(y1)(TaxDetails.taxDetailsFormat),
-            "year2" -> Json.toJson(y2)(TaxDetails.taxDetailsFormat)
+            "year1" -> Json.toJson(y1)(using TaxDetails.taxDetailsFormat),
+            "year2" -> Json.toJson(y2)(using TaxDetails.taxDetailsFormat)
           )
       }
 

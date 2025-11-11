@@ -36,11 +36,11 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
 
       val result = errorHandler.onClientError(request, statusCode.intValue, message)
 
-      status(result) mustEqual 404
+      status(result) `mustEqual` 404
 
       val view = application.injector.instanceOf[ErrorTemplate]
 
-      contentAsString(result).filterAndTrim mustEqual view
+      contentAsString(result).filterAndTrim `mustEqual` view
         .render("Page not found", "This page can’t be found", message, request, messages(application))
         .toString
         .filterAndTrim
@@ -56,11 +56,11 @@ class ErrorHandlerSpec extends SpecBase with MockitoSugar {
       val request = FakeRequest(GET, "/fake")
       val result = errorHandler.onServerError(request, new Exception)
 
-      status(result) mustEqual 500
+      status(result) `mustEqual` 500
 
       val view = application.injector.instanceOf[InternalServerErrorTemplate]
 
-      contentAsString(result).filterAndTrim mustEqual
+      contentAsString(result).filterAndTrim `mustEqual`
         view
           .render(
             request,

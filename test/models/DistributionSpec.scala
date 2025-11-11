@@ -33,7 +33,7 @@ class DistributionSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
       val gen = Gen.oneOf(Distribution.values.toSeq)
 
       forAll(gen) { distribution =>
-        JsString(distribution.toString).validate[Distribution].asOpt.value mustEqual distribution
+        JsString(distribution.toString).validate[Distribution].asOpt.value `mustEqual` distribution
       }
     }
 
@@ -42,7 +42,7 @@ class DistributionSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
       val gen = arbitrary[String] suchThat (!Distribution.values.map(_.toString).contains(_))
 
       forAll(gen) { invalidValue =>
-        JsString(invalidValue).validate[Distribution] mustEqual JsError("error.invalid")
+        JsString(invalidValue).validate[Distribution] `mustEqual` JsError("error.invalid")
       }
     }
 
@@ -51,7 +51,7 @@ class DistributionSpec extends AnyFreeSpec with Matchers with ScalaCheckProperty
       val gen = Gen.oneOf(Distribution.values.toSeq)
 
       forAll(gen) { distribution =>
-        Json.toJson(distribution) mustEqual JsString(distribution.toString)
+        Json.toJson(distribution) `mustEqual` JsString(distribution.toString)
       }
     }
   }

@@ -46,7 +46,7 @@ class BasicAuthFilter @Inject() (appConfig: FrontendAppConfig, override val mat:
       f(rh)
     }
 
-  private[this] def decodeBasicAuth(authHeader: String): (String, String) = {
+  private def decodeBasicAuth(authHeader: String): (String, String) = {
     val authBasicValue = authHeader.replaceFirst("Basic ", "")
     val usernamePassword = new String(Base64.getDecoder.decode(authBasicValue))
     val separatorIndex = usernamePassword.indexOf(":")

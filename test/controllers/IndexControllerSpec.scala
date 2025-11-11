@@ -48,9 +48,9 @@ class IndexControllerSpec extends SpecBase {
 
           val view = application.injector.instanceOf[IndexView]
 
-          status(result) mustEqual OK
+          status(result) `mustEqual` OK
 
-          contentAsString(result).filterAndTrim mustEqual view()(request, messages(application)).toString.filterAndTrim
+          contentAsString(result).filterAndTrim `mustEqual` view()(request, messages(application)).toString.filterAndTrim
         }
       }
     }
@@ -68,7 +68,7 @@ class IndexControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+          status(result) `mustEqual` SEE_OTHER
           redirectLocation(result) mustBe Some(routes.AccountingPeriodController.onPageLoad(NormalMode).url)
           val userAnswers = sessionRepository
             .get("test-session-id")
@@ -91,7 +91,7 @@ class IndexControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+          status(result) `mustEqual` SEE_OTHER
           redirectLocation(result) mustBe Some(routes.AccountingPeriodController.onPageLoad(NormalMode).url)
           val userAnswers = sessionRepository
             .get("test-session-id")

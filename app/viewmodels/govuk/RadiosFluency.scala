@@ -49,7 +49,7 @@ trait RadiosFluency {
       Radios(
         fieldset = Some(fieldset),
         name = field.name,
-        items = items map (item => item copy (checked = field.value.isDefined && field.value == item.value)),
+        items = items map (item => item.copy(checked = field.value.isDefined && field.value == item.value)),
         errorMessage = errorMessage(field)
       )
 
@@ -91,16 +91,16 @@ trait RadiosFluency {
   implicit class FluentRadios(radios: Radios) {
 
     def withHint(hint: Hint): Radios =
-      radios copy (hint = Some(hint))
+      radios.copy(hint = Some(hint))
 
     def withIdPrefix(prefix: String): Radios =
-      radios copy (idPrefix = Some(prefix))
+      radios.copy(idPrefix = Some(prefix))
 
     def withCssClass(newClass: String): Radios =
-      radios copy (classes = s"${radios.classes} $newClass")
+      radios.copy(classes = s"${radios.classes} $newClass")
 
     def withAttribute(attribute: (String, String)): Radios =
-      radios copy (attributes = radios.attributes + attribute)
+      radios.copy(attributes = radios.attributes + attribute)
 
     def inline(): Radios =
       radios.withCssClass("govuk-radios--inline")

@@ -30,7 +30,7 @@
     govukDetails : GovukDetails
 )
 
-@(form: Form[_], associatedCompaniesParameter: AssociatedCompaniesParameter,mode: Mode)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[?], associatedCompaniesParameter: AssociatedCompaniesParameter,mode: Mode)(implicit request: RequestHeader, messages: Messages)
 
 @heading= @{AssociatedCompaniesViewHelper.heading(associatedCompaniesParameter)}
 

@@ -60,7 +60,7 @@ trait PageBehaviours
             } yield (page, savedValue, userAnswers.set(page, savedValue).success.value)
 
             forAll(gen) { case (page, savedValue, userAnswers) =>
-              userAnswers.get(page).value mustEqual savedValue
+              userAnswers.get(page).value `mustEqual` savedValue
             }
           }
         }
@@ -79,7 +79,7 @@ trait PageBehaviours
 
         forAll(gen) { case (page, newValue, userAnswers) =>
           val updatedAnswers = userAnswers.set(page, newValue).success.value
-          updatedAnswers.get(page).value mustEqual newValue
+          updatedAnswers.get(page).value `mustEqual` newValue
         }
       }
   }

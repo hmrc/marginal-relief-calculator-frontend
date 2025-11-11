@@ -21,7 +21,7 @@ import play.api.data.{ Form, FormError }
 
 trait CheckboxFieldBehaviours extends FormSpec {
 
-  def checkboxField[T](form: Form[_], fieldName: String, validValues: Seq[T], invalidError: FormError): Unit = {
+  def checkboxField[T](form: Form[?], fieldName: String, validValues: Seq[T], invalidError: FormError): Unit = {
     for {
       (value, i) <- validValues.zipWithIndex
     } yield s"binds `$value` successfully" in {
@@ -29,7 +29,7 @@ trait CheckboxFieldBehaviours extends FormSpec {
         s"$fieldName[$i]" -> value.toString
       )
       val result = form.bind(data)
-      result.get mustEqual Set(value)
+      result.get `mustEqual` Set(value)
       result.errors mustBe empty
     }
 
@@ -37,22 +37,22 @@ trait CheckboxFieldBehaviours extends FormSpec {
       val data = Map(
         s"$fieldName[0]" -> "invalid value"
       )
-      form.bind(data).errors must contain(invalidError)
+      form.bind(data).errors `must` contain(invalidError)
     }
   }
 
-  def mandatoryCheckboxField(form: Form[_], fieldName: String, requiredKey: String): Unit = {
+  def mandatoryCheckboxField(form: Form[?], fieldName: String, requiredKey: String): Unit = {
 
     "fail to bind when no answers are selected" in {
       val data = Map.empty[String, String]
-      form.bind(data).errors must contain(FormError(s"$fieldName", requiredKey))
+      form.bind(data).errors `must` contain(FormError(s"$fieldName", requiredKey))
     }
 
     "fail to bind when blank answer provided" in {
       val data = Map(
         s"$fieldName[0]" -> ""
       )
-      form.bind(data).errors must contain(FormError(s"$fieldName[0]", requiredKey))
+      form.bind(data).errors `must` contain(FormError(s"$fieldName[0]", requiredKey))
     }
   }
 }

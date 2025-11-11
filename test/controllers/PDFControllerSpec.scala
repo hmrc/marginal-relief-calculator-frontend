@@ -23,7 +23,6 @@ import models.calculator.{ DualResult, FYRatio, MarginalRate, SingleResult }
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm, PDFAddCompanyDetailsForm, PDFMetadataForm, TwoAssociatedCompaniesForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, PDFAddCompanyDetails }
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.mockito.MockitoSugar
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, PDFAddCompanyDetailsPage, PDFMetadataPage, TaxableProfitPage, TwoAssociatedCompaniesPage }
 import play.api.http.HeaderNames
@@ -118,7 +117,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
 
         when(
           mockCalculatorService.calculate(
@@ -130,15 +129,15 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
             associatedCompaniesFY1 = None,
             associatedCompaniesFY2 = None
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
           val result = route(application, request).value
           val view = application.injector.instanceOf[PDFView]
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view
             .render(
               pdfMetadata = pdfMetadataForm,
               calculatorResult = calculatorResult,
@@ -168,7 +167,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
           val request = FakeRequest(GET, pdfViewRoute)
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+          status(result) `mustEqual` SEE_OTHER
           header(HeaderNames.LOCATION, result) mustBe Some(routes.JourneyRecoveryController.onPageLoad().url)
         }
       }
@@ -243,7 +242,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
 
         when(
           mockCalculatorService.calculate(
@@ -255,15 +254,15 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
             associatedCompaniesFY1 = None,
             associatedCompaniesFY2 = None
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, pdfViewRoute)
           val result = route(application, request).value
           val view = application.injector.instanceOf[PDFView]
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view
             .render(
               pdfMetadata = None,
               calculatorResult = calculatorResult,
@@ -323,7 +322,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
           effectiveTaxRate = 1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
 
         when(
           mockCalculatorService.calculate(
@@ -335,7 +334,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
             associatedCompaniesFY1 = None,
             associatedCompaniesFY2 = None
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
           implicit lazy val materializer: Materializer = application.materializer
@@ -343,7 +342,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual OK
+          status(result) `mustEqual` OK
           val contentDisposition = headers(result).get("Content-Disposition")
           contentDisposition.isDefined mustBe true
           contentDisposition.get mustBe s"""attachment; filename="marginal-relief-for-corporation-tax-result-${fakeDateTime.currentInstant
@@ -382,7 +381,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) thenReturn Future.successful(Map(2023 -> config(2023)))
+        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(Map(2023 -> config(2023)))
 
         when(
           mockCalculatorService.calculate(
@@ -394,7 +393,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
             associatedCompaniesFY1 = None,
             associatedCompaniesFY2 = None
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
           implicit lazy val materializer: Materializer = application.materializer
@@ -402,7 +401,7 @@ class PDFControllerSpec extends SpecBase with MockitoSugar {
 
           val result = route(application, request).value
 
-          status(result) mustEqual OK
+          status(result) `mustEqual` OK
           val contentDisposition = headers(result).get("Content-Disposition")
           contentDisposition.isDefined mustBe true
           contentDisposition.get mustBe

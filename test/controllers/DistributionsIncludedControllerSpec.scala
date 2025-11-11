@@ -65,8 +65,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val view = application.injector.instanceOf[DistributionsIncludedView]
 
-        status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(form, NormalMode)(
+        status(result) `mustEqual` OK
+        contentAsString(result).filterAndTrim `mustEqual` view(form, NormalMode)(
           request,
           messages(application)
         ).toString.filterAndTrim
@@ -90,8 +90,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(
+        status(result) `mustEqual` OK
+        contentAsString(result).filterAndTrim `mustEqual` view(
           form.fill(DistributionsIncludedForm(DistributionsIncluded.Yes, Some(1))),
           NormalMode
         )(
@@ -105,7 +105,7 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
       val mockSessionRepository = mock[SessionRepository]
       val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())) `thenReturn` Future.successful(true)
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -122,8 +122,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        status(result) `mustEqual` SEE_OTHER
+        redirectLocation(result).value `mustEqual` onwardRoute.url
       }
     }
 
@@ -142,8 +142,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result).filterAndTrim mustEqual view(boundForm, NormalMode)(
+        status(result) `mustEqual` BAD_REQUEST
+        contentAsString(result).filterAndTrim `mustEqual` view(boundForm, NormalMode)(
           request,
           messages(application)
         ).toString.filterAndTrim
@@ -159,8 +159,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        status(result) `mustEqual` SEE_OTHER
+        redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
       }
     }
 
@@ -179,8 +179,8 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        status(result) `mustEqual` SEE_OTHER
+        redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
       }
     }
 
@@ -195,9 +195,9 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        status(result) `mustEqual` SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
       }
     }
 
@@ -218,9 +218,9 @@ class DistributionsIncludedControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        status(result) `mustEqual` SEE_OTHER
 
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
       }
     }
   }

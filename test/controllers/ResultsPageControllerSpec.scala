@@ -106,16 +106,16 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
             associatedCompaniesFY1 = Some(1),
             associatedCompaniesFY2 = Some(2)
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
           val result = route(application, request).value
           val view = application.injector.instanceOf[ResultsPageView]
 
-          status(result) mustEqual OK
+          status(result) `mustEqual` OK
 
-          contentAsString(result).filterAndTrim mustEqual view
+          contentAsString(result).filterAndTrim `mustEqual` view
             .render(
               calculatorResult = calculatorResult,
               accountingPeriodForm = AccountingPeriodForm(
@@ -157,13 +157,13 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
             None,
             None
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
           val request = FakeRequest(GET, resultsPageRoute)
           val result = route(application, request).value
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
 
@@ -208,7 +208,7 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
             None,
             None
           )
-        ) thenReturn Future.successful(calculatorResult)
+        ) `thenReturn` Future.successful(calculatorResult)
 
         running(application) {
 
@@ -230,10 +230,10 @@ class ResultsPageControllerSpec extends SpecBase with MockitoSugar {
             messages(application)
           ).toString.filterAndTrim
 
-          status(result) mustEqual OK
-          requestContent mustEqual viewContent
-          requestContent.contains("2022 to 2023: 1 January 2023 to 31 March 2023") mustEqual true
-          requestContent.contains("2023 to 2024: 1 April 2023 to 31 December 2023") mustEqual true
+          status(result) `mustEqual` OK
+          requestContent `mustEqual` viewContent
+          requestContent.contains("2022 to 2023: 1 January 2023 to 31 March 2023") `mustEqual` true
+          requestContent.contains("2023 to 2024: 1 April 2023 to 31 December 2023") `mustEqual` true
         }
       }
     }

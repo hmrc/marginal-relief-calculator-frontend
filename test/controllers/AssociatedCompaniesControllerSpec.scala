@@ -23,7 +23,6 @@ import models.{ AssociatedCompanies, Distribution, DistributionsIncluded, Normal
 import org.mockito.ArgumentMatchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.mockito.MockitoSugar.mock
 import pages.{ AccountingPeriodPage, AssociatedCompaniesPage, DistributionPage, DistributionsIncludedPage, TaxableProfitPage }
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -77,8 +76,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val view = application.injector.instanceOf[AssociatedCompaniesView]
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form, AskFull, NormalMode)(
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view(form, AskFull, NormalMode)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -130,8 +129,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
           val result = route(application, request).value
           val view = application.injector.instanceOf[AssociatedCompaniesView]
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(form, AskFull, NormalMode)(
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view(form, AskFull, NormalMode)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -155,7 +154,7 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
           )
-        ) thenReturn Future.successful(AskFull)
+        ) `thenReturn` Future.successful(AskFull)
 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
@@ -164,8 +163,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual OK
-          contentAsString(result).filterAndTrim mustEqual view(
+          status(result) `mustEqual` OK
+          contentAsString(result).filterAndTrim `mustEqual` view(
             form.fill(AssociatedCompaniesForm(AssociatedCompanies.Yes, Some(1))),
             AskFull,
             NormalMode
@@ -179,8 +178,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
           val request = FakeRequest(GET, associatedCompaniesRoute)
 
           val result = route(application, request).value
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
 
@@ -196,8 +195,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
           val request = FakeRequest(GET, associatedCompaniesRoute)
 
           val result = route(application, request).value
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
 
@@ -220,8 +219,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
         running(application) {
           val request = FakeRequest(GET, associatedCompaniesRoute)
           val result = route(application, request).value
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.CheckYourAnswersController.onPageLoad().url
         }
       }
 
@@ -233,7 +232,7 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
           )
-        ) thenReturn Future.failed(UpstreamErrorResponse("Bad request", 400))
+        ) `thenReturn` Future.failed(UpstreamErrorResponse("Bad request", 400))
 
         val application = applicationBuilder(Some(requiredAnswers))
           .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
@@ -253,13 +252,13 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
         val mockSessionRepository = mock[SessionRepository]
         val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-        when(mockSessionRepository.set(any[models.UserAnswers])) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(any[models.UserAnswers])) `thenReturn` Future.successful(true)
         when(
           mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
           )
-        ) thenReturn Future.successful(AskFull)
+        ) `thenReturn` Future.successful(AskFull)
 
         val application =
           applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -273,8 +272,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.CheckYourAnswersController.onPageLoad().url
         }
       }
 
@@ -296,13 +295,13 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
               )
               .get
           )
-        ) thenReturn Future.successful(true)
+        ) `thenReturn` Future.successful(true)
         when(
           mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
           )
-        ) thenReturn Future.successful(AskFull)
+        ) `thenReturn` Future.successful(AskFull)
 
         val application =
           applicationBuilder(userAnswers =
@@ -323,8 +322,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.CheckYourAnswersController.onPageLoad().url
         }
       }
 
@@ -334,13 +333,13 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
         val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-        when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) thenReturn Future.successful(true)
+        when(mockSessionRepository.set(ArgumentMatchers.any(classOf[UserAnswers]))) `thenReturn` Future.successful(true)
         when(
           mockParameterService.associatedCompaniesParameters(
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(1)
           )
-        ) thenReturn Future.successful(
+        ) `thenReturn` Future.successful(
           AskBothParts(
             Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1)),
             Period(LocalDate.ofEpochDay(0), LocalDate.ofEpochDay(0).plusDays(1))
@@ -359,8 +358,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).url
+          status(result) `mustEqual` SEE_OTHER
+          redirectLocation(result).value `mustEqual` routes.TwoAssociatedCompaniesController.onPageLoad(NormalMode).url
         }
       }
 
@@ -390,12 +389,12 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
                 accountingPeriodStart = LocalDate.ofEpochDay(0),
                 accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
               )
-            ) thenReturn Future.successful(associatedCompaniesParameter)
+            ) `thenReturn` Future.successful(associatedCompaniesParameter)
 
             val request =
               FakeRequest(POST, associatedCompaniesRoute)
                 .withFormUrlEncodedBody(
-                  requestParams.toList: _*
+                  requestParams.toList*
                 )
 
             val boundForm =
@@ -405,8 +404,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
             val result = route(application, request).value
 
-            status(result) mustEqual BAD_REQUEST
-            contentAsString(result).filterAndTrim mustEqual view(boundForm, associatedCompaniesParameter, NormalMode)(
+            status(result) `mustEqual` BAD_REQUEST
+            contentAsString(result).filterAndTrim `mustEqual` view(boundForm, associatedCompaniesParameter, NormalMode)(
               request,
               messages(application)
             ).toString.filterAndTrim
@@ -422,7 +421,7 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
             accountingPeriodStart = LocalDate.ofEpochDay(0),
             accountingPeriodEnd = LocalDate.ofEpochDay(0).plusDays(1)
           )
-        ) thenReturn Future.successful(AskFull)
+        ) `thenReturn` Future.successful(AskFull)
         val application =
           applicationBuilder(Some(requiredAnswers))
             .overrides(bind[AssociatedCompaniesParameterService].toInstance(mockParameterService))
@@ -443,8 +442,8 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual BAD_REQUEST
-          contentAsString(result).filterAndTrim mustEqual view(boundForm, AskFull, NormalMode)(
+          status(result) `mustEqual` BAD_REQUEST
+          contentAsString(result).filterAndTrim `mustEqual` view(boundForm, AskFull, NormalMode)(
             request,
             messages(application)
           ).toString.filterAndTrim
@@ -462,9 +461,9 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+          status(result) `mustEqual` SEE_OTHER
 
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
 
@@ -485,9 +484,9 @@ class AssociatedCompaniesControllerSpec extends SpecBase with MockitoSugar with 
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
+          status(result) `mustEqual` SEE_OTHER
 
-          redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
         }
       }
     }

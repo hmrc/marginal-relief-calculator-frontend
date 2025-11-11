@@ -27,7 +27,6 @@ import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import controllers.routes
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.mockito.MockitoSugar.mock
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import java.time.LocalDate

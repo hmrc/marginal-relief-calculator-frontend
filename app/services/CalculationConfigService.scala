@@ -17,7 +17,7 @@
 package services
 
 import cats.data.Validated
-import config.{ ConfigMissingError, FrontendAppConfig }
+import config.FrontendAppConfig
 import models.calculator.CalculatorResult
 import models.FYConfig
 import play.api.Logging

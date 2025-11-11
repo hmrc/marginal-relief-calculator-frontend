@@ -20,7 +20,6 @@ import base.SpecBase
 import models.associatedCompanies.*
 import forms.{ AccountingPeriodForm, AssociatedCompaniesForm, DistributionsIncludedForm }
 import models.{ AssociatedCompanies, Distribution, DistributionsIncluded }
-import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.mockito.MockitoSugar
 import pages.*
 import play.api.i18n.Messages
@@ -74,7 +73,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(1)
         )
-      ) thenReturn Future.successful(AskFull)
+      ) `thenReturn` Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
       running(application) {
@@ -93,8 +92,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
             TwoAssociatedCompaniesSummary.row(requiredAnswers, askAssociatedCompaniesParam)
         )
 
-        status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view
+        status(result) `mustEqual` OK
+        contentAsString(result).filterAndTrim `mustEqual` view
           .render(list, routes.ResultsPageController.onPageLoad().url, request, messages(application))
           .toString
           .filterAndTrim
@@ -119,7 +118,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
           accountingPeriodStart = LocalDate.ofEpochDay(0),
           accountingPeriodEnd = LocalDate.ofEpochDay(0).plusYears(1).minusDays(1)
         )
-      ) thenReturn Future.successful(AskFull)
+      ) `thenReturn` Future.successful(AskFull)
       implicit val msgs: Messages = messages(application)
 
       running(application) {
@@ -138,8 +137,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
             TwoAssociatedCompaniesSummary.row(answers, askAssociatedCompaniesParam)
         )
 
-        status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view
+        status(result) `mustEqual` OK
+        contentAsString(result).filterAndTrim `mustEqual` view
           .render(list, routes.ResultsPageController.onPageLoad().url, request, messages(application))
           .toString
           .filterAndTrim
@@ -155,8 +154,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        status(result) `mustEqual` SEE_OTHER
+        redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
       }
     }
 
@@ -175,8 +174,8 @@ class CheckYourAnswersControllerSpec extends SpecBase with SummaryListFluency wi
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        status(result) `mustEqual` SEE_OTHER
+        redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
       }
     }
   }
