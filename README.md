@@ -40,7 +40,7 @@ Check your answers page shows a summary of the user entered data and allows any 
 
 ### Running the tests with coverage
 
-    sbt clean fmt coverage test it:test coverageReport
+    sbt clean fmt coverage test it/test coverageReport
 
 ### License
 

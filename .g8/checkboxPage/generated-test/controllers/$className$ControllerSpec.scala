@@ -39,9 +39,9 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         val view = application.injector.instanceOf[$className$View]
 
-        status(result).mustEqual(OK
+        status(result).mustEqual(OK)
 
-        contentAsString(result).mustEqual(view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result).mustEqual(view(form, NormalMode)(request, messages(application)).toString)
       }
     }
 
@@ -58,8 +58,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result).mustEqual(OK
-        contentAsString(result).mustEqual(view(form.fill($className$.values.toSet), NormalMode)(request, messages(application)).toString
+        status(result).mustEqual(OK)
+        contentAsString(result).mustEqual(view(form.fill($className$.values.toSet), NormalMode)(request, messages(application)).toString)
       }
     }
 
@@ -67,7 +67,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
       val mockSessionRepository = mock[SessionRepository]
 
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
@@ -84,8 +84,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result).mustEqual(SEE_OTHER
-        redirectLocation(result).value.mustEqual(onwardRoute.url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(onwardRoute.url)
       }
     }
 
@@ -104,8 +104,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result).mustEqual(BAD_REQUEST
-        contentAsString(result).mustEqual(view(boundForm, NormalMode)(request, messages(application)).toString
+        status(result).mustEqual(BAD_REQUEST)
+        contentAsString(result).mustEqual(view(boundForm, NormalMode)(request, messages(application)).toString)
       }
     }
 
@@ -118,8 +118,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result).mustEqual(SEE_OTHER
-        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
 
@@ -134,8 +134,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result).mustEqual(SEE_OTHER
-        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
   }
