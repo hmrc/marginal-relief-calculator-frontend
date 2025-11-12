@@ -33,7 +33,7 @@ class AssociatedCompaniesSpec extends AnyFreeSpec with Matchers with ScalaCheckP
       val gen = Gen.oneOf(AssociatedCompanies.values.toSeq)
 
       forAll(gen) { associatedCompanies =>
-        JsString(associatedCompanies.toString).validate[AssociatedCompanies].asOpt.value `mustEqual` associatedCompanies
+        JsString(associatedCompanies.toString).validate[AssociatedCompanies].asOpt.value.mustEqual(associatedCompanies)
       }
     }
 
@@ -42,7 +42,7 @@ class AssociatedCompaniesSpec extends AnyFreeSpec with Matchers with ScalaCheckP
       val gen = arbitrary[String] suchThat (!AssociatedCompanies.values.map(_.toString).contains(_))
 
       forAll(gen) { invalidValue =>
-        JsString(invalidValue).validate[AssociatedCompanies] `mustEqual` JsError("error.invalid")
+        JsString(invalidValue).validate[AssociatedCompanies].mustEqual(JsError("error.invalid"))
       }
     }
 
@@ -51,7 +51,7 @@ class AssociatedCompaniesSpec extends AnyFreeSpec with Matchers with ScalaCheckP
       val gen = Gen.oneOf(AssociatedCompanies.values.toSeq)
 
       forAll(gen) { associatedCompanies =>
-        Json.toJson(associatedCompanies) `mustEqual` JsString(associatedCompanies.toString)
+        Json.toJson(associatedCompanies).mustEqual(JsString(associatedCompanies.toString))
       }
     }
   }

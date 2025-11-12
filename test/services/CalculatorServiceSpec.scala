@@ -40,7 +40,7 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     val mockCalculator: MarginalReliefCalculatorService = mock[MarginalReliefCalculatorService]
 
     val mockCalculatorService: CalculatorService = new CalculatorService()(
-      appConfig = mockConfig,
+      using appConfig = mockConfig,
       calculator = mockCalculator
     )
 

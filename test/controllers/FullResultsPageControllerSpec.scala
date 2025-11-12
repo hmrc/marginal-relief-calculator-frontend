@@ -117,8 +117,10 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
-          Map(2023 -> config(2023))
+        when(mockConfigService.getAllConfigs(calculatorResult)).thenReturn(
+          Future.successful(
+            Map(2023 -> config(2023))
+          )
         )
 
         when(
@@ -131,7 +133,7 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
             Some(1),
             Some(2)
           )
-        ) `thenReturn` Future.successful(calculatorResult)
+        ).thenReturn(Future.successful(calculatorResult))
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
@@ -140,20 +142,22 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
 
           val view = application.injector.instanceOf[FullResultsPageView]
 
-          status(result) `mustEqual` OK
-          contentAsString(result).filterAndTrim `mustEqual` view
-            .render(
-              calculatorResult,
-              accountingPeriodForm,
-              1,
-              1,
-              twoAssociatedCompanies,
-              config,
-              request,
-              messages(application)
-            )
-            .toString
-            .filterAndTrim
+          status(result).mustEqual(OK)
+          contentAsString(result).filterAndTrim.mustEqual(
+            view
+              .render(
+                calculatorResult,
+                accountingPeriodForm,
+                1,
+                1,
+                twoAssociatedCompanies,
+                config,
+                request,
+                messages(application)
+              )
+              .toString
+              .filterAndTrim
+          )
         }
       }
 
@@ -199,8 +203,10 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
-          Map(2023 -> config(2023))
+        when(mockConfigService.getAllConfigs(calculatorResult)).thenReturn(
+          Future.successful(
+            Map(2023 -> config(2023))
+          )
         )
 
         when(
@@ -213,7 +219,7 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
             None,
             None
           )
-        ) `thenReturn` Future.successful(calculatorResult)
+        ).thenReturn(Future.successful(calculatorResult))
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
@@ -222,15 +228,17 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
 
           val view = application.injector.instanceOf[FullResultsPageView]
 
-          status(result) `mustEqual` OK
-          contentAsString(result).filterAndTrim `mustEqual` view(
-            calculatorResult,
-            accountingPeriodForm,
-            1,
-            0,
-            oneAssociatedCompany,
-            config
-          )(request, messages(application)).toString.filterAndTrim
+          status(result).mustEqual(OK)
+          contentAsString(result).filterAndTrim.mustEqual(
+            view(
+              calculatorResult,
+              accountingPeriodForm,
+              1,
+              0,
+              oneAssociatedCompany,
+              config
+            )(using request, messages(application)).toString.filterAndTrim
+          )
         }
       }
 
@@ -276,8 +284,10 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
-          Map(2023 -> config(2023))
+        when(mockConfigService.getAllConfigs(calculatorResult)).thenReturn(
+          Future.successful(
+            Map(2023 -> config(2023))
+          )
         )
 
         when(
@@ -290,7 +300,7 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
             None,
             None
           )
-        ) `thenReturn` Future.successful(calculatorResult)
+        ).thenReturn(Future.successful(calculatorResult))
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
@@ -299,15 +309,17 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
 
           val view = application.injector.instanceOf[FullResultsPageView]
 
-          status(result) `mustEqual` OK
-          contentAsString(result).filterAndTrim `mustEqual` view(
-            calculatorResult,
-            accountingPeriodForm,
-            1,
-            0,
-            Left(0),
-            config
-          )(request, messages(application)).toString.filterAndTrim
+          status(result).mustEqual(OK)
+          contentAsString(result).filterAndTrim.mustEqual(
+            view(
+              calculatorResult,
+              accountingPeriodForm,
+              1,
+              0,
+              Left(0),
+              config
+            )(using request, messages(application)).toString.filterAndTrim
+          )
         }
       }
 
@@ -344,8 +356,10 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
           1
         )
 
-        when(mockConfigService.getAllConfigs(calculatorResult)) `thenReturn` Future.successful(
-          Map(2023 -> config(2023))
+        when(mockConfigService.getAllConfigs(calculatorResult)).thenReturn(
+          Future.successful(
+            Map(2023 -> config(2023))
+          )
         )
 
         when(
@@ -358,13 +372,13 @@ class FullResultsPageControllerSpec extends SpecBase with MockitoSugar {
             None,
             None
           )
-        ) `thenReturn` Future.successful(calculatorResult)
+        ).thenReturn(Future.successful(calculatorResult))
 
         running(application) {
           val request = FakeRequest(GET, fullResultsPageRoute)
           val result = route(application, request).value
-          status(result) `mustEqual` SEE_OTHER
-          redirectLocation(result).value `mustEqual` routes.JourneyRecoveryController.onPageLoad().url
+          status(result).mustEqual(SEE_OTHER)
+          redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
         }
       }
     }

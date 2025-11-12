@@ -109,11 +109,13 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val view = application.injector.instanceOf[AccountingPeriodView]
 
-        status(result) `mustEqual` OK
-        contentAsString(result).filterAndTrim `mustEqual` view
-          .render(form(messages(application)), NormalMode, getRequest, messages(application))
-          .toString
-          .filterAndTrim
+        status(result).mustEqual(OK)
+        contentAsString(result).filterAndTrim.mustEqual(
+          view
+            .render(form(messages(application)), NormalMode, getRequest, messages(application))
+            .toString
+            .filterAndTrim
+        )
       }
     }
 
@@ -126,14 +128,16 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, getRequest).value
 
-        status(result) `mustEqual` OK
-        contentAsString(result).filterAndTrim `mustEqual` view(
-          form(messages(application)).fill(validAnswer),
-          NormalMode
-        )(
-          getRequest,
-          messages(application)
-        ).toString.filterAndTrim
+        status(result).mustEqual(OK)
+        contentAsString(result).filterAndTrim.mustEqual(
+          view(
+            form(messages(application)).fill(validAnswer),
+            NormalMode
+          )(
+            using getRequest,
+            messages(application)
+          ).toString.filterAndTrim
+        )
       }
     }
 
@@ -141,7 +145,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       val mockSessionRepository = mock[SessionRepository]
       val mockParameterService: AssociatedCompaniesParameterService = mock[AssociatedCompaniesParameterService]
 
-      when(mockSessionRepository.set(any())) `thenReturn` Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers.set(AccountingPeriodPage, validAnswer).get))
@@ -154,8 +158,8 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val result = route(application, postRequest).value
 
-        status(result) `mustEqual` SEE_OTHER
-        redirectLocation(result).value `mustEqual` onwardRoute.url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(onwardRoute.url)
       }
     }
 
@@ -174,7 +178,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) `mustEqual` 400
+        status(result).mustEqual(400)
         contentAsString(result) must include("The start date for the accounting period must be a real date")
       }
     }
@@ -199,7 +203,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val sessionRepository = application.injector.instanceOf[SessionRepository]
         val result = route(application, request).value
 
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
         sessionRepository
           .get("test-session-id")
@@ -235,7 +239,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
         val sessionRepository = application.injector.instanceOf[SessionRepository]
         val result = route(application, request).value
 
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must be(Some(routes.TaxableProfitController.onPageLoad(NormalMode).url))
         sessionRepository
           .get("test-session-id")
@@ -272,7 +276,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad().url))
       }
     }
@@ -297,7 +301,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must be(Some(routes.CheckYourAnswersController.onPageLoad().url))
       }
     }
@@ -323,7 +327,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must not be Some(routes.CheckYourAnswersController.onPageLoad().url)
         sessionRepository
           .get("test-session-id")
@@ -344,16 +348,18 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) `mustEqual` OK
+        status(result).mustEqual(OK)
 
-        contentAsString(result).filterAndTrim `mustEqual` view
-          .render(
-            NormalMode,
-            request,
-            messages(application)
-          )
-          .toString
-          .filterAndTrim
+        contentAsString(result).filterAndTrim.mustEqual(
+          view
+            .render(
+              NormalMode,
+              request,
+              messages(application)
+            )
+            .toString
+            .filterAndTrim
+        )
       }
     }
 
@@ -370,7 +376,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
           .withSession(SessionKeys.sessionId -> "test-session-id")
 
         val result = route(application, request).value
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage(CheckMode).url))
       }
     }
@@ -391,7 +397,7 @@ class AccountingPeriodControllerSpec extends SpecBase with MockitoSugar {
           .withSession(SessionKeys.sessionId -> "test-session-id")
 
         val result = route(application, request).value
-        status(result) `mustEqual` SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
         redirectLocation(result) must be(Some(routes.AccountingPeriodController.irrelevantPeriodPage(CheckMode).url))
       }
     }

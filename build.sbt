@@ -84,4 +84,4 @@ lazy val itSettings = Defaults.testSettings ++ Seq(
   javaOptions += "-Dconfig.resource=it.application.conf"
 )
 
-addCommandAlias("fmt", "scalafmt;scalafmtSbt;test:scalafmt;it:scalafmt")
+addCommandAlias("fmt", "scalafmt;scalafmtSbt;test/scalafmt;it/scalafmt")
