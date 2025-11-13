@@ -17,10 +17,10 @@ Prior to starting the service from source, make sure the instance running in ser
 
 To run the service locally from source code, you need the following installed: `Java 11`, `Mongo`, `sbt`
 
-```$ sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
+```$ sbt run ```
 
 To debug the locally running application from IDE, use `jvm-debug` sbt option and run
-```$ sbt run -jvm-debug 5005 -Dapplication.router=testOnlyDoNotUseInAppConf.Routes ```
+```$ sbt run -jvm-debug 5005```
 
 ## Starting the calculation journey (QA env)
 
@@ -40,7 +40,7 @@ Check your answers page shows a summary of the user entered data and allows any 
 
 ### Running the tests with coverage
 
-    sbt clean fmt coverage test it:test coverageReport
+    sbt clean fmt coverage test it/test coverageReport
 
 ### License
 

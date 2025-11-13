@@ -103,7 +103,7 @@ object FullResultsPageHelper extends ViewHelper {
     config: Map[Int, FYConfig]
   )(implicit messages: Messages): Html = {
 
-    def dualResultTable(dual: DualResult[_ <: TaxDetails, _ <: TaxDetails]) = {
+    def dualResultTable(dual: DualResult[? <: TaxDetails, ? <: TaxDetails]) = {
 
       def tabContent(marginalRate: MarginalRate, associatedCompanies: Int) = {
         val year = marginalRate.year

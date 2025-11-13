@@ -25,7 +25,7 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_])(implicit request: RequestHeader, messages: Messages)
+@(form: Form[?])(implicit request: RequestHeader, messages: Messages)
 
 @layout(pageTitle = title(form, messages("pdfMetaData.title")), backLink = BackLinkHelper.backLinkOrDefault(routes.PDFAddCompanyDetailsController.onPageLoad().path(), NormalMode)) {
 

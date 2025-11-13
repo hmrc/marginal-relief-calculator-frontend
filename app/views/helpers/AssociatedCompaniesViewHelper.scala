@@ -37,7 +37,7 @@ object AssociatedCompaniesViewHelper extends ViewHelper {
   private val govukLabel = new GovukLabel
   private val govukInput = new GovukInput(govukLabel, govukFormGroup, govukHintAndErrorMessage)
 
-  def yesHtml(form: Form[_], a: AssociatedCompaniesParameter)(implicit messages: Messages): Option[Html] =
+  def yesHtml(form: Form[?], a: AssociatedCompaniesParameter)(implicit messages: Messages): Option[Html] =
     a match {
       case AskFull | AskOnePart(_) =>
         Some(

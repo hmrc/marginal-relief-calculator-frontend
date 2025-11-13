@@ -14,7 +14,6 @@ import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import java.time.{ Clock, Instant, ZoneId }
 import scala.concurrent.ExecutionContext
-import org.scalatest.concurrent.ScalaFutures.*
 
 class SessionRepositorySpec
     extends AnyFreeSpec with Matchers with DefaultPlayMongoRepositorySupport[UserAnswers] with ScalaFutures
@@ -26,7 +25,7 @@ class SessionRepositorySpec
   private val userAnswers = UserAnswers("id", Json.obj("foo" -> "bar"), Instant.ofEpochSecond(1))
 
   private val mockAppConfig = mock[FrontendAppConfig]
-  when(mockAppConfig.cacheTtl) thenReturn 1
+  when(mockAppConfig.cacheTtl).thenReturn(1)
 
   private val stubClock: Clock = Clock.fixed(instant, ZoneId.systemDefault)
 
@@ -40,13 +39,13 @@ class SessionRepositorySpec
 
     "must set the last updated time on the supplied user answers to `now`, and save them" in {
 
-      val expectedResult = userAnswers copy (lastUpdated = instant)
+      val expectedResult = userAnswers.copy(lastUpdated = instant)
 
       val setResult = repository.set(userAnswers).futureValue
       val updatedRecord = find(Filters.equal("_id", userAnswers.id)).futureValue.headOption.value
 
-      setResult mustEqual true
-      updatedRecord mustEqual expectedResult
+      setResult.mustEqual(true)
+      updatedRecord.mustEqual(expectedResult)
     }
   }
 
@@ -59,9 +58,9 @@ class SessionRepositorySpec
         insert(userAnswers).futureValue
 
         val result = repository.get(userAnswers.id).futureValue
-        val expectedResult = userAnswers copy (lastUpdated = instant)
+        val expectedResult = userAnswers.copy(lastUpdated = instant)
 
-        result.value mustEqual expectedResult
+        result.value.mustEqual(expectedResult)
       }
     }
 
@@ -82,14 +81,14 @@ class SessionRepositorySpec
 
       val result = repository.clear(userAnswers.id).futureValue
 
-      result mustEqual true
+      result.mustEqual(true)
       repository.get(userAnswers.id).futureValue must not be defined
     }
 
     "must return true when there is no record to remove" in {
       val result = repository.clear("id that does not exist").futureValue
 
-      result mustEqual true
+      result.mustEqual(true)
     }
   }
 
@@ -103,11 +102,11 @@ class SessionRepositorySpec
 
         val result = repository.keepAlive(userAnswers.id).futureValue
 
-        val expectedUpdatedAnswers = userAnswers copy (lastUpdated = instant)
+        val expectedUpdatedAnswers = userAnswers.copy(lastUpdated = instant)
 
-        result mustEqual true
+        result.mustEqual(true)
         val updatedAnswers = find(Filters.equal("_id", userAnswers.id)).futureValue.headOption.value
-        updatedAnswers mustEqual expectedUpdatedAnswers
+        updatedAnswers.mustEqual(expectedUpdatedAnswers)
       }
     }
 
@@ -115,7 +114,7 @@ class SessionRepositorySpec
 
       "must return true" in {
 
-        repository.keepAlive("id that does not exist").futureValue mustEqual true
+        repository.keepAlive("id that does not exist").futureValue.mustEqual(true)
       }
     }
   }

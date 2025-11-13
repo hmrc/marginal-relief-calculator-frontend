@@ -362,7 +362,7 @@ class FullResultsPageHelperSpec extends SpecBase {
       }
     }
     "renders marginal relief formula" in {
-      FullResultsPageHelper.marginalReliefFormula(messages)
+      FullResultsPageHelper.marginalReliefFormula(using messages)
     }
     "shows marginal relief explanation if marginal relief > 0" in {
       val calculatorResult = SingleResult(

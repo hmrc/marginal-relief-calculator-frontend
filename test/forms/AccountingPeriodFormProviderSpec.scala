@@ -26,7 +26,7 @@ import java.time.LocalDate
 class AccountingPeriodFormProviderSpec extends DateBehaviours with SpecBase {
 
   private val application = applicationBuilder(userAnswers = None).build()
-  val form = new AccountingPeriodFormProvider()(messages(application))
+  val form = new AccountingPeriodFormProvider()(using messages(application))
 
   "bind" - {
 
@@ -47,7 +47,7 @@ class AccountingPeriodFormProviderSpec extends DateBehaviours with SpecBase {
 
         val result = form.bind(data)
 
-        result.value.value mustEqual AccountingPeriodForm(startDate, Some(endDate))
+        result.value.value.mustEqual(AccountingPeriodForm(startDate, Some(endDate)))
         result.errors mustBe empty
       }
     }

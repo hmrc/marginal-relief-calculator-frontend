@@ -60,11 +60,13 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
         val view = application.injector.instanceOf[DistributionView]
 
-        status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view
-          .render(form, NormalMode, request, messages(application))
-          .toString
-          .filterAndTrim
+        status(result).mustEqual(OK)
+        contentAsString(result).filterAndTrim.mustEqual(
+          view
+            .render(form, NormalMode, request, messages(application))
+            .toString
+            .filterAndTrim
+        )
       }
     }
 
@@ -79,11 +81,13 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual OK
-        contentAsString(result).filterAndTrim mustEqual view(form.fill(Distribution.values.head), NormalMode)(
-          request,
-          messages(application)
-        ).toString.filterAndTrim
+        status(result).mustEqual(OK)
+        contentAsString(result).filterAndTrim.mustEqual(
+          view(form.fill(Distribution.values.head), NormalMode)(
+            using request,
+            messages(application)
+          ).toString.filterAndTrim
+        )
       }
     }
 
@@ -92,7 +96,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
       val mockSessionRepository = mock[SessionRepository]
       val mockParameterService = mock[AssociatedCompaniesParameterService]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -109,8 +113,8 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(onwardRoute.url)
       }
     }
 
@@ -119,7 +123,7 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
       val mockSessionRepository = mock[SessionRepository]
       val mockParameterService = mock[AssociatedCompaniesParameterService]
 
-      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val application =
         applicationBuilder(userAnswers = Some(requiredAnswers))
@@ -136,8 +140,8 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(onwardRoute.url)
       }
     }
 
@@ -156,11 +160,13 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result).filterAndTrim mustEqual view(boundForm, NormalMode)(
-          request,
-          messages(application)
-        ).toString.filterAndTrim
+        status(result).mustEqual(BAD_REQUEST)
+        contentAsString(result).filterAndTrim.mustEqual(
+          view(boundForm, NormalMode)(
+            using request,
+            messages(application)
+          ).toString.filterAndTrim
+        )
       }
     }
 
@@ -172,8 +178,8 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
 
@@ -191,8 +197,8 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        status(result).mustEqual(SEE_OTHER)
+        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
 
@@ -207,9 +213,9 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
 
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
 
@@ -229,9 +235,9 @@ class DistributionControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        status(result) mustEqual SEE_OTHER
+        status(result).mustEqual(SEE_OTHER)
 
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
+        redirectLocation(result).value.mustEqual(routes.JourneyRecoveryController.onPageLoad().url)
       }
     }
   }

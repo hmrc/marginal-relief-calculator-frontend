@@ -27,7 +27,7 @@ class AccountingPeriodFormProvider extends Mappings {
     Form(
       mapping(
         "accountingPeriodStartDate" -> of(
-          new LocalDateFormatter(
+          using new LocalDateFormatter(
             invalidKey = "accountingPeriodStartDate.error.invalid",
             allRequiredKey = "accountingPeriodStartDate.error.required.all",
             twoRequiredKey = "accountingPeriodStartDate.error.required.two",
@@ -36,13 +36,13 @@ class AccountingPeriodFormProvider extends Mappings {
         ),
         "accountingPeriodEndDate" -> optional(
           of(
-            new EndLocalDateFormatter(
+            using new EndLocalDateFormatter(
               invalidKey = "accountingPeriodEndDate.error.invalid",
               allRequiredKey = "accountingPeriodEndDate.error.required.all",
               twoRequiredKey = "accountingPeriodEndDate.error.required.two",
               startDateId = "accountingPeriodStartDate",
               requiredKey = "accountingPeriodEndDate.error.required"
-            )
+            )(using messages)
           )
         )
       )(AccountingPeriodForm.apply)(o => Some(Tuple.fromProductTyped(o)))

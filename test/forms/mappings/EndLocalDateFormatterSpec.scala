@@ -34,7 +34,7 @@ class EndLocalDateFormatterSpec extends SpecBase {
     "someEndDateId.tworequired.key",
     "someEndDateId.required.key",
     "someStartDateId"
-  )(msgs)
+  )(using msgs)
 
   "EndLocalDateFormatter" - {
     "bind" - {

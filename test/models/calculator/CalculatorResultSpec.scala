@@ -31,7 +31,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
 
         val corporationTax = 23.34
         val calculatorResult = SingleResult(FlatRate(currentDate.getYear, corporationTax, 2, 3, 4, 5, 6), 1)
-        val result = Json.toJson(calculatorResult)(CalculatorResult.writes)
+        val result = Json.toJson(calculatorResult)(using CalculatorResult.writes)
 
         calculatorResult.totalMarginalRelief shouldBe 0.0
         calculatorResult.totalCorporationTax shouldBe corporationTax
@@ -52,7 +52,7 @@ class CalculatorResultSpec extends AnyFreeSpec with Matchers {
           FlatRate(year, 1, 2, 3, 4, 5, 6),
           1
         )
-        val result = Json.toJson(calculatorResult)(CalculatorResult.writes)
+        val result = Json.toJson(calculatorResult)(using CalculatorResult.writes)
 
         (result \ "type").as[String] shouldBe "DualResult"
         (result \ "year1" \ "type").as[String] shouldBe "FlatRate"

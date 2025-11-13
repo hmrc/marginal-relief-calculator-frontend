@@ -30,14 +30,16 @@ class SessionExpiredControllerSpec extends SpecBase with MockitoSugar {
       val request = FakeRequest(GET, routes.SessionExpiredController.onPageLoad().url)
       val result = route(application, request).value
 
-      status(result) mustEqual OK
+      status(result).mustEqual(OK)
 
       val view = application.injector.instanceOf[SessionExpiredView]
 
-      contentAsString(result).filterAndTrim mustEqual view()(
-        request,
-        messages(application)
-      ).toString.filterAndTrim
+      contentAsString(result).filterAndTrim.mustEqual(
+        view()(
+          using request,
+          messages(application)
+        ).toString.filterAndTrim
+      )
 
     }
   }
@@ -49,14 +51,16 @@ class SessionExpiredControllerSpec extends SpecBase with MockitoSugar {
       val request = FakeRequest(GET, routes.SessionExpiredController.signOut().url)
       val result = route(application, request).value
 
-      status(result) mustEqual OK
+      status(result).mustEqual(OK)
 
       val view = application.injector.instanceOf[SignOutView]
 
-      contentAsString(result).filterAndTrim mustEqual view()(
-        request,
-        messages(application)
-      ).toString.filterAndTrim
+      contentAsString(result).filterAndTrim.mustEqual(
+        view()(
+          using request,
+          messages(application)
+        ).toString.filterAndTrim
+      )
 
     }
   }

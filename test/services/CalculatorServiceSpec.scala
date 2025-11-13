@@ -24,7 +24,6 @@ import models.calculator.*
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.when
 import org.mockito.stubbing.OngoingStubbing
-import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.matchers.should.Matchers.shouldBe
 import play.api.test.{ DefaultAwaitTimeout, FutureAwaits }
@@ -41,7 +40,7 @@ class CalculatorServiceSpec extends SpecBase with MockitoSugar with FutureAwaits
     val mockCalculator: MarginalReliefCalculatorService = mock[MarginalReliefCalculatorService]
 
     val mockCalculatorService: CalculatorService = new CalculatorService()(
-      appConfig = mockConfig,
+      using appConfig = mockConfig,
       calculator = mockCalculator
     )
 

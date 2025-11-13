@@ -136,7 +136,7 @@ class AssociatedCompaniesController @Inject() (
                           case Some(errorKey) =>
                             ifAskAssociatedCompaniesThen(
                               associatedCompaniesParameter,
-                              badRequestWithError(boundedForm, _, errorKey, mode)(request.request)
+                              badRequestWithError(boundedForm, _, errorKey, mode)(using request.request)
                             )
                           case None =>
                             updateAndRedirect(value, associatedCompaniesParameter, mode, request.userAnswers)

@@ -79,7 +79,7 @@ class BackLinkFilter(
       val updatedSession = session + (BackLinkFilter.visitedLinks -> Json.toJson(updatedVisitedLinks).toString())
       f(
         rh.addAttr(RequestAttrKey.Session, Cell(updatedSession))
-      ).map(_.withSession(updatedSession))(ec)
+      ).map(_.withSession(updatedSession))(using ec)
     } else {
       f(rh)
     }

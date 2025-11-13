@@ -23,7 +23,7 @@ import models.Enumerable
 trait Mappings extends Formatters with Constraints {
 
   protected def text(errorKey: String = "error.required", args: Seq[String] = Seq.empty): FieldMapping[String] =
-    of(stringFormatter(errorKey, args))
+    of(using stringFormatter(errorKey, args))
 
   protected def int(
     requiredKey: String = "error.required",
@@ -31,7 +31,7 @@ trait Mappings extends Formatters with Constraints {
     nonNumericKey: String = "error.nonNumeric",
     args: Seq[String] = Seq.empty
   ): FieldMapping[Int] =
-    of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
+    of(using intFormatter(requiredKey, wholeNumberKey, nonNumericKey, args))
 
   protected def wholeAmount(
     requiredKey: String = "error.required",
@@ -43,7 +43,7 @@ trait Mappings extends Formatters with Constraints {
     args: Seq[String] = Seq.empty
   ): FieldMapping[Int] =
     of(
-      wholeAmountFormatter(
+      using wholeAmountFormatter(
         requiredKey,
         outOfRangeKey,
         doNotUseDecimalsKey,
@@ -62,7 +62,7 @@ trait Mappings extends Formatters with Constraints {
     args: Seq[String] = Seq.empty
   ): FieldMapping[String] =
     of(
-      utrFormatter(
+      using utrFormatter(
         requiredKey,
         nonNumericKey,
         maxKey,
@@ -76,18 +76,18 @@ trait Mappings extends Formatters with Constraints {
     invalidKey: String = "error.boolean",
     args: Seq[String] = Seq.empty
   ): FieldMapping[Boolean] =
-    of(booleanFormatter(requiredKey, invalidKey, args))
+    of(using booleanFormatter(requiredKey, invalidKey, args))
 
   protected def enumerable[A](
     requiredKey: String = "error.required",
     invalidKey: String = "error.invalid",
     args: Seq[String] = Seq.empty
   )(implicit ev: Enumerable[A]): FieldMapping[A] =
-    of(enumerableFormatter[A](requiredKey, invalidKey, args))
+    of(using enumerableFormatter[A](requiredKey, invalidKey, args))
 
   protected def conditional[A, B](
     field: Mapping[A],
     conditionField: Mapping[B],
     condition: B => Boolean
-  ): FieldMapping[Option[A]] = of(conditionalFormatter(field, conditionField, condition))
+  ): FieldMapping[Option[A]] = of(using conditionalFormatter(field, conditionField, condition))
 }

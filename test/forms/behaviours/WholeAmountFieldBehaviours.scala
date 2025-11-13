@@ -25,7 +25,7 @@ trait WholeAmountFieldBehaviours extends FieldBehaviours {
   implicit val noShrinkBigDecimal: Shrink[BigDecimal] = Shrink.shrinkAny
 
   def wholeAmountField(
-    form: Form[_],
+    form: Form[?],
     fieldName: String,
     dependentFields: Map[String, String],
     nonNumericError: FormError,
@@ -36,28 +36,28 @@ trait WholeAmountFieldBehaviours extends FieldBehaviours {
     "not bind non-numeric numbers" in {
       forAll(nonNumerics -> "nonNumeric") { nonNumeric =>
         val result = form.bind(Map(fieldName -> nonNumeric) ++ dependentFields).apply(fieldName)
-        result.errors must contain only nonNumericError
+        result.errors.must(contain.only(nonNumericError))
       }
     }
 
     "not bind decimals" in {
       forAll(positiveDecimals -> "decimal") { decimal =>
         val result = form.bind(Map(fieldName -> decimal.toString) ++ dependentFields).apply(fieldName)
-        result.errors must contain only doNotUseDecimalsError
+        result.errors.must(contain.only(doNotUseDecimalsError))
       }
     }
 
     "not bind longs smaller than Int.MinValue" in {
       forAll(intsSmallerThanMinValue -> "tinyInt") { (num: BigInt) =>
         val result = form.bind(Map(fieldName -> num.toString) ++ dependentFields).apply(fieldName)
-        result.errors must contain only outOfRangeError
+        result.errors.must(contain.only(outOfRangeError))
       }
     }
 
     "not bind longs larger than Int.MaxValue" in {
       forAll(longsLargerThanMaxValue -> "massiveInt") { (num: BigInt) =>
         val result = form.bind(Map(fieldName -> num.toString) ++ dependentFields).apply(fieldName)
-        result.errors must contain only outOfRangeError
+        result.errors.must(contain.only(outOfRangeError))
       }
     }
   }

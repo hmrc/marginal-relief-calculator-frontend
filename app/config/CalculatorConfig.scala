@@ -23,7 +23,7 @@ import play.api.libs.json.{ Json, OFormat }
 
 case class CalculatorConfig(private val fyConfigs: Seq[FYConfig]) {
   def findFYConfig[T](year: Int)(error: Int => T): ValidatedNel[T, FYConfig] =
-    this.fyConfigs.sortBy(_.year)(Ordering[Int].reverse).find(_.year <= year) match {
+    this.fyConfigs.sortBy(_.year)(using Ordering[Int].reverse).find(_.year <= year) match {
       case Some(value) => value.validNel
       case None        => error(year).invalidNel
     }

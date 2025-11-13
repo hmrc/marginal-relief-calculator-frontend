@@ -44,7 +44,7 @@ class RichJsValueSpec
 
       val value = Json.obj()
 
-      value.set(JsPath, Json.obj()) mustEqual JsError("path cannot be empty")
+      value.set(JsPath, Json.obj()).mustEqual(JsError("path cannot be empty"))
     }
 
     "must set a value on a JsObject" in {
@@ -61,9 +61,13 @@ class RichJsValueSpec
 
         val path = JsPath \ pathKey
 
-        value.set(path, JsString(newValue)) mustEqual JsSuccess(
-          Json.obj(originalKey -> originalValue, pathKey -> newValue)
-        )
+        value
+          .set(path, JsString(newValue))
+          .mustEqual(
+            JsSuccess(
+              Json.obj(originalKey -> originalValue, pathKey -> newValue)
+            )
+          )
       }
     }
 
@@ -75,11 +79,17 @@ class RichJsValueSpec
 
       val path = JsPath \ "foo" \ "bar"
 
-      value.set(path, JsString("baz")).asOpt.value mustEqual Json.obj(
-        "foo" -> Json.obj(
-          "bar" -> "baz"
+      value
+        .set(path, JsString("baz"))
+        .asOpt
+        .value
+        .mustEqual(
+          Json.obj(
+            "foo" -> Json.obj(
+              "bar" -> "baz"
+            )
+          )
         )
-      )
     }
 
     "must add a value to an empty JsArray" in {
@@ -89,7 +99,7 @@ class RichJsValueSpec
 
         val path = JsPath \ 0
 
-        value.set(path, JsString(newValue)) mustEqual JsSuccess(Json.arr(newValue))
+        value.set(path, JsString(newValue)).mustEqual(JsSuccess(Json.arr(newValue)))
       }
     }
 
@@ -100,7 +110,7 @@ class RichJsValueSpec
 
         val path = JsPath \ 1
 
-        value.set(path, JsString(newValue)) mustEqual JsSuccess(Json.arr(oldValue, newValue))
+        value.set(path, JsString(newValue)).mustEqual(JsSuccess(Json.arr(oldValue, newValue)))
       }
     }
 
@@ -111,7 +121,7 @@ class RichJsValueSpec
 
         val path = JsPath \ 0
 
-        value.set(path, JsString(newValue)) mustEqual JsSuccess(Json.arr(newValue, secondValue))
+        value.set(path, JsString(newValue)).mustEqual(JsSuccess(Json.arr(newValue, secondValue)))
       }
     }
 
@@ -121,7 +131,7 @@ class RichJsValueSpec
 
       val path = JsPath \ 0 \ 0
 
-      value.set(path, JsString("bar")).asOpt.value mustEqual Json.arr(Json.arr("bar"))
+      value.set(path, JsString("bar")).asOpt.value.mustEqual(Json.arr(Json.arr("bar")))
     }
 
     "must change the value of an existing key" in {
@@ -137,7 +147,7 @@ class RichJsValueSpec
 
         val path = JsPath \ pathKey
 
-        value.set(path, JsString(newValue)) mustEqual JsSuccess(Json.obj(pathKey -> newValue))
+        value.set(path, JsString(newValue)).mustEqual(JsSuccess(Json.obj(pathKey -> newValue)))
       }
     }
 
@@ -147,7 +157,7 @@ class RichJsValueSpec
 
       val path = JsPath \ "foo"
 
-      value.set(path, JsString("bar")) mustEqual JsError(s"cannot set a key on $value")
+      value.set(path, JsString("bar")).mustEqual(JsError(s"cannot set a key on $value"))
     }
 
     "must return an error when trying to set an index on a non-JsArray" in {
@@ -156,7 +166,7 @@ class RichJsValueSpec
 
       val path = JsPath \ 0
 
-      value.set(path, JsString("bar")) mustEqual JsError(s"cannot set an index on $value")
+      value.set(path, JsString("bar")).mustEqual(JsError(s"cannot set an index on $value"))
     }
 
     "must return an error when trying to set an index other than zero on an empty array" in {
@@ -165,7 +175,7 @@ class RichJsValueSpec
 
       val path = JsPath \ 1
 
-      value.set(path, JsString("bar")) mustEqual JsError("array index out of bounds: 1, []")
+      value.set(path, JsString("bar")).mustEqual(JsError("array index out of bounds: 1, []"))
     }
 
     "must return an error when trying to set an index out of bounds" in {
@@ -174,7 +184,7 @@ class RichJsValueSpec
 
       val path = JsPath \ 3
 
-      value.set(path, JsString("fork")) mustEqual JsError("array index out of bounds: 3, [\"bar\",\"baz\"]")
+      value.set(path, JsString("fork")).mustEqual(JsError("array index out of bounds: 3, [\"bar\",\"baz\"]"))
     }
 
     "must set into an array which does not exist" in {
@@ -183,11 +193,15 @@ class RichJsValueSpec
 
       val path = JsPath \ "foo" \ 0
 
-      value.set(path, JsString("bar")) mustEqual JsSuccess(
-        Json.obj(
-          "foo" -> Json.arr("bar")
+      value
+        .set(path, JsString("bar"))
+        .mustEqual(
+          JsSuccess(
+            Json.obj(
+              "foo" -> Json.arr("bar")
+            )
+          )
         )
-      )
     }
 
     "must set into an object which does not exist" in {
@@ -196,13 +210,17 @@ class RichJsValueSpec
 
       val path = JsPath \ "foo" \ "bar"
 
-      value.set(path, JsString("baz")) mustEqual JsSuccess(
-        Json.obj(
-          "foo" -> Json.obj(
-            "bar" -> "baz"
+      value
+        .set(path, JsString("baz"))
+        .mustEqual(
+          JsSuccess(
+            Json.obj(
+              "foo" -> Json.obj(
+                "bar" -> "baz"
+              )
+            )
           )
         )
-      )
     }
 
     "must set nested objects and arrays" in {
@@ -211,17 +229,21 @@ class RichJsValueSpec
 
       val path = JsPath \ "foo" \ 0 \ "bar" \ 0
 
-      value.set(path, JsString("baz")) mustEqual JsSuccess(
-        Json.obj(
-          "foo" -> Json.arr(
+      value
+        .set(path, JsString("baz"))
+        .mustEqual(
+          JsSuccess(
             Json.obj(
-              "bar" -> Json.arr(
-                "baz"
+              "foo" -> Json.arr(
+                Json.obj(
+                  "bar" -> Json.arr(
+                    "baz"
+                  )
+                )
               )
             )
           )
         )
-      )
     }
   }
 
@@ -230,7 +252,7 @@ class RichJsValueSpec
 
       val value = Json.obj()
 
-      value.set(JsPath, Json.obj()) mustEqual JsError("path cannot be empty")
+      value.set(JsPath, Json.obj()).mustEqual(JsError("path cannot be empty"))
     }
 
     "must return an error if the path does not contain a value" in {
@@ -246,7 +268,7 @@ class RichJsValueSpec
 
         val path = JsPath \ pathKey
 
-        value.remove(path) mustEqual JsError("cannot find value at path")
+        value.remove(path).mustEqual(JsError("cannot find value at path"))
 
       }
 
@@ -271,7 +293,7 @@ class RichJsValueSpec
         val pathToRemove = JsPath \ keyToRemove
 
         testObject mustNot equal(initialObj)
-        testObject.remove(pathToRemove) mustEqual JsSuccess(initialObj)
+        testObject.remove(pathToRemove).mustEqual(JsSuccess(initialObj))
       }
     }
 

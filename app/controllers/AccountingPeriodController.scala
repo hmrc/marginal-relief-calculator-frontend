@@ -48,7 +48,7 @@ class AccountingPeriodController @Inject() (
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  private def form(implicit req: RequestHeader) = formProvider(messagesApi.preferred(req))
+  private def form(implicit req: RequestHeader) = formProvider(using messagesApi.preferred(req))
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData) { implicit request =>
     val preparedForm =
