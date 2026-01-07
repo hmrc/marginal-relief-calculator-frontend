@@ -132,7 +132,7 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
         result shouldBe SingleResult(FlatRate(2022, 19000.0, 19.0, 100000, 0, 100000, 365), 19).valid
       }
 
-      "when a shorter account period falls in a single FY with MR and profits are above the upper threshold, apply main rate and MR ratio with 365 days" in {
+      "when a shorter account period falls in a single FY with MR and profits are above the upper threshold, apply main rate and MR ratio using the FY day count" in {
         val marginalReliefCalculator =
           new MarginalReliefCalculatorService(appConfigFromStr("""
                                                                  |appName = test
@@ -170,10 +170,10 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
             300000.0,
             0.0,
             300000.0,
-            46027.4,
-            230136.99,
+            45901.64,
+            229508.2,
             336,
-            FYRatio(336, 365)
+            FYRatio(336, 366)
           ),
           25
         ).valid
@@ -639,16 +639,16 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
               2023,
               3125.0,
               25.0,
-              2377.57,
-              19.02,
-              747.43,
+              2380.12,
+              19.04,
+              744.88,
               12500.0,
               0.0,
               12500.0,
-              12465.75,
-              62328.77,
+              12431.69,
+              62158.47,
               91,
-              FYRatio(91, 365)
+              FYRatio(91, 366)
             ),
             MarginalRate(
               2024,
@@ -665,7 +665,7 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
               91,
               FYRatio(91, 365)
             ),
-            19.02
+            19.03
           ).valid
 
       }
@@ -1386,16 +1386,16 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
             2023,
             6232.88,
             25.0,
-            5671.92,
-            22.75,
-            560.96,
+            5674.47,
+            22.76,
+            558.4,
             24931.51,
             0.0,
             24931.51,
-            12465.75,
-            62328.77,
+            12431.69,
+            62158.47,
             91,
-            FYRatio(91, 365)
+            FYRatio(91, 366)
           ),
           MarginalRate(
             2024,
@@ -1456,16 +1456,16 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
             2023,
             6232.88,
             25.0,
-            6139.38,
+            6140.66,
             24.63,
-            93.49,
+            92.22,
             24931.51,
             0.0,
             24931.51,
-            6232.88,
-            31164.38,
+            6215.85,
+            31079.23,
             91,
-            FYRatio(91, 365)
+            FYRatio(91, 366)
           ),
           MarginalRate(
             2024,
@@ -1526,16 +1526,16 @@ class MarginalReliefCalculatorServiceSpec extends AnyWordSpec with Matchers {
             2023,
             6232.88,
             25.0,
-            6139.38,
+            6140.66,
             24.63,
-            93.49,
+            92.22,
             24931.51,
             0.0,
             24931.51,
-            6232.88,
-            31164.38,
+            6215.85,
+            31079.23,
             91,
-            FYRatio(91, 365)
+            FYRatio(91, 366)
           ),
           MarginalRate(
             2024,
