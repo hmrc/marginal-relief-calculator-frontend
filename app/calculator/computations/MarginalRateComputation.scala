@@ -28,7 +28,7 @@ trait MarginalRateComputation {
     fyDays: Int,
     daysInAP: Int
   ): FYRatio = {
-    val totalNoOfDays = if (differentUpperLimitThresholds) fyDays else 365 max daysInAP
+    val totalNoOfDays = if (differentUpperLimitThresholds) fyDays else fyDays max daysInAP
     FYRatio(BigDecimal(apDaysInFY), totalNoOfDays)
   }
 

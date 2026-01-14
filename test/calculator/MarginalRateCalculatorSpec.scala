@@ -64,6 +64,27 @@ class MarginalRateCalculatorSpec extends AnyWordSpec with Matchers {
         22.75
       )
     }
+
+    "when accounting period falls in a future leap FY, use 366 days when adjusting thresholds" in {
+      val config = MarginalReliefConfig(2027, 50000, 250000, 0.19, 0.25, 0.015)
+      val fyData = FyDataWrapper.constructSingleYear(
+        2027,
+        LocalDate.of(2027, 4, 1),
+        366,
+        LocalDate.of(2028, 3, 31),
+        100000,
+        0,
+        None,
+        None,
+        config
+      )
+
+      val result = MarginalRateCalculator.computeSingle(fyData)
+      result match {
+        case SingleResult(marginalRate: MarginalRate, _) => marginalRate.fyRatio.shouldBe(FYRatio(366, 366))
+      }
+    }
+
     "When accounting period straddles two FY and profits are below upper threshold" in {
       val fy1Config = MarginalReliefConfig(2023, 50000, 250000, 0.19, 0.25, 0.015)
       val fy2Config = MarginalReliefConfig(2024, 50000, 250000, 0.19, 0.25, 0.015)
