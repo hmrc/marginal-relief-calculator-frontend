@@ -81,7 +81,10 @@ class MarginalRateCalculatorSpec extends AnyWordSpec with Matchers {
 
       val result = MarginalRateCalculator.computeSingle(fyData)
       result match {
-        case SingleResult(marginalRate: MarginalRate, _) => marginalRate.fyRatio.shouldBe(FYRatio(366, 366))
+        case SingleResult(marginalRate: MarginalRate, _) => marginalRate.fyRatio shouldBe FYRatio(366, 366)
+
+        case other =>
+          fail(s"Unexpected result: $other")
       }
     }
 
