@@ -585,6 +585,11 @@ class ResultsPageHelperSpec extends SpecBase {
 
   "displayCorporationTaxTable" - {
 
+    "must not include 'No header' text" in {
+      val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
+      displayCorporationTaxTable(calculatorResult).toString must not include "No Header"
+    }
+
     "when accounting period falls in a single year" - {
 
       "when flat rate" in {
@@ -935,6 +940,12 @@ class ResultsPageHelperSpec extends SpecBase {
   }
 
   "displayEffectiveTaxTable" - {
+
+    "must not include 'No header' text" in {
+      val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
+      displayEffectiveTaxTable(calculatorResult).toString must not include "No Header"
+    }
+
     "when accounting period falls in a single year" - {
       "when flat rate" in {
         val calculatorResult = SingleResult(FlatRate(1970, 1, 2, 3, 4, 5, 6), 1)
