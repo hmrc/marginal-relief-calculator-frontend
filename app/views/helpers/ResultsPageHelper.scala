@@ -651,8 +651,12 @@ object ResultsPageHelper extends ViewHelper {
         .toString()
         .replaceAll("[\n\r]", "")
         .replace(
-          "<th scope=\"col\" class=\"govuk-table__header\"  ></th>",
-          "<td class=\"govuk-table__header\"></td>"
+          """<th scope="col" class="govuk-table__header"  ><span class="govuk-visually-hidden">No header</span></th>""",
+          """<td class="govuk-table__header"></td>"""
+        )
+        .replace(
+          """<th scope="col" class="govuk-table__header"  ></th>""",
+          """<td class="govuk-table__header"></td>"""
         )
     )
 
