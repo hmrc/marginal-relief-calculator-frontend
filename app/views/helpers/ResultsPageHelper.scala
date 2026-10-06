@@ -24,8 +24,8 @@ import org.slf4j.{ Logger, LoggerFactory }
 import play.api.i18n.Messages
 import play.twirl.api.{ Html, HtmlFormat }
 import uk.gov.hmrc.govukfrontend.views.Aliases.{ HtmlContent, SummaryListRow, Table, Text, Value }
-import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukSummaryList, GovukTable }
+import uk.gov.hmrc.govukfrontend.views.html.components.implicits.*
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukButton, GovukPanel, GovukSummaryList, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.panel.Panel
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{ HeadCell, TableRow }
@@ -38,8 +38,8 @@ import scala.collection.immutable
 object ResultsPageHelper extends ViewHelper {
 
   private val logger: Logger = LoggerFactory.getLogger(getClass)
-
-  private val govukPanel = new GovukPanel()
+  private val govukButton = new GovukButton()
+  private val govukPanel = new GovukPanel(govukButton)
   private val govukTable = new GovukTable()
   private val summaryList = new GovukSummaryList()
 

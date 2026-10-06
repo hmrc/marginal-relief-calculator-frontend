@@ -24,7 +24,7 @@ import org.jsoup.Jsoup
 import play.api.i18n.Messages
 import play.api.test.Helpers
 import uk.gov.hmrc.govukfrontend.views.Aliases.{ HeadCell, Panel, Table }
-import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukPanel, GovukTable }
+import uk.gov.hmrc.govukfrontend.views.html.components.{ GovukButton, GovukPanel, GovukTable }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{ HtmlContent, Text }
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import utils.FormatUtils.{ HtmlFormat, StringFormat }
@@ -37,7 +37,8 @@ class ResultsPageHelperSpec extends SpecBase {
 
   private implicit val messages: Messages = Helpers.stubMessages()
   private val govukTable = new GovukTable()
-  private val govukPanel = new GovukPanel()
+  private val govukButton = new GovukButton()
+  private val govukPanel = new GovukPanel(govukButton)
   private val bannerPanel = new BannerPanel()
   private val epoch = LocalDate.ofEpochDay(0)
 
