@@ -344,6 +344,7 @@ pdfMetaData.title=Ychwanegu manylion y cwmni cyn i chi argraffu neu gadw eich cy
 pdfMetaData.heading=Ychwanegu manylion y cwmni cyn i chi argraffu neu gadw eich cyfrifiad
 pdfMetaData.companyname.label=Enw’r cwmni (dewisol)
 pdfMetaData.utr.label=Cyfeirnod Unigryw y Trethdalwr (dewisol)
+pdfMetaData.utr.hint = Gall eich UTR fod yn 10 neu’n 13 digid o hyd
 pdfMetaData.companyname.error.length=Mae’n rhaid i enw’r cwmni fod yn 160 o gymeriadau neu lai.
 pdfMetaData.utr.error.length=Mae’n rhaid i Gyfeirnod Unigryw y Trethdalwr fod yn 10 o gymeriadau
 pdfMetaData.utr.error.nonNumeric = Nodwch Gyfeirnod Unigryw y Trethdalwr sy’n ddilys. Er enghraifft, 1234567891
