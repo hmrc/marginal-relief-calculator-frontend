@@ -64,19 +64,26 @@ trait MarginalRateComputation {
       companies = associatedCompanies
     )
 
-    val ctBeforeMarginalRelief = adjustedProfit * (if (adjustedAugmentedProfit <= adjustedLT) {
+    val augmentedProfitForComparison = adjustedAugmentedProfit.setScale(20, BigDecimal.RoundingMode.HALF_UP)
+    val adjustedLTForComparison = adjustedLT.setScale(20, BigDecimal.RoundingMode.HALF_UP)
+    val adjustedUTForComparison = adjustedUT.setScale(20, BigDecimal.RoundingMode.HALF_UP)
+
+    val ctBeforeMarginalRelief = adjustedProfit * (if (augmentedProfitForComparison <= adjustedLTForComparison) {
                                                      BigDecimal(smallProfitRate)
                                                    } else {
                                                      BigDecimal(mainRate)
                                                    })
 
-    val marginalRelief = if (adjustedAugmentedProfit > adjustedLT && adjustedAugmentedProfit <= adjustedUT) {
-      BigDecimal(marginalReliefFraction) *
-        (adjustedUT - adjustedAugmentedProfit) *
-        (adjustedProfit / adjustedAugmentedProfit)
-    } else {
-      BigDecimal(0)
-    }
+    val marginalRelief =
+      if (
+        augmentedProfitForComparison > adjustedLTForComparison && augmentedProfitForComparison <= adjustedUTForComparison
+      ) {
+        BigDecimal(marginalReliefFraction) *
+          (adjustedUT - adjustedAugmentedProfit) *
+          (adjustedProfit / adjustedAugmentedProfit)
+      } else {
+        BigDecimal(0)
+      }
 
     val effectiveRateBeforeMR = (ctBeforeMarginalRelief / adjustedProfit) * 100
 
